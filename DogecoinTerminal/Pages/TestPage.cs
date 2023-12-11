@@ -8,9 +8,12 @@ namespace DogecoinTerminal.Pages
 {
 	internal class TestPage : AppPage
 	{
+
+
+
 		public override void Draw(VirtualScreen screen)
 		{
-			throw new NotImplementedException();
+
 		}
 
 		public override void OnBack()
@@ -20,12 +23,17 @@ namespace DogecoinTerminal.Pages
 
 		public override void OnNav(object value)
 		{
-			throw new NotImplementedException();
+
 		}
 
 		public override void OnReturned(object value)
 		{
 			throw new NotImplementedException();
+		}
+
+		public override void Update()
+		{
+
 		}
 	}
 }

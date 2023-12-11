@@ -9,13 +9,26 @@ namespace DogecoinTerminal.Components
 	internal class AppButton : Interactable
 	{
 
-		public AppButton(string name, Action<bool> onInteract)
-			: base(onInteract)
+
+		public AppButton(string text,
+						 (int x, int y) start,
+							(int x, int y) end,
+							Action<bool> onInteract)
+			: base(start, end, onInteract)
 		{
-			MyName = name;
+			Text = text;
 		}
 
-		public string MyName
+
+		public override void Draw(VirtualScreen screen)
+		{
+
+			screen.DrawRectangle(TerminalColor.Red, Start, End);
+
+			screen.DrawText(Text, TerminalColor.White, Start);
+		}
+
+		public string Text
 		{
 			get;set;
 		}

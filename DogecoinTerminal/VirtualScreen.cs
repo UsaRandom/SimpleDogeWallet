@@ -1,11 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace DogecoinTerminal
 {
@@ -18,7 +20,10 @@ namespace DogecoinTerminal
 		private SpriteBatch _spriteBatch;
 		private GraphicsDevice _graphicsDevice;
 
+		private InteractionMonitor _interactionMonitor;
+
 		private SpriteFont _font;
+		private Game1 _game;
 
 		private int _width;
 		private int _height;
@@ -38,17 +43,44 @@ namespace DogecoinTerminal
 
 			_heightScale = _height / 100M;
 			_widthScale = _width / 100M;
+
+			_interactionMonitor = new InteractionMonitor();
 		}
 
 		public void Load(Game1 game)
 		{
-			_font = game.Content.Load<SpriteFont>("File"); // Use the name of your sprite font file here instead of 'Score'.
-
+			_game = game;
+			_font = _game.Content.Load<SpriteFont>("basic"); 
 		}
+
 
 		public void Update(AppPage page)
 		{
+			var mouseState = Mouse.GetState(_game.Window);
 
+			var interactionResult = _interactionMonitor.GetInteraction(mouseState);
+
+			if(interactionResult.HasValue)
+			{
+				var interaction = interactionResult.Value;
+
+				var vertPos = (x: (int)(interaction.x / _widthScale),
+							   y: (int)(interaction.y / _heightScale));
+
+
+				
+				foreach(var interactable in page.Interactables)
+				{
+					if (vertPos.x >= interactable.Start.x &&
+					   vertPos.y >= interactable.Start.y &&
+					   vertPos.x <= interactable.End.x &&
+					   vertPos.y <= interactable.End.y)
+					{
+						interactable.OnInteract(interaction.isFirst);
+						break;
+					}
+				}
+			}
 		}
 
 
@@ -58,7 +90,6 @@ namespace DogecoinTerminal
 			_spriteBatch = spriteBatch;
 
 			page.Draw(this);
-			
 		}
 
 
@@ -83,7 +114,6 @@ namespace DogecoinTerminal
 					(int)(pos.x * _widthScale),
 					(int)(pos.y * _heightScale)	
 					),
-				
 				color.Color);
 
 		}

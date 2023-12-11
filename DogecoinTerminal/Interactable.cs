@@ -8,10 +8,23 @@ namespace DogecoinTerminal
 {
 	internal abstract class Interactable
 	{
-		public Interactable(Action<bool> onInteract)
+
+		public (int x, int y) Start;
+		public (int x, int y) End;
+
+
+		public Interactable((int x, int y) start,
+							(int x, int y) end,
+							Action<bool> onInteract)
 		{
+			Start = start;
+			End = end;
 			OnInteract = onInteract;
 		}
+
+
+		public abstract void Draw(VirtualScreen screen);
+
 
 		public Action<bool> OnInteract { get; private set; }
 

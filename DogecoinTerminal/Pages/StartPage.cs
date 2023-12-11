@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DogecoinTerminal.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,12 +9,24 @@ namespace DogecoinTerminal.Pages
 {
 	internal class StartPage : AppPage
 	{
+
+		public StartPage()
+		{
+			Interactables.Add(
+				new AppButton("Go To Test Page",
+						(30, 30), (40, 50),
+						(isFirst) =>
+						{
+							Router.Instance.Route("test", null, false);
+						}));
+		}
+
 		public override void Draw(VirtualScreen screen)
 		{
-			screen.DrawRectangle(TerminalColor.Red,
-				(30,30), (36,34));
-
-			screen.DrawText("Hello World!", TerminalColor.White, (31, 31));
+			foreach (var item in Interactables)
+			{
+				item.Draw(screen);
+			}
 		}
 
 		public override void OnBack()
@@ -29,6 +42,11 @@ namespace DogecoinTerminal.Pages
 		public override void OnReturned(object value)
 		{
 			throw new NotImplementedException();
+		}
+
+		public override void Update()
+		{
+
 		}
 	}
 }

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Linq;
 
 namespace DogecoinTerminal
 {
@@ -58,8 +59,11 @@ namespace DogecoinTerminal
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
-			// TODO: Add your update logic here
 
+			_router.GetPage().Update();
+			_screen.Update(_router.GetPage());
+
+			
 			base.Update(gameTime);
 		}
 

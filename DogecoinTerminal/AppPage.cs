@@ -8,7 +8,18 @@ namespace DogecoinTerminal
 {
 	internal abstract class AppPage
 	{
+		protected AppPage()
+		{
+			Interactables = new List<Interactable>();
+		}
+
+
+		public IList<Interactable> Interactables { get; set; }
+
+
 		public abstract void Draw(VirtualScreen screen);
+
+		public abstract void Update();
 
 		public abstract void OnBack();
 
