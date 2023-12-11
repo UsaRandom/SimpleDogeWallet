@@ -1,0 +1,169 @@
+AppSession
+	unlockPhrase
+	radioDoge?
+
+TerminalSession
+VirtualScreen
+
+init
+	router = new router({
+		{ path: "terminalOpen", page: new TerminalOpenPage()},
+		{ path: "phraseUnlock", page: new PhraseUnlockPage()},
+		{ path: "phraseSelect", page: new PhraseSelectPage()}
+	});
+
+	physicalScreen = getPhysicalScreen();
+
+	virtualScreen = new VirtualScreen(physicalScreen);
+
+update
+	appPage = router.getCurrentAppPage();
+	appPage.update();
+	virtualScreen.update(appPage);
+
+draw
+	appPage = router.getCurrentAppPage();
+	virtualScreen.draw(appPage)
+
+
+
+
+
+Text
+	
+
+	
+
+
+
+
+
+
+AppPage
+
+
+	public List<IInteractables> Interactables {get; set;}
+
+	init(){
+
+		text = new Text("text", TerminalColor.white, 10, 10, TextSize.small);
+
+		firstButton = new Button("Send", TerminalColor.White, TermincalColor.Blue,
+								  10, 20, 25, 25,
+								 (bool isFirst) => {
+
+								 	if(isFirst) {
+								 		//we have a click!
+								 		//do our thing.
+								 		router.GoTo("EnterPin", true);
+								 	}
+
+								 });
+
+
+		secondButton = new Button("1", TerminalColor.White, TerminalColor.Gray,
+								  10, 20, 25, 25,
+								 (bool isFirst) => {
+
+
+								 	if(isFirst && userEnteredPin.length < 7) {
+								 		userEnteredPin += "1";
+								 	}
+
+								 });
+
+
+		Interactables.Add(firstButton);
+
+
+	}
+
+	update() {
+
+		//for a pin screen
+
+		if(userEnteredPin.length == 7) //pin length
+		{
+			nextButtonEnabled = true;
+			nextButton.Color = TerminalColor.Green;
+		}
+		else
+		{
+			nextButtonEnabled = true;
+			nextButton.Color = TerminalColor.Gray;
+		}
+
+		//you know, but not shit. lol
+		pin1.number = userEnteredPin[0];
+		pin2.number = userEnteredPin[1];
+		pin3.number = userEnteredPin[2];
+		pin4.number = userEnteredPin[3];
+		pin5.number = userEnteredPin[4];
+
+	}
+
+
+	draw(vScreen) {
+
+		text.draw(vScreen);
+		firstButton.draw(vScreen);
+
+	}
+
+	OnNav(value) {
+		//called when state is passed forward
+	}
+
+	OnReturn(value)
+	{
+		called when state is passed back
+	}
+
+	OnBack()
+	{
+		can be used to clear values and used for chained
+	}
+
+
+Router
+	
+	currentPage = getPage(startPageText);
+	backStack = new stack();
+
+	route(txt, state, backable) {
+		page = getPage(txt);
+
+		page.useState(state);
+
+		if(backable){
+			backStack.push(currentPage);
+		}
+		else {
+			backStack.clear();
+		}
+
+		currentPage = page;
+	}
+
+
+
+	getNextScreen()
+		{
+		returns currentPage;
+		}
+
+	back() {
+		currentPage = backstack.pop();
+
+		currentPage.onBack();
+	}
+
+	return(value) {
+
+		currentPage = backstack.pop();
+
+		currentPage.onReturned(value);
+	}
+
+
+
