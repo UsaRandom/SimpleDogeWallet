@@ -43,7 +43,7 @@ namespace DogecoinTerminal
 					);
 
 				Interactables.Add(
-					new AppText("Đogecoin Terminal", TerminalColor.White, 3, (90, 25))
+					new AppText("Đogecoin\n Terminal", TerminalColor.White, 3, (90, 27))
 					);
 			}
 		}

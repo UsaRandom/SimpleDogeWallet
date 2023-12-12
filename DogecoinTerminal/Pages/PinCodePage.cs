@@ -36,7 +36,7 @@ namespace DogecoinTerminal.Pages
 
 			_returnButton = new AppButton(">", (88, 88), (98, 98), TerminalColor.Green, TerminalColor.White, 5, (isFirst, self) =>
 			{
-				Router.Instance.Return(UserText.Text);
+				Router.Instance.Return(UserText.Text.Replace("Đ", string.Empty));
 			});
 
 			Interactables.Add(
@@ -203,7 +203,13 @@ namespace DogecoinTerminal.Pages
 				{
 					return;
 				}
+
+				//if (!UserText.Text.StartsWith("Đ"))
+				//{
+				//	UserText.Text = "Đ" + UserText.Text;
+				//}
 			}
+
 			
 			UserText.Text += character;
 
@@ -213,11 +219,16 @@ namespace DogecoinTerminal.Pages
 
 		private void UpdateReturnButton()
 		{
-			if (_settings.IsValueMode && !string.IsNullOrEmpty(UserText.Text) && double.TryParse(UserText.Text, out double value))
+			if (_settings.IsValueMode && !UserText.Text.StartsWith("Đ"))
+			{
+				UserText.Text = "Đ" + UserText.Text;
+			}
+
+			if (_settings.IsValueMode && !string.IsNullOrEmpty(UserText.Text.Replace("Đ", string.Empty)) && double.TryParse(UserText.Text.Replace("Đ", string.Empty), out double value))
 			{
 				EnableReturn();
 			}
-			else if (!_settings.IsValueMode && !string.IsNullOrEmpty(UserText.Text))
+			else if (!_settings.IsValueMode && !string.IsNullOrEmpty(UserText.Text.Replace("Đ", string.Empty)))
 			{
 				EnableReturn();
 			}

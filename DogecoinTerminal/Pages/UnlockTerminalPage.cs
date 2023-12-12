@@ -10,7 +10,7 @@ namespace DogecoinTerminal.Pages
 {
 	internal class UnlockTerminalPage : AppPage
 	{
-		private const string UNLOCK_PIN = "420.69";
+		private const string UNLOCK_PIN = "120813";
 
 
 		public UnlockTerminalPage()
@@ -33,7 +33,7 @@ namespace DogecoinTerminal.Pages
 						(isFirst, self) =>
 						{
 							Router.Instance.Route("pin",
-								new PinCodePageSettings("Enter Pin", false), true,
+								new PinCodePageSettings("Enter Operator Pin to Unlock", false), true,
 								(dynamic enteredPin) =>
 								{
 									if(enteredPin == UNLOCK_PIN)
