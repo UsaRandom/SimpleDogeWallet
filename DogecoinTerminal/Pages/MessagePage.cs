@@ -29,7 +29,7 @@ namespace DogecoinTerminal.Pages
 						5,
 						(isFirst, self) =>
 						{
-							Router.Instance.Return("ok");
+							Router.Instance.Return("wow");
 						}));
 		}
 

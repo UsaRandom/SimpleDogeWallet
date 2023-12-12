@@ -24,7 +24,7 @@ namespace DogecoinTerminal
 		private InteractionMonitor _interactionMonitor;
 
 		private SpriteFont _font;
-		private Game1 _game;
+		private DogecoinTerminalGame _game;
 
 		private int _width;
 		private int _height;
@@ -50,7 +50,7 @@ namespace DogecoinTerminal
 			_interactionMonitor = new InteractionMonitor();
 		}
 
-		public void Load(Game1 game)
+		public void Load(DogecoinTerminalGame game)
 		{
 			_game = game;
 			_fontSystem = _game._fontSystem;//.Content.Load<SpriteFont>("basic"); 

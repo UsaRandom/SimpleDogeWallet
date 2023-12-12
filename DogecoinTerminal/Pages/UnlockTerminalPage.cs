@@ -10,7 +10,7 @@ namespace DogecoinTerminal.Pages
 {
 	internal class UnlockTerminalPage : AppPage
 	{
-		private const string UNLOCK_PIN = "120813";
+		private const string UNLOCK_PIN = "1102";
 
 
 		public UnlockTerminalPage()

@@ -47,6 +47,7 @@ namespace DogecoinTerminal
 				_callbackStack.Push(callback);
 			}
 
+			_currentPage?.Cleanup();
 			_currentPage = nextPage;
 
 			_currentPage.OnNavigation(value, backable);
@@ -60,6 +61,7 @@ namespace DogecoinTerminal
 
 		public void Back()
 		{
+			_currentPage.Cleanup();
 			_currentPage = _backStack.Pop();
 
 			_currentPage.OnBack();
@@ -68,6 +70,7 @@ namespace DogecoinTerminal
 
 		public void Return(object value)
 		{
+			_currentPage.Cleanup();
 			_currentPage = _backStack.Pop();
 
 			if(_callbackStack.Count > 0)

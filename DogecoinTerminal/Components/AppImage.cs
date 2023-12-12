@@ -11,7 +11,7 @@ namespace DogecoinTerminal.Components
 {
 	internal class AppImage : Interactable
 	{
-		private Texture2D _image;
+		public Texture2D Image;
 
 		//desired dim
 		private (int width, int height) _imgDim;
@@ -25,7 +25,7 @@ namespace DogecoinTerminal.Components
 						 (int width, int height) imgOgDim)
 			: base(start, start, (a,b) => { })
 		{
-			_image = image;
+			Image = image;
 			_imgDim = imgDim;
 			_imgOgDim = imgOgDim;
 		}
@@ -33,7 +33,7 @@ namespace DogecoinTerminal.Components
 
 		public override void Draw(VirtualScreen screen)
 		{
-			screen.DrawImage(_image, Start, _imgDim, _imgOgDim);
+			screen.DrawImage(Image, Start, _imgDim, _imgOgDim);
 		}
 
 		public string Text

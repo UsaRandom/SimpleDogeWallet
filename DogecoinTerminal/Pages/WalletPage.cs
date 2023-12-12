@@ -34,7 +34,15 @@ namespace DogecoinTerminal.Pages
 										{
 											var amountToSend = float.Parse(value);
 
-											Router.Instance.Route("msg", "You want to send Đ" + amountToSend, true);
+
+											Router.Instance.Route("qr", null, true,
+												(dynamic value) =>
+												{
+													//value should end up being who we want to send to.
+
+
+												});
+
 
 										});
 								}));

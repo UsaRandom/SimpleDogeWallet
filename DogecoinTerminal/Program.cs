@@ -1,3 +1,3 @@
 ﻿
-using var game = new DogecoinTerminal.Game1();
+using var game = new DogecoinTerminal.DogecoinTerminalGame();
 game.Run();

@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace DogecoinTerminal
 {
-	public class Game1 : Game
+	public class DogecoinTerminalGame : Game
 	{
 		private GraphicsDeviceManager _graphics;
 		private SpriteBatch _spriteBatch;
@@ -25,7 +25,7 @@ namespace DogecoinTerminal
 		public const int HEIGHT = 720;
 		public const int WIDTH = 1280;
 
-		public Game1()
+		public DogecoinTerminalGame()
 		{
 			_graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
@@ -39,6 +39,15 @@ namespace DogecoinTerminal
 
 		protected override void Initialize()
 		{
+			//GraphicsDevice.RasterizerState = new RasterizerState
+			//{
+			//	CullMode = CullMode.CullClockwiseFace
+			//};
+			//_graphics.GraphicsProfile = GraphicsProfile.HiDef;
+			//_graphics.PreferMultiSampling = true;
+			//GraphicsDevice.PresentationParameters.MultiSampleCount = 4;
+			//_graphics.ApplyChanges();
+
 			_screen.Init(GraphicsDevice, HEIGHT, WIDTH);
 
 
@@ -59,11 +68,11 @@ namespace DogecoinTerminal
 			_router = new Router(new[]
 			{
 				("home", (AppPage)new UnlockTerminalPage()),
-				("test", new TestPage()),
 				("pin", new PinCodePage()),
 				("msg", new MessagePage()),
 				("wallets", new WalletListPage()),
-				("wallet", new WalletPage())
+				("wallet", new WalletPage()),
+				("qr", new QRScannerPage(GraphicsDevice))
 			});
 
 			_router.Route("home", null, false);
@@ -75,7 +84,7 @@ namespace DogecoinTerminal
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
-
+			_router.GetPage().Update();
 			_screen.Update(_router.GetPage());
 
 			
@@ -90,7 +99,7 @@ namespace DogecoinTerminal
 			_spriteBatch.Begin();
 
 			_screen.Draw(_spriteBatch, _router.GetPage());
-
+			
 
 			_spriteBatch.End();
 
