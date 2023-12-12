@@ -8,6 +8,8 @@ namespace DogecoinTerminal
 {
 	internal class Router
 	{
+		private Stack<Action<dynamic>> _callbackStack = new Stack<Action<dynamic>>();
+
 		private Stack<AppPage> _backStack = new Stack<AppPage>();
 		private IDictionary<string, AppPage> _pages;
 		private AppPage _currentPage;
@@ -31,13 +33,18 @@ namespace DogecoinTerminal
 			Instance = this;
 		}
 
-		public void Route(string path, object value, bool backable)
+		public void Route(string path, object value, bool backable, Action<dynamic> callback = null)
 		{
 			var nextPage = _pages[path];
 
 			if(backable)
 			{
 				_backStack.Push(_currentPage);
+			}
+
+			if(callback != null)
+			{
+				_callbackStack.Push(callback);
 			}
 
 			_currentPage = nextPage;
@@ -63,7 +70,13 @@ namespace DogecoinTerminal
 		{
 			_currentPage = _backStack.Pop();
 
-			_currentPage.OnReturned(value);
+			if(_callbackStack.Count > 0)
+			{
+				var callback = _callbackStack.Pop();
+
+				callback.Invoke(value);
+			}
+
 		}
 	}
 }

@@ -52,7 +52,8 @@ namespace DogecoinTerminal
 			{
 				("home", (AppPage)new UnlockTerminalPage()),
 				("test", new TestPage()),
-				("pin", new PinCodePage())
+				("pin", new PinCodePage()),
+				("msg", new MessagePage())
 			});
 
 			_router.Route("home", null, false);

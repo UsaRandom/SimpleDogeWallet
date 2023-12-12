@@ -26,10 +26,6 @@ namespace DogecoinTerminal.Pages
 
 		}
 
-		public override void OnReturned(dynamic value)
-		{
-			throw new NotImplementedException();
-		}
 
 		public override void Update()
 		{

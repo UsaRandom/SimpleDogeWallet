@@ -11,9 +11,33 @@ namespace DogecoinTerminal.Pages
 	internal class PinCodePage : AppPage
 	{
 
-		public PinCodePage(
-			)
+		public string TypedValue { get; set; }
+
+		public AppText UserText { get; set; }
+
+		public AppText Title { get; set; }
+
+		private PinCodePageSettings _settings;
+
+		private AppButton _returnButton;
+
+
+		public PinCodePage()
+			: base(true)
 		{
+
+			Title = new AppText(string.Empty, TerminalColor.White, 1, (50, 10));
+
+			Interactables.Add(Title);
+
+			UserText = new AppText(string.Empty, TerminalColor.White, 1, (50, 20));
+
+			Interactables.Add(UserText);
+
+			_returnButton = new AppButton("->", (88, 88), (98, 98), TerminalColor.Green, TerminalColor.White, 1, (isFirst, self) =>
+			{
+				Router.Instance.Return(UserText.Text);
+			});
 
 			Interactables.Add(
 				new AppButton("1",
@@ -23,7 +47,7 @@ namespace DogecoinTerminal.Pages
 						1,
 						(isFirst, self) =>
 						{
-
+							AddCharacter("1");
 						}));
 
 
@@ -36,6 +60,7 @@ namespace DogecoinTerminal.Pages
 						(isFirst, self) =>
 						{
 
+							AddCharacter("2");
 						}));
 
 			Interactables.Add(
@@ -46,7 +71,7 @@ namespace DogecoinTerminal.Pages
 						1,
 						(isFirst, self) =>
 						{
-
+							AddCharacter("3");
 						}));
 
 			Interactables.Add(
@@ -58,6 +83,7 @@ namespace DogecoinTerminal.Pages
 						(isFirst, self) =>
 						{
 
+							AddCharacter("4");
 						}));
 
 			Interactables.Add(
@@ -69,6 +95,7 @@ namespace DogecoinTerminal.Pages
 						(isFirst, self) =>
 						{
 
+							AddCharacter("5");
 						}));
 
 			Interactables.Add(
@@ -80,6 +107,7 @@ namespace DogecoinTerminal.Pages
 						(isFirst, self) =>
 						{
 
+							AddCharacter("6");
 						}));
 
 
@@ -92,6 +120,7 @@ namespace DogecoinTerminal.Pages
 						(isFirst, self) =>
 						{
 
+							AddCharacter("7");
 						}));
 
 			Interactables.Add(
@@ -103,6 +132,7 @@ namespace DogecoinTerminal.Pages
 						(isFirst, self) =>
 						{
 
+							AddCharacter("8");
 						}));
 
 			Interactables.Add(
@@ -114,6 +144,7 @@ namespace DogecoinTerminal.Pages
 						(isFirst, self) =>
 						{
 
+							AddCharacter("9");
 						}));
 
 
@@ -126,7 +157,8 @@ namespace DogecoinTerminal.Pages
 						1,
 						(isFirst, self) =>
 						{
-							
+
+							AddCharacter(".");
 						}));
 
 			Interactables.Add(
@@ -138,6 +170,7 @@ namespace DogecoinTerminal.Pages
 						(isFirst, self) =>
 						{
 
+							AddCharacter("0");
 						}));
 
 			Interactables.Add(
@@ -148,22 +181,77 @@ namespace DogecoinTerminal.Pages
 						1,
 						(isFirst, self) =>
 						{
-
+							DeleteCharacter();
 						}));
 		}
 
-		public override void OnBack()
+
+		public void DeleteCharacter()
 		{
-			throw new NotImplementedException();
+			if(UserText.Text.Length > 0)
+			{
+				UserText.Text = UserText.Text.Remove(UserText.Text.Length - 1);
+				UpdateReturnButton();
+			}
 		}
 
-		public override void OnReturned(dynamic value)
+		public void AddCharacter(string character)
 		{
-			throw new NotImplementedException();
+			if (_settings.IsValueMode)
+			{
+				if(character == "." && UserText.Text.Contains("."))
+				{
+					return;
+				}
+			}
+			
+			UserText.Text += character;
+
+			UpdateReturnButton();
+
+		}
+
+		private void UpdateReturnButton()
+		{
+			if (_settings.IsValueMode && !string.IsNullOrEmpty(UserText.Text) && double.TryParse(UserText.Text, out double value))
+			{
+				EnableReturn();
+			}
+			else if (!_settings.IsValueMode && !string.IsNullOrEmpty(UserText.Text))
+			{
+				EnableReturn();
+			}
+			else
+			{
+				DisableReturn();
+			}
+			
+		}
+
+		private void EnableReturn()
+		{
+			if(!Interactables.Contains(_returnButton))
+			{
+				Interactables.Add(_returnButton);
+			}
+		}
+
+		private void DisableReturn()
+		{
+			Interactables.Remove(_returnButton);
+		}
+
+
+		public override void OnBack()
+		{
+			Router.Instance.Back();
 		}
 
 		public override void Update()
 		{
+
+
+
 		}
 
 		protected override void Draw(VirtualScreen screen)
@@ -172,7 +260,24 @@ namespace DogecoinTerminal.Pages
 
 		protected override void OnNav(dynamic value, bool backable)
 		{
+			_settings = value;
 
+			UserText.Text = string.Empty;
+			Title.Text = _settings.Title;
+
+			UpdateReturnButton();
+		}
+
+
+		public struct PinCodePageSettings
+		{
+			public PinCodePageSettings(string title, bool isValueMode)
+			{
+				Title = title;
+				IsValueMode = isValueMode;
+			}
+			public string Title;
+			public bool IsValueMode;
 		}
 	}
 }

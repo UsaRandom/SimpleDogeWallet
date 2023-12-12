@@ -13,7 +13,7 @@ namespace DogecoinTerminal
 
 		private AppButton _backButton;
 
-		protected AppPage()
+		protected AppPage(bool showDoge = false)
 		{
 			Interactables = new List<Interactable>();
 
@@ -33,6 +33,19 @@ namespace DogecoinTerminal
 						}
 					}
 				);
+
+
+			if(showDoge )
+			{
+				Interactables.Add(
+					new AppImage(Images.DogeImage,
+						(90, 10), (10, 10), Images.DogeImageDim)
+					);
+
+				Interactables.Add(
+					new AppText("Dogecoin Terminal", TerminalColor.White, 1.5, (90, 25))
+					);
+			}
 		}
 
 
@@ -56,7 +69,7 @@ namespace DogecoinTerminal
 
 		public abstract void OnBack();
 
-		public abstract void OnReturned(dynamic value);
+	//	public abstract void OnReturned(dynamic value);
 
 		protected abstract void OnNav(dynamic value, bool backable);
 

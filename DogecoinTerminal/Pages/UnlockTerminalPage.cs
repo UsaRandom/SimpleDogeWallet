@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static DogecoinTerminal.Pages.PinCodePage;
 
 namespace DogecoinTerminal.Pages
 {
@@ -30,8 +31,21 @@ namespace DogecoinTerminal.Pages
 						(isFirst, self) =>
 						{
 							Router.Instance.Route("pin",
-												  (title: "Enter Pin", expected: "420.69"),
-												  true);
+								new PinCodePageSettings("Enter Pin", false), true,
+								(dynamic enteredPin) =>
+								{
+									Router.Instance.Route("pin",
+										new PinCodePageSettings("Confirm Pin", false), true,
+										(dynamic confirmedPin) =>
+										{
+
+											if(enteredPin == confirmedPin)
+											{
+												Router.Instance.Route("msg", "Pin Confirmed: " + enteredPin, true);
+											}
+
+										});
+								});
 						}));
 		}
 
@@ -51,10 +65,6 @@ namespace DogecoinTerminal.Pages
 			
 		}
 
-		public override void OnReturned(dynamic value)
-		{
-			throw new NotImplementedException();
-		}
 
 		public override void Update()
 		{
