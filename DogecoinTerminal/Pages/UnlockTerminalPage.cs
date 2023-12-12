@@ -21,7 +21,7 @@ namespace DogecoinTerminal.Pages
 				);
 
 			Interactables.Add(
-				new AppText("Dogecoin Terminal", TerminalColor.White, 5, (50, 50))
+				new AppText("Đogecoin Terminal", TerminalColor.White, 5, (50, 50))
 				);
 
 			Interactables.Add(

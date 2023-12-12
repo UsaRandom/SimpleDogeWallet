@@ -34,7 +34,7 @@ namespace DogecoinTerminal.Pages
 
 			Interactables.Add(UserText);
 
-			_returnButton = new AppButton("->", (88, 88), (98, 98), TerminalColor.Green, TerminalColor.White, 5, (isFirst, self) =>
+			_returnButton = new AppButton(">", (88, 88), (98, 98), TerminalColor.Green, TerminalColor.White, 5, (isFirst, self) =>
 			{
 				Router.Instance.Return(UserText.Text);
 			});

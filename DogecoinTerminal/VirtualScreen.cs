@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FontStashSharp;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -31,6 +32,8 @@ namespace DogecoinTerminal
 		private decimal _heightScale;
 		private decimal _widthScale;
 
+		private FontSystem _fontSystem;
+
 		public void Init(GraphicsDevice graphicsDevice, int height, int width)
 		{
 			_graphicsDevice = graphicsDevice;
@@ -50,7 +53,7 @@ namespace DogecoinTerminal
 		public void Load(Game1 game)
 		{
 			_game = game;
-			_font = _game.Content.Load<SpriteFont>("basic"); 
+			_fontSystem = _game._fontSystem;//.Content.Load<SpriteFont>("basic"); 
 		}
 
 
@@ -109,21 +112,14 @@ namespace DogecoinTerminal
 
 		public void DrawText(string text, TerminalColor color, float scale, (int x, int y) pos)
 		{
+			SpriteFontBase font = _fontSystem.GetFont(scale * 8);
 
-			var textSize = _font.MeasureString(text);
+			var textSize = font.MeasureString(text);
 
-			//	public void DrawString(SpriteFont spriteFont, string text, Vector2 position, Color color, float rotation, Vector2 origin,
-			//	//float scale, SpriteEffects effects, float layerDepth)
-
-			var scaleToOne =  (float)_heightScale / textSize.Y;
-
-
-			_spriteBatch.DrawString(_font, text,
-				new Vector2(
-					(int)(pos.x * _widthScale) - (textSize.X * scaleToOne * scale) /2,
-					(int)(pos.y * _heightScale) - (textSize.Y * scaleToOne * scale) /2	
-					),
-				Color.White, 0, Vector2.Zero, scaleToOne * scale, SpriteEffects.None, 0);
+			_spriteBatch.DrawString(font, text,
+				new Vector2((int)(pos.x * _widthScale) - (textSize.X) / 2,
+					        (int)(pos.y * _heightScale) - (textSize.Y) / 2),
+				Color.White);
 
 		}
 

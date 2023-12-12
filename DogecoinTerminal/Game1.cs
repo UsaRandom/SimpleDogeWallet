@@ -1,9 +1,11 @@
 ﻿using DogecoinTerminal.Components;
 using DogecoinTerminal.Pages;
+using FontStashSharp;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace DogecoinTerminal
@@ -17,8 +19,8 @@ namespace DogecoinTerminal
 		private AppButton _button;
 
 		private Router _router;
+		public FontSystem _fontSystem;
 
-		
 
 
 		public Game1()
@@ -30,6 +32,7 @@ namespace DogecoinTerminal
 			_graphics.PreferredBackBufferHeight = 720;
 			_graphics.PreferredBackBufferWidth = 1280;
 			_screen = new VirtualScreen();
+			_fontSystem = new FontSystem();
 		}
 
 		protected override void Initialize()
@@ -43,6 +46,9 @@ namespace DogecoinTerminal
 		protected override void LoadContent()
 		{
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
+
+			_fontSystem.AddFont(File.ReadAllBytes(@"Content\ComicNeue-Bold.ttf"));
+		
 
 			Images.DogeImage = Content.Load<Texture2D>("dogedrawn");
 
