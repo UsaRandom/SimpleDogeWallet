@@ -66,7 +66,6 @@ namespace DogecoinTerminal
 				Exit();
 
 
-			_router.GetPage().Update();
 			_screen.Update(_router.GetPage());
 
 			

@@ -247,17 +247,6 @@ namespace DogecoinTerminal.Pages
 			Router.Instance.Back();
 		}
 
-		public override void Update()
-		{
-
-
-
-		}
-
-		protected override void Draw(VirtualScreen screen)
-		{
-		}
-
 		protected override void OnNav(dynamic value, bool backable)
 		{
 			_settings = value;

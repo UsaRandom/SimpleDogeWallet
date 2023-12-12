@@ -50,11 +50,6 @@ namespace DogecoinTerminal.Pages
 		}
 
 
-		protected override void Draw(VirtualScreen screen)
-		{
-
-		}
-
 		public override void OnBack()
 		{
 
@@ -62,13 +57,15 @@ namespace DogecoinTerminal.Pages
 
 		protected override void OnNav(dynamic value, bool backable)
 		{
-			
+			//alright, so the router keeps track of the callbacks we use when chaining pages.
+			//sounds fine, but there is a problem.... the got' dang back button.
+			//
+			//... so we have to do this on a few pages lol
+			//
+			//what kind of shitty programmer am i?
+			Router.Instance.ClearCallbackStack();
 		}
 
 
-		public override void Update()
-		{
-
-		}
 	}
 }

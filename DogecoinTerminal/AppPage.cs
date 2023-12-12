@@ -52,24 +52,17 @@ namespace DogecoinTerminal
 		public IList<Interactable> Interactables { get; set; }
 
 
-		protected abstract void Draw(VirtualScreen screen);
-
-
 		public void DrawScreen(VirtualScreen screen)
 		{
 			foreach (var item in Interactables)
 			{
 				item.Draw(screen);
 			}
-
-			this.Draw(screen);
 		}
 
-		public abstract void Update();
 
 		public abstract void OnBack();
 
-	//	public abstract void OnReturned(dynamic value);
 
 		protected abstract void OnNav(dynamic value, bool backable);
 

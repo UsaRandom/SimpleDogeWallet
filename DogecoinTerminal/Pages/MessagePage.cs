@@ -34,11 +34,6 @@ namespace DogecoinTerminal.Pages
 		}
 
 
-		protected override void Draw(VirtualScreen screen)
-		{
-
-		}
-
 		public override void OnBack()
 		{
 			Router.Instance.Back();
@@ -50,9 +45,5 @@ namespace DogecoinTerminal.Pages
 		}
 
 
-		public override void Update()
-		{
-
-		}
 	}
 }

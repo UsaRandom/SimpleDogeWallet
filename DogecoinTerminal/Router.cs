@@ -78,5 +78,10 @@ namespace DogecoinTerminal
 			}
 
 		}
+
+		public void ClearCallbackStack()
+		{
+			_callbackStack.Clear();
+		}
 	}
 }
