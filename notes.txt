@@ -52,7 +52,7 @@ AppPage
 								  10, 20, 25, 25,
 								 (bool isFirst) => {
 
-								 	if(isFirst) {
+								 	if(isFirst, self) {
 								 		//we have a click!
 								 		//do our thing.
 								 		router.GoTo("EnterPin", true);

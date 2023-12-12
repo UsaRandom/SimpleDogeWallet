@@ -18,6 +18,8 @@ namespace DogecoinTerminal
 
 		private Router _router;
 
+		
+
 
 		public Game1()
 		{
@@ -42,12 +44,15 @@ namespace DogecoinTerminal
 		{
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
 
+			Images.DogeImage = Content.Load<Texture2D>("dogedrawn");
+
 			_screen.Load(this);
 
 			_router = new Router(new[]
 			{
 				("home", (AppPage)new UnlockTerminalPage()),
-				("test", new TestPage())
+				("test", new TestPage()),
+				("pin", new PinCodePage())
 			});
 
 			_router.Route("home", null, false);

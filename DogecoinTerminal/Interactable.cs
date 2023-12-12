@@ -15,7 +15,7 @@ namespace DogecoinTerminal
 
 		public Interactable((int x, int y) start,
 							(int x, int y) end,
-							Action<bool> onInteract)
+							Action<bool, Interactable> onInteract)
 		{
 			Start = start;
 			End = end;
@@ -26,7 +26,7 @@ namespace DogecoinTerminal
 		public abstract void Draw(VirtualScreen screen);
 
 
-		public Action<bool> OnInteract { get; private set; }
+		public Action<bool, Interactable> OnInteract { get; private set; }
 
 
 	}

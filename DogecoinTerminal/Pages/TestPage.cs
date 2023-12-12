@@ -21,12 +21,12 @@ namespace DogecoinTerminal.Pages
 			throw new NotImplementedException();
 		}
 
-		protected override void OnNav(object value, bool backable)
+		protected override void OnNav(dynamic value, bool backable)
 		{
 
 		}
 
-		public override void OnReturned(object value)
+		public override void OnReturned(dynamic value)
 		{
 			throw new NotImplementedException();
 		}

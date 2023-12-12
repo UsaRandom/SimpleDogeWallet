@@ -19,7 +19,7 @@ namespace DogecoinTerminal.Components
 							TerminalColor backgroundColor,
 							TerminalColor foregroundColor,
 							double textScale,
-							Action<bool> onInteract)
+							Action<bool, Interactable> onInteract)
 			: base(start, end, onInteract)
 		{
 			Text = text;

@@ -76,7 +76,7 @@ namespace DogecoinTerminal
 					   vertPos.x <= interactable.End.x &&
 					   vertPos.y <= interactable.End.y)
 					{
-						interactable.OnInteract(interaction.isFirst);
+						interactable.OnInteract(interaction.isFirst, interactable);
 						break;
 					}
 				}
@@ -103,7 +103,7 @@ namespace DogecoinTerminal
 					(int)Math.Round(start.y * _heightScale),
 					(int)Math.Round((end.x - start.x) * _widthScale),
 					(int)Math.Round((end.y - start.y) * _heightScale)),
-				color.Color);
+				Color.White);
 		}
 
 
@@ -119,12 +119,32 @@ namespace DogecoinTerminal
 					(int)(pos.x * _widthScale) - textSize.X/2,
 					(int)(pos.y * _heightScale) - textSize.Y/2	
 					),
-				color.Color);
+				Color.White);
 
 		}
 
+		internal void DrawImage(
+			Texture2D image,
+			(int x, int y) start,
+			(int width, int height) imgDim,
+			(int width, int height) imgOgDim)
+		{
+
+			//determine target size
+			var target = (width: imgDim.width * _widthScale,
+						 height: imgDim.height * _heightScale);
 
 
 
+			_spriteBatch.Draw(image,
+					new Vector2((int)( (start.x - (imgDim.width / 2)) * _widthScale),
+					(int)((start.y - (imgDim.height / 2)) * _heightScale)),
+					null, Color.White, 0, Vector2.Zero, 
+					new Vector2((float)target.width/imgOgDim.width,
+								(float)target.width / imgOgDim.width), 
+					
+					SpriteEffects.None, 0
+					);
+		}
 	}
 }

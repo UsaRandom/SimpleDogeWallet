@@ -18,7 +18,7 @@ namespace DogecoinTerminal.Components
 					   TerminalColor color,
 					   double scale,
 					   (int x, int y) start)
-			: base(start, start, (isFirst) => {})
+			: base(start, start, (a, b) => { })
 		{
 			Text = text;
 			_color = color;

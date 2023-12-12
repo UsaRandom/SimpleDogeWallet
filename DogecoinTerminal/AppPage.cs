@@ -23,7 +23,7 @@ namespace DogecoinTerminal
 					TerminalColor.DarkGrey,
 					TerminalColor.White,
 					2,
-					(isFirst) =>
+					(isFirst, self) =>
 					{
 						if (isFirst && _isBackable)
 						{
@@ -56,11 +56,11 @@ namespace DogecoinTerminal
 
 		public abstract void OnBack();
 
-		public abstract void OnReturned(object value);
+		public abstract void OnReturned(dynamic value);
 
-		protected abstract void OnNav(object value, bool backable);
+		protected abstract void OnNav(dynamic value, bool backable);
 
-		public void OnNavigation(object value, bool backable)
+		public void OnNavigation(dynamic value, bool backable)
 		{
 			_isBackable = backable;
 

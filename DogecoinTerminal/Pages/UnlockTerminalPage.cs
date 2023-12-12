@@ -13,6 +13,11 @@ namespace DogecoinTerminal.Pages
 		public UnlockTerminalPage()
 		{
 			Interactables.Add(
+				new AppImage(Images.DogeImage,
+					(50, 25), (15, 15), Images.DogeImageDim)
+				);
+
+			Interactables.Add(
 				new AppText("Dogecoin Terminal", TerminalColor.White, 1.5, (50, 50))
 				);
 
@@ -22,9 +27,11 @@ namespace DogecoinTerminal.Pages
 						TerminalColor.Green,
 						TerminalColor.White,
 						1,
-						(isFirst) =>
+						(isFirst, self) =>
 						{
-							Router.Instance.Route("test", null, true);
+							Router.Instance.Route("pin",
+												  (title: "Enter Pin", expected: "420.69"),
+												  true);
 						}));
 		}
 
@@ -39,12 +46,12 @@ namespace DogecoinTerminal.Pages
 
 		}
 
-		protected override void OnNav(object value, bool backable)
+		protected override void OnNav(dynamic value, bool backable)
 		{
 			
 		}
 
-		public override void OnReturned(object value)
+		public override void OnReturned(dynamic value)
 		{
 			throw new NotImplementedException();
 		}
