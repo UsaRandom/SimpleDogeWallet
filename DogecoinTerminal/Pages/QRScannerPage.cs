@@ -8,6 +8,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZXing;
+using ZXing.OpenCV;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace DogecoinTerminal.Pages
 {
@@ -38,29 +41,12 @@ namespace DogecoinTerminal.Pages
 		public override void Update()
 		{
 
-	//		cameraImg.Image = cameraTexture;
 		}
 
 
-		static int[] BytesToIntArray(byte[] byteArray)
-		{
-			if (byteArray.Length % 4 != 0)
-			{
-				throw new ArgumentException("Byte array length must be a multiple of 4.");
-			}
 
-			int[] intArray = new int[byteArray.Length / 4];
-
-			for (int i = 0; i < intArray.Length; i++)
-			{
-				intArray[i] = BitConverter.ToInt32(byteArray, i * 4);
-			}
-
-			return intArray;
-		}
 		public override void Draw(VirtualScreen screen)
 		{
-
 			using (Mat frame = new Mat(640, 480, MatType.CV_32SC1))
 			{
 				if (capture.Read(frame))
@@ -80,6 +66,21 @@ namespace DogecoinTerminal.Pages
 
 
 					cameraTexture.SetData(intArray);
+
+
+
+					// create a barcode reader instance
+					var reader = new BarcodeReader();
+					// load a bitmap
+					var result = reader.Decode(frame);
+					
+					// do something with the result
+					if (result != null && result.BarcodeFormat == BarcodeFormat.QR_CODE
+							&& result.Text.ToLower().StartsWith("dogecoin:"))
+					{
+						Router.Instance.Return(result.Text.Split(":")[1]);		
+					}
+
 
 					screen.DrawImage(cameraTexture, (50, 50), (50,60), (640, 480));
 

@@ -72,7 +72,8 @@ namespace DogecoinTerminal
 				("msg", new MessagePage()),
 				("wallets", new WalletListPage()),
 				("wallet", new WalletPage()),
-				("qr", new QRScannerPage(GraphicsDevice))
+				("qr", new QRScannerPage(GraphicsDevice)),
+				("receive", new DisplayQRPage(GraphicsDevice))
 			});
 
 			_router.Route("home", null, false);

@@ -34,11 +34,11 @@ namespace DogecoinTerminal.Pages
 										{
 											var amountToSend = float.Parse(value);
 
-
 											Router.Instance.Route("qr", null, true,
-												(dynamic value) =>
+												(dynamic receiver) =>
 												{
-													//value should end up being who we want to send to.
+
+													Router.Instance.Route("msg", "You want to send Đ" + value + "\nto " + receiver, true);
 
 
 												});
@@ -52,7 +52,7 @@ namespace DogecoinTerminal.Pages
 							  TerminalColor.DarkGrey, TerminalColor.White, 4,
 							  (isFirst, self) =>
 							  {
-
+								Router.Instance.Route("receive", "dogecoin:D8ZEVbgf4yPs3MK8dMJJ7PpSyBKsbd66TX", true);
 							  }));
 
 			Interactables.Add(
