@@ -42,7 +42,7 @@ namespace DogecoinTerminal
 
 			_currentPage = nextPage;
 
-			_currentPage.OnNav(value);
+			_currentPage.OnNavigation(value, backable);
 		}
 
 

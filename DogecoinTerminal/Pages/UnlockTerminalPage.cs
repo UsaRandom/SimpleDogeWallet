@@ -7,34 +7,39 @@ using System.Threading.Tasks;
 
 namespace DogecoinTerminal.Pages
 {
-	internal class StartPage : AppPage
+	internal class UnlockTerminalPage : AppPage
 	{
 
-		public StartPage()
+		public UnlockTerminalPage()
 		{
 			Interactables.Add(
-				new AppButton("Go To Test Page",
-						(30, 30), (40, 50),
+				new AppText("Dogecoin Terminal", TerminalColor.White, 1.5, (50, 50))
+				);
+
+			Interactables.Add(
+				new AppButton("Unlock",
+						(40, 60), (60, 70),
+						TerminalColor.Green,
+						TerminalColor.White,
+						1,
 						(isFirst) =>
 						{
-							Router.Instance.Route("test", null, false);
+							Router.Instance.Route("test", null, true);
 						}));
 		}
 
-		public override void Draw(VirtualScreen screen)
+
+		protected override void Draw(VirtualScreen screen)
 		{
-			foreach (var item in Interactables)
-			{
-				item.Draw(screen);
-			}
+
 		}
 
 		public override void OnBack()
 		{
-			throw new NotImplementedException();
+
 		}
 
-		public override void OnNav(object value)
+		protected override void OnNav(object value, bool backable)
 		{
 			
 		}

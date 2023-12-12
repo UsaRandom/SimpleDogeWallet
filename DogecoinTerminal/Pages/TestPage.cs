@@ -11,7 +11,7 @@ namespace DogecoinTerminal.Pages
 
 
 
-		public override void Draw(VirtualScreen screen)
+		protected override void Draw(VirtualScreen screen)
 		{
 
 		}
@@ -21,7 +21,7 @@ namespace DogecoinTerminal.Pages
 			throw new NotImplementedException();
 		}
 
-		public override void OnNav(object value)
+		protected override void OnNav(object value, bool backable)
 		{
 
 		}

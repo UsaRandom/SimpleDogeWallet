@@ -89,7 +89,7 @@ namespace DogecoinTerminal
 		{
 			_spriteBatch = spriteBatch;
 
-			page.Draw(this);
+			page.DrawScreen(this);
 		}
 
 
@@ -107,12 +107,17 @@ namespace DogecoinTerminal
 		}
 
 
-		public void DrawText(string text, TerminalColor color, (int x, int y) pos)
+		public void DrawText(string text, TerminalColor color, double scale, (int x, int y) pos)
 		{
+
+			var textSize = _font.MeasureString(text);
+
+
+			
 			_spriteBatch.DrawString(_font, text,
 				new Vector2(
-					(int)(pos.x * _widthScale),
-					(int)(pos.y * _heightScale)	
+					(int)(pos.x * _widthScale) - textSize.X/2,
+					(int)(pos.y * _heightScale) - textSize.Y/2	
 					),
 				color.Color);
 

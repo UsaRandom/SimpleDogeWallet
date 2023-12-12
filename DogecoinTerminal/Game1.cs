@@ -28,19 +28,12 @@ namespace DogecoinTerminal
 			_graphics.PreferredBackBufferHeight = 720;
 			_graphics.PreferredBackBufferWidth = 1280;
 			_screen = new VirtualScreen();
-			_router = new Router(new[]
-			{
-				("home", (AppPage)new StartPage()),
-				("test", new TestPage())
-			}) ;
 		}
 
 		protected override void Initialize()
 		{
-			// TODO: Add your initialization logic here
 			_screen.Init(GraphicsDevice, 720, 1280);
 
-			_router.Route("home", null, false);
 
 			base.Initialize();
 		}
@@ -51,7 +44,14 @@ namespace DogecoinTerminal
 
 			_screen.Load(this);
 
-			// TODO: use this.Content to load your game content here
+			_router = new Router(new[]
+			{
+				("home", (AppPage)new UnlockTerminalPage()),
+				("test", new TestPage())
+			});
+
+			_router.Route("home", null, false);
+
 		}
 
 		protected override void Update(GameTime gameTime)

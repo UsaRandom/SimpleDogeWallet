@@ -34,6 +34,7 @@ namespace DogecoinTerminal
 			}
 
 
+			_lastState = nextState;
 
 			return null;
 		}
