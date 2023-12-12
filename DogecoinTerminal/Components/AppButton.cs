@@ -11,14 +11,14 @@ namespace DogecoinTerminal.Components
 
 		private  TerminalColor _backgroundColor;
 		private TerminalColor _foregroundColor;
-		private double _textScale;
+		private float _textScale;
 
 		public AppButton(string text,
 						 (int x, int y) start,
 							(int x, int y) end,
 							TerminalColor backgroundColor,
 							TerminalColor foregroundColor,
-							double textScale,
+							float textScale,
 							Action<bool, Interactable> onInteract)
 			: base(start, end, onInteract)
 		{

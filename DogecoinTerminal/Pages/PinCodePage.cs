@@ -26,15 +26,15 @@ namespace DogecoinTerminal.Pages
 			: base(true)
 		{
 
-			Title = new AppText(string.Empty, TerminalColor.White, 1, (50, 10));
+			Title = new AppText(string.Empty, TerminalColor.White, 6, (50, 10));
 
 			Interactables.Add(Title);
 
-			UserText = new AppText(string.Empty, TerminalColor.White, 1, (50, 20));
+			UserText = new AppText(string.Empty, TerminalColor.White, 5, (50, 20));
 
 			Interactables.Add(UserText);
 
-			_returnButton = new AppButton("->", (88, 88), (98, 98), TerminalColor.Green, TerminalColor.White, 1, (isFirst, self) =>
+			_returnButton = new AppButton("->", (88, 88), (98, 98), TerminalColor.Green, TerminalColor.White, 5, (isFirst, self) =>
 			{
 				Router.Instance.Return(UserText.Text);
 			});
@@ -44,7 +44,7 @@ namespace DogecoinTerminal.Pages
 						(21, 41), (39,51),
 						TerminalColor.DarkGrey,
 						TerminalColor.White,
-						1,
+						5,
 						(isFirst, self) =>
 						{
 							AddCharacter("1");
@@ -56,7 +56,7 @@ namespace DogecoinTerminal.Pages
 						(41,41), (59,51),
 						TerminalColor.DarkGrey,
 						TerminalColor.White,
-						1,
+						5,
 						(isFirst, self) =>
 						{
 
@@ -68,7 +68,7 @@ namespace DogecoinTerminal.Pages
 						(61, 41), (79, 51),
 						TerminalColor.DarkGrey,
 						TerminalColor.White,
-						1,
+						5,
 						(isFirst, self) =>
 						{
 							AddCharacter("3");
@@ -79,7 +79,7 @@ namespace DogecoinTerminal.Pages
 						(21, 53), (39, 63),
 						TerminalColor.DarkGrey,
 						TerminalColor.White,
-						1,
+						5,
 						(isFirst, self) =>
 						{
 
@@ -91,7 +91,7 @@ namespace DogecoinTerminal.Pages
 						(41, 53), (59, 63),
 						TerminalColor.DarkGrey,
 						TerminalColor.White,
-						1,
+						5,
 						(isFirst, self) =>
 						{
 
@@ -103,7 +103,7 @@ namespace DogecoinTerminal.Pages
 						(61, 53), (79, 63),
 						TerminalColor.DarkGrey,
 						TerminalColor.White,
-						1,
+						5,
 						(isFirst, self) =>
 						{
 
@@ -116,7 +116,7 @@ namespace DogecoinTerminal.Pages
 						(21, 65), (39, 75),
 						TerminalColor.DarkGrey,
 						TerminalColor.White,
-						1,
+						5,
 						(isFirst, self) =>
 						{
 
@@ -128,7 +128,7 @@ namespace DogecoinTerminal.Pages
 						(41, 65), (59, 75),
 						TerminalColor.DarkGrey,
 						TerminalColor.White,
-						1,
+						5,
 						(isFirst, self) =>
 						{
 
@@ -140,7 +140,7 @@ namespace DogecoinTerminal.Pages
 						(61, 65), (79, 75),
 						TerminalColor.DarkGrey,
 						TerminalColor.White,
-						1,
+						5,
 						(isFirst, self) =>
 						{
 
@@ -154,7 +154,7 @@ namespace DogecoinTerminal.Pages
 						(21, 77), (39, 87),
 						TerminalColor.DarkGrey,
 						TerminalColor.White,
-						1,
+						5,
 						(isFirst, self) =>
 						{
 
@@ -166,7 +166,7 @@ namespace DogecoinTerminal.Pages
 						(41, 77), (59, 87),
 						TerminalColor.DarkGrey,
 						TerminalColor.White,
-						1,
+						5,
 						(isFirst, self) =>
 						{
 
@@ -178,7 +178,7 @@ namespace DogecoinTerminal.Pages
 						(61, 77), (79, 87),
 						TerminalColor.Red,
 						TerminalColor.White,
-						1,
+						5,
 						(isFirst, self) =>
 						{
 							DeleteCharacter();

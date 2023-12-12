@@ -107,19 +107,23 @@ namespace DogecoinTerminal
 		}
 
 
-		public void DrawText(string text, TerminalColor color, double scale, (int x, int y) pos)
+		public void DrawText(string text, TerminalColor color, float scale, (int x, int y) pos)
 		{
 
 			var textSize = _font.MeasureString(text);
 
+			//	public void DrawString(SpriteFont spriteFont, string text, Vector2 position, Color color, float rotation, Vector2 origin,
+			//	//float scale, SpriteEffects effects, float layerDepth)
 
-			
+			var scaleToOne =  (float)_heightScale / textSize.Y;
+
+
 			_spriteBatch.DrawString(_font, text,
 				new Vector2(
-					(int)(pos.x * _widthScale) - textSize.X/2,
-					(int)(pos.y * _heightScale) - textSize.Y/2	
+					(int)(pos.x * _widthScale) - (textSize.X * scaleToOne * scale) /2,
+					(int)(pos.y * _heightScale) - (textSize.Y * scaleToOne * scale) /2	
 					),
-				Color.White);
+				Color.White, 0, Vector2.Zero, scaleToOne * scale, SpriteEffects.None, 0);
 
 		}
 

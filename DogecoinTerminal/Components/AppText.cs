@@ -12,11 +12,11 @@ namespace DogecoinTerminal.Components
 
 		private TerminalColor _color;
 
-		private double _scale;
+		private float _scale;
 
 		public AppText(string text,
 					   TerminalColor color,
-					   double scale,
+					   float scale,
 					   (int x, int y) start)
 			: base(start, start, (a, b) => { })
 		{

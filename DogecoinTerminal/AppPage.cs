@@ -19,10 +19,10 @@ namespace DogecoinTerminal
 
 
 			_backButton = new AppButton(
-					"<", (5, 5), (10, 10),
-					TerminalColor.DarkGrey,
+					"<", (5, 5), (15, 15),
+					TerminalColor.LightGrey,
 					TerminalColor.White,
-					2,
+					5,
 					(isFirst, self) =>
 					{
 						if (isFirst && _isBackable)
@@ -43,7 +43,7 @@ namespace DogecoinTerminal
 					);
 
 				Interactables.Add(
-					new AppText("Dogecoin Terminal", TerminalColor.White, 1.5, (90, 25))
+					new AppText("Dogecoin Terminal", TerminalColor.White, 3, (90, 25))
 					);
 			}
 		}

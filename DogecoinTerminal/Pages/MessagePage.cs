@@ -17,7 +17,7 @@ namespace DogecoinTerminal.Pages
 					(50, 25), (15, 15), Images.DogeImageDim)
 				);
 
-			MessageText = new AppText(string.Empty, TerminalColor.White, 1.5, (50, 50));
+			MessageText = new AppText(string.Empty, TerminalColor.White, 5, (50, 50));
 
 			Interactables.Add(MessageText);
 
@@ -26,7 +26,7 @@ namespace DogecoinTerminal.Pages
 						(40, 60), (60, 70),
 						TerminalColor.Blue,
 						TerminalColor.White,
-						1,
+						5,
 						(isFirst, self) =>
 						{
 							Router.Instance.Back();
