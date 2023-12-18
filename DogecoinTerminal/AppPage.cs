@@ -11,35 +11,27 @@ namespace DogecoinTerminal
 	{
 		private bool _isBackable = false;
 
-		private AppButton _backButton;
+		private AppImage _backButton;
 
 		protected AppPage(bool showDoge = false)
 		{
 			Interactables = new List<Interactable>();
 
+			_backButton = new AppImage(Images.ArrowImage, (3, 3), (9, 7), Images.ArrowImageData, (isFirst, self) =>
+			{
+				if (isFirst && _isBackable)
+				{
 
-			_backButton = new AppButton(
-					"<", (5, 5), (15, 15),
-					TerminalColor.LightGrey,
-					TerminalColor.White,
-					5,
-					(isFirst, self) =>
-					{
-						if (isFirst && _isBackable)
-						{
+					Router.Instance.Back();
 
-							Router.Instance.Back();
-
-						}
-					}
-				);
-
+				}
+			});
 
 			if(showDoge )
 			{
 				Interactables.Add(
 					new AppImage(Images.DogeImage,
-						(90, 10), (10, 10), Images.DogeImageDim)
+						(85, 5), (95, 15), Images.DogeImageDim)
 					);
 
 				Interactables.Add(

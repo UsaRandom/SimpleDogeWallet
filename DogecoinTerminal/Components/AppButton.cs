@@ -9,8 +9,8 @@ namespace DogecoinTerminal.Components
 	internal class AppButton : Interactable
 	{
 
-		private  TerminalColor _backgroundColor;
-		private TerminalColor _foregroundColor;
+		public  TerminalColor BackgroundColor;
+		public TerminalColor ForegroundColor;
 		private float _textScale;
 
 		public AppButton(string text,
@@ -23,17 +23,18 @@ namespace DogecoinTerminal.Components
 			: base(start, end, onInteract)
 		{
 			Text = text;
-			_backgroundColor = backgroundColor;
-			_foregroundColor = foregroundColor;
+			BackgroundColor = backgroundColor;
+			ForegroundColor = foregroundColor;
 			_textScale = textScale;
 		}
 
 
+
 		public override void Draw(VirtualScreen screen)
 		{
-			screen.DrawRectangle(_backgroundColor, Start, End);
+			screen.DrawRectangle(BackgroundColor, Start, End);
 
-			screen.DrawText(Text, _foregroundColor, _textScale, 
+			screen.DrawText(Text, ForegroundColor, _textScale, 
 				(Start.x + ((End.x - Start.x)/2), Start.y + ((End.y - Start.y)/2)));
 		}
 

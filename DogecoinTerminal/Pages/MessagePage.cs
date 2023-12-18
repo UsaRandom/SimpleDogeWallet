@@ -14,7 +14,7 @@ namespace DogecoinTerminal.Pages
 		{
 			Interactables.Add(
 				new AppImage(Images.DogeImage,
-					(50, 25), (15, 15), Images.DogeImageDim)
+					(43, 18), (57, 33), Images.DogeImageDim)
 				);
 
 			MessageText = new AppText(string.Empty, TerminalColor.White, 5, (50, 50));

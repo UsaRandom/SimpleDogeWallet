@@ -19,7 +19,7 @@ namespace DogecoinTerminal
 		{
 			Start = start;
 			End = end;
-			OnInteract = onInteract;
+			OnInteract = onInteract ?? ((_,_) => { });
 		}
 
 

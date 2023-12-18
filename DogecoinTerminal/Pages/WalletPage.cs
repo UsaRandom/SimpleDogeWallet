@@ -78,7 +78,7 @@ namespace DogecoinTerminal.Pages
 							  TerminalColor.DarkGrey, TerminalColor.White, 4,
 							  (isFirst, self) =>
 							  {
-
+								  Router.Instance.Route("codes", null, true);
 							  }));
 
 

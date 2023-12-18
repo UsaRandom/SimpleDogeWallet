@@ -17,7 +17,7 @@ namespace DogecoinTerminal.Pages
 		{
 			Interactables.Add(
 				new AppImage(Images.DogeImage,
-					(50, 25), (15, 15), Images.DogeImageDim)
+					(43, 18), (57, 33), Images.DogeImageDim)
 				);
 
 			Interactables.Add(
@@ -36,7 +36,7 @@ namespace DogecoinTerminal.Pages
 								new PinCodePageSettings("Enter Operator Pin to Unlock", false), true,
 								(dynamic enteredPin) =>
 								{
-									if(enteredPin == UNLOCK_PIN)
+									if (enteredPin == UNLOCK_PIN)
 									{
 										Router.Instance.Route("wallets", null, false);
 									}

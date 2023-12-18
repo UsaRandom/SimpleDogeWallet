@@ -10,7 +10,9 @@ namespace DogecoinTerminal
 	internal class Images
 	{
 		public static Texture2D DogeImage;
+		public static Texture2D ArrowImage;
 
 		public static (int width, int height) DogeImageDim = (2477, 2477);
+		public static (int width, int height) ArrowImageData = (231, 148);
 	}
 }

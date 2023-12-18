@@ -62,6 +62,7 @@ namespace DogecoinTerminal
 		
 
 			Images.DogeImage = Content.Load<Texture2D>("dogedrawn");
+			Images.ArrowImage = Content.Load<Texture2D>("arrow");
 
 			_screen.Load(this);
 
@@ -73,7 +74,8 @@ namespace DogecoinTerminal
 				("wallets", new WalletListPage()),
 				("wallet", new WalletPage()),
 				("qr", new QRScannerPage(GraphicsDevice)),
-				("receive", new DisplayQRPage(GraphicsDevice))
+				("receive", new DisplayQRPage(GraphicsDevice)),
+				("codes", new BackupCodePage())
 			});
 
 			_router.Route("home", null, false);

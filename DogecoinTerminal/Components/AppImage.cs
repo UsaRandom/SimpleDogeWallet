@@ -19,21 +19,25 @@ namespace DogecoinTerminal.Components
 		//original dim
 		private (int width, int height) _imgOgDim;
 
+		private (int x, int y) _center;
+
 		public AppImage(Texture2D image,
 						 (int x, int y) start,
-						 (int width, int height) imgDim,
-						 (int width, int height) imgOgDim)
-			: base(start, start, (a,b) => { })
+						 (int x, int y) end,
+						 (int width, int height) imgOgDim,
+						 Action<bool, Interactable> onInteract = null)
+			: base(start, end, onInteract)
 		{
 			Image = image;
-			_imgDim = imgDim;
+			_imgDim = (end.x-start.x, end.y-start.y);
 			_imgOgDim = imgOgDim;
+			_center = (start.x + (_imgDim.width / 2), start.y + (_imgDim.height / 2));
 		}
 
 
 		public override void Draw(VirtualScreen screen)
 		{
-			screen.DrawImage(Image, Start, _imgDim, _imgOgDim);
+			screen.DrawImage(Image, _center, _imgDim, _imgOgDim);
 		}
 
 		public string Text
