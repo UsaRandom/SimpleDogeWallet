@@ -8,9 +8,9 @@ using ZXing;
 using ZXing.Common;
 using ZXing.QrCode;
 
-namespace DogecoinTerminal.Pages
+namespace DogecoinTerminal.Common
 {
-	internal class DisplayQRPage : AppPage
+	public class DisplayQRPage : AppPage
 	{
 		private GraphicsDevice _graphicsDevice;
 
@@ -35,7 +35,7 @@ namespace DogecoinTerminal.Pages
 
 		protected override void OnNav(dynamic value, bool backable)
 		{
-			_image = new Texture2D(_graphicsDevice, 480, 480);//, false, SurfaceFormat.Alpha8);
+			_image = new Texture2D(_graphicsDevice, 480, 480);
 			var barcodeWriter = new BarcodeWriterPixelData()
 			{
 				Format = BarcodeFormat.QR_CODE,
@@ -46,11 +46,8 @@ namespace DogecoinTerminal.Pages
 				}
 			};
 
-			// Generate the QR code array
 			var pixels = barcodeWriter.Write(value).Pixels;
 
-			
-			// Set the byte array to the Texture2D
 			_image.SetData(pixels);
 		}
 	}

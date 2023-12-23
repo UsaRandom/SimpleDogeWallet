@@ -1,4 +1,4 @@
-﻿using DogecoinTerminal.Components;
+﻿
 using DogecoinTerminal.Pages;
 using FontStashSharp;
 using Microsoft.Xna.Framework;
@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.IO;
 using System.Linq;
+using DogecoinTerminal.Common;
+using DogecoinTerminal.Common.Components;
 
 namespace DogecoinTerminal
 {
@@ -59,14 +61,12 @@ namespace DogecoinTerminal
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
 
 			_fontSystem.AddFont(File.ReadAllBytes(@"Content\ComicNeue-Bold.ttf"));
-		
 
-			Images.DogeImage = Content.Load<Texture2D>("dogedrawn");
-			Images.ArrowImage = Content.Load<Texture2D>("arrow");
+			Images.Load(GraphicsDevice);
 
-			_screen.Load(this);
+			_screen.Load(this, this._fontSystem);
 
-			_router = new Router(new[]
+			_router = new Router(new (string,AppPage)[]
 			{
 				("home", (AppPage)new UnlockTerminalPage()),
 				("pin", new PinCodePage()),
@@ -75,7 +75,8 @@ namespace DogecoinTerminal
 				("wallet", new WalletPage()),
 				("qr", new QRScannerPage(GraphicsDevice)),
 				("receive", new DisplayQRPage(GraphicsDevice)),
-				("codes", new BackupCodePage())
+				("codes", new BackupCodePage()),
+				("settings", new TerminalSettingsPage())
 			});
 
 			_router.Route("home", null, false);

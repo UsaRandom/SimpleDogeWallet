@@ -1,13 +1,15 @@
-﻿using DogecoinTerminal.Components;
+﻿using DogecoinTerminal.Common.Components;
+using DogecoinTerminal.Common;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DogecoinTerminal.Pages
+namespace DogecoinTerminal.Common
 {
-	internal class MessagePage : AppPage
+	public class MessagePage : AppPage
 	{
 		private AppText MessageText;
 		public MessagePage()

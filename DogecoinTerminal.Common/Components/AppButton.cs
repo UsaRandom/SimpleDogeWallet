@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DogecoinTerminal.Components
+namespace DogecoinTerminal.Common.Components
 {
-	internal class AppButton : Interactable
+	public class AppButton : Interactable
 	{
 
 		public  TerminalColor BackgroundColor;

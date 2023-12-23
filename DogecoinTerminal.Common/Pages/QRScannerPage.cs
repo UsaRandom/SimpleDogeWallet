@@ -1,4 +1,4 @@
-﻿using DogecoinTerminal.Components;
+﻿
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OpenCvSharp;
@@ -11,10 +11,12 @@ using System.Threading.Tasks;
 using ZXing;
 using ZXing.OpenCV;
 using static System.Net.Mime.MediaTypeNames;
+using DogecoinTerminal.Common.Components;
+using DogecoinTerminal.Common;
 
-namespace DogecoinTerminal.Pages
+namespace DogecoinTerminal.Common
 {
-	internal class QRScannerPage : AppPage
+	public class QRScannerPage : AppPage
 	{
 		public AppImage cameraImg;
 		private GraphicsDevice _graphicsDevice;

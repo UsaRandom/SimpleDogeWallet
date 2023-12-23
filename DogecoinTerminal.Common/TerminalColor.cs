@@ -2,9 +2,9 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace DogecoinTerminal
+namespace DogecoinTerminal.Common
 {
-	internal class TerminalColor
+	public class TerminalColor
 	{
 		private Texture2D _texture;
 		private Color _color;

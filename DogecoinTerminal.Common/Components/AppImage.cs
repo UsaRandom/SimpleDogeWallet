@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace DogecoinTerminal.Components
+namespace DogecoinTerminal.Common.Components
 {
-	internal class AppImage : Interactable
+	public class AppImage : Interactable
 	{
 		public Texture2D Image;
 

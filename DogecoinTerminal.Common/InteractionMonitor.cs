@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DogecoinTerminal
+namespace DogecoinTerminal.Common
 {
-	internal class InteractionMonitor
+	public class InteractionMonitor
 	{
 
 

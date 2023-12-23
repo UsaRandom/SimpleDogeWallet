@@ -1,14 +1,16 @@
-﻿using DogecoinTerminal.Components;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using DogecoinTerminal.Common.Components;
+using DogecoinTerminal.Common;
 
-namespace DogecoinTerminal.Pages
+namespace DogecoinTerminal.Common
 {
-	internal class PinCodePage : AppPage
+	public class PinCodePage : AppPage
 	{
 
 		public string TypedValue { get; set; }
@@ -269,15 +271,17 @@ namespace DogecoinTerminal.Pages
 		}
 
 
-		public struct PinCodePageSettings
+	}
+
+
+	public struct PinCodePageSettings
+	{
+		public PinCodePageSettings(string title, bool isValueMode)
 		{
-			public PinCodePageSettings(string title, bool isValueMode)
-			{
-				Title = title;
-				IsValueMode = isValueMode;
-			}
-			public string Title;
-			public bool IsValueMode;
+			Title = title;
+			IsValueMode = isValueMode;
 		}
+		public string Title;
+		public bool IsValueMode;
 	}
 }

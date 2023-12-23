@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		notes.txt = notes.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DogecoinTerminal.Common", "DogecoinTerminal.Common\DogecoinTerminal.Common.csproj", "{89206BAA-7CEF-4B68-949A-07D69AA5F48E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{ACA376CB-E87D-4B73-AC0F-7263D79F348D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACA376CB-E87D-4B73-AC0F-7263D79F348D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACA376CB-E87D-4B73-AC0F-7263D79F348D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89206BAA-7CEF-4B68-949A-07D69AA5F48E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89206BAA-7CEF-4B68-949A-07D69AA5F48E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89206BAA-7CEF-4B68-949A-07D69AA5F48E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89206BAA-7CEF-4B68-949A-07D69AA5F48E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

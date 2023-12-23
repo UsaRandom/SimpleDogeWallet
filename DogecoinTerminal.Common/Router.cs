@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DogecoinTerminal
+namespace DogecoinTerminal.Common
 {
-	internal class Router
+	public class Router
 	{
 		private Stack<Action<dynamic>> _callbackStack = new Stack<Action<dynamic>>();
 

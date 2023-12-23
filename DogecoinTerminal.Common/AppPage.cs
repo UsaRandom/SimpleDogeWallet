@@ -1,13 +1,15 @@
-﻿using DogecoinTerminal.Components;
+﻿using DogecoinTerminal.Common.Components;
+using DogecoinTerminal.Common;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DogecoinTerminal
+namespace DogecoinTerminal.Common
 {
-	internal abstract class AppPage
+	public abstract class AppPage
 	{
 		private bool _isBackable = false;
 
@@ -21,9 +23,7 @@ namespace DogecoinTerminal
 			{
 				if (isFirst && _isBackable)
 				{
-
 					Router.Instance.Back();
-
 				}
 			});
 

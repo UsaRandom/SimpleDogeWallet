@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DogecoinTerminal.Components
+namespace DogecoinTerminal.Common.Components
 {
-	internal class AppText : Interactable
+	public class AppText : Interactable
 	{
 
 		private TerminalColor _color;

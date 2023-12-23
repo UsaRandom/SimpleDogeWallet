@@ -3,19 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using DogecoinTerminal.Common;
+
 namespace DogecoinTerminal.Pages
 {
-	internal class TransactionConfirmationPage : AppPage
+	internal class RadioDogeSettingsPage : AppPage
 	{
-
-		public TransactionConfirmationPage()
-			: base(true)
-		{
-
-		}
-
 		public override void OnBack()
 		{
 

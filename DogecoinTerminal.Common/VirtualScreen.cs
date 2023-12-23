@@ -10,13 +10,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace DogecoinTerminal
+namespace DogecoinTerminal.Common
 {
 	/// <summary>
 	/// basically a 0-100 grid that is projected to the physical screen.
 	/// also provides a simplified interface for drawing to the screen.
 	/// </summary>
-	internal class VirtualScreen
+	public class VirtualScreen
 	{
 		private SpriteBatch _spriteBatch;
 		private GraphicsDevice _graphicsDevice;
@@ -24,7 +24,7 @@ namespace DogecoinTerminal
 		private InteractionMonitor _interactionMonitor;
 
 		private SpriteFont _font;
-		private DogecoinTerminalGame _game;
+		private Game _game;
 
 		private int _width;
 		private int _height;
@@ -50,10 +50,10 @@ namespace DogecoinTerminal
 			_interactionMonitor = new InteractionMonitor();
 		}
 
-		public void Load(DogecoinTerminalGame game)
+		public void Load(Game game, FontSystem fontSystem)
 		{
 			_game = game;
-			_fontSystem = _game._fontSystem;//.Content.Load<SpriteFont>("basic"); 
+			_fontSystem = fontSystem;
 		}
 
 

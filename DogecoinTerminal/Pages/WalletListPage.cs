@@ -1,10 +1,10 @@
-﻿using DogecoinTerminal.Components;
+﻿using DogecoinTerminal.Common.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static DogecoinTerminal.Pages.PinCodePage;
+using DogecoinTerminal.Common;
 
 namespace DogecoinTerminal.Pages
 {
@@ -81,6 +81,14 @@ namespace DogecoinTerminal.Pages
 					(isFirst, self) =>
 					{
 						Router.Instance.Route("home", null, false);
+					}));
+
+			Interactables.Add(
+				new AppButton("Settings", (88, 88), (98, 98),
+					TerminalColor.DarkGrey, TerminalColor.White, 3,
+					(isFirst, self) =>
+					{
+						Router.Instance.Route("settings", null, true);
 					}));
 		}
 

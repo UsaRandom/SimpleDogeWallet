@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DogecoinTerminal
+namespace DogecoinTerminal.Common
 {
-	internal abstract class Interactable
+	public abstract class Interactable
 	{
 
 		public (int x, int y) Start;
