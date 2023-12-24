@@ -14,23 +14,15 @@ namespace DogecoinTerminal.Common
 		private IDictionary<string, AppPage> _pages;
 		private AppPage _currentPage;
 
-
-		public static Router Instance { get; private set; }
-
-		public Router((string path, AppPage page)[] routes)
+		public Router()
 		{
-			if(Instance != null)
-			{
-				throw new Exception("Singleton AHH!!!!");
-			}
-
 			_pages = new Dictionary<string, AppPage>();
+		}
 
-			foreach(var route in routes)
-			{
-				_pages.Add(route.path, route.page);
-			}
-			Instance = this;
+
+		public void AddRoute(string path, AppPage page)
+		{
+			_pages.Add(path, page);
 		}
 
 		public void Route(string path, object value, bool backable, Action<dynamic> callback = null)

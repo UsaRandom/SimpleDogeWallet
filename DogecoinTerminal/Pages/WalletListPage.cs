@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DogecoinTerminal.Common;
+using Microsoft.Xna.Framework;
 
 namespace DogecoinTerminal.Pages
 {
 	internal class WalletListPage : AppPage
 	{
-		public WalletListPage()
-			:base(true)
+		public WalletListPage(Game game)
+			:base(game, true)
 		{
 			Interactables.Add(
 				new AppText("Select a Wallet/Slot:", TerminalColor.White, 6, (50, 20))
@@ -22,12 +23,12 @@ namespace DogecoinTerminal.Pages
 					TerminalColor.DarkGrey, TerminalColor.White, 5,
 					(isFirst, self) =>
 					{
-						Router.Instance.Route("pin", new PinCodePageSettings("Enter Pin:", false), true,
+						Game.Services.GetService<Router>().Route("pin", new PinCodePageSettings("Enter Pin:", false), true,
 							(dynamic value) =>
 							{
 								if(value == "6969")
 								{
-									Router.Instance.Route("wallet", null, true);
+									Game.Services.GetService<Router>().Route("wallet", null, true);
 								}
 							});
 					}));
@@ -37,7 +38,7 @@ namespace DogecoinTerminal.Pages
 					TerminalColor.LightGrey, TerminalColor.White, 5,
 					(isFirst, self) =>
 					{
-						Router.Instance.Route("msg", "No work yet!", true);
+						Game.Services.GetService<Router>().Route("msg", "No work yet!", true);
 					}));
 
 
@@ -46,7 +47,7 @@ namespace DogecoinTerminal.Pages
 					TerminalColor.LightGrey, TerminalColor.White, 5,
 					(isFirst, self) =>
 					{
-						Router.Instance.Route("msg", "No work yet!", true);
+						Game.Services.GetService<Router>().Route("msg", "No work yet!", true);
 					}));
 
 			Interactables.Add(
@@ -54,7 +55,7 @@ namespace DogecoinTerminal.Pages
 					TerminalColor.LightGrey, TerminalColor.White, 5,
 					(isFirst, self) =>
 					{
-						Router.Instance.Route("msg", "No work yet!", true);
+						Game.Services.GetService<Router>().Route("msg", "No work yet!", true);
 					}));
 
 			Interactables.Add(
@@ -62,7 +63,7 @@ namespace DogecoinTerminal.Pages
 					TerminalColor.LightGrey, TerminalColor.White, 5,
 					(isFirst, self) =>
 					{
-						Router.Instance.Route("msg", "No work yet!", true);
+						Game.Services.GetService<Router>().Route("msg", "No work yet!", true);
 					}));
 
 
@@ -71,7 +72,7 @@ namespace DogecoinTerminal.Pages
 					TerminalColor.LightGrey, TerminalColor.White, 5,
 					(isFirst, self) =>
 					{
-						Router.Instance.Route("msg", "No work yet!", true);
+						Game.Services.GetService<Router>().Route("msg", "No work yet!", true);
 					}));
 
 
@@ -80,7 +81,7 @@ namespace DogecoinTerminal.Pages
 					TerminalColor.DarkGrey, TerminalColor.White, 3,
 					(isFirst, self) =>
 					{
-						Router.Instance.Route("home", null, false);
+						Game.Services.GetService<Router>().Route("home", null, false);
 					}));
 
 			Interactables.Add(
@@ -88,14 +89,14 @@ namespace DogecoinTerminal.Pages
 					TerminalColor.DarkGrey, TerminalColor.White, 3,
 					(isFirst, self) =>
 					{
-						Router.Instance.Route("settings", null, true);
+						Game.Services.GetService<Router>().Route("settings", null, true);
 					}));
 		}
 
 		public override void OnBack()
 		{
 			//one of those places we should do this.
-			Router.Instance.ClearCallbackStack();
+			Game.Services.GetService<Router>().ClearCallbackStack();
 		}
 
 		protected override void OnNav(dynamic value, bool backable)

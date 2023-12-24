@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DogecoinTerminal.Common;
 using DogecoinTerminal.Common.Components;
+using Microsoft.Xna.Framework;
 
 namespace DogecoinTerminal.Pages
 {
@@ -13,8 +14,8 @@ namespace DogecoinTerminal.Pages
 	{
 		private string[] _backupCodes;
 
-		public BackupCodePage()
-			: base(false)
+		public BackupCodePage(Game game)
+			: base(game, false)
 		{
 
 			Interactables.Add(new AppText("Backup Phrases", TerminalColor.White, 5, (50, 10)));

@@ -5,13 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 
 using DogecoinTerminal.Common;
+using Microsoft.Xna.Framework;
+
 namespace DogecoinTerminal.Pages
 {
 	internal class TransactionConfirmationPage : AppPage
 	{
 
-		public TransactionConfirmationPage()
-			: base(true)
+		public TransactionConfirmationPage(Game game)
+			: base(game, true)
 		{
 
 		}

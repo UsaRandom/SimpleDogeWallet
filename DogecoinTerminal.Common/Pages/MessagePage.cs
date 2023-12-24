@@ -6,13 +6,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 
 namespace DogecoinTerminal.Common
 {
 	public class MessagePage : AppPage
 	{
 		private AppText MessageText;
-		public MessagePage()
+		public MessagePage(Game game)
+			:base(game)
 		{
 			Interactables.Add(
 				new AppImage(Images.DogeImage,
@@ -31,14 +33,14 @@ namespace DogecoinTerminal.Common
 						5,
 						(isFirst, self) =>
 						{
-							Router.Instance.Return("wow");
+							Game.Services.GetService<Router>().Return("wow");
 						}));
 		}
 
 
 		public override void OnBack()
 		{
-			Router.Instance.Back();
+			Game.Services.GetService<Router>().Back();
 		}
 
 		protected override void OnNav(dynamic value, bool backable)

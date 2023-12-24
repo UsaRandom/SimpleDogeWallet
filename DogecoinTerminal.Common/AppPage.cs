@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 
 namespace DogecoinTerminal.Common
 {
@@ -15,15 +16,19 @@ namespace DogecoinTerminal.Common
 
 		private AppImage _backButton;
 
-		protected AppPage(bool showDoge = false)
+		protected Game Game { get; set; }
+
+		protected AppPage(Game game, bool showDoge = false)
 		{
+			this.Game = game;
+
 			Interactables = new List<Interactable>();
 
 			_backButton = new AppImage(Images.ArrowImage, (3, 3), (9, 7), Images.ArrowImageData, (isFirst, self) =>
 			{
 				if (isFirst && _isBackable)
 				{
-					Router.Instance.Back();
+					Game.Services.GetService<Router>().Back();
 				}
 			});
 

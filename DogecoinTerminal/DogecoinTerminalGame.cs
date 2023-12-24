@@ -9,6 +9,8 @@ using System.IO;
 using System.Linq;
 using DogecoinTerminal.Common;
 using DogecoinTerminal.Common.Components;
+using System.Diagnostics.Metrics;
+using DogecoinTerminal.QRDoge;
 
 namespace DogecoinTerminal
 {
@@ -53,6 +55,11 @@ namespace DogecoinTerminal
 			_screen.Init(GraphicsDevice, HEIGHT, WIDTH);
 
 
+			_router = new Router();
+
+			Services.AddService(_router);
+			Services.AddService<IDogecoinService>(new QRDogecoinService(this));
+
 			base.Initialize();
 		}
 
@@ -64,20 +71,18 @@ namespace DogecoinTerminal
 
 			Images.Load(GraphicsDevice);
 
-			_screen.Load(this, this._fontSystem);
+			_screen.Load(this, _fontSystem);
 
-			_router = new Router(new (string,AppPage)[]
-			{
-				("home", (AppPage)new UnlockTerminalPage()),
-				("pin", new PinCodePage()),
-				("msg", new MessagePage()),
-				("wallets", new WalletListPage()),
-				("wallet", new WalletPage()),
-				("qr", new QRScannerPage(GraphicsDevice)),
-				("receive", new DisplayQRPage(GraphicsDevice)),
-				("codes", new BackupCodePage()),
-				("settings", new TerminalSettingsPage())
-			});
+
+			_router.AddRoute("home", new UnlockTerminalPage(this));
+			_router.AddRoute("pin", new PinCodePage(this));
+			_router.AddRoute("msg", new MessagePage(this));
+			_router.AddRoute("wallets", new WalletListPage(this));
+			_router.AddRoute("wallet", new WalletPage(this));
+			_router.AddRoute("scanqr", new QRScannerPage(this));
+			_router.AddRoute("displayqr", new DisplayQRPage(this));
+			_router.AddRoute("codes", new BackupCodePage(this));
+			_router.AddRoute("settings", new TerminalSettingsPage(this));
 
 			_router.Route("home", null, false);
 
@@ -85,9 +90,6 @@ namespace DogecoinTerminal
 
 		protected override void Update(GameTime gameTime)
 		{
-			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-				Exit();
-
 			_router.GetPage().Update();
 			_screen.Update(_router.GetPage());
 
@@ -103,7 +105,6 @@ namespace DogecoinTerminal
 			_spriteBatch.Begin();
 
 			_screen.Draw(_spriteBatch, _router.GetPage());
-			
 
 			_spriteBatch.End();
 

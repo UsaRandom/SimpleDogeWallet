@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DogecoinTerminal.Common.Components;
 using DogecoinTerminal.Common;
+using Microsoft.Xna.Framework;
 
 namespace DogecoinTerminal.Pages
 {
@@ -14,7 +15,8 @@ namespace DogecoinTerminal.Pages
 		private const string UNLOCK_PIN = "1102";
 
 
-		public UnlockTerminalPage()
+		public UnlockTerminalPage(Game game)
+			: base(game)
 		{
 			Interactables.Add(
 				new AppImage(Images.DogeImage,
@@ -33,13 +35,13 @@ namespace DogecoinTerminal.Pages
 						5,
 						(isFirst, self) =>
 						{
-							Router.Instance.Route("pin",
+							Game.Services.GetService<Router>().Route("pin",
 								new PinCodePageSettings("Enter Operator Pin to Unlock", false), true,
 								(dynamic enteredPin) =>
 								{
 									if (enteredPin == UNLOCK_PIN)
 									{
-										Router.Instance.Route("wallets", null, false);
+										Game.Services.GetService<Router>().Route("wallets", null, false);
 									}
 								});
 						}));
@@ -59,7 +61,7 @@ namespace DogecoinTerminal.Pages
 			//... so we have to do this on a few pages lol
 			//
 			//what kind of shitty programmer am i?
-			Router.Instance.ClearCallbackStack();
+			Game.Services.GetService<Router>().ClearCallbackStack();
 		}
 
 

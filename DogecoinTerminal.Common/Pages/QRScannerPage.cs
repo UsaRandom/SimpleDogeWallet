@@ -22,20 +22,20 @@ namespace DogecoinTerminal.Common
 		private GraphicsDevice _graphicsDevice;
 		public Texture2D cameraTexture;
 		private VideoCapture capture;
-		private AppText updateText;
+		private AppText titleText;
 
 
-		public QRScannerPage(GraphicsDevice graphicsDevice)
-			:base(true)
+		public QRScannerPage(Game game)
+			:base(game, true)
 		{
-			_graphicsDevice = graphicsDevice;
+			_graphicsDevice = Game.GraphicsDevice;
 
 
-			cameraTexture = new Texture2D(graphicsDevice, 640, 480);
+			cameraTexture = new Texture2D(Game.GraphicsDevice, 640, 480);
 
-			updateText = new AppText("Scan QR", TerminalColor.White, 3, (50, 10));
+			titleText = new AppText("Scan QR", TerminalColor.White, 3, (50, 10));
 
-			Interactables.Add(updateText);
+			Interactables.Add(titleText);
 		}
 
 		private int updateNumb = 0;
@@ -80,7 +80,7 @@ namespace DogecoinTerminal.Common
 					if (result != null && result.BarcodeFormat == BarcodeFormat.QR_CODE
 							&& result.Text.ToLower().StartsWith("dogecoin:"))
 					{
-						Router.Instance.Return(result.Text.Split(":")[1]);		
+						Game.Services.GetService<Router>().Return(result.Text.Split(":")[1]);		
 					}
 
 
@@ -102,11 +102,20 @@ namespace DogecoinTerminal.Common
 
 		public override void OnBack()
 		{
-			Router.Instance.Back();
+			Game.Services.GetService<Router>().Back();
 		}
 
 		protected override void OnNav(dynamic value, bool backable)
 		{
+			if(!string.IsNullOrEmpty(value as string))
+			{
+				titleText.Text = value as string;
+			}
+			else
+			{
+				titleText.Text = "Scan QR";
+			}
+
 
 			capture = new VideoCapture(0, VideoCaptureAPIs.DSHOW);
 

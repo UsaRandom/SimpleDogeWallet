@@ -6,15 +6,15 @@ using System.Text;
 using System.Threading.Tasks;
 using DogecoinTerminal.Common.Components;
 using DogecoinTerminal.Common;
-
+using Microsoft.Xna.Framework;
 
 namespace DogecoinTerminal.Pages
 {
 	internal class WalletPage : AppPage
 	{
 
-		public WalletPage()
-			: base(true)
+		public WalletPage(Game game)
+			: base(game, true)
 		{
 
 			Interactables.Add(
@@ -31,16 +31,16 @@ namespace DogecoinTerminal.Pages
 							  TerminalColor.DarkGrey, TerminalColor.White, 4,
 							  (isFirst, self) =>
 								{
-									Router.Instance.Route("pin", new PinCodePageSettings("Amount to Send:", true), true,
+									Game.Services.GetService<Router>().Route("pin", new PinCodePageSettings("Amount to Send:", true), true,
 										(dynamic value) =>
 										{
 											var amountToSend = float.Parse(value);
 
-											Router.Instance.Route("qr", null, true,
+											Game.Services.GetService<Router>().Route("scanqr", "Scan Address to Pay", true,
 												(dynamic receiver) =>
 												{
 
-													Router.Instance.Route("msg", "You want to send Đ" + value + "\nto " + receiver, true);
+													Game.Services.GetService<Router>().Route("msg", "You want to send Đ" + value + "\nto " + receiver, true);
 
 
 												});
@@ -54,7 +54,7 @@ namespace DogecoinTerminal.Pages
 							  TerminalColor.DarkGrey, TerminalColor.White, 4,
 							  (isFirst, self) =>
 							  {
-								Router.Instance.Route("receive", "dogecoin:D8ZEVbgf4yPs3MK8dMJJ7PpSyBKsbd66TX", true);
+								Game.Services.GetService<Router>().Route("displayqr", "dogecoin:D8ZEVbgf4yPs3MK8dMJJ7PpSyBKsbd66TX", true);
 							  }));
 
 			Interactables.Add(
@@ -63,13 +63,13 @@ namespace DogecoinTerminal.Pages
 							  (isFirst, self) =>
 							  {
 
-								  Router.Instance.Route("pin", new PinCodePageSettings("Enter New Pin:", false), true,
+								  Game.Services.GetService<Router>().Route("pin", new PinCodePageSettings("Enter New Pin:", false), true,
 									  (dynamic newPin) =>
 									  {
-										  Router.Instance.Route("pin", new PinCodePageSettings("Confirm Pin:", false), true,
+										  Game.Services.GetService<Router>().Route("pin", new PinCodePageSettings("Confirm Pin:", false), true,
 										  (dynamic confirmPin) =>
 										  {
-											  Router.Instance.Route("msg", newPin == confirmPin ? "Pin Updated!" : "Pins did not match!", true);
+											  Game.Services.GetService<Router>().Route("msg", newPin == confirmPin ? "Pin Updated!" : "Pins did not match!", true);
 										  });
 									  });
 							  }));
@@ -80,9 +80,22 @@ namespace DogecoinTerminal.Pages
 							  TerminalColor.DarkGrey, TerminalColor.White, 4,
 							  (isFirst, self) =>
 							  {
-								  Router.Instance.Route("codes", null, true);
+								  Game.Services.GetService<Router>().Route("codes", null, true);
 							  }));
 
+
+
+
+			Interactables.Add(
+				new AppButton("Refresh Balance", (30, 78), (49, 93),
+							  TerminalColor.Blue, TerminalColor.White, 4,
+							  (isFirst, self) =>
+							  {
+								  Game.Services.GetService<IDogecoinService>().GetUTXOs("D8ZEVbgf4yPs3MK8dMJJ7PpSyBKsbd66TX", null, (utxos) =>
+								  {
+
+								  });
+							  }));
 
 
 			Interactables.Add(
@@ -91,6 +104,7 @@ namespace DogecoinTerminal.Pages
 							  (isFirst, self) =>
 							  {
 
+								  Game.Services.GetService<Router>().Route("msg", "no work yet!", true);
 							  }));
 
 

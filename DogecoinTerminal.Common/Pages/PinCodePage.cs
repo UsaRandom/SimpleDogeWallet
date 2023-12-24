@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DogecoinTerminal.Common.Components;
 using DogecoinTerminal.Common;
+using Microsoft.Xna.Framework;
 
 namespace DogecoinTerminal.Common
 {
@@ -24,8 +25,8 @@ namespace DogecoinTerminal.Common
 		private AppButton _returnButton;
 
 
-		public PinCodePage()
-			: base(true)
+		public PinCodePage(Game game)
+			: base(game, true)
 		{
 
 			Title = new AppText(string.Empty, TerminalColor.White, 6, (50, 10));
@@ -38,7 +39,7 @@ namespace DogecoinTerminal.Common
 
 			_returnButton = new AppButton(">", (88, 88), (98, 98), TerminalColor.Green, TerminalColor.White, 5, (isFirst, self) =>
 			{
-				Router.Instance.Return(UserText.Text.Replace("Đ", string.Empty));
+				Game.Services.GetService<Router>().Return(UserText.Text.Replace("Đ", string.Empty));
 			});
 
 			Interactables.Add(
@@ -257,7 +258,7 @@ namespace DogecoinTerminal.Common
 
 		public override void OnBack()
 		{
-			Router.Instance.Back();
+			Game.Services.GetService<Router>().Back();
 		}
 
 		protected override void OnNav(dynamic value, bool backable)
