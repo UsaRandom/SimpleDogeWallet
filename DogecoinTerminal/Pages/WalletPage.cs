@@ -7,57 +7,96 @@ using System.Threading.Tasks;
 using DogecoinTerminal.Common.Components;
 using DogecoinTerminal.Common;
 using Microsoft.Xna.Framework;
+using static DogecoinTerminal.Common.DisplayQRPage;
 
 namespace DogecoinTerminal.Pages
 {
 	internal class WalletPage : AppPage
 	{
+		private int SlotNumber;
+
+		private List<Interactable> _walletControls; 
+
 
 		public WalletPage(Game game)
 			: base(game, true)
 		{
-
-			Interactables.Add(
-				new AppText("D8ZEVbgf4yPs3MK8dMJJ7PpSyBKsbd66TX",
-							TerminalColor.White, 4, (50, 20)));
-
-			Interactables.Add(
-				new AppText("Đ420.69",
-							TerminalColor.White, 8, (50, 30)));
+			_walletControls = new List<Interactable>();
 
 
-			Interactables.Add(
+		}
+
+
+		private void LoadWalletSlot(int slotNumber)
+		{
+			foreach(var control in _walletControls)
+			{
+				Interactables.Remove(control);
+			}
+
+
+			SlotNumber = slotNumber;
+
+			var terminalService = Game.Services.GetService<ITerminalService>();
+			var router = Game.Services.GetService<Router>();
+			var slot = terminalService.GetWalletSlot(slotNumber);
+			var dogeService = Game.Services.GetService<IDogecoinService>();
+
+			var balanceStr = slot.CalculatetBalance();
+			decimal balance = decimal.Parse(balanceStr);
+
+
+		
+			_walletControls.Add(new AppText(slot.Address, TerminalColor.White, 4, (50, 20)));
+
+			_walletControls.Add( new AppText("Đ " + balanceStr, TerminalColor.White, 8, (50, 30)));
+
+
+			_walletControls.Add(
 				new AppButton("Send", (30, 40), (49, 55),
 							  TerminalColor.DarkGrey, TerminalColor.White, 4,
 							  (isFirst, self) =>
-								{
-									Game.Services.GetService<Router>().Route("pin", new PinCodePageSettings("Amount to Send:", true), true,
-										(dynamic value) =>
-										{
-											var amountToSend = float.Parse(value);
+							  {
+								  router.Route("pin", new PinCodePageSettings("Amount to Send:", true), true,
+									  (dynamic value) =>
+									  {
+										  var amountToSend = decimal.Parse(value);
 
-											Game.Services.GetService<Router>().Route("scanqr", "Scan Address to Pay", true,
-												(dynamic receiver) =>
-												{
+										  if(amountToSend > balance)
+										  {
+											  router.Route("msg", "Not enough dogecoin!", false);
+											  return;
+										  }
 
-													Game.Services.GetService<Router>().Route("msg", "You want to send Đ" + value + "\nto " + receiver, true);
+										  router.Route("scanqr", "Scan Recipient's Address", true,
+											  (dynamic receipient) =>
+											  {
+												  var rawTransaction = slot.CreateTransaction(receipient, amountToSend);
 
 
-												});
+												  dogeService.SendTransaction(rawTransaction, slot.SlotPin,
+													  (Action<bool>)((sendConfirmed) =>
+													{
+
+														router.Route("msg", "Send Confirmed!", false);
+
+													}));
+
+											  });
 
 
-										});
-								}));
+									  });
+							  }));
 
-			Interactables.Add(
+			_walletControls.Add(
 				new AppButton("Receive", (51, 40), (70, 55),
 							  TerminalColor.DarkGrey, TerminalColor.White, 4,
 							  (isFirst, self) =>
 							  {
-								Game.Services.GetService<Router>().Route("displayqr", "dogecoin:D8ZEVbgf4yPs3MK8dMJJ7PpSyBKsbd66TX", true);
+								  Game.Services.GetService<Router>().Route("displayqr", new DisplayQRPageSettings("dogecoin:"+slot.Address, slot.Address, false), true);
 							  }));
 
-			Interactables.Add(
+			_walletControls.Add(
 				new AppButton("Update Pin", (30, 59), (49, 74),
 							  TerminalColor.DarkGrey, TerminalColor.White, 4,
 							  (isFirst, self) =>
@@ -69,56 +108,91 @@ namespace DogecoinTerminal.Pages
 										  Game.Services.GetService<Router>().Route("pin", new PinCodePageSettings("Confirm Pin:", false), true,
 										  (dynamic confirmPin) =>
 										  {
-											  Game.Services.GetService<Router>().Route("msg", newPin == confirmPin ? "Pin Updated!" : "Pins did not match!", true);
+											  if(newPin != confirmPin)
+											  {
+												  router.Route("msg", "Pins did not match!", false);
+												  return;
+											  }
+
+											  dogeService.UpdatePin(slot.Address, slot.SlotPin, newPin,
+												  (Action<bool>)((updatePinConfirmed) =>
+												  {
+													  if(updatePinConfirmed)
+													  {
+														  slot.UpdateSlotPin(newPin);
+														  router.Route("msg", "Pin Updated!", false);
+													  }
+													  else
+													  {
+														  router.Route("msg", "Could not update Pin!", false);
+													  }
+
+												  }));
 										  });
 									  });
 							  }));
 
 
-			Interactables.Add(
+			_walletControls.Add(
 				new AppButton("Show Backup\n    Phrases", (51, 59), (70, 74),
 							  TerminalColor.DarkGrey, TerminalColor.White, 4,
 							  (isFirst, self) =>
 							  {
-								  Game.Services.GetService<Router>().Route("codes", null, true);
+								  Game.Services.GetService<Router>().Route("codes", slot.GetMnemonic(), true);
 							  }));
 
 
 
 
-			Interactables.Add(
+			_walletControls.Add(
 				new AppButton("Refresh Balance", (30, 78), (49, 93),
 							  TerminalColor.Blue, TerminalColor.White, 4,
 							  (isFirst, self) =>
 							  {
-								  Game.Services.GetService<IDogecoinService>().GetUTXOs("D8ZEVbgf4yPs3MK8dMJJ7PpSyBKsbd66TX", null, (utxos) =>
+								  Game.Services.GetService<IDogecoinService>().GetUTXOs(slot.Address, null, (utxos) =>
 								  {
-
+									  slot.UpdateUTXOs(utxos);
 								  });
 							  }));
 
 
-			Interactables.Add(
+			_walletControls.Add(
 				new AppButton("Delete", (51, 78), (70, 93),
 							  TerminalColor.Red, TerminalColor.White, 4,
 							  (isFirst, self) =>
 							  {
-
-								  Game.Services.GetService<Router>().Route("msg", "no work yet!", true);
+								  Game.Services.GetService<Router>().Route("pin", new PinCodePageSettings("Confirm Pin to Delete:", false), true,
+									  (dynamic enteredPin) =>
+									  {
+										  if(enteredPin == slot.SlotPin)
+										  {
+											  dogeService.OnDeleteAddress(slot.Address, slot.SlotPin,
+											  () =>
+											  {
+												  slot.ClearSlot();
+												  slot.Lock();
+												  router.Route("wallets", null, false);
+											  });
+										  }
+									  });
 							  }));
 
-
+			foreach(var control in _walletControls)
+			{
+				Interactables.Add(control);
+			}
 		}
-
 
 		public override void OnBack()
 		{
+			//Game.Services.GetService<Router>().ClearCallbackStack();
+
 
 		}
 
 		protected override void OnNav(dynamic value, bool backable)
 		{
-
+			LoadWalletSlot(value);
 		}
 	}
 }

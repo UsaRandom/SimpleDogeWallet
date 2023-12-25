@@ -14,7 +14,7 @@ namespace DogecoinTerminal.Common
 
 		public int VOut { get; set; }
 
-		public string Amount {  get; set; }
+		public decimal Amount {  get; set; }
 
 	}
 }

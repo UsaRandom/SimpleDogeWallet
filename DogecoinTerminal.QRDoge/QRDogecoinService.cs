@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DogecoinTerminal.Common;
 using Microsoft.Xna.Framework;
+using static DogecoinTerminal.Common.DisplayQRPage;
 
 namespace DogecoinTerminal.QRDoge
 {
@@ -60,8 +61,10 @@ namespace DogecoinTerminal.QRDoge
 
 		public void OnDeleteAddress(string address, string pin, Action callback)
 		{
+			//the corresponding QRDoge app will request that the node stop watching this address.
+			//
 			// qrdoge-0-delete:address
-			_game.Services.GetService<Router>().Route("displayqr", $"qrdoge:0-delete:{address}", false, (scanAcknowledged) =>
+			_game.Services.GetService<Router>().Route("displayqr", new DisplayQRPageSettings($"qrdoge:0-delete:{address}", "Scan with QRDoge App (Delete Address)", true), false, (scanAcknowledged) =>
 			{
 				//nothing else to do
 				callback();
@@ -70,7 +73,10 @@ namespace DogecoinTerminal.QRDoge
 
 		public void OnNewAddress(string address, string pin, Action<bool> callback)
 		{
-			_game.Services.GetService<Router>().Route("displayqr", $"qrdoge:0-new:{address}", false, (scanAcknowledged) =>
+
+			//the corresponding QRDoge app will request that the node start watching this address.
+
+			_game.Services.GetService<Router>().Route("displayqr", new DisplayQRPageSettings($"qrdoge:0-new:{address}", "Scan with QRDoge App (New Address)", true), false, (scanAcknowledged) =>
 			{
 				//nothing else to do
 				callback(true);
@@ -89,7 +95,8 @@ namespace DogecoinTerminal.QRDoge
 
 		public void SendTransaction(string transaction, string pin, Action<bool> callback)
 		{
-			_game.Services.GetService<Router>().Route("displayqr", $"qrdoge:0-send:{transaction}", false, (scanAcknowledged) =>
+			//the corresponding QRDoge app will request that the node broadcast this transaction.
+			_game.Services.GetService<Router>().Route("displayqr", new DisplayQRPageSettings($"qrdoge:0-send:{transaction}", "Scan with QRDoge App (Send Transaction)", true), false, (scanAcknowledged) =>
 			{
 				callback(true);
 			});

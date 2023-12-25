@@ -60,6 +60,8 @@ namespace DogecoinTerminal
 			Services.AddService(_router);
 			Services.AddService<IDogecoinService>(new QRDogecoinService(this));
 
+			Services.AddService<ITerminalService>(new TerminalService(this));
+
 			base.Initialize();
 		}
 

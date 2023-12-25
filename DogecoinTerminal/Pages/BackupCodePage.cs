@@ -18,8 +18,6 @@ namespace DogecoinTerminal.Pages
 			: base(game, false)
 		{
 
-			Interactables.Add(new AppText("Backup Phrases", TerminalColor.White, 5, (50, 10)));
-
 			var count = 1;
 
 			for(var x = 10; x < 90; x += 20)
@@ -37,6 +35,14 @@ namespace DogecoinTerminal.Pages
 			}
 
 
+			Interactables.Add(new AppButton(">", (88, 88), (98, 98), TerminalColor.Green, TerminalColor.White, 5, (isFirst, self) =>
+			{
+				Game.Services.GetService<Router>().Return("wow");
+			}));
+
+
+			Interactables.Add(new AppText("Backup Phrases", TerminalColor.White, 5, (50, 10)));
+
 		}
 
 		public override void OnBack()
@@ -46,7 +52,17 @@ namespace DogecoinTerminal.Pages
 
 		protected override void OnNav(dynamic value, bool backable)
 		{
+			for (var i = 0; i < 24; i++)
+			{
+				((AppButton)Interactables[i]).Text = $"{i}. wow";
+			}
 
+			var words = value.Split(' ');
+
+			for(var i = 0; i < 24; i++)
+			{
+				((AppButton)Interactables[i]).Text = $"{i}. {words[i]}";
+			}
 		}
 	}
 }

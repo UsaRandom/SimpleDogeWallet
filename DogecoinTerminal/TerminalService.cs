@@ -1,196 +1,485 @@
-﻿using System;
+﻿using DogecoinTerminal.Common;
+using Lib.Dogecoin;
+using Microsoft.Xna.Framework;
+using OpenCvSharp;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 
 namespace DogecoinTerminal
 {
-	internal class TerminalService
+	internal class TerminalService : ITerminalService
 	{
-		public const int MAX_WALLET_SLOTS = 6;
-		internal const string VERIFICATION_MSG = "much verify, wow";
-		private const string OPVERIFY_DTF = "opverify.dtf";
-
-		private WalletSlot[] _slots;
+		private const int MAX_SLOT_COUNT = 6;
+		private const string OP_PIN_VERIFY_FILE = "op_pin_verify.dtf";
+		private const string OP_PIN_VERIFY_STATEMENT = "much verify, very wow";
 
 
-		private string _opPin = string.Empty;
+		private Game _game;
+		private string _opPin;
+		private IWalletSlot[] _slots;
 
-		public TerminalService()
+		public bool IsUnlocked { get; private set; }
+
+		public TerminalService(Game game)
 		{
-			_slots = new WalletSlot[MAX_WALLET_SLOTS];
+			_slots = new IWalletSlot[MAX_SLOT_COUNT];
+			_game = game;
+			_opPin = string.Empty;
+			IsUnlocked = false;
 		}
 
-
-		public bool Unlock(string operatorPin)
+		public void ClearSlot(int slot)
 		{
-			if (CheckOperatorPin(operatorPin))
+			if(IsUnlocked)
 			{
-				_opPin = operatorPin;
-				return true;
+				GetWalletSlot(slot).ClearSlot();
+			}
+		}
+
+		public IWalletSlot GetWalletSlot(int slot)
+		{
+			if (_slots[slot] == null)
+			{
+				_slots[slot] = new WalletSlot(_game, _opPin, slot);
 			}
 
-			return false;
+			return _slots[slot];
 		}
 
 		public void Lock()
 		{
 			_opPin = string.Empty;
+			IsUnlocked = false;
 		}
 
-
-		public bool UpdateOperatorPin(string oldPin, string newPin)
+		public bool Unlock(string operatorPin)
 		{
-			if(CheckOperatorPin(oldPin))
+			if(OpPinIsSet() && operatorPin != string.Empty)
 			{
-				File.Delete(OPVERIFY_DTF);
-				File.WriteAllText(OPVERIFY_DTF, CryptoTools.Encrypt(OPVERIFY_DTF, newPin));
-
-				foreach(var slot in _slots)
+				if(Crypto.Decrypt(File.ReadAllText(OP_PIN_VERIFY_FILE), operatorPin) == OP_PIN_VERIFY_STATEMENT)
 				{
-					slot.UpdateOperatorPin(oldPin, newPin);
+					_opPin = operatorPin;
+					IsUnlocked = true;
+					return true;
 				}
+			}
 
+			//Op pin not set, we unlock for operator setup.
+			if(!OpPinIsSet() && operatorPin == string.Empty)
+			{
+				_opPin = operatorPin;
+				IsUnlocked = true;
 				return true;
 			}
 
 			return false;
 		}
 
-		public WalletSlot GetSlot(int slot)
+		public bool UpdateOperatorPin(string newOperatorPin)
 		{
-			return _slots[slot];
-		}
-
-
-		public bool CheckOperatorPin(string pin)
-		{
-			//dogecoin terminal file, or .dtf
-			if(!File.Exists(OPVERIFY_DTF))
+			if(!IsUnlocked)
 			{
-				// no opverify.dtf means we need to set our operator pin
-				// so any pin provided is 'correct'.
-				return true;
+				return false;
 			}
 
-			return CryptoTools.Decrypt(File.ReadAllText(OPVERIFY_DTF), pin) == VERIFICATION_MSG;
+			if(string.IsNullOrEmpty(newOperatorPin))
+			{
+				return false;
+			}
+			
+			for(var i = 0; i < MAX_SLOT_COUNT; i++)
+			{
+				var walletSlot = GetWalletSlot(i);
+
+				walletSlot.UpdateOperatorPin(newOperatorPin);
+			}
+
+			File.Delete(OP_PIN_VERIFY_FILE);
+			File.WriteAllText(OP_PIN_VERIFY_FILE, Crypto.Encrypt(OP_PIN_VERIFY_STATEMENT, newOperatorPin));
+
+			_opPin = newOperatorPin;
+
+			return true;
 		}
-		
+
+		private bool OpPinIsSet()
+		{
+			return File.Exists(OP_PIN_VERIFY_FILE);
+		}
 	}
 
 	//TODO: Update Slot Pin, create slot, delete slot, SetUTXOs, SendDogecoin
-	internal class WalletSlot
+	internal class WalletSlot : IWalletSlot
 	{
+		//address file
+		//utxo file
+		//key file
 
-		public WalletSlot(int number)
+		private string SlotAddressFile
 		{
-			SlotNumber = number;
-			_slotPin = string.Empty;
+			get
+			{
+				return $"slot_{SlotNumber}_address.dtf";
+			}
 		}
 
+		private string UTXOFile
+		{
+			get
+			{
+				return $"slot_{SlotNumber}_utxos.dtf";
+			}
+		}
+		private string KeyFile
+		{
+			get
+			{
+				return $"slot_{SlotNumber}_key.dtf";
+			}
+		}
+
+
+		private Game _game;
+		private string _opPin;
 		private string _slotPin;
 
-		public int SlotNumber { get; set; }
-
-		public string Address { get; set; }
-
-		public string KeyFile
+		public WalletSlot(Game game, string opPin, int slotNumber)
 		{
-			get
-			{
-				return "slot_" + SlotNumber + ".dtf";
-			}
+			_game = game;
+			_opPin = opPin;
+			_slotPin = string.Empty;
+			SlotNumber = slotNumber;
+			UTXOs = new List<UTXOInfo>();
 		}
-
-
-		public string VerifyFile
-		{
-			get
-			{
-				return "slot_" + SlotNumber + "_verify.dtf";
-			}
-		}
-
 
 		public bool IsEmpty
 		{
 			get
 			{
-				return string.IsNullOrEmpty(Address);
+				return !File.Exists(SlotAddressFile);
 			}
 		}
 
-		public bool Unlock(string operatorPin, string slotPin)
+		public bool IsUnlocked { get; private set; }
+
+		public int SlotNumber { get; private set; }
+
+		public string Address
 		{
-			if(CheckSlotPin(operatorPin, slotPin))
+			get
 			{
-				_slotPin = slotPin;
-				return true;
+				if (!IsEmpty && _opPin != string.Empty)
+				{
+					return Crypto.Decrypt(File.ReadAllText(SlotAddressFile), _opPin);
+				}
+				return string.Empty;
 			}
+		}
+
+		public string SlotPin
+		{
+			get
+			{
+				return _slotPin;
+			}
+		}
+
+		public IEnumerable<UTXOInfo> UTXOs { get; private set; }
+
+
+		public void Init(string slotPin)
+		{
+			ClearSlot();
+
+			_slotPin = slotPin;
+
+			//create mnemonic
+			using (var ctx = LibDogecoinContext.CreateContext())
+			{
+				var newMnemonic = ctx.GenerateRandomEnglishMnemonic(LibDogecoinContext.ENTROPY_SIZE_256);
+
+				var keys = ctx.GenerateHDMasterPubKeypairFromMnemonic(newMnemonic);
+				
+				if(ctx.VerifyHDMasterPubKeyPair(keys.privateKey, keys.publicKey))
+				{
+					File.WriteAllText(KeyFile, Crypto.Encrypt(Crypto.Encrypt(newMnemonic, _slotPin), _opPin));
+					File.WriteAllText(SlotAddressFile, Crypto.Encrypt(keys.publicKey, _opPin));
+				}
+			}
+
+			//new wallet slots are initialized unlocked.
+			Unlock(slotPin);
+		}
+
+
+		public string CalculatetBalance()
+		{
+			var sum = 0M;
+
+			foreach(var  utxo in UTXOs)
+			{
+				sum += utxo.Amount;
+			}
+
+			return sum.ToString("#,##0.00");
+		}
+
+
+		public bool Unlock(string slotPin)
+		{
+			if(IsEmpty)
+			{
+				return false;
+			}
+
+			if(File.Exists(UTXOFile))
+			{
+				try
+				{
+					var utxoList = new List<UTXOInfo>();
+					var utxoFileContent = File.ReadAllText(UTXOFile);
+
+					if (string.IsNullOrEmpty(utxoFileContent))
+					{
+						var lines = utxoFileContent.Split('\n');
+
+						foreach (var line in lines)
+						{
+							if (string.IsNullOrEmpty(line))
+							{
+								continue;
+							}
+
+							var lineParts = line.Split('|');
+
+							utxoList.Add(new UTXOInfo
+							{
+								TransactionId = lineParts[0],
+								VOut = int.Parse(lineParts[1]),
+								Amount = decimal.Parse(lineParts[2])
+							});
+						}
+					}
+
+					UTXOs = utxoList;
+				}
+				catch
+				{
+					//UTXO Parse error, most likely our slot pin is incorrect.
+					return false;
+				}
+			}
+
+			if(!File.Exists(KeyFile))
+			{
+				//key file is mandatory
+				return false;
+			}
+
+
+			try
+			{
+				var mnemonic = Crypto.Decrypt(Crypto.Decrypt(File.ReadAllText(KeyFile), _opPin), slotPin);
+
+				if(mnemonic.Split(' ').Length == 24)
+				{
+					_slotPin = slotPin;
+					IsUnlocked = true;
+					return true;
+				}
+			}
+			catch
+			{
+				//error parsing key file, most likely incorrect pin
+				return false;
+			}
+
 			return false;
 		}
 
-		
 		public void Lock()
 		{
+			IsUnlocked = false;
 			_slotPin = string.Empty;
 		}
 
-
-		private bool CheckSlotPin(string operatorPin, string slotPin)
+		public void UpdateOperatorPin(string newOperatorPin)
 		{
-			//dogecoin terminal file, or .dtf
-			if (!File.Exists(VerifyFile))
-			{
-				// no opverify.dtf means we need to set our operator pin
-				// so any pin provided is 'correct'.
-				return true;
-			}
-
-			return CryptoTools.Decrypt(CryptoTools.Decrypt(File.ReadAllText(VerifyFile), operatorPin), slotPin) == TerminalService.VERIFICATION_MSG;
-		}
-
-		public void UpdateOperatorPin(string oldPin, string newPin)
-		{
-			if (!File.Exists(KeyFile))
+			if(IsEmpty)
 			{
 				return;
 			}
 
-			var oldFile = CryptoTools.Decrypt(File.ReadAllText(KeyFile), oldPin);
+			//update address file
+			var address = Address;
 
-			File.Delete(KeyFile);
+			File.WriteAllText(SlotAddressFile, Crypto.Encrypt(address, newOperatorPin));
 
-			File.WriteAllText(KeyFile, CryptoTools.Encrypt(oldFile, newPin));
+			if(File.Exists(UTXOFile))
+			{
+				//update utxo file
+				var utxoContent = Crypto.Decrypt(File.ReadAllText(UTXOFile), _opPin);
+				File.WriteAllText(UTXOFile, Crypto.Encrypt(utxoContent, newOperatorPin));
+			}
+
+			//update key file
+			var keyContent = Crypto.Decrypt(File.ReadAllText(KeyFile), _opPin);
+			File.WriteAllText(KeyFile, Crypto.Encrypt(keyContent, newOperatorPin));
+
+
+			_opPin = newOperatorPin;
 		}
 
-		private string GetMnemonic(string operatorPin, string slotPin)
+
+		public void UpdateSlotPin(string newSlotPin)
 		{
-			
-			if (!File.Exists(KeyFile))
+			if (!IsUnlocked)
+			{
+				return;
+			}
+
+			if (File.Exists(UTXOFile))
+			{
+				//update utxo file
+				var utxoContent = Crypto.Decrypt(Crypto.Decrypt(File.ReadAllText(UTXOFile), _opPin), _slotPin);
+				File.WriteAllText(UTXOFile, Crypto.Encrypt(Crypto.Encrypt(utxoContent, newSlotPin), _opPin));
+			}
+
+			//update key file
+			var keyContent = Crypto.Decrypt(Crypto.Decrypt(File.ReadAllText(KeyFile), _opPin), _slotPin);
+			File.WriteAllText(KeyFile, Crypto.Encrypt(Crypto.Encrypt(keyContent, newSlotPin), _opPin));
+
+			_slotPin = newSlotPin;
+		}
+
+
+		public void ClearSlot()
+		{
+			File.Delete(SlotAddressFile);
+			File.Delete(UTXOFile);
+			File.Delete(KeyFile);
+
+			_slotPin = string.Empty;
+		}
+
+		public string CreateTransaction(string receipient, decimal amount)
+		{
+			using(var ctx = LibDogecoinContext.CreateContext())
+			{
+				var workingTransactionId = ctx.StartTransaction();
+
+				try
+				{
+					var utxoEnumerator = UTXOs.GetEnumerator();
+
+					decimal fee = 0.01M; //fee per utxo
+					decimal sum = 0M;
+					int utxoCount = 0;
+
+					do
+					{
+						if (!utxoEnumerator.MoveNext())
+						{
+							break;
+						}
+
+						var utxo = utxoEnumerator.Current;
+
+						sum += utxo.Amount;
+
+						utxoCount++;
+
+						ctx.AddUTXO(workingTransactionId, utxo.TransactionId, utxo.VOut);
+
+					} while (sum < amount + (fee * utxoCount));
+
+					if (sum < amount + (fee * utxoCount))
+					{
+						throw new Exception("Not enough dogecoin to send.");
+					}
+
+					var totalFee = (fee * utxoCount);
+
+					var remainder = sum - totalFee - amount;
+
+					ctx.AddOutput(workingTransactionId, receipient, amount.ToString());
+					ctx.AddOutput(workingTransactionId, Address, remainder.ToString());
+
+					var privateKey = GetPrivateKey();
+
+					for (var i = 0; i < utxoCount; i++)
+					{
+						ctx.SignTransactionWithPrivateKey(workingTransactionId, i, privateKey);
+					}
+
+					return ctx.GetRawTransaction(workingTransactionId);
+
+				}
+				finally
+				{
+					ctx.ClearTransaction(workingTransactionId);
+				}
+			}
+		}
+
+
+		public void UpdateUTXOs(IEnumerable<UTXOInfo> utxos)
+		{
+			UTXOs = utxos;
+		}
+
+
+		private string GetPrivateKey()
+		{
+			try
+			{
+				var mnemonic = GetMnemonic();
+
+				using (var ctx = LibDogecoinContext.CreateContext())
+				{
+					var keys = ctx.GenerateHDMasterPubKeypairFromMnemonic(mnemonic);
+
+					return keys.privateKey;
+				}
+			}
+			catch
 			{
 				return string.Empty;
 			}
+		}
 
-			return CryptoTools.Decrypt(CryptoTools.Decrypt(File.ReadAllText(KeyFile), operatorPin), slotPin);
+		public string GetMnemonic()
+		{
+			if (IsUnlocked)
+			{
+				return Crypto.Decrypt(Crypto.Decrypt(File.ReadAllText(KeyFile), _opPin), _slotPin);
+			}
+			return string.Empty;
 		}
 	}
 
 
-	internal class CryptoTools
+	internal class Crypto
 	{
 
 		public static string Encrypt(string plainText, string key)
 		{
 			using (Aes aesAlg = Aes.Create())
 			{
-				aesAlg.Key = Encoding.UTF8.GetBytes(key);
-				aesAlg.IV = GenerateRandomIV();
+				byte[] keyBytes = Encoding.ASCII.GetBytes(Sha256Hash(key));
+				byte[] aesKey = SHA256Managed.Create().ComputeHash(keyBytes);
+				byte[] aesIV = MD5.Create().ComputeHash(keyBytes);
+				aesAlg.Key = aesKey;
+				aesAlg.IV = aesIV;
 
 				ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
 
@@ -213,8 +502,11 @@ namespace DogecoinTerminal
 		{
 			using (Aes aesAlg = Aes.Create())
 			{
-				aesAlg.Key = Encoding.UTF8.GetBytes(key);
-				aesAlg.IV = GenerateRandomIV();
+				byte[] keyBytes = Encoding.ASCII.GetBytes(Sha256Hash(key));
+				byte[] aesKey = SHA256Managed.Create().ComputeHash(keyBytes);
+				byte[] aesIV = MD5.Create().ComputeHash(keyBytes);
+				aesAlg.Key = aesKey;
+				aesAlg.IV = aesIV;
 
 				ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
 
@@ -232,14 +524,14 @@ namespace DogecoinTerminal
 		}
 
 
-		static byte[] GenerateRandomIV()
+
+		public static string Sha256Hash(string value)
 		{
-			using (RandomNumberGenerator rng = new RNGCryptoServiceProvider())
-			{
-				byte[] iv = new byte[16]; // 16 bytes for AES
-				rng.GetBytes(iv);
-				return iv;
-			}
+			byte[] data = Encoding.ASCII.GetBytes(value);
+			data = new SHA256Managed().ComputeHash(data);
+			String hash = Encoding.ASCII.GetString(data);
+			return hash;
 		}
+
 	}
 }

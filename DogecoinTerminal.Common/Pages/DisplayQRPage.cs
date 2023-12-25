@@ -15,18 +15,24 @@ namespace DogecoinTerminal.Common
 	public class DisplayQRPage : AppPage
 	{
 		private GraphicsDevice _graphicsDevice;
-		private AppButton _returnButton;
+		private AppButton _confirmButton;
 		private Texture2D _image;
+		private AppText Title;
 
 		public DisplayQRPage(Game game)
 			: base(game, true)
 		{
 			_graphicsDevice = game.GraphicsDevice;
+			Title = new AppText("Scan QR", TerminalColor.White, 6, (50, 10));
 
-			_returnButton = new AppButton(">", (88, 88), (98, 98), TerminalColor.Green, TerminalColor.White, 5, (isFirst, self) =>
+			Interactables.Add(Title);
+
+			_confirmButton = new AppButton("Next", (88, 88), (98, 98), TerminalColor.Green, TerminalColor.White, 5, (isFirst, self) =>
 			{
 				Game.Services.GetService<Router>().Return(true);
 			});
+
+			Interactables.Add(_confirmButton);
 		}
 
 		public override void OnBack()
@@ -42,6 +48,18 @@ namespace DogecoinTerminal.Common
 
 		protected override void OnNav(dynamic value, bool backable)
 		{
+			var parameters = (DisplayQRPageSettings)value;
+
+
+			Interactables.Remove(_confirmButton);
+
+			if (parameters.EnableConfirm)
+			{
+				Interactables.Add(_confirmButton);
+			}
+
+			Title.Text = parameters.Title;
+
 			_image = new Texture2D(_graphicsDevice, 480, 480);
 			var barcodeWriter = new BarcodeWriterPixelData()
 			{
@@ -53,9 +71,23 @@ namespace DogecoinTerminal.Common
 				}
 			};
 
-			var pixels = barcodeWriter.Write(value).Pixels;
+			var pixels = barcodeWriter.Write(parameters.QRData).Pixels;
 
 			_image.SetData(pixels);
+		}
+
+
+		public struct DisplayQRPageSettings
+		{
+			public DisplayQRPageSettings(string qrData, string title, bool enableConfirm)
+			{
+				QRData = qrData;
+				Title = title;
+				EnableConfirm = enableConfirm;
+			}
+			public string QRData;
+			public string Title;
+			public bool EnableConfirm;
 		}
 	}
 }

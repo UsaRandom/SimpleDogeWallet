@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 using DogecoinTerminal.Common.Components;
 using DogecoinTerminal.Common;
 using Microsoft.Xna.Framework;
+using System.Diagnostics.Metrics;
 
 namespace DogecoinTerminal.Pages
 {
 	internal class UnlockTerminalPage : AppPage
 	{
-		private const string UNLOCK_PIN = "1102";
-
 
 		public UnlockTerminalPage(Game game)
 			: base(game)
@@ -35,15 +34,48 @@ namespace DogecoinTerminal.Pages
 						5,
 						(isFirst, self) =>
 						{
-							Game.Services.GetService<Router>().Route("pin",
-								new PinCodePageSettings("Enter Operator Pin to Unlock", false), true,
-								(dynamic enteredPin) =>
+							var terminalService = Game.Services.GetService<ITerminalService>();
+							var router = Game.Services.GetService<Router>();
+
+							if(terminalService.Unlock(string.Empty))
+							{
+								router.Route("pin", new PinCodePageSettings("Set Operator Pin", false), true,
+								(enteredPin) =>
 								{
-									if (enteredPin == UNLOCK_PIN)
+									if (string.IsNullOrEmpty(enteredPin))
 									{
-										Game.Services.GetService<Router>().Route("wallets", null, false);
+										return;
 									}
+
+									router.Route("pin", new PinCodePageSettings("Confirm Operator Pin", false), true,
+									(confirmPin) =>
+									{
+										if (enteredPin != confirmPin)
+										{
+											return;
+										}
+
+										terminalService.UpdateOperatorPin(enteredPin);
+										terminalService.Unlock(enteredPin);
+
+
+										Game.Services.GetService<Router>().Route("wallets", null, false);
+									});
 								});
+							}
+							else
+							{
+								Game.Services.GetService<Router>().Route("pin",
+									new PinCodePageSettings("Enter Operator Pin to Unlock", false), true,
+									(dynamic enteredPin) =>
+									{
+										if (terminalService.Unlock(enteredPin))
+										{
+											Game.Services.GetService<Router>().Route("wallets", null, false);
+										}
+									});
+							}
+
 						}));
 		}
 
