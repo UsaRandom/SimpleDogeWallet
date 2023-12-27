@@ -15,7 +15,7 @@ namespace Lib.Dogecoin
 		{
 			lock (_lock)
 			{
-				if(_instance == null || _instance._disposed)
+				if (_instance == null || _instance._disposed)
 				{
 					_instance = new LibDogecoinContext();
 					return _instance;
@@ -34,7 +34,7 @@ namespace Lib.Dogecoin
 
 		public (string privateKey, string publicKey) GeneratePrivPubKeyPair(bool testNet = false)
 		{
-			lock(_lock)
+			lock (_lock)
 			{
 				var privKey = new char[52];
 				var pubKey = new char[34];
@@ -86,6 +86,23 @@ namespace Lib.Dogecoin
 				return key.TerminateNull();
 			}
 		}
+
+		public string GetHDNodePrivateKeyWIFByPath(string master, string path, bool priv)
+		{
+			lock (_lock)
+			{
+				var key = new char[111];
+
+				var result = LibDogecoinInterop.getHDNodePrivateKeyWIFByPath(
+					master.NullTerminate(),
+					path.NullTerminate(),
+					key,
+					priv);
+
+				return Marshal.PtrToStringAnsi(result);
+			}
+		}
+
 
 		public bool VerifyPrivPubKeyPair(string privKey, string pubKey, bool testNet = false)
 		{
@@ -162,7 +179,7 @@ namespace Lib.Dogecoin
 
 		public string P2pkhToQrString(string p2pkh)
 		{
-			lock(_lock)
+			lock (_lock)
 			{
 				var qrString = new char[3918 * 4];
 
@@ -175,8 +192,8 @@ namespace Lib.Dogecoin
 
 		public bool StringToQrPng(string qrString, string file, byte sizeMultiplier = 100)
 		{
-            lock (_lock)
-            {
+			lock (_lock)
+			{
 				return -1 != LibDogecoinInterop.qrgen_string_to_qr_pngfile(file.NullTerminate(), qrString.NullTerminate(), sizeMultiplier);
 			}
 		}
@@ -212,7 +229,7 @@ namespace Lib.Dogecoin
 
 		public bool AddOutput(int txIndex, string destinationAddress, string amount)
 		{
-			lock(_lock)
+			lock (_lock)
 			{
 				return 0 != LibDogecoinInterop.add_output(txIndex, destinationAddress.NullTerminate(), amount.NullTerminate());
 			}
@@ -230,7 +247,7 @@ namespace Lib.Dogecoin
 										outputSum.NullTerminate(),
 										changeAddress.NullTerminate()));
 
-				
+
 			}
 		}
 
@@ -240,7 +257,7 @@ namespace Lib.Dogecoin
 			lock (_lock)
 			{
 				IntPtr result = Marshal.StringToHGlobalAnsi(incomingrawtx);
-			//	var result = incomingrawtx.NullTerminate();
+				//	var result = incomingrawtx.NullTerminate();
 
 				LibDogecoinInterop.sign_raw_transaction(
 										inputindex,
@@ -254,9 +271,9 @@ namespace Lib.Dogecoin
 		}
 
 
-		public (string privateKey, string publicKey) GenerateHDMasterPubKeypairFromMnemonic(string mnemonic, string pass = null, bool isTest=false)
+		public (string privateKey, string publicKey) GenerateHDMasterPubKeypairFromMnemonic(string mnemonic, string pass = null, bool isTest = false)
 		{
-			lock(_lock)
+			lock (_lock)
 			{
 				var privKey = new char[255];
 				var pubKey = new char[255];
@@ -271,7 +288,7 @@ namespace Lib.Dogecoin
 
 		public string AddressToPubKeyHash(string address)
 		{
-			lock(_lock)
+			lock (_lock)
 			{
 				var pubkeyhash = new char[50];
 
@@ -378,7 +395,7 @@ namespace Lib.Dogecoin
 
 		public void Dispose()
 		{
-			lock(_lock)
+			lock (_lock)
 			{
 				_disposed = true;
 				LibDogecoinInterop.dogecoin_ecc_stop();

@@ -18,7 +18,7 @@ namespace DogecoinTerminal.Common
 		{
 			Interactables.Add(
 				new AppImage(Images.DogeImage,
-					(43, 18), (57, 33), Images.DogeImageDim)
+					(43, 8), (57, 23), Images.DogeImageDim)
 				);
 
 			MessageText = new AppText(string.Empty, TerminalColor.White, 5, (50, 50));
@@ -27,7 +27,7 @@ namespace DogecoinTerminal.Common
 
 			Interactables.Add(
 				new AppButton("wow",
-						(40, 60), (60, 70),
+						(40, 80), (60, 90),
 						TerminalColor.Blue,
 						TerminalColor.White,
 						5,

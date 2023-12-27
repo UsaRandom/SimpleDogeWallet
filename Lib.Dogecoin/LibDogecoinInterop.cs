@@ -58,9 +58,18 @@ namespace Lib.Dogecoin
 			[MarshalAs(UnmanagedType.LPArray)] char[] masterkey,
 			[MarshalAs(UnmanagedType.LPArray)] char[] derived_path,
 			[Out, MarshalAs(UnmanagedType.LPArray)] char[] outaddress,
-			[MarshalAs(UnmanagedType.I1)]bool outprivkey
+			[MarshalAs(UnmanagedType.I1)] bool outprivkey
 		);
 
+		
+
+		[DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		internal static extern IntPtr getHDNodePrivateKeyWIFByPath(
+			[MarshalAs(UnmanagedType.LPArray)] char[] masterkey,
+			[MarshalAs(UnmanagedType.LPArray)] char[] derived_path,
+			[Out, MarshalAs(UnmanagedType.LPArray)] char[] outaddress,
+			[MarshalAs(UnmanagedType.I1)] bool outprivkey
+		);
 
 		/* verify that a private key and dogecoin address match */
 		[DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
@@ -69,7 +78,6 @@ namespace Lib.Dogecoin
 			[MarshalAs(UnmanagedType.LPArray)] char[] p2pkh_pubkey,
 			[MarshalAs(UnmanagedType.I1)] bool is_testnet
 		);
-
 
 		/* verify that a HD Master key and a dogecoin address matches */
 		[DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]

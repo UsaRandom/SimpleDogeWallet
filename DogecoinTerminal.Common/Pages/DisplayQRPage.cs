@@ -16,6 +16,7 @@ namespace DogecoinTerminal.Common
 	{
 		private GraphicsDevice _graphicsDevice;
 		private AppButton _confirmButton;
+		private AppButton _cancelButton;
 		private Texture2D _image;
 		private AppText Title;
 
@@ -32,12 +33,17 @@ namespace DogecoinTerminal.Common
 				Game.Services.GetService<Router>().Return(true);
 			});
 
+			_cancelButton = new AppButton("Cancel", (2, 75), (12, 85), TerminalColor.Red, TerminalColor.White, 5, (isFirst, self) =>
+			{
+				Game.Services.GetService<Router>().Return(false);
+			});
+
 			Interactables.Add(_confirmButton);
 		}
 
 		public override void OnBack()
 		{
-
+			Game.Services.GetService<Router>().Back();
 		}
 
 		public override void Draw(VirtualScreen screen)
@@ -51,11 +57,13 @@ namespace DogecoinTerminal.Common
 			var parameters = (DisplayQRPageSettings)value;
 
 
+			Interactables.Remove(_cancelButton);
 			Interactables.Remove(_confirmButton);
 
 			if (parameters.EnableConfirm)
 			{
 				Interactables.Add(_confirmButton);
+				Interactables.Add(_cancelButton);
 			}
 
 			Title.Text = parameters.Title;

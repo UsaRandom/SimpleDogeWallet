@@ -8,6 +8,8 @@ using DogecoinTerminal.Common.Components;
 using DogecoinTerminal.Common;
 using Microsoft.Xna.Framework;
 using static DogecoinTerminal.Common.DisplayQRPage;
+using System.Diagnostics.Metrics;
+using OpenCvSharp.ML;
 
 namespace DogecoinTerminal.Pages
 {
@@ -33,7 +35,7 @@ namespace DogecoinTerminal.Pages
 			{
 				Interactables.Remove(control);
 			}
-
+			_walletControls = new List<Interactable>();
 
 			SlotNumber = slotNumber;
 
@@ -42,7 +44,7 @@ namespace DogecoinTerminal.Pages
 			var slot = terminalService.GetWalletSlot(slotNumber);
 			var dogeService = Game.Services.GetService<IDogecoinService>();
 
-			var balanceStr = slot.CalculatetBalance();
+			var balanceStr = slot.CalculateBalance();
 			decimal balance = decimal.Parse(balanceStr);
 
 
@@ -64,23 +66,43 @@ namespace DogecoinTerminal.Pages
 
 										  if(amountToSend > balance)
 										  {
-											  router.Route("msg", "Not enough dogecoin!", false);
+											  router.Route("msg", "Not enough dogecoin!", true);
 											  return;
 										  }
 
 										  router.Route("scanqr", "Scan Recipient's Address", true,
 											  (dynamic receipient) =>
 											  {
-												  var rawTransaction = slot.CreateTransaction(receipient, amountToSend);
+											  //remove preceiding 'dogecoin:'
+											  if (receipient.Contains(":"))
+											  {
+												  receipient = receipient.Split(':')[1];
+											  }
 
 
-												  dogeService.SendTransaction(rawTransaction, slot.SlotPin,
-													  (Action<bool>)((sendConfirmed) =>
-													{
+											  IDogecoinTransaction transaction = slot.CreateTransaction(receipient, amountToSend);
 
-														router.Route("msg", "Send Confirmed!", false);
 
-													}));
+											  router.Route("msg",
+												  $"Sending: Đ {transaction.Amount.ToString("#,##0.00")}\nFrom: {transaction.From}\n"
+												  + $"To: {transaction.Recipient}\nFee: Đ {transaction.Fee.ToString("#,##0.00")}\nTotal: Đ {transaction.Total.ToString("#,##0.00")}", true,
+												  _ =>
+													  {
+															  dogeService.SendTransaction(transaction.GetRawTransaction(), slot.SlotPin,
+																(Action<bool>)((sendConfirmed) =>
+																{
+
+																	if (sendConfirmed)
+																	{
+																		transaction.Commit();
+																		slot.UTXOStore.Save();
+
+																		LoadWalletSlot(slot.SlotNumber);
+																	}
+																	transaction.Dispose();
+																}));
+														});
+
 
 											  });
 
@@ -151,7 +173,15 @@ namespace DogecoinTerminal.Pages
 							  {
 								  Game.Services.GetService<IDogecoinService>().GetUTXOs(slot.Address, null, (utxos) =>
 								  {
-									  slot.UpdateUTXOs(utxos);
+									  slot.UTXOStore.RemoveAll();
+									  
+									  foreach(var utxo in utxos)
+									  {
+										  slot.UTXOStore.AddUTXO(utxo);
+									  }
+
+									  slot.UTXOStore.Save();
+									  LoadWalletSlot(slot.SlotNumber);
 								  });
 							  }));
 
@@ -183,9 +213,16 @@ namespace DogecoinTerminal.Pages
 			}
 		}
 
+
+
+		private void OnUpdatePinButtonClicked(bool isFirstInteraction, Interactable sender)
+		{
+
+		}
+
 		public override void OnBack()
 		{
-			//Game.Services.GetService<Router>().ClearCallbackStack();
+			Game.Services.GetService<Router>().ClearCallbackStack();
 
 
 		}

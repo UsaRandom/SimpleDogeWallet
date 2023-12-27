@@ -152,15 +152,12 @@ namespace DogecoinTerminal.Pages
 
 		public override void OnBack()
 		{
-			//one of those places we should do this.
-			Game.Services.GetService<Router>().ClearCallbackStack();
-
-
 			RefreshSlots();
 		}
 
 		protected override void OnNav(dynamic value, bool backable)
 		{
+			Game.Services.GetService<Router>().ClearCallbackStack();
 			RefreshSlots();
 		}
 	}

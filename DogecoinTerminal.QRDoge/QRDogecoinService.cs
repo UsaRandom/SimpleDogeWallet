@@ -48,7 +48,7 @@ namespace DogecoinTerminal.QRDoge
 						{
 							TransactionId = lineParts[0],
 							VOut = Int32.Parse(lineParts[1]),
-							Amount = lineParts[2]
+							Amount = decimal.Parse(lineParts[2])
 						});
 					}
 
@@ -64,7 +64,7 @@ namespace DogecoinTerminal.QRDoge
 			//the corresponding QRDoge app will request that the node stop watching this address.
 			//
 			// qrdoge-0-delete:address
-			_game.Services.GetService<Router>().Route("displayqr", new DisplayQRPageSettings($"qrdoge:0-delete:{address}", "Scan with QRDoge App (Delete Address)", true), false, (scanAcknowledged) =>
+			_game.Services.GetService<Router>().Route("displayqr", new DisplayQRPageSettings($"qrdoge:0-delete:{address}", "Scan with QRDoge App (Delete Address)", true), true, (scanAcknowledged) =>
 			{
 				//nothing else to do
 				callback();
@@ -76,10 +76,10 @@ namespace DogecoinTerminal.QRDoge
 
 			//the corresponding QRDoge app will request that the node start watching this address.
 
-			_game.Services.GetService<Router>().Route("displayqr", new DisplayQRPageSettings($"qrdoge:0-new:{address}", "Scan with QRDoge App (New Address)", true), false, (scanAcknowledged) =>
+			_game.Services.GetService<Router>().Route("displayqr", new DisplayQRPageSettings($"qrdoge:0-new:{address}", "Scan with QRDoge App (New Address)", true), true, (scanAcknowledged) =>
 			{
 				//nothing else to do
-				callback(true);
+				callback(scanAcknowledged);
 			});
 		}
 
@@ -96,9 +96,9 @@ namespace DogecoinTerminal.QRDoge
 		public void SendTransaction(string transaction, string pin, Action<bool> callback)
 		{
 			//the corresponding QRDoge app will request that the node broadcast this transaction.
-			_game.Services.GetService<Router>().Route("displayqr", new DisplayQRPageSettings($"qrdoge:0-send:{transaction}", "Scan with QRDoge App (Send Transaction)", true), false, (scanAcknowledged) =>
+			_game.Services.GetService<Router>().Route("displayqr", new DisplayQRPageSettings($"qrdoge:0-send:{transaction}", "Scan with QRDoge App (Send Transaction)", true), true, (scanAcknowledged) =>
 			{
-				callback(true);
+				callback(scanAcknowledged);
 			});
 		}
 

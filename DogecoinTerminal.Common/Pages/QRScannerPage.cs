@@ -13,6 +13,8 @@ using ZXing.OpenCV;
 using static System.Net.Mime.MediaTypeNames;
 using DogecoinTerminal.Common.Components;
 using DogecoinTerminal.Common;
+using ZXing.Common;
+using ZXing.QrCode;
 
 namespace DogecoinTerminal.Common
 {
@@ -24,6 +26,9 @@ namespace DogecoinTerminal.Common
 		private VideoCapture capture;
 		private AppText titleText;
 
+		private const int VIDEO_CAPTURE_HEIGHT = 480;
+		private const int VIDEO_CAPTURE_WIDTH = 640;
+
 
 		public QRScannerPage(Game game)
 			:base(game, true)
@@ -31,7 +36,7 @@ namespace DogecoinTerminal.Common
 			_graphicsDevice = Game.GraphicsDevice;
 
 
-			cameraTexture = new Texture2D(Game.GraphicsDevice, 640, 480);
+			cameraTexture = new Texture2D(Game.GraphicsDevice, VIDEO_CAPTURE_WIDTH, VIDEO_CAPTURE_HEIGHT);
 
 			titleText = new AppText("Scan QR", TerminalColor.White, 3, (50, 10));
 
@@ -49,7 +54,7 @@ namespace DogecoinTerminal.Common
 
 		public override void Draw(VirtualScreen screen)
 		{
-			using (Mat frame = new Mat(640, 480, MatType.CV_32SC1))
+			using (Mat frame = new Mat(VIDEO_CAPTURE_WIDTH, VIDEO_CAPTURE_HEIGHT, MatType.CV_32SC1))
 			{
 				if (capture.Read(frame))
 				{
@@ -64,27 +69,34 @@ namespace DogecoinTerminal.Common
 					}
 					cameraTexture.Dispose();
 
-					cameraTexture = new Texture2D(_graphicsDevice, 640, 480);
+					cameraTexture = new Texture2D(_graphicsDevice, VIDEO_CAPTURE_WIDTH, VIDEO_CAPTURE_HEIGHT);
 
 
 					cameraTexture.SetData(intArray);
 
+					//byte[] byteArray = new byte[intArray.Length * sizeof(int)];
+					//Buffer.BlockCopy(intArray, 0, byteArray, 0, byteArray.Length);
 
+					//RGBLuminanceSource source = new RGBLuminanceSource(byteArray, VIDEO_CAPTURE_WIDTH, VIDEO_CAPTURE_HEIGHT);
+					//BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+					//Dictionary<DecodeHintType, object> hints = new Dictionary<DecodeHintType, object>();
+					//hints.Add(DecodeHintType.TRY_HARDER, true);
+
+					//Result result = new QRCodeReader().decode(bitmap, hints);
 
 					// create a barcode reader instance
 					var reader = new BarcodeReader();
 					// load a bitmap
-					var result = reader.Decode(frame);
-					
+						var result = reader.Decode(frame);
+
 					// do something with the result
-					if (result != null && result.BarcodeFormat == BarcodeFormat.QR_CODE
-							&& result.Text.ToLower().StartsWith("dogecoin:"))
+					if (result != null)
 					{
-						Game.Services.GetService<Router>().Return(result.Text.Split(":")[1]);		
+						Game.Services.GetService<Router>().Return(result.Text);		
 					}
 
 
-					screen.DrawImage(cameraTexture, (50, 50), (50,60), (640, 480));
+					screen.DrawImage(cameraTexture, (50, 50), (50,60), (VIDEO_CAPTURE_WIDTH, VIDEO_CAPTURE_HEIGHT));
 
 					next.Dispose();
 				}
@@ -120,8 +132,8 @@ namespace DogecoinTerminal.Common
 			capture = new VideoCapture(0, VideoCaptureAPIs.DSHOW);
 
 
-			capture.Set(VideoCaptureProperties.FrameWidth, 640);
-			capture.Set(VideoCaptureProperties.FrameHeight, 480);
+			capture.Set(VideoCaptureProperties.FrameWidth, VIDEO_CAPTURE_WIDTH);
+			capture.Set(VideoCaptureProperties.FrameHeight, VIDEO_CAPTURE_HEIGHT);
 		}
 
 

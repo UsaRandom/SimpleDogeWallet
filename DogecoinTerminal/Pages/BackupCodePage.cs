@@ -35,7 +35,7 @@ namespace DogecoinTerminal.Pages
 			}
 
 
-			Interactables.Add(new AppButton(">", (88, 88), (98, 98), TerminalColor.Green, TerminalColor.White, 5, (isFirst, self) =>
+			Interactables.Add(new AppButton(">", (90, 90), (98, 98), TerminalColor.Green, TerminalColor.White, 5, (isFirst, self) =>
 			{
 				Game.Services.GetService<Router>().Return("wow");
 			}));
@@ -47,7 +47,7 @@ namespace DogecoinTerminal.Pages
 
 		public override void OnBack()
 		{
-
+			Game.Services.GetService<Router>().Back();
 		}
 
 		protected override void OnNav(dynamic value, bool backable)

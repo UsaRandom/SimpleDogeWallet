@@ -29,7 +29,8 @@ namespace DogecoinTerminal
 		bool IsEmpty { get; }
 		string SlotPin { get; }
 
-		IEnumerable<UTXOInfo> UTXOs { get; }
+		IUTXOStore UTXOStore { get; }
+
 
 
 		bool Unlock(string slotPin);
@@ -46,10 +47,55 @@ namespace DogecoinTerminal
 
 		string GetMnemonic();
 
-		string CalculatetBalance();
+		string CalculateBalance();
 
-		void UpdateUTXOs(IEnumerable<UTXOInfo> utxos);
 
-		string CreateTransaction(string receipient, decimal amount);
+		IDogecoinTransaction CreateTransaction(string receipient, decimal amount);
+
+	}
+
+	internal interface IUTXOStore
+	{
+		IEnumerable<UTXOInfo> UTXOs { get; }
+
+		bool Unlock(string opPin, string slotPin);
+
+		void AddUTXO(UTXOInfo utxoInfo);
+
+		void RemoveUTXO(UTXOInfo utxoInfo);
+
+		void RemoveAll();
+
+		void OnWalletSlotDelete();
+
+		void UpdateOperatorPin(string newOperatorPin);
+
+		void UpdateSlotPin(string slotPin);
+
+		void Save();
+	}
+
+	internal interface IDogecoinTransaction : IDisposable
+	{
+
+		decimal Fee { get; }
+
+		decimal Amount { get; }
+
+		decimal Total { get; }
+
+		string Recipient { get; }
+
+		string From { get; }
+
+
+		bool Send(string recipient, decimal amount);
+
+		bool Sign();
+
+		string GetRawTransaction();
+
+		void Commit();
+
 	}
 }

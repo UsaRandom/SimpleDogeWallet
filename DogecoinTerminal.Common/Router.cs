@@ -63,13 +63,16 @@ namespace DogecoinTerminal.Common
 		public void Return(object value)
 		{
 			_currentPage.Cleanup();
-			_currentPage = _backStack.Pop();
-
-			if(_callbackStack.Count > 0)
+			if(_backStack.Count > 0)
 			{
-				var callback = _callbackStack.Pop();
+				_currentPage = _backStack.Pop();
 
-				callback.Invoke(value);
+				if (_callbackStack.Count > 0)
+				{
+					var callback = _callbackStack.Pop();
+
+					callback.Invoke(value);
+				}
 			}
 
 		}
