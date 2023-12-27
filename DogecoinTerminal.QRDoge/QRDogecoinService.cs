@@ -10,6 +10,12 @@ using static DogecoinTerminal.Common.DisplayQRPage;
 
 namespace DogecoinTerminal.QRDoge
 {
+	/*
+	 * QRDoge v0
+	 * 
+	 * 
+	 * 
+	 */
 	public class QRDogecoinService : IDogecoinService
 	{
 		private Game _game;
@@ -21,13 +27,10 @@ namespace DogecoinTerminal.QRDoge
 
 		public void GetUTXOs(string address, string pin, Action<IEnumerable<UTXOInfo>> callback)
 		{
-			// This is a super simple implimentation.
-			// 
-			// This creates a very low limit on the number of UTXOs the terminal can support.
-			// Multiple scans is the best way forward.
 
 			_game.Services.GetService<Router>().Route("scanqr", "Press 'Get UTXOs' on Phone", true, (qrString) =>
 			{					
+
 				var utxoList = new List<UTXOInfo>();
 
 				try
@@ -52,7 +55,9 @@ namespace DogecoinTerminal.QRDoge
 						});
 					}
 
-				} finally
+				}
+				catch (Exception) { }
+				finally
 				{
 					callback(utxoList);
 				}

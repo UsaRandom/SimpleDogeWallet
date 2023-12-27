@@ -129,7 +129,17 @@ namespace DogecoinTerminal.Common
 			}
 
 
-			capture = new VideoCapture(0, VideoCaptureAPIs.DSHOW);
+			if(Environment.OSVersion.Platform == PlatformID.Win32NT)
+			{
+				capture = new VideoCapture(0, VideoCaptureAPIs.DSHOW);
+			}
+			else
+			{
+				//TODO: this can take a long time if you don't specify the video capture api.
+				//
+				//we also are relying on the first camera, there might be more.
+				capture = new VideoCapture(0, VideoCaptureAPIs.ANY);
+			}
 
 
 			capture.Set(VideoCaptureProperties.FrameWidth, VIDEO_CAPTURE_WIDTH);

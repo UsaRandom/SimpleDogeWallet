@@ -11,6 +11,8 @@ namespace DogecoinTerminal
 	{
 		bool IsUnlocked { get; }
 
+		bool ConfirmOperatorPin(string pin);
+
 		bool Unlock(string operatorPin);
 		void Lock();
 

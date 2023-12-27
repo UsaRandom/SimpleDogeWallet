@@ -30,6 +30,8 @@ namespace DogecoinTerminal
 		private string _opPin;
 		private IWalletSlot[] _slots;
 
+		private ITerminalSettingsService _settings;
+
 		public bool IsUnlocked { get; private set; }
 
 		public TerminalService(Game game)
@@ -64,6 +66,30 @@ namespace DogecoinTerminal
 			IsUnlocked = false;
 		}
 
+
+		public bool ConfirmOperatorPin(string pin)
+		{
+			if (OpPinIsSet() && pin != string.Empty)
+			{
+				try
+				{
+					return Crypto.Decrypt(File.ReadAllText(OP_PIN_VERIFY_FILE), pin) == OP_PIN_VERIFY_STATEMENT;
+				}
+				catch { }
+
+				return false;
+			}
+
+			if (!OpPinIsSet() && pin == string.Empty)
+			{
+
+				return true;
+			}
+
+			return false;
+		}
+
+
 		public bool Unlock(string operatorPin)
 		{
 			if(OpPinIsSet() && operatorPin != string.Empty)
@@ -88,6 +114,7 @@ namespace DogecoinTerminal
 			{
 				_opPin = operatorPin;
 				IsUnlocked = true;
+
 				return true;
 			}
 
@@ -125,6 +152,9 @@ namespace DogecoinTerminal
 		{
 			return File.Exists(OP_PIN_VERIFY_FILE);
 		}
+
+
+
 	}
 
 

@@ -43,14 +43,6 @@ namespace DogecoinTerminal
 
 		protected override void Initialize()
 		{
-			//GraphicsDevice.RasterizerState = new RasterizerState
-			//{
-			//	CullMode = CullMode.CullClockwiseFace
-			//};
-			//_graphics.GraphicsProfile = GraphicsProfile.HiDef;
-			//_graphics.PreferMultiSampling = true;
-			//GraphicsDevice.PresentationParameters.MultiSampleCount = 4;
-			//_graphics.ApplyChanges();
 
 			_screen.Init(GraphicsDevice, HEIGHT, WIDTH);
 
@@ -58,9 +50,12 @@ namespace DogecoinTerminal
 			_router = new Router();
 
 			Services.AddService(_router);
+			Services.AddService<ITerminalService>(new TerminalService(this));
+			Services.AddService<ITerminalSettingsService>(new TerminalSettingsService());
+
+
 			Services.AddService<IDogecoinService>(new QRDogecoinService(this));
 
-			Services.AddService<ITerminalService>(new TerminalService(this));
 
 			base.Initialize();
 		}
@@ -85,6 +80,7 @@ namespace DogecoinTerminal
 			_router.AddRoute("displayqr", new DisplayQRPage(this));
 			_router.AddRoute("codes", new BackupCodePage(this));
 			_router.AddRoute("settings", new TerminalSettingsPage(this));
+			_router.AddRoute("transactionsettings", new TransactionSettingsPage(this));
 
 			_router.Route("home", null, false);
 

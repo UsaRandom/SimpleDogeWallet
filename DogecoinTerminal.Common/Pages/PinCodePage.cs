@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using DogecoinTerminal.Common.Components;
 using DogecoinTerminal.Common;
 using Microsoft.Xna.Framework;
+using System.Text.RegularExpressions;
 
 namespace DogecoinTerminal.Common
 {
@@ -207,14 +208,24 @@ namespace DogecoinTerminal.Common
 					return;
 				}
 
+				UserText.Text += character;
+
+				if (UserText.Text == "Đ.")
+				{
+					UserText.Text = "Đ0.";
+				}
+
 				//if (!UserText.Text.StartsWith("Đ"))
 				//{
 				//	UserText.Text = "Đ" + UserText.Text;
 				//}
 			}
+			else
+			{
+				UserText.Text += character;
+			}
 
-			
-			UserText.Text += character;
+
 
 			UpdateReturnButton();
 
@@ -227,11 +238,11 @@ namespace DogecoinTerminal.Common
 				UserText.Text = "Đ" + UserText.Text;
 			}
 
-			if (_settings.IsValueMode && !string.IsNullOrEmpty(UserText.Text.Replace("Đ", string.Empty)) && double.TryParse(UserText.Text.Replace("Đ", string.Empty), out double value))
+			if (_settings.IsValueMode && double.TryParse(UserText.Text.Replace("Đ", string.Empty), out double value))
 			{
 				EnableReturn();
 			}
-			else if (!_settings.IsValueMode && !string.IsNullOrEmpty(UserText.Text.Replace("Đ", string.Empty)))
+			else if (!_settings.IsValueMode && Regex.IsMatch(UserText.Text, _settings.RegexRule))
 			{
 				EnableReturn();
 			}
@@ -277,12 +288,14 @@ namespace DogecoinTerminal.Common
 
 	public struct PinCodePageSettings
 	{
-		public PinCodePageSettings(string title, bool isValueMode)
+		public PinCodePageSettings(string title, bool isValueMode, string regexRule = ".*")
 		{
 			Title = title;
 			IsValueMode = isValueMode;
+			RegexRule = regexRule;
 		}
 		public string Title;
 		public bool IsValueMode;
+		public string RegexRule;
 	}
 }

@@ -33,7 +33,7 @@ namespace DogecoinTerminal.Common
 				Game.Services.GetService<Router>().Return(true);
 			});
 
-			_cancelButton = new AppButton("Cancel", (2, 75), (12, 85), TerminalColor.Red, TerminalColor.White, 5, (isFirst, self) =>
+			_cancelButton = new AppButton("Cancel", (2, 88), (12, 98), TerminalColor.Red, TerminalColor.White, 5, (isFirst, self) =>
 			{
 				Game.Services.GetService<Router>().Return(false);
 			});

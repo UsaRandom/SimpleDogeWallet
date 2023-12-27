@@ -160,7 +160,7 @@ namespace DogecoinTerminal.Pages
 							  TerminalColor.DarkGrey, TerminalColor.White, 4,
 							  (isFirst, self) =>
 							  {
-								  Game.Services.GetService<Router>().Route("codes", slot.GetMnemonic(), true);
+								  Game.Services.GetService<Router>().Route("codes", new BackupCodePageSettings(slot.GetMnemonic(), false), true);
 							  }));
 
 

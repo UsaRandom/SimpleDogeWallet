@@ -1,5 +1,6 @@
 ﻿using DogecoinTerminal.Common;
 using Lib.Dogecoin;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,12 +14,10 @@ namespace DogecoinTerminal
 	internal class DogecoinTransaction : IDogecoinTransaction
 	{
 
-		internal const decimal DUST_LIMIT = 0.001M;
-
 		private int _workingTransactionId;
 		private LibDogecoinContext _ctx;
 		private IWalletSlot _slot;
-
+		private Game _game;
 		private List<UTXOInfo> _txUTXOs;
 
 		public decimal Fee { get; private set; }
@@ -43,8 +42,9 @@ namespace DogecoinTerminal
 
 		public string From { get; private set; }
 
-		public DogecoinTransaction(IWalletSlot slot)
+		public DogecoinTransaction(Game game, IWalletSlot slot)
 		{
+			_game = game;
 			_slot = slot;
 			_txUTXOs = new List<UTXOInfo>();
 			_ctx = LibDogecoinContext.CreateContext();
@@ -54,8 +54,11 @@ namespace DogecoinTerminal
 
 		public bool Send(string recipient, decimal amount)
 		{
+			var settings = _game.Services.GetService<ITerminalSettingsService>();
 
-			if(amount < DUST_LIMIT)
+			var dustLimit = settings.Get<decimal>("dust-limit");
+
+			if (amount < dustLimit)
 			{
 				return false;
 			}
@@ -67,7 +70,7 @@ namespace DogecoinTerminal
 			//it might make sense to order these decending
 			var utxoEnumerator = _slot.UTXOStore.UTXOs.GetEnumerator();
 
-			decimal fee = 0.02M; //fee per utxo
+			decimal fee = settings.Get<decimal>("fee-per-utxo"); //fee per utxo
 			decimal sum = 0M;
 			int utxoCount = 0;
 
@@ -116,7 +119,7 @@ namespace DogecoinTerminal
 			this.From = _slot.Address;
 
 
-			if(this.Remainer > DUST_LIMIT)
+			if(this.Remainer > dustLimit)
 			{
 
 				if (!_ctx.AddOutput(_workingTransactionId, this.From, remainderStr))
@@ -163,7 +166,9 @@ namespace DogecoinTerminal
 				_slot.UTXOStore.RemoveUTXO(utxo);
 			}
 
-			if(Remainer > DUST_LIMIT)
+			var settings = _game.Services.GetService<ITerminalSettingsService>();
+
+			if (Remainer > settings.Get<decimal>("dust-limit"))
 			{
 
 				_slot.UTXOStore.AddUTXO(new UTXOInfo

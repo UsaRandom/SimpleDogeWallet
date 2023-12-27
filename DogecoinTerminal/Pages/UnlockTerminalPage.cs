@@ -91,8 +91,6 @@ namespace DogecoinTerminal.Pages
 			//sounds fine, but there is a problem.... the got' dang back button.
 			//
 			//... so we have to do this on a few pages lol
-			//
-			//what kind of shitty programmer am i?
 			Game.Services.GetService<Router>().ClearCallbackStack();
 		}
 

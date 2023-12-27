@@ -43,7 +43,13 @@ namespace DogecoinTerminal.Pages
 					TerminalColor.DarkGrey, TerminalColor.White, 3,
 					(isFirst, self) =>
 					{
-						Game.Services.GetService<Router>().Route("settings", null, true);
+						Game.Services.GetService<Router>().Route("pin", new PinCodePageSettings("Enter Operator Pin:", false), true, (pin) =>
+						{
+							if (Game.Services.GetService<ITerminalService>().ConfirmOperatorPin(pin))
+							{
+								Game.Services.GetService<Router>().Route("settings", null, true);
+							}
+						});
 					}));
 		}
 
@@ -65,8 +71,10 @@ namespace DogecoinTerminal.Pages
 
 			var slot = terminalService.GetWalletSlot(slotNumber);
 
+
+			//we zero index our arrays obviously, but users see slotnumber+1 because otherwise they complain...
 			SlotButtons[slotNumber] =
-				new AppButton(slot.IsEmpty ? $"(Slot {slotNumber})" : GetShortAddress(slot.Address), start, end,
+				new AppButton(slot.IsEmpty ? $"(Slot {slotNumber+1})" : GetShortAddress(slot.Address), start, end,
 							slot.IsEmpty ? TerminalColor.LightGrey : TerminalColor.DarkGrey,
 							TerminalColor.White, 5,
 							(isFirst, self) =>
@@ -93,7 +101,7 @@ namespace DogecoinTerminal.Pages
 											{
 												slot.Init(enteredPin);
 
-												router.Route("codes", slot.GetMnemonic(), true, _ =>
+												router.Route("codes", new BackupCodePageSettings(slot.GetMnemonic(), true), true, _ =>
 												{
 													router.Route("wallet", slotNumber, true);
 												});

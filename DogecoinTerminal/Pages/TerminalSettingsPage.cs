@@ -31,17 +31,27 @@ namespace DogecoinTerminal.Pages
 										Game.Services.GetService<Router>().Route("pin", new PinCodePageSettings("Confirm Pin:", false), true,
 										(dynamic confirmPin) =>
 										{
-											Game.Services.GetService<Router>().Route("msg", newPin == confirmPin ? "Pin Updated!" : "Pins did not match!", true);
+											if (string.IsNullOrEmpty(newPin) || newPin != confirmPin)
+											{
+												Game.Services.GetService<Router>().Route("msg", "Could not update pin!", true);
+											}
+											else
+											{
+												Game.Services.GetService<ITerminalService>().UpdateOperatorPin(newPin);
+
+												Game.Services.GetService<Router>().Route("msg", "Operator Pin Updated!", true);
+											}
 										});
 									});
 							  }));
 
 			Interactables.Add(
-				new AppButton("RadioDoge", (51, 40), (70, 55),
+				new AppButton("Transaction\n"
+							 +"  Settings", (51, 40), (70, 55),
 							  TerminalColor.DarkGrey, TerminalColor.White, 4,
 							  (isFirst, self) =>
 							  {
-								  Game.Services.GetService<Router>().Route("msg", "no work yet", true);
+								  Game.Services.GetService<Router>().Route("transactionsettings", null, true);
 							  }));
 
 
@@ -50,7 +60,22 @@ namespace DogecoinTerminal.Pages
 							  TerminalColor.Red, TerminalColor.White, 4,
 							  (isFirst, self) =>
 							  {
-								  Game.Services.GetService<Router>().Route("msg", "no work yet", true);
+								  Game.Services.GetService<Router>().Route("pin", new PinCodePageSettings("Enter Slot Number to Remove (1,2,3,4,5,6):", false, "[123456]"), true, (input) =>
+								  {
+									  int slotNumber = -1;
+
+									  if(int.TryParse(input, out slotNumber) && slotNumber >= 1 && slotNumber <= 6)
+									  {
+										  Game.Services.GetService<ITerminalService>().ClearSlot(slotNumber - 1);
+										  Game.Services.GetService<Router>().Route("msg", $"Cleared out Slot #{slotNumber}!", true);
+									  }
+									  else
+									  {
+										  Game.Services.GetService<Router>().Route("msg", $"Ummm? I said 1-6, you gave me: '{slotNumber}'", true);
+									  }
+									  
+								  });
+
 							  }));
 		}
 

@@ -14,7 +14,6 @@ namespace DogecoinTerminal
 	internal class WalletSlot : IWalletSlot
 	{
 		//address file
-		//utxo file
 		//key file
 
 		private string SlotAddressFile
@@ -43,6 +42,9 @@ namespace DogecoinTerminal
 			_opPin = opPin;
 			_slotPin = string.Empty;
 			SlotNumber = slotNumber;
+
+
+			UTXOStore = new UTXOStore(this);
 		}
 
 		public bool IsEmpty
@@ -134,8 +136,6 @@ namespace DogecoinTerminal
 				return false;
 			}
 
-
-			UTXOStore = new UTXOStore(this);
 
 
 			if(!UTXOStore.Unlock(_opPin, slotPin))
@@ -235,7 +235,7 @@ namespace DogecoinTerminal
 
 		public IDogecoinTransaction CreateTransaction(string receipient, decimal amount)
 		{
-			var transaction = new DogecoinTransaction(this);
+			var transaction = new DogecoinTransaction(_game, this);
 
 			if(transaction.Send(receipient, amount) && transaction.Sign())
 			{
