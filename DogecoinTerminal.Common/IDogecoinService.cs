@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace DogecoinTerminal.Common
 {
-	//NOTE: This is not a final interface.
+	//NOTE: not a final interface.
 	public interface IDogecoinService
 	{
 		void OnSetup(Action<bool> callback);
-
-		void OnReset(Action<bool> callback);
 
 		void OnNewAddress(string address, string pin, Action<bool> callback);
 

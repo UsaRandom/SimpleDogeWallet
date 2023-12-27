@@ -32,7 +32,7 @@ namespace DogecoinTerminal
 			}
 		}
 
-		internal decimal Remainer
+		internal decimal Remainder
 		{
 			get;
 			private set;
@@ -67,7 +67,7 @@ namespace DogecoinTerminal
 
 			_workingTransactionId = _ctx.StartTransaction();
 
-			//it might make sense to order these decending
+			//it might make sense to order these
 			var utxoEnumerator = _slot.UTXOStore.UTXOs.GetEnumerator();
 
 			decimal fee = settings.Get<decimal>("fee-per-utxo"); //fee per utxo
@@ -111,7 +111,7 @@ namespace DogecoinTerminal
 			var remainderStr = remainder.ToString();
 
 
-			this.Remainer = remainder;
+			this.Remainder = remainder;
 			this.Fee = fee;
 			this.Amount = amount;
 			
@@ -119,7 +119,7 @@ namespace DogecoinTerminal
 			this.From = _slot.Address;
 
 
-			if(this.Remainer > dustLimit)
+			if(this.Remainder > dustLimit)
 			{
 
 				if (!_ctx.AddOutput(_workingTransactionId, this.From, remainderStr))
@@ -156,9 +156,8 @@ namespace DogecoinTerminal
 			var masterKeys = _ctx.GenerateHDMasterPubKeypairFromMnemonic(mnemonic);
 
 			return _ctx.GetHDNodePrivateKeyWIFByPath(masterKeys.privateKey, Crypto.HDPATH, true);
-		
-		
 		}
+
 		public void Commit()
 		{
 			foreach(var utxo in _txUTXOs)
@@ -168,14 +167,13 @@ namespace DogecoinTerminal
 
 			var settings = _game.Services.GetService<ITerminalSettingsService>();
 
-			if (Remainer > settings.Get<decimal>("dust-limit"))
+			if (Remainder > settings.Get<decimal>("dust-limit"))
 			{
-
 				_slot.UTXOStore.AddUTXO(new UTXOInfo
 				{
 					TransactionId = Crypto.GetTransactionIdFromRaw(GetRawTransaction()),
 					VOut = 0,// by our convention, our first output is back to ourselves.
-					Amount = Remainer
+					Amount = Remainder
 				});
 			}
 

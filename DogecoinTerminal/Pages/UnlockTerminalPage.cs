@@ -59,7 +59,18 @@ namespace DogecoinTerminal.Pages
 										terminalService.Unlock(enteredPin);
 
 
-										Game.Services.GetService<Router>().Route("wallets", null, false);
+										Game.Services.GetService<IDogecoinService>().OnSetup((setupSuccess) =>
+										{
+											if(setupSuccess)
+											{
+												Game.Services.GetService<Router>().Route("wallets", null, false);
+											}
+											else
+											{
+												Game.Services.GetService<Router>().Back();
+											}
+										});
+
 									});
 								});
 							}

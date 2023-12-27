@@ -63,6 +63,10 @@ namespace DogecoinTerminal.Common
 			if (parameters.EnableConfirm)
 			{
 				Interactables.Add(_confirmButton);
+			}
+
+			if (parameters.EnableCancel)
+			{
 				Interactables.Add(_cancelButton);
 			}
 
@@ -87,15 +91,17 @@ namespace DogecoinTerminal.Common
 
 		public struct DisplayQRPageSettings
 		{
-			public DisplayQRPageSettings(string qrData, string title, bool enableConfirm)
+			public DisplayQRPageSettings(string qrData, string title, bool enableConfirm, bool enableCancel=false)
 			{
 				QRData = qrData;
 				Title = title;
 				EnableConfirm = enableConfirm;
+				EnableCancel = enableCancel;
 			}
 			public string QRData;
 			public string Title;
 			public bool EnableConfirm;
+			public bool EnableCancel;
 		}
 	}
 }

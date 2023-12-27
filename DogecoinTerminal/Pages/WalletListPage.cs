@@ -97,15 +97,38 @@ namespace DogecoinTerminal.Pages
 												return;
 											}
 
-											router.Route("msg", "Prepare to write down your backup phrases.", true, _ =>
-											{
-												slot.Init(enteredPin);
+											
+											slot.Init(enteredPin);
 
-												router.Route("codes", new BackupCodePageSettings(slot.GetMnemonic(), true), true, _ =>
+											var mnemonic = slot.GetMnemonic();
+
+											var dogeService = Game.Services.GetService<IDogecoinService>();
+
+											dogeService.OnNewAddress(slot.Address, enteredPin,
+												(Action<bool>)((canCreate) =>
 												{
-													router.Route("wallet", slotNumber, true);
-												});
-											});
+													//our typical dogecoinservice requires registering an address to watch
+													//so we need it's 'approval' to create a key. this is to protect users?
+													if(canCreate)
+													{
+														router.Route("msg", "Prepare to write down your backup phrases.", true, _ =>
+														{
+
+															router.Route("codes", new BackupCodePageSettings(slot.GetMnemonic(), true), true, _ =>
+															{
+																router.Route("wallet", slotNumber, true);
+															});
+														});
+													}
+													else
+													{
+														//our dogecoin provider can't service this address, or something, we have to clear the slot...
+														slot.ClearSlot();
+														router.Route("wallets", null, false);
+													}
+												}));
+
+									
 
 										});
 									});

@@ -13,7 +13,7 @@ namespace DogecoinTerminal.QRDoge
 	/*
 	 * QRDoge v0
 	 * 
-	 * 
+	 * this is an example dogecoin service 
 	 * 
 	 */
 	public class QRDogecoinService : IDogecoinService
@@ -27,41 +27,53 @@ namespace DogecoinTerminal.QRDoge
 
 		public void GetUTXOs(string address, string pin, Action<IEnumerable<UTXOInfo>> callback)
 		{
-
-			_game.Services.GetService<Router>().Route("scanqr", "Press 'Get UTXOs' on Phone", true, (qrString) =>
-			{					
-
-				var utxoList = new List<UTXOInfo>();
-
-				try
+			_game.Services.GetService<Router>().Route("displayqr", new DisplayQRPageSettings($"qrdoge:0-update:{address}", "Scan with QRDoge App (Update UTXOs)", true, true), true, (scanAcknowledged) =>
+			{
+				if(scanAcknowledged)
 				{
-					var lines = qrString.Split('\n');
 
-
-					foreach (var line in lines)
+					_game.Services.GetService<Router>().Route("scanqr", "Scan QR Code display'd in App.", true, (qrString) =>
 					{
-						if (string.IsNullOrEmpty(line))
+
+						var utxoList = new List<UTXOInfo>();
+
+						try
 						{
-							continue;
+							var lines = qrString.Split('\n');
+
+
+							foreach (var line in lines)
+							{
+								if (string.IsNullOrEmpty(line))
+								{
+									continue;
+								}
+
+								var lineParts = line.Split('|');
+
+								utxoList.Add(new UTXOInfo
+								{
+									TransactionId = lineParts[0],
+									VOut = Int32.Parse(lineParts[1]),
+									Amount = decimal.Parse(lineParts[2])
+								});
+							}
+
 						}
-
-						var lineParts = line.Split('|');
-
-						utxoList.Add(new UTXOInfo
+						catch (Exception) { }
+						finally
 						{
-							TransactionId = lineParts[0],
-							VOut = Int32.Parse(lineParts[1]),
-							Amount = decimal.Parse(lineParts[2])
-						});
-					}
-
+							callback(utxoList);
+						}
+					});
 				}
-				catch (Exception) { }
-				finally
+				else
 				{
-					callback(utxoList);
+					callback(new List<UTXOInfo>());
 				}
 			});
+
+
 		}
 
 		public void OnDeleteAddress(string address, string pin, Action callback)
@@ -69,11 +81,15 @@ namespace DogecoinTerminal.QRDoge
 			//the corresponding QRDoge app will request that the node stop watching this address.
 			//
 			// qrdoge-0-delete:address
-			_game.Services.GetService<Router>().Route("displayqr", new DisplayQRPageSettings($"qrdoge:0-delete:{address}", "Scan with QRDoge App (Delete Address)", true), true, (scanAcknowledged) =>
-			{
-				//nothing else to do
-				callback();
-			});
+			//_game.Services.GetService<Router>().Route("displayqr", new DisplayQRPageSettings($"qrdoge:0-delete:{address}", "Scan with QRDoge App (Delete Address)", true), true, (scanAcknowledged) =>
+			//{
+			//	//nothing else to do
+			//	callback();
+			//});
+
+			
+
+			callback();
 		}
 
 		public void OnNewAddress(string address, string pin, Action<bool> callback)
@@ -81,16 +97,11 @@ namespace DogecoinTerminal.QRDoge
 
 			//the corresponding QRDoge app will request that the node start watching this address.
 
-			_game.Services.GetService<Router>().Route("displayqr", new DisplayQRPageSettings($"qrdoge:0-new:{address}", "Scan with QRDoge App (New Address)", true), true, (scanAcknowledged) =>
+			_game.Services.GetService<Router>().Route("displayqr", new DisplayQRPageSettings($"qrdoge:0-new:{address}", "Scan with QRDoge App (New Address)", true, true), true, (scanAcknowledged) =>
 			{
 				//nothing else to do
 				callback(scanAcknowledged);
 			});
-		}
-
-		public void OnReset(Action<bool> callback)
-		{
-			callback(true);
 		}
 
 		public void OnSetup(Action<bool> callback)
@@ -101,7 +112,7 @@ namespace DogecoinTerminal.QRDoge
 		public void SendTransaction(string transaction, string pin, Action<bool> callback)
 		{
 			//the corresponding QRDoge app will request that the node broadcast this transaction.
-			_game.Services.GetService<Router>().Route("displayqr", new DisplayQRPageSettings($"qrdoge:0-send:{transaction}", "Scan with QRDoge App (Send Transaction)", true), true, (scanAcknowledged) =>
+			_game.Services.GetService<Router>().Route("displayqr", new DisplayQRPageSettings($"qrdoge:0-send:{transaction}", "Scan with QRDoge App (Send Transaction)", true, true), true, (scanAcknowledged) =>
 			{
 				callback(scanAcknowledged);
 			});
