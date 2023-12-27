@@ -42,6 +42,11 @@ namespace DogecoinTerminal
 			}
 		}
 
+		public bool IsSet(string settingName)
+		{
+			return settings.ContainsKey(settingName);
+		}
+
 		public void Set(string settingName, object value)
 		{
 			settings[settingName] = value.ToString();
@@ -74,7 +79,7 @@ namespace DogecoinTerminal
 
 		private void SetIfMissing(string settingName, object value)
 		{
-			if (!settings.ContainsKey(settingName))
+			if (!IsSet(settingName))
 			{
 				Set(settingName, value);
 			}
