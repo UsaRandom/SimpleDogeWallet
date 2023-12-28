@@ -20,7 +20,7 @@ DogecoinTerminal is a multi-user **offline** dogecoin wallet made using *Monogam
 
 Each wallet slot is given it's own set of `BackupWords`. 
 
-DogecoinTerminal uses `libdogecoin` to create user `BackupWords` and derive keys from hd node `m/44'/3'/0'/0/0`. 
+DogecoinTerminal uses `libdogecoin` to create user `BackupWords` and derive keys from `m/44'/3'/0'/0/0`. 
 
 User `BackupWords` are encrypted basically like so:
 
