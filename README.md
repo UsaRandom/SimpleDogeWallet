@@ -37,8 +37,8 @@ The `Operator Pin` is used to change settings and unlock the terminal.
 ## Settings
 ----
 
-`fee-per-utxo` (default: 0.02): Used to calculate network fees, `fee-per-utxo` * `count(UTXOsUsedInTransaction)` = `networkFee`
-`dust-limit`: (default: 0.001): The dust limit used in transaction creation.
+* `fee-per-utxo` (default: 0.02): Used to calculate network fees, `fee-per-utxo` * `count(UTXOsUsedInTransaction)` = `networkFee`
+* `dust-limit`: (default: 0.001): The dust limit used in transaction creation.
 
 
 ## Bridging to the Network
