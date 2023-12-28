@@ -26,16 +26,11 @@ DogecoinTerminal is designed to run on `An Always Offline Device with a Camera`,
 ## Security
 --------
 
+Security comes from the device being offline, your ability to keep it offline, and your ability to keep it physically secure.
 
-```
-KeyFileData = Encrypt(Encrypt(SlotMnemonics, SlotPin), OperatorPin)
-UTXOFileData = Encrypt(Encrypt(SlotUTXOs, SlotPin), OperatorPin)
-```
+Currently, wallet data (mnemonics/utxos) is encrypted when stored but it would be trivial to decrypt for a motiviated actor.
 
-The `Operator Pin` is set by the terminal owner and is programmed on first unlock.
-Every slot is secured by it's own `Slot Pin`, allowing multiple users for the same terminal.
 
-The `Operator Pin` is used to change settings and unlock the terminal.
 
 
 ## Settings
