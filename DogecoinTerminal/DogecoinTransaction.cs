@@ -138,9 +138,9 @@ namespace DogecoinTerminal
 
 		public bool Sign()
 		{
-			foreach(var utxo in _txUTXOs)
+			for(var i = 0; i < _txUTXOs.Count; i++)
 			{
-				if(!_ctx.SignTransactionWithPrivateKey(_workingTransactionId, utxo.VOut, GetPrivateKeyFromMnemonic(_slot.GetMnemonic())))
+				if(!_ctx.SignTransactionWithPrivateKey(_workingTransactionId, i, GetPrivateKeyFromMnemonic(_slot.GetMnemonic())))
 				{
 					return false;
 				}
