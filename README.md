@@ -15,7 +15,7 @@ Currently it supports a single bridge:
 
 ### [QRDoge](https://github.com/UsaRandom/QRDoge)
 
-A rudamentary android companion app that acts as a bridge between your Dogecoin Core Node and DogecoinTerminal.
+A rudamentary android companion app that acts as a bridge between your [Dogecoin Core Node](https://github.com/dogecoin/dogecoin) and DogecoinTerminal.
 
 
 ![image](https://github.com/UsaRandom/DogecoinTerminal/assets/2897796/876af895-1897-46d0-be58-1e05c223e231)
