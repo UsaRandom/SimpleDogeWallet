@@ -85,6 +85,8 @@ To create your own bridge, create a new project with a reference to `DogecoinTer
 
 		void UpdatePin(string address, string oldPin, string newPin, Action<bool> callback);
 
+		//These are the only two required to functions that are required to send/receive transactions.
+		//pin string param is likely going away, nothing depends on it currently.
 		void GetUTXOs(string address, string pin, Action<IEnumerable<UTXOInfo>> callback);
 
 		void SendTransaction(string transaction, string pin, Action<bool> callback);
