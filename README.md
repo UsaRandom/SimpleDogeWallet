@@ -20,7 +20,7 @@ DogecoinTerminal is designed to run on `An Always Offline Device with a Camera`,
 # Important Notes
 
 * **DogecoinTerminal cannot send transactions out of the box** (read more on 'Bridging to the Network')
-* **Loading old keys is not supported in the user interface** and must be done by hand. 
+* **Loading old keys not currently supported!** You *can* load them by hand, but getting UTXOs (balance) could also become annoying.
 
 
 ## Security
