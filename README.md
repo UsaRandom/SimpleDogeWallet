@@ -30,6 +30,9 @@ Security comes from the device being offline, your ability to keep it offline, a
 
 Currently, wallet data (mnemonics/utxos) is encrypted when stored but it would be trivial to decrypt for a motiviated actor.
 
+Different network bridges might provide different levels of security.
+
+QRDoge isn't pretty, but you can observe the data before consuming it, which is useful in it's own right.
 
 
 
