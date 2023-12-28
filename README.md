@@ -87,6 +87,3 @@ To create your own bridge, create a new project with a reference to `DogecoinTer
 The `DogecoinTerminal.Common.QRDoge.QRDogecoinService` class is a good reference on creating a service.
 
 
-
-
-**Disclaimer**: I am illiterate and retarded. 
