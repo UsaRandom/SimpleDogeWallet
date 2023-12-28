@@ -41,6 +41,7 @@ The `Operator Pin` is used to change settings and unlock the terminal.
 * `dust-limit`: (default: 0.001): The dust limit used in transaction creation.
 
 
+
 ## Bridging to the Network
 
 **DogecoinTerminal cannot send transactions on it's own**, it can only sign them.
