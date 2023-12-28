@@ -2,6 +2,14 @@
 
 DogecoinTerminal is a multi-user **offline** dogecoin wallet made using *Monogame* and *[libdogecoin](https://github.com/dogecoinfoundation/libdogecoin)* for maximum portability.
 
+## What you'll need:
+
+DogecoinTerminal is designed to run on `An Always Offline Device with a Camera`, so you'll need:
+
+* An Always Offline Device with a Camera
+* An Android Device with a Camera. *(for QRDoge)*
+* An [Dogecoin](https://github.com/dogecoin/dogecoin) node *(for QRDoge)*
+
 
 ![image](https://github.com/UsaRandom/DogecoinTerminal/assets/2897796/f0fb780f-2960-4a5c-8e46-4cf1ec3e675e)
 
