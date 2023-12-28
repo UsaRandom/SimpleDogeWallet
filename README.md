@@ -9,6 +9,38 @@ DogecoinTerminal is a multi-user **offline** dogecoin wallet made using *Monogam
 
 
 
+# Important Notes
+
+* **DogecoinTerminal cannot send transactions out of the box** (read more on 'Bridging to the Network')
+* **Loading old keys is not supported in the user interface** and must be done by hand. 
+
+
+## Security
+--------
+
+Each wallet slot is given it's own set of `BackupWords`. 
+
+DogecoinTerminal uses `libdogecoin` to create user `BackupWords` and derive keys from hd node `m/44'/3'/0'/0/0`. 
+
+User `BackupWords` are encrypted basically like so:
+
+```
+KeyFileData = Encrypt(Encrypt(BackupWords, SlotPin), OperatorPin)
+```
+
+The `Operator Pin` is set by the terminal owner and is programmed on first unlock.
+Every slot is secured by it's own `Slot Pin`, allowing multiple users for the same terminal.
+
+The `Operator Pin` is used to change settings and unlock the terminal.
+
+
+## Settings
+----
+
+`fee-per-utxo` (default: 0.02): Used to calculate network fees, `fee-per-utxo` * `count(UTXOsUsedInTransaction)` = `networkFee`
+`dust-limit`: (default: 0.001): The dust limit used in transaction creation.
+
+
 ## Bridging to the Network
 
 **DogecoinTerminal cannot send transactions on it's own**, it can only sign them.
