@@ -9,9 +9,15 @@ DogecoinTerminal is a multi-user **offline** dogecoin wallet made using *Monogam
 
 
 
-## Bridging to the Network 
+## Bridging to the Network
 
-Currently it supports a single bridge:
+**DogecoinTerminal cannot send transactions on it's own**, it can only sign them.
+
+To send transactions, you'll need a bridge. (an implimentation of `IDogecoinService`)
+
+Currently there is one bridge, `DogecoinTerminal.Common.QRDoge.QRDogeService`.
+
+It uses QR codes to pass messages back and forth with it's companion app:
 
 ### [QRDoge](https://github.com/UsaRandom/QRDoge)
 
