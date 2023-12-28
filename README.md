@@ -26,14 +26,10 @@ DogecoinTerminal is designed to run on `An Always Offline Device with a Camera`,
 ## Security
 --------
 
-Each wallet slot is given it's own set of `BackupWords`. 
-
-DogecoinTerminal uses `libdogecoin` to create user `BackupWords` and derive keys from `m/44'/3'/0'/0/0`. 
-
-User `BackupWords` are encrypted basically like so:
 
 ```
-KeyFileData = Encrypt(Encrypt(BackupWords, SlotPin), OperatorPin)
+KeyFileData = Encrypt(Encrypt(SlotMnemonics, SlotPin), OperatorPin)
+UTXOFileData = Encrypt(Encrypt(SlotUTXOs, SlotPin), OperatorPin)
 ```
 
 The `Operator Pin` is set by the terminal owner and is programmed on first unlock.
