@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,9 +60,11 @@ namespace DogecoinTerminal.Common
 
 		public void Update(AppPage page)
 		{
+			var touchState = TouchPanel.GetState();
+
 			var mouseState = Mouse.GetState(_game.Window);
 
-			var interactionResult = _interactionMonitor.GetInteraction(mouseState);
+			var interactionResult = _interactionMonitor.GetInteraction(touchState, mouseState);
 
 			if(interactionResult.HasValue)
 			{
@@ -112,7 +115,7 @@ namespace DogecoinTerminal.Common
 
 		public void DrawText(string text, TerminalColor color, float scale, (int x, int y) pos)
 		{
-			SpriteFontBase font = _fontSystem.GetFont(scale * 8);
+			SpriteFontBase font = _fontSystem.GetFont(scale * (float)Math.Min(_widthScale, _heightScale));
 
 			var textSize = font.MeasureString(text);
 

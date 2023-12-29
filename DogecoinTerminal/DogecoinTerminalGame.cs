@@ -26,8 +26,8 @@ namespace DogecoinTerminal
 		public FontSystem _fontSystem;
 
 
-		public const int HEIGHT = 720;
-		public const int WIDTH = 1280;
+		public readonly int HEIGHT = 720;
+		public readonly int WIDTH = 1280;
 
 		public DogecoinTerminalGame()
 		{
@@ -35,14 +35,20 @@ namespace DogecoinTerminal
 			Content.RootDirectory = "Content";
 			IsMouseVisible = true;
 
-			_graphics.PreferredBackBufferHeight = HEIGHT;
-			_graphics.PreferredBackBufferWidth = WIDTH;
+			WIDTH = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+			HEIGHT = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+
 			_screen = new VirtualScreen();
 			_fontSystem = new FontSystem();
 		}
 
 		protected override void Initialize()
 		{
+
+			_graphics.PreferredBackBufferHeight = HEIGHT;
+			_graphics.PreferredBackBufferWidth = WIDTH;
+			_graphics.IsFullScreen = true;
+			_graphics.ApplyChanges();
 
 			_screen.Init(GraphicsDevice, HEIGHT, WIDTH);
 
