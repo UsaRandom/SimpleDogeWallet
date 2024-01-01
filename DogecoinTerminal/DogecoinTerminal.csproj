@@ -29,6 +29,14 @@
     <ProjectReference Include="..\DogecoinTerminal.QRDoge\DogecoinTerminal.QRDoge.csproj" />
     <ProjectReference Include="..\Lib.Dogecoin\Lib.Dogecoin.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Pages\Xml\UnlockTerminal.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Strings\en.terminal.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
     <Message Text="Restoring dotnet tools" Importance="High" />
     <Exec Command="dotnet tool restore" />

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Page>
+
+  <Image StartPosition="43,18"
+         EndPosition="57,33"
+         SourceImageDim="2477,2477"
+         Image="Content/dogedrawn.png"/>
+
+  <Text StringDef="terminal-unlockpage-title"
+        Color="White"
+        TextSize="5"
+        Position="50,50"/>
+
+  <Button StringDef="terminal-unlockpage-unlockbutton"
+          StartPosition="40,60"
+          EndPosition="60,70"
+          BackgroundColor="Green"
+          ForegroundColor="White"
+          TextSize="5"
+          Name="UnlockButton"/>
+
+</Page>

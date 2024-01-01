@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Strings>
+  <String Id="terminal-unlockpage-title"><![CDATA[Đogecoin Terminal]]></String>
+  <String Id="terminal-unlockpage-unlockbutton"><![CDATA[Unlock]]></String>
+  
+  <String Id="terminal-enteroppin-title"><![CDATA[Enter Operator Pin to Unlock:]]></String>
+  <String Id="terminal-enterslotpin-title"><![CDATA[Enter Operator Pin to Unlock:]]></String>
+  
+  
+</Strings>
