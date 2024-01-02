@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Page xmlns:common="DogecoinTerminal.Common">
+
+
+  <!-- 
+  
+  TODO: Add settings button and lock button
+            
+            -->
+
+
+
+  <!-- Going to switch this to a lock icon, have to design it later. -->
+  <common:ButtonControl
+          StringDef="terminal-walletlist-lockbutton"
+          StartPosition="5,88"
+          EndPosition="12,95"
+          BackgroundColor="DarkGrey"
+          ForegroundColor="White"
+          TextSize="3"
+          Name="LockButton"/>
+
+
+
+  <common:ImageControl StartPosition="40,5"
+       EndPosition="60,25"
+       Name="Doge"
+       ImageSource="Content/dogedrawn.png"/>
+
+  <common:TextControl
+        StringDef="terminal-walletlist-title"
+        Name="TitleText"
+        Color="White"
+        TextSize="6"
+        Position="50,30"/>
+  
+  
+  <common:ButtonControl
+          StringDef="terminal-walletlist-emptyslot"
+          StartPosition="15,40"
+          EndPosition="35,60"
+          BackgroundColor="DarkGrey"
+          ForegroundColor="White"
+          TextSize="4"
+          Name="WalletSlotButton_0"/>
+
+  <common:ButtonControl
+          StringDef="terminal-walletlist-emptyslot"
+          StartPosition="40,40"
+          EndPosition="60,60"
+          BackgroundColor="DarkGrey"
+          ForegroundColor="White"
+          TextSize="4"
+          Name="WalletSlotButton_1"/>
+
+  <common:ButtonControl
+          StringDef="terminal-walletlist-emptyslot"
+          StartPosition="65,40"
+          EndPosition="85,60"
+          BackgroundColor="DarkGrey"
+          ForegroundColor="White"
+          TextSize="4"
+          Name="WalletSlotButton_2"/>
+
+
+  <common:ButtonControl
+          StringDef="terminal-walletlist-emptyslot"
+          StartPosition="15,65"
+          EndPosition="35,85"
+          BackgroundColor="DarkGrey"
+          ForegroundColor="White"
+          TextSize="4"
+          Name="WalletSlotButton_3"/>
+
+  <common:ButtonControl
+          StringDef="terminal-walletlist-emptyslot"
+          StartPosition="40,65"
+          EndPosition="60,85"
+          BackgroundColor="DarkGrey"
+          ForegroundColor="White"
+          TextSize="4"
+          Name="WalletSlotButton_4"/>
+
+  <common:ButtonControl
+          StringDef="terminal-walletlist-emptyslot"
+          StartPosition="65,65"
+          EndPosition="85,85"
+          BackgroundColor="DarkGrey"
+          ForegroundColor="White"
+          TextSize="4"
+          Name="WalletSlotButton_5"/>
+</Page>

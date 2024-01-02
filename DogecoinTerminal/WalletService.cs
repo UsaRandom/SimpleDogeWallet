@@ -119,7 +119,7 @@ namespace DogecoinTerminal
                 sum += utxo.Amount;
             }
 
-            return sum.ToString("#,##0.00");
+            return sum.ToString("#,##0.000");
         }
 
 

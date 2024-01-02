@@ -7,7 +7,7 @@ namespace DogecoinTerminal
 {
 	internal class TerminalService : ITerminalService
     {
-        private const int MAX_SLOT_COUNT = 6;
+        public const int MAX_SLOT_COUNT = 6;
         private const string OP_PIN_VERIFY_FILE = "op_pin_verify.dtf";
         private const string OP_PIN_VERIFY_STATEMENT = "much verify, very wow";
 

@@ -4,8 +4,18 @@
   <String Id="terminal-setuppage-setupbutton"><![CDATA[Setup]]></String>
   <String Id="terminal-unlockpage-unlockbutton"><![CDATA[Unlock]]></String>
   
+  <Strings Id="terminal-walletlist-emptyslot"><![CDATA[Empty Slot]]></Strings>
+  <Strings Id="terminal-walletlist-title"><![CDATA[Select a Wallet/Slot]]></Strings>
+  <Strings Id="terminal-walletlist-lockbutton"><![CDATA[Lock]]></Strings>
+
+  <Strings Id="terminal-walletlist-newwallet-enterpin"><![CDATA[Set Pin:]]></Strings>
+  <Strings Id="terminal-walletlist-newwallet-confirmpin"><![CDATA[Confirm Pin:]]></Strings>
+
+  <Strings Id="terminal-backupcodes-title"><![CDATA[Seed Phrase:]]></Strings>
+
+
   <String Id="terminal-enteroppin-title"><![CDATA[Enter Operator Pin to Unlock:]]></String>
-  <String Id="terminal-enterslotpin-title"><![CDATA[Enter Operator Pin to Unlock:]]></String>
+  <String Id="terminal-enterslotpin-title"><![CDATA[Enter Slot Pin to Unlock:]]></String>
   
   
 </Strings>
