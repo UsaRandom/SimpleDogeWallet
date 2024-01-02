@@ -98,24 +98,25 @@ namespace DogecoinTerminal.Common
 
 			if (pageDef != null && File.Exists(pageDef.FileName))
 			{
-				//LoadPageDef
-
 				var pageEl = XElement.Load(pageDef.FileName);
 
 				foreach(var element in pageEl.Elements())
 				{
-					switch(element.Name.LocalName)
+					var fullControlName = element.Name.NamespaceName + "." + element.Name.LocalName;
+
+					var target = Type.GetType(fullControlName);
+
+					if(target == null)
 					{
-						case "Button":
-							var button = new Button(element);
-
-							newPage.Controls.Add(button);
-
-							break;
-						default:
-							Debug.WriteLine($"Unknown control '{element.Name}' in {pageDef.FileName}");
-							break;
+						Debug.WriteLine($"Unknown control '{fullControlName}' in {pageDef.FileName}");
+						continue;
 					}
+
+					var controlConstructor = target.GetConstructor(BindingFlags.Public | BindingFlags.Instance, new Type[] { typeof(XElement) });
+
+					var newControl = (IPageControl) controlConstructor.Invoke(new object[] { element });
+
+					newPage.Controls.Add(newControl);
 				}
 
 			}

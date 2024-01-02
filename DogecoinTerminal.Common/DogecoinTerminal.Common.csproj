@@ -28,9 +28,9 @@
     <PackageReference Include="ZXing.Net.Bindings.OpenCV.V4" Version="0.16.9" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Pages\" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Update="Pages\Xml\NumPadPage.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Strings\en.common.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
