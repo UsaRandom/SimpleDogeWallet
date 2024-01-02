@@ -1,6 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Strings>
-  <String Id="common-unlockpage-title"><![CDATA[Đogecoin Terminal]]></String>
-  <String Id="common-unlockpage-unlockbutton"><![CDATA[Unlock]]></String>
-  <String Id="common-unlockpage-enterpin-title"><![CDATA[Enter Pin to Unlock:]]></String>
+  <String Id="common-numpad-title"><![CDATA[Enter Pin:]]></String>
 </Strings>

@@ -1,23 +1,22 @@
-﻿using DogecoinTerminal.Common.Controls;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System;
 using System.Xml.Linq;
 
 namespace DogecoinTerminal.Common
 {
-	public class Button : PageControl, IButton
+	public class ButtonControl : PageControl
 	{
 
-		internal Button(XElement element)
+		public ButtonControl(XElement element)
+			: base(element)
 		{
 			StartPosition = GetPoint(element.Attribute(nameof(StartPosition)));
 			EndPosition = GetPoint(element.Attribute(nameof(EndPosition)));
 			BackgroundColor = GetTerminalColor(element.Attribute(nameof(BackgroundColor)));
 			ForegroundColor = GetTerminalColor(element.Attribute(nameof(ForegroundColor)));
 			TextSize = int.Parse(element.Attribute(nameof(TextSize)).Value);
-			Name = element.Attribute(nameof(Name)).Value;
-			StringDef = element.Attribute(nameof(StringDef)).Value;
-			Text = StringDef;
+			StringDef = element.Attribute(nameof(StringDef))?.Value;
+			Text = StringDef ?? element.Attribute(nameof(Text))?.Value;
 		}
 
 		public string Text { get; set; }
@@ -27,7 +26,6 @@ namespace DogecoinTerminal.Common
 		public TerminalColor ForegroundColor { get; set; }
 		public int TextSize { get; set; }
 
-		public string Name { get; private set; }
 
 		public string StringDef { get; set; }
 

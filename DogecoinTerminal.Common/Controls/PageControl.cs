@@ -2,10 +2,15 @@
 using System;
 using System.Xml.Linq;
 
-namespace DogecoinTerminal.Common.Controls
+namespace DogecoinTerminal.Common
 {
 	public abstract class PageControl : IPageControl
 	{
+
+		public PageControl(XElement element)
+		{
+			Name = element.Attribute(nameof(Name)).Value;
+		}
 
 		protected Point GetPoint(XAttribute attribute)
 		{
@@ -36,7 +41,7 @@ namespace DogecoinTerminal.Common.Controls
 			}
 		}
 
-		public string Name { get; protected set; }
+		public string Name { get; private set; }
 
 		public abstract bool ContainsPoint(Point point);
 

@@ -42,7 +42,10 @@ namespace DogecoinTerminal.Common
 		}
 
 
-
+		public Point WindowCoordToVirtualCoord(Point screenCoord)
+		{
+			return new Point((int)(((float)screenCoord.X/(float)_width)*100.0), (int)(((float)screenCoord.Y/(float)_height) * 100.0));
+		}
 
 
 		public void DrawRectangle(TerminalColor color,
@@ -70,6 +73,7 @@ namespace DogecoinTerminal.Common
 				Color.White);
 
 		}
+
 
 		internal void DrawImage(
 			Texture2D image,

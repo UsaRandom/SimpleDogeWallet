@@ -96,13 +96,16 @@ namespace DogecoinTerminal
             if(mouseState.LeftButton == ButtonState.Pressed &&
                 lastButtonState == ButtonState.Released)
             {
-                Messenger.Default.Send(new UserClickMessage(new Point(mouseState.X, mouseState.Y)));
+                Messenger.Default.Send(
+                    new UserClickMessage(
+                        _screen.WindowCoordToVirtualCoord(
+                            new Point(mouseState.X, mouseState.Y))));
 
-                lastButtonState = mouseState.LeftButton;
             }
 
+			lastButtonState = mouseState.LeftButton;
 
-            base.Update(gameTime);
+			base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)

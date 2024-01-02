@@ -1,4 +1,5 @@
 ﻿using DogecoinTerminal.Common;
+using DogecoinTerminal.Common.Pages;
 
 namespace DogecoinTerminal.Pages
 {
@@ -11,7 +12,7 @@ namespace DogecoinTerminal.Pages
 		{
 			OnClick(UNLOCK_BUTTON_NAME, async _ => {
 
-				var numPadResponse = await navigation.PromptAsync<NumberPadPage>(("title", strings["terminal-enteroppin-title"]));
+				var numPadResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-enteroppin-title"]));
 
 				if (terminalService.ConfirmOperatorPin(numPadResponse.Value.ToString()) &&
 				   numPadResponse.Response == PromptResponse.YesConfirm)
