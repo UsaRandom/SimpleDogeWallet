@@ -1,23 +1,38 @@
-﻿namespace DogecoinTerminal.Common
+﻿using System.Collections;
+using System.Collections.Generic;
+using ZXing.OneD;
+
+namespace DogecoinTerminal.Common
 {
 
 	internal class PageOptions : IPageOptions
 	{
-		private (string key, object value)[] options;
+		private Dictionary<string, object> _options = new();
 
 		public PageOptions((string key, object value)[] options)
 		{
-			this.options = options;
+			if(options != null)
+			{
+				foreach(var option in options)
+				{
+					_options.Add(option.key, option.value);
+				}
+			}
 		}
 
 		public void AddOption<T>(string name, T value)
 		{
-			throw new System.NotImplementedException();
+			_options[name] = value;
 		}
 
 		public T GetOption<T>(string name, T valueIfDefault = default)
 		{
-			throw new System.NotImplementedException();
+			if(!_options.ContainsKey(name))
+			{
+				return valueIfDefault;
+			}
+
+			return (T)_options[name] ?? valueIfDefault;
 		}
 	}
 }

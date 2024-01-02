@@ -24,6 +24,38 @@ namespace DogecoinTerminal.Common
 			Options = options;
 
 			_controlEvents = new Dictionary<string, OnEvent>();
+
+
+			var pageDef = GetType().GetCustomAttribute<PageDefAttribute>();
+
+			if (pageDef != null && File.Exists(pageDef.FileName))
+			{
+				var pageEl = XElement.Load(pageDef.FileName);
+
+				foreach (var element in pageEl.Elements())
+				{
+					var fullControlName = element.Name.NamespaceName + "." + element.Name.LocalName;
+
+					var target = Type.GetType(fullControlName);
+
+					if (target == null)
+					{
+						Debug.WriteLine($"Unknown control '{fullControlName}' in {pageDef.FileName}");
+						continue;
+					}
+
+					var controlConstructor = target.GetConstructor(BindingFlags.Public | BindingFlags.Instance, new Type[] { typeof(XElement) });
+
+					var newControl = (IPageControl)controlConstructor.Invoke(new object[] { element });
+
+					Controls.Add(newControl);
+				}
+			}
+			else
+			{
+				Debug.WriteLine($"Loaded page, but couldn't find xml page def. Ensure page has PageDefAttribute and xml file exists.");
+			}
+
 		}
 
 
@@ -81,7 +113,7 @@ namespace DogecoinTerminal.Common
 
 
 		/*
-		 * Pages are created dynamically, any dependencies are injected.
+		 * Pages are created using reflection to inject any dependencies.
 		 */
 		public static T Create<T>(IPageOptions options, IServiceProvider services) where T : IPage
 		{
@@ -94,32 +126,6 @@ namespace DogecoinTerminal.Common
 
 			var newPage = (T)constructor.Invoke(BuildConstructorArguments(constructor, options, services));
 
-			var pageDef = typeof(T).GetCustomAttribute<PageDefAttribute>();
-
-			if (pageDef != null && File.Exists(pageDef.FileName))
-			{
-				var pageEl = XElement.Load(pageDef.FileName);
-
-				foreach(var element in pageEl.Elements())
-				{
-					var fullControlName = element.Name.NamespaceName + "." + element.Name.LocalName;
-
-					var target = Type.GetType(fullControlName);
-
-					if(target == null)
-					{
-						Debug.WriteLine($"Unknown control '{fullControlName}' in {pageDef.FileName}");
-						continue;
-					}
-
-					var controlConstructor = target.GetConstructor(BindingFlags.Public | BindingFlags.Instance, new Type[] { typeof(XElement) });
-
-					var newControl = (IPageControl) controlConstructor.Invoke(new object[] { element });
-
-					newPage.Controls.Add(newControl);
-				}
-
-			}
 
 			return newPage;
 		}
@@ -130,7 +136,7 @@ namespace DogecoinTerminal.Common
 
 			foreach (var parameter in constructor.GetParameters())
 			{
-				if (parameter.ParameterType.IsSubclassOf(typeof(IPageOptions)))
+				if (parameter.ParameterType.IsAssignableTo(typeof(IPageOptions)))
 				{
 					parameters.Add(options);
 				}

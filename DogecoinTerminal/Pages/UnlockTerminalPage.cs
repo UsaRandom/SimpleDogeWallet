@@ -14,10 +14,10 @@ namespace DogecoinTerminal.Pages
 
 				var numPadResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-enteroppin-title"]));
 
-				if (terminalService.ConfirmOperatorPin(numPadResponse.Value.ToString()) &&
-				   numPadResponse.Response == PromptResponse.YesConfirm)
+				if (numPadResponse.Response == PromptResponse.YesConfirm
+					&& terminalService.ConfirmOperatorPin(numPadResponse.Value.ToString()))
 				{
-					await navigation.PushAsync<SettingsPage>();
+
 				}
 
 			});

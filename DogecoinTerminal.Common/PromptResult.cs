@@ -5,7 +5,7 @@
 		public PromptResult(PromptResponse userResponse, object value = null)
 		{
 			Response = userResponse;
-			Value = Value;
+			Value = value;
 		}
 
 		public PromptResponse Response { get; private set; }

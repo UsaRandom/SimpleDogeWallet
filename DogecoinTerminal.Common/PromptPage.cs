@@ -16,7 +16,7 @@
 
 		public void Cancel(object result = null)
 		{
-			if (CanSubmit())
+			if (CanCancel())
 			{
 				Messenger.Default.Send(new PromptResult(PromptResponse.NoCancelBack, result));
 			}

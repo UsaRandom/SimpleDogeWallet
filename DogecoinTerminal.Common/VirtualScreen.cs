@@ -21,14 +21,24 @@ namespace DogecoinTerminal.Common
 		private decimal _heightScale;
 		private decimal _widthScale;
 
+		private int _xPad;
+		private int _yPad;
+
 		private FontSystem _fontSystem;
 
 		public void Init(GraphicsDevice graphicsDevice, int height, int width)
 		{
 			_graphicsDevice = graphicsDevice;
 
-			_height = height;
-			_width = width;
+			_height = Math.Min(height, width);
+			_width = Math.Min(height, width);// width;
+
+			_xPad = 0;
+			_yPad = 0;
+
+			_xPad = Math.Max(0, (width - height) / 2);
+
+			_yPad = Math.Max(0, (height - width) / 2);
 
 			_heightScale = _height / 100M;
 			_widthScale = _width / 100M;
@@ -44,7 +54,8 @@ namespace DogecoinTerminal.Common
 
 		public Point WindowCoordToVirtualCoord(Point screenCoord)
 		{
-			return new Point((int)(((float)screenCoord.X/(float)_width)*100.0), (int)(((float)screenCoord.Y/(float)_height) * 100.0));
+
+			return new Point((int)(((float)(screenCoord.X-_xPad)/(float)_width)*100.0), (int)(((float)(screenCoord.Y-_yPad)/(float)_height) * 100.0));
 		}
 
 
@@ -53,8 +64,8 @@ namespace DogecoinTerminal.Common
 		{
 			_spriteBatch.Draw(color.Texture,
 				new Rectangle(
-					(int)Math.Round(start.X * _widthScale),
-					(int)Math.Round(start.Y * _heightScale),
+					_xPad + (int)Math.Round(start.X * _widthScale),
+					_yPad + (int)Math.Round(start.Y * _heightScale),
 					(int)Math.Round((end.X - start.X) * _widthScale),
 					(int)Math.Round((end.Y - start.Y) * _heightScale)),
 				Color.White);
@@ -68,8 +79,8 @@ namespace DogecoinTerminal.Common
 			var textSize = font.MeasureString(text);
 
 			_spriteBatch.DrawString(font, text,
-				new Vector2((int)(pos.X * _widthScale) - (textSize.X) / 2,
-					        (int)(pos.Y * _heightScale) - (textSize.Y) / 2),
+				new Vector2(_xPad + (int)(pos.X * _widthScale) - (textSize.X) / 2,
+					        _yPad + (int)(pos.Y * _heightScale) - (textSize.Y) / 2),
 				Color.White);
 
 		}
@@ -78,8 +89,7 @@ namespace DogecoinTerminal.Common
 		internal void DrawImage(
 			Texture2D image,
 			Point start,
-			Point imgDim,
-			Point imgOgDim)
+			Point imgDim)
 		{
 
 			//determine target size
@@ -89,11 +99,12 @@ namespace DogecoinTerminal.Common
 
 
 			_spriteBatch.Draw(image,
-					new Vector2((int)( (start.X - (imgDim.X / 2)) * _widthScale),
-					(int)((start.Y - (imgDim.Y / 2)) * _heightScale)),
+					new Vector2(
+						_xPad + (int)( (start.X - (imgDim.X / 2)) * _widthScale),
+					_yPad + (int)((start.Y - (imgDim.Y / 2)) * _heightScale)),
 					null, Color.White, 0, Vector2.Zero, 
-					new Vector2((float)target.width/imgOgDim.X,
-								(float)target.width / imgOgDim.X), 
+					new Vector2((float)target.width/ image.Bounds.Width,
+								(float)target.height / image.Bounds.Height), 
 					
 					SpriteEffects.None, 0
 					);
