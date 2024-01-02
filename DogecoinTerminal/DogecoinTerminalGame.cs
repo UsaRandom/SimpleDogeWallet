@@ -19,22 +19,11 @@ namespace DogecoinTerminal
 
         private Navigation _nav;
 
-
-        public readonly int HEIGHT = 720;
-        public readonly int WIDTH = 1280;
-
         public DogecoinTerminalGame()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-
-            WIDTH = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            HEIGHT = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-
-            WIDTH = Math.Min(WIDTH - 100, HEIGHT - 100);
-            HEIGHT = Math.Min(WIDTH, HEIGHT);
-
 
             _screen = new VirtualScreen();
             _fontSystem = new FontSystem();
@@ -42,18 +31,12 @@ namespace DogecoinTerminal
 
         protected override void Initialize()
         {
+
             Strings.Current.SelectLanguage(Language.Languages["en"]);
-
-            _graphics.PreferredBackBufferHeight = HEIGHT;
-            _graphics.PreferredBackBufferWidth = WIDTH;
-         //   _graphics.IsFullScreen = true;
-            _graphics.ApplyChanges();
-
 			TerminalColor.Init(_graphics.GraphicsDevice);
 
-			
 
-			_screen.Init(GraphicsDevice, HEIGHT, WIDTH);
+			_screen.Init(_graphics, useFullScreen: false);
 
 			_nav = new Navigation(Services);
 
