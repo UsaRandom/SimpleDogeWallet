@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Page xmlns:common="DogecoinTerminal.Common">
+
+  <common:TextControl Text="your wallet address here"
+                      Position="50,10"
+                      TextSize="4"
+                      Name="AddressText"
+                      Color="White"/>
+
+  <common:TextControl Text="your balance here"
+                      Position="50, 25"
+                      TextSize="7"
+                      Name="BalanceText"
+                      Color="White"/>
+
+
+</Page>

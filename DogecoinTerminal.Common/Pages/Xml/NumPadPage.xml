@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Page xmlns:common="DogecoinTerminal.Common">
 
+  <common:ImageControl StartPosition="82,5"
+         EndPosition="95,18"
+         Name="Doge"
+         ImageSource="Content/dogedrawn.png"/>
 
 
   <common:ImageControl
