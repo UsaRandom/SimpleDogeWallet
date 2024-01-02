@@ -32,11 +32,11 @@ namespace DogecoinTerminal
             WIDTH = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             HEIGHT = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
 
-            WIDTH = Math.Min(WIDTH - 100, HEIGHT-100);
-			HEIGHT = Math.Min(WIDTH, HEIGHT);
+            WIDTH = Math.Min(WIDTH - 100, HEIGHT - 100);
+            HEIGHT = Math.Min(WIDTH, HEIGHT);
 
 
-			_screen = new VirtualScreen();
+            _screen = new VirtualScreen();
             _fontSystem = new FontSystem();
         }
 
@@ -46,6 +46,7 @@ namespace DogecoinTerminal
 
             _graphics.PreferredBackBufferHeight = HEIGHT;
             _graphics.PreferredBackBufferWidth = WIDTH;
+         //   _graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
 
 			TerminalColor.Init(_graphics.GraphicsDevice);
@@ -59,6 +60,7 @@ namespace DogecoinTerminal
             Services.AddService(Strings.Current);
             Services.AddService(_nav);
             Services.AddService(_screen);
+            Services.AddService(new Images(GraphicsDevice));
 			Services.AddService<ITerminalSettingsService>(new TerminalSettingsService());
 			Services.AddService<ITerminalService>(new TerminalService(Services));
 
@@ -72,22 +74,16 @@ namespace DogecoinTerminal
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
             _screen.Load(_spriteBatch);
-    //        _fontSystem.AddFont(File.ReadAllBytes(@"Content\ComicNeue-Bold.ttf"));
 
-          //  Images.Load(GraphicsDevice);
             _nav.PushAsync<UnlockTerminalPage>();
-     //       _screen.Load(this, _fontSystem);
-
-
         }
 
         private ButtonState lastButtonState = ButtonState.Released;
 
         protected override void Update(GameTime gameTime)
         {
-
-
 			_nav.CurrentPage.Update(gameTime, Services);
 
 
@@ -100,7 +96,6 @@ namespace DogecoinTerminal
                     new UserClickMessage(
                         _screen.WindowCoordToVirtualCoord(
                             new Point(mouseState.X, mouseState.Y))));
-
             }
 
 			lastButtonState = mouseState.LeftButton;

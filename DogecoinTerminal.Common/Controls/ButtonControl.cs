@@ -31,8 +31,8 @@ namespace DogecoinTerminal.Common
 
 		public override bool ContainsPoint(Point point)
 		{
-			if (point.X >= StartPosition.X && point.X <= EndPosition.X &&
-				point.Y >= StartPosition.Y && point.Y <= EndPosition.Y)
+			if (point.X >= StartPosition.X && point.X < EndPosition.X &&
+				point.Y >= StartPosition.Y && point.Y < EndPosition.Y)
 			{
 				return true;
 			}

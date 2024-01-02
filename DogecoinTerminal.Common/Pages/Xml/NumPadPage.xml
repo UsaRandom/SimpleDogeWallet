@@ -2,6 +2,13 @@
 <Page xmlns:common="DogecoinTerminal.Common">
 
 
+
+  <common:ImageControl
+				Name="BackButton"
+				StartPosition="5,5"
+				EndPosition="17,17"
+        ImageSource="Content\left-arrow-dim.png"/>
+
   <common:TextControl
         Name="Title"
         Color="White"
@@ -12,114 +19,117 @@
   <common:TextControl
         Name="UserText"
         Color="White"
-        TextSize="4"
+        TextSize="8"
         Position="50,20"/>
 
 
-  <common:TextControl
-        Name="UserText"
-        Color="White"
-        TextSize="4"
-        Position="50,20"/>
 
 
+
+  <common:ImageControl
+				Name="SubmitButton"
+				StartPosition="81,81"
+				EndPosition="95,95"
+				BackgroundColor="Green"
+        ImageSource="Content\right-arrow.png"/>
+  
   <!-- Number pad buttons: -->
   
   <common:ButtonControl Text="1"
 			Name="Button_1"
-			StartPosition="21,41"
-			EndPosition="39,51"
+			StartPosition="26,30"
+			EndPosition="40,43"
 			BackgroundColor="DarkGrey"
 			ForegroundColor="White"
-			TextSize="5"/>
+			TextSize="6"/>
 
 	<common:ButtonControl Text="2"
 				Name="Button_2"
-				StartPosition="41,41"
-				EndPosition="59,51"
+				StartPosition="43,30"
+				EndPosition="57,43"
 				BackgroundColor="DarkGrey"
 				ForegroundColor="White"
-				TextSize="5"/>
+				TextSize="6"/>
 
 	<common:ButtonControl Text="3"
 				Name="Button_3"
-				StartPosition="61,41"
-				EndPosition="79,51"
+				StartPosition="60,30"
+				EndPosition="74,43"
 				BackgroundColor="DarkGrey"
 				ForegroundColor="White"
-				TextSize="5"/>
+				TextSize="6"/>
 
 	<common:ButtonControl Text="4"
 				Name="Button_4"
-				StartPosition="21,53"
-				EndPosition="39,63"
+				StartPosition="26,47"
+				EndPosition="40,61"
 				BackgroundColor="DarkGrey"
 				ForegroundColor="White"
-				TextSize="5"/>
+				TextSize="6"/>
 
 	<common:ButtonControl Text="5"
 				Name="Button_5"
-				StartPosition="41,53"
-				EndPosition="59,63"
+				StartPosition="43,47"
+				EndPosition="57,61"
 				BackgroundColor="DarkGrey"
 				ForegroundColor="White"
-				TextSize="5"/>
+				TextSize="6"/>
 
 	<common:ButtonControl Text="6"
 				Name="Button_6"
-				StartPosition="61,53"
-				EndPosition="79,63"
+				StartPosition="60,47"
+				EndPosition="74,61"
 				BackgroundColor="DarkGrey"
 				ForegroundColor="White"
-				TextSize="5"/>
+				TextSize="6"/>
 
 
 	<common:ButtonControl Text="7"
 				Name="Button_7"
-				StartPosition="21,65"
-				EndPosition="39,75"
+				StartPosition="26,64"
+				EndPosition="40,78"
 				BackgroundColor="DarkGrey"
 				ForegroundColor="White"
-				TextSize="5"/>
+				TextSize="6"/>
 
 	<common:ButtonControl Text="8"
 				Name="Button_8"
-				StartPosition="41,65"
-				EndPosition="59,75"
+				StartPosition="43,64"
+				EndPosition="57,78"
 				BackgroundColor="DarkGrey"
 				ForegroundColor="White"
-				TextSize="5"/>
+				TextSize="6"/>
 
 	<common:ButtonControl Text="9"
 				Name="Button_9"
-				StartPosition="61,65"
-				EndPosition="79,75"
+				StartPosition="60,64"
+				EndPosition="74,78"
 				BackgroundColor="DarkGrey"
 				ForegroundColor="White"
-				TextSize="5"/>
+				TextSize="6"/>
 
 	<common:ButtonControl Text="."
 				Name="Button_."
-				StartPosition="21,77"
-				EndPosition="39,87"
+				StartPosition="26,81"
+				EndPosition="40,95"
 				BackgroundColor="DarkGrey"
 				ForegroundColor="White"
-				TextSize="5"/>
+				TextSize="6"/>
 
 	<common:ButtonControl Text="0"
 				Name="Button_0"
-				StartPosition="41,77"
-				EndPosition="59,87"
+				StartPosition="43,81"
+				EndPosition="57,95"
 				BackgroundColor="DarkGrey"
 				ForegroundColor="White"
-				TextSize="5"/>
+				TextSize="6"/>
 
-	<common:ButtonControl Text="&lt;"
+  <common:ImageControl
 				Name="Button_Delete"
-				StartPosition="61,77"
-				EndPosition="79,87"
-				BackgroundColor="Red"
-				ForegroundColor="White"
-				TextSize="5"/>
+				StartPosition="60,81"
+				EndPosition="74,95"
+				BackgroundColor="DarkGrey"
+        ImageSource="Content\delete-button.png"
+				TextSize="6"/>
 
 </Page>

@@ -1,4 +1,5 @@
 ﻿using DogecoinTerminal.Common;
+using DogecoinTerminal.Common.Pages;
 
 namespace DogecoinTerminal.Pages
 {
@@ -16,12 +17,12 @@ namespace DogecoinTerminal.Pages
 			});
 
 			OnClick(SETTINGS_BUTTON_NAME, async _ => {
-				var numPadResponse = await navigation.PromptAsync<NumberPadPage>(("title", strings["terminal-enteroppin-title"]));
+				var numPadResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-enteroppin-title"]));
 
 				if (terminalService.ConfirmOperatorPin(numPadResponse.Value.ToString()) &&
 				   numPadResponse.Response == PromptResponse.YesConfirm)
 				{
-					await navigation.PushAsync<SettingsPage>();
+				//	await navigation.PushAsync<SettingsPage>();
 				}
 			});
 
@@ -34,16 +35,16 @@ namespace DogecoinTerminal.Pages
 
 					if (slot.IsEmpty)
 					{
-						await navigation.PushAsync<FillWalletSlotPage>(("slot", slot));
+			//			await navigation.PushAsync<FillWalletSlotPage>(("slot", slot));
 					}
 					else
 					{
-						var numPadResponse = await navigation.PromptAsync<NumberPadPage>(("title", strings["terminal-enterslotpin-title"]));
+						var numPadResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-enterslotpin-title"]));
 
 						if (numPadResponse.Response == PromptResponse.YesConfirm &&
 							slot.Unlock(numPadResponse.Value.ToString()))
 						{
-							await navigation.PushAsync<WalletPage>(("slot", slot));
+					//		await navigation.PushAsync<WalletPage>(("slot", slot));
 						}
 					}
 

@@ -32,8 +32,8 @@ namespace DogecoinTerminal.Common
         {
             _white = new TerminalColor(graphicsDevice, 0xff, 0xff, 0xff);
             _blue = new TerminalColor(graphicsDevice, 0x42, 0xa4, 0xff);
-            _green = new TerminalColor(graphicsDevice, 0x2c, 0x93, 0x30);
-            _darkGrey = new TerminalColor(graphicsDevice, 0x22, 0x22, 0x22);
+            _green = new TerminalColor(graphicsDevice, 0x2F, 0x69, 0x31);
+			_darkGrey = new TerminalColor(graphicsDevice, 0x22, 0x22, 0x22);
             _red = new TerminalColor(graphicsDevice, 0xff, 0x28, 0x28);
             _grey = new TerminalColor(graphicsDevice, 0x33, 0x33, 0x33);
             _lightGrey = new TerminalColor(graphicsDevice, 0x67, 0x67, 0x67);
