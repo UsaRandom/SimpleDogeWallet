@@ -10,7 +10,7 @@
   <common:ImageControl
 				Name="BackButton"
 				StartPosition="5,5"
-				EndPosition="17,17"
+				EndPosition="15,15"
         ImageSource="Content\left-arrow-dim.png"/>
 
   <common:TextControl
