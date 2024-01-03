@@ -52,6 +52,8 @@ namespace DogecoinTerminal.Pages
 
 						//ok, so now it's time to create a wallet and fill a wallet slot.
 
+
+
 						//
 						// Steps to create a slot:
 						//
@@ -97,6 +99,10 @@ namespace DogecoinTerminal.Pages
 
 						//TODO: now we need to confirm with an IDogecoinService (which isn't implimented currently, so lets skip)
 
+
+						//lets test out our message page
+
+						await navigation.PromptAsync<ShortMessagePage>(("message", "Prepare to write down backup phrases!"));
 
 						//then, we need to show the user their backup codes.
 

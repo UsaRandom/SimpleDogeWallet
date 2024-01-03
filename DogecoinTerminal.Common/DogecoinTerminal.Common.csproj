@@ -45,6 +45,9 @@
     <None Update="Pages\Xml\NumPadPage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Pages\Xml\ShortMessagePage.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Strings\en.common.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
