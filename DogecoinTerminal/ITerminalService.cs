@@ -25,6 +25,9 @@ namespace DogecoinTerminal
         bool IsUnlocked { get; }
         int SlotNumber { get; }
         string Address { get; }
+
+        string ShortAddress { get; }
+        
         bool IsEmpty { get; }
         string SlotPin { get; }
 

@@ -3,14 +3,10 @@
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Content\arrow.png" />
     <None Remove="Content\ComicNeue-Bold.ttf" />
     <None Remove="Content\dogedrawn.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\arrow.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\ComicNeue-Bold.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -28,6 +24,9 @@
     <PackageReference Include="ZXing.Net.Bindings.OpenCV.V4" Version="0.16.9" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="Content\dancing-doge.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Content\delete-button.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -38,6 +37,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Content\right-arrow.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Pages\Xml\LoadingPage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Pages\Xml\NumPadPage.xml">

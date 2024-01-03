@@ -19,7 +19,7 @@ namespace DogecoinTerminal.Pages
 		public WalletListPage(IPageOptions options, Navigation navigation, Strings strings, ITerminalService terminalService) : base(options)
 		{
 
-			OnClick(LOCK_BUTTON_NAME, _ => {
+			OnClick(LOCK_BUTTON_NAME, async _ => {
 				terminalService.Lock();
 				navigation.Pop();
 			});
@@ -47,6 +47,9 @@ namespace DogecoinTerminal.Pages
 
 					if (slot.IsEmpty)
 					{
+						//push loading page to nav stack, so when pages switch, the loading screen is rendered between instead of wallet list page
+						await navigation.PushAsync<LoadingPage>();
+
 						//ok, so now it's time to create a wallet and fill a wallet slot.
 
 						//
@@ -77,6 +80,8 @@ namespace DogecoinTerminal.Pages
 							enteredPin != confirmPin)
 
 						{
+							//remove loading page, return to wallet list page.
+							navigation.Pop();
 							return;
 						}
 
@@ -96,10 +101,10 @@ namespace DogecoinTerminal.Pages
 						//then, we need to show the user their backup codes.
 
 						var mnemonic = slot.GetMnemonic();
+					
 
-						await navigation.PushAsync<BackupCodePage>(("mnemonic", mnemonic));
-
-
+						await navigation.TryInsertBeforeAsync<BackupCodePage, LoadingPage>(("mnemonic", mnemonic));
+						navigation.Pop();
 
 					}
 					else
@@ -149,7 +154,7 @@ namespace DogecoinTerminal.Pages
 					//by setting StringDef to empty, we say not to use internationalization, use the provided string.
 					slotButton.StringDef = string.Empty;
 					slotButton.BackgroundColor = TerminalColor.DarkGrey;
-					slotButton.Text = GetShortAddress(slot.Address);
+					slotButton.Text = slot.ShortAddress;
 				}
 			}
 
@@ -158,14 +163,6 @@ namespace DogecoinTerminal.Pages
 			base.Update(gameTime, services);
 		}
 
-		private string GetShortAddress(string address)
-		{
-			var builder = new StringBuilder();
-			builder.Append(address.Substring(0, 4));
-			builder.Append("..");
-			builder.Append(address.Substring(address.Length - 3, 3));
-			return builder.ToString();
-		}
 
 	}
 

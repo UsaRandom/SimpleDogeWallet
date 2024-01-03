@@ -8,7 +8,7 @@ namespace DogecoinTerminal.Common
 {
     /// <summary>
     /// basically a 0-100 grid that is projected to the physical screen.
-    /// also provides a simplified interface for drawing to the screen.
+    /// provides a simplified interface for drawing to the screen.
     /// </summary>
     public class VirtualScreen
 	{
@@ -32,17 +32,22 @@ namespace DogecoinTerminal.Common
 
 			if (useFullScreen)
 			{
-				graphicsDeviceManager.PreferredBackBufferHeight = displayWidth;
-				graphicsDeviceManager.PreferredBackBufferWidth = displayHeight;
+				graphicsDeviceManager.PreferredBackBufferWidth = displayWidth;
+				graphicsDeviceManager.PreferredBackBufferHeight = displayHeight;
 				graphicsDeviceManager.IsFullScreen = true;
+
+				_xPad = Math.Max(0, (displayWidth - displayHeight) / 2);
+				_yPad = Math.Max(0, (displayHeight - displayWidth) / 2);
 			}
 			else
 			{
 				//if not fullscreen, we render as a box, 100 pixels less than the smallest dim on the screen
-				var renderDim = Math.Min(displayWidth, displayHeight) - 100;
+				var renderDim = Math.Min(displayWidth, displayHeight) - 400;
 
 				graphicsDeviceManager.PreferredBackBufferHeight = renderDim;
 				graphicsDeviceManager.PreferredBackBufferWidth = renderDim;
+				_xPad = 0;
+				_yPad = 0;
 			}
 
 			graphicsDeviceManager.ApplyChanges();
@@ -52,12 +57,6 @@ namespace DogecoinTerminal.Common
 
 			_renderDim = Math.Min(graphicsDeviceManager.PreferredBackBufferHeight, graphicsDeviceManager.PreferredBackBufferWidth);
 
-			_xPad = 0;
-			_yPad = 0;
-
-			_xPad = Math.Max(0, (graphicsDeviceManager.PreferredBackBufferWidth - graphicsDeviceManager.PreferredBackBufferHeight) / 2);
-
-			_yPad = Math.Max(0, (graphicsDeviceManager.PreferredBackBufferHeight - graphicsDeviceManager.PreferredBackBufferWidth) / 2);
 
 			_renderScale = _renderDim / 100M;
 		}
@@ -103,8 +102,32 @@ namespace DogecoinTerminal.Common
 
 		}
 
+		public void DrawSprite(
+			Texture2D image,
+			Rectangle sourceRectangle,
+			Point start,
+			Point imgDim)
+		{
 
-		internal void DrawImage(
+			//determine target size
+			var target = (width: imgDim.X * _renderScale,
+						 height: imgDim.Y * _renderScale);
+
+
+
+			_spriteBatch.Draw(image,
+					new Vector2(
+						_xPad + (int)((start.X - (imgDim.X / 2)) * _renderScale),
+					_yPad + (int)((start.Y - (imgDim.Y / 2)) * _renderScale)),
+					sourceRectangle, Color.White, 0, Vector2.Zero,
+					new Vector2((float)target.width / sourceRectangle.Width,
+								(float)target.height / sourceRectangle.Height),
+
+					SpriteEffects.None, 0
+					);
+		}
+
+		public void DrawImage(
 			Texture2D image,
 			Point start,
 			Point imgDim)

@@ -38,12 +38,17 @@ namespace DogecoinTerminal
 
         public IWalletSlot GetWalletSlot(int slot)
         {
-            if (_slots[slot] == null)
+            if(IsUnlocked)
             {
-                _slots[slot] = new WalletSlot(_services, _opPin, slot);
-            }
+				if (_slots[slot] == null)
+				{
+					_slots[slot] = new WalletSlot(_services, _opPin, slot);
+				}
 
-            return _slots[slot];
+				return _slots[slot];
+			}
+
+            return null;
         }
 
         public void Lock()
