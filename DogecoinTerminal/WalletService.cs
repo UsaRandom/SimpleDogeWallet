@@ -1,6 +1,8 @@
 ﻿using Lib.Dogecoin;
 using System;
 using System.IO;
+using System.Net;
+using System.Text;
 
 namespace DogecoinTerminal
 {
@@ -30,6 +32,10 @@ namespace DogecoinTerminal
         internal string _opPin;
         internal string _slotPin;
 
+        private bool _isEmpty;
+        private string _address;
+        private string _shortAddress;
+
         public WalletSlot(IServiceProvider services, string opPin, int slotNumber)
         {
             _services = services;
@@ -37,7 +43,7 @@ namespace DogecoinTerminal
             _slotPin = string.Empty;
             SlotNumber = slotNumber;
 
-
+            _isEmpty = !File.Exists(SlotAddressFile);
             UTXOStore = new UTXOStore(this);
         }
 
@@ -45,7 +51,7 @@ namespace DogecoinTerminal
         {
             get
             {
-                return !File.Exists(SlotAddressFile);
+                return _isEmpty;
             }
         }
 
@@ -57,15 +63,33 @@ namespace DogecoinTerminal
         {
             get
             {
-                if (!IsEmpty && _opPin != string.Empty && File.Exists(SlotAddressFile))
+                if (!IsEmpty && _opPin != string.Empty && File.Exists(SlotAddressFile) && string.IsNullOrEmpty(_address))
                 {
-                    return Crypto.Decrypt(File.ReadAllText(SlotAddressFile), _opPin);
+					_address = Crypto.Decrypt(File.ReadAllText(SlotAddressFile), _opPin);
                 }
-                return string.Empty;
+
+                return _address;
             }
         }
 
-        public string SlotPin
+		public string ShortAddress
+        {
+            get
+            {
+                if(string.IsNullOrEmpty(_shortAddress) && !string.IsNullOrEmpty(Address))
+				{
+					var builder = new StringBuilder();
+					builder.Append(_address.Substring(0, 4));
+					builder.Append("..");
+					builder.Append(_address.Substring(_address.Length - 3, 3));
+					_shortAddress = builder.ToString();
+				}
+
+                return _shortAddress;
+            }
+        }
+
+		public string SlotPin
         {
             get
             {
@@ -78,7 +102,8 @@ namespace DogecoinTerminal
             get; private set;
         }
 
-        public void Init(string slotPin)
+
+		public void Init(string slotPin)
         {
             ClearSlot();
 
@@ -105,8 +130,10 @@ namespace DogecoinTerminal
                 }
             }
 
-            //new wallet slots are initialized unlocked.
-            Unlock(slotPin);
+            _isEmpty = false;
+
+			//new wallet slots are initialized unlocked.
+			Unlock(slotPin);
         }
 
 
@@ -217,7 +244,6 @@ namespace DogecoinTerminal
 
         public void ClearSlot()
         {
-
             UTXOStore.OnWalletSlotDelete();
 
             File.Delete(SlotAddressFile);
@@ -225,6 +251,8 @@ namespace DogecoinTerminal
 
 
             _slotPin = string.Empty;
+            _address = string.Empty;
+            _isEmpty = true;
         }
 
         public IDogecoinTransaction CreateTransaction(string receipient, decimal amount)

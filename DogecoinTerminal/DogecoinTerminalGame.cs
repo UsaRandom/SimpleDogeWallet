@@ -6,6 +6,7 @@ using DogecoinTerminal.Common;
 using Microsoft.Xna.Framework.Input;
 using System;
 using DogecoinTerminal.Pages;
+using DogecoinTerminal.Common.Pages;
 
 namespace DogecoinTerminal
 {
@@ -19,7 +20,7 @@ namespace DogecoinTerminal
 
         private Navigation _nav;
 
-        public DogecoinTerminalGame()
+		public DogecoinTerminalGame()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -40,7 +41,8 @@ namespace DogecoinTerminal
 
 			_nav = new Navigation(Services);
 
-            Services.AddService(Strings.Current);
+
+			Services.AddService(Strings.Current);
             Services.AddService(_nav);
             Services.AddService(_screen);
             Services.AddService(new Images(GraphicsDevice));
@@ -66,7 +68,10 @@ namespace DogecoinTerminal
         private ButtonState lastButtonState = ButtonState.Released;
 
         protected override void Update(GameTime gameTime)
-        {
+		{
+			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+				Exit();
+
 			_nav.CurrentPage.Update(gameTime, Services);
 
 
@@ -82,6 +87,7 @@ namespace DogecoinTerminal
             }
 
 			lastButtonState = mouseState.LeftButton;
+
 
 			base.Update(gameTime);
         }

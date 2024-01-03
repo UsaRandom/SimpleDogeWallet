@@ -9,16 +9,12 @@
             -->
 
 
-
-  <!-- Going to switch this to a lock icon, have to design it later. -->
-  <common:ButtonControl
-          StringDef="terminal-walletlist-lockbutton"
-          StartPosition="5,88"
-          EndPosition="12,95"
-          BackgroundColor="DarkGrey"
-          ForegroundColor="White"
-          TextSize="3"
-          Name="LockButton"/>
+  <common:ImageControl
+				Name="LockButton"
+				StartPosition="5,85"
+        BackgroundColor="DarkGrey"
+				EndPosition="15,95"
+        ImageSource="Content\lock-fill.png"/>
 
 
 
@@ -38,7 +34,7 @@
   <common:ButtonControl
           StringDef="terminal-walletlist-emptyslot"
           StartPosition="15,40"
-          EndPosition="35,60"
+          EndPosition="35,55"
           BackgroundColor="DarkGrey"
           ForegroundColor="White"
           TextSize="4"
@@ -47,7 +43,7 @@
   <common:ButtonControl
           StringDef="terminal-walletlist-emptyslot"
           StartPosition="40,40"
-          EndPosition="60,60"
+          EndPosition="60,55"
           BackgroundColor="DarkGrey"
           ForegroundColor="White"
           TextSize="4"
@@ -56,7 +52,7 @@
   <common:ButtonControl
           StringDef="terminal-walletlist-emptyslot"
           StartPosition="65,40"
-          EndPosition="85,60"
+          EndPosition="85,55"
           BackgroundColor="DarkGrey"
           ForegroundColor="White"
           TextSize="4"
@@ -65,8 +61,8 @@
 
   <common:ButtonControl
           StringDef="terminal-walletlist-emptyslot"
-          StartPosition="15,65"
-          EndPosition="35,85"
+          StartPosition="15,60"
+          EndPosition="35,75"
           BackgroundColor="DarkGrey"
           ForegroundColor="White"
           TextSize="4"
@@ -74,8 +70,8 @@
 
   <common:ButtonControl
           StringDef="terminal-walletlist-emptyslot"
-          StartPosition="40,65"
-          EndPosition="60,85"
+          StartPosition="40,60"
+          EndPosition="60,75"
           BackgroundColor="DarkGrey"
           ForegroundColor="White"
           TextSize="4"
@@ -83,8 +79,8 @@
 
   <common:ButtonControl
           StringDef="terminal-walletlist-emptyslot"
-          StartPosition="65,65"
-          EndPosition="85,85"
+          StartPosition="65,60"
+          EndPosition="85,75"
           BackgroundColor="DarkGrey"
           ForegroundColor="White"
           TextSize="4"

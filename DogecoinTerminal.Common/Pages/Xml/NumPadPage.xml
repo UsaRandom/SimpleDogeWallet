@@ -32,7 +32,7 @@
 
   <common:ImageControl
 				Name="SubmitButton"
-				StartPosition="81,81"
+				StartPosition="85,85"
 				EndPosition="95,95"
 				BackgroundColor="Green"
         ImageSource="Content\right-arrow.png"/>
