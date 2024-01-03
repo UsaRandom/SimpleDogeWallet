@@ -3,6 +3,7 @@
   <String Id="terminal-title"><![CDATA[Đogecoin Terminal]]></String>
   <String Id="terminal-setuppage-setupbutton"><![CDATA[Setup]]></String>
   <String Id="terminal-unlockpage-unlockbutton"><![CDATA[Unlock]]></String>
+  <String Id="terminal-unlockpage-exitbutton"><![CDATA[Exit]]></String>
   
   <Strings Id="terminal-walletlist-emptyslot"><![CDATA[Empty Slot]]></Strings>
   <Strings Id="terminal-walletlist-title"><![CDATA[Select a Wallet/Slot]]></Strings>

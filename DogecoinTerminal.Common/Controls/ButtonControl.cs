@@ -1,10 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿
+using Microsoft.Xna.Framework;
 using System;
 using System.Xml.Linq;
 
 namespace DogecoinTerminal.Common
 {
-	public class ButtonControl : PageControl
+    public class ButtonControl : PageControl
 	{
 
 		public ButtonControl(XElement element)
@@ -59,6 +60,11 @@ namespace DogecoinTerminal.Common
 			{
 				Text = strings[StringDef];
 			}
+		}
+
+		public override void AcceptVisitor(IControlVisitor visitor)
+		{
+			visitor.VisitButton(this);
 		}
 	}
 }

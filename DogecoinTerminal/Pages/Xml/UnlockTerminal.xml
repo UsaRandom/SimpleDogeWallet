@@ -20,4 +20,13 @@
           TextSize="4"
           Name="UnlockButton"/>
 
+
+  <common:ButtonControl StringDef="terminal-unlockpage-exitbutton"
+          StartPosition="45,75"
+          EndPosition="55,80"
+          BackgroundColor="DarkGrey"
+          ForegroundColor="White"
+          TextSize="3"
+          Name="ExitButton"/>
+
 </Page>

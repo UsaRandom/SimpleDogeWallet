@@ -1,5 +1,6 @@
 ﻿using DogecoinTerminal.Common;
 using DogecoinTerminal.Common.Pages;
+using Microsoft.Xna.Framework;
 
 namespace DogecoinTerminal.Pages
 {
@@ -8,7 +9,7 @@ namespace DogecoinTerminal.Pages
 	{
 		private const string UNLOCK_BUTTON_NAME = "UnlockButton";
 
-		public UnlockTerminalPage(IPageOptions options, Navigation navigation, ITerminalService terminalService, Strings strings) : base(options)
+		public UnlockTerminalPage(IPageOptions options, Navigation navigation, ITerminalService terminalService, Strings strings, Game game) : base(options)
 		{
 			OnClick(UNLOCK_BUTTON_NAME, async _ => {
 
@@ -23,6 +24,11 @@ namespace DogecoinTerminal.Pages
 				}
 
 				navigation.Pop();
+			});
+
+			OnClick("ExitButton", async _ =>
+			{
+				game.Exit();
 			});
 		}
 

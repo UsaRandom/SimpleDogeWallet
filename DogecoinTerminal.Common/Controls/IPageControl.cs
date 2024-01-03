@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿
+using Microsoft.Xna.Framework;
 using System;
 
 namespace DogecoinTerminal.Common
@@ -11,5 +12,7 @@ namespace DogecoinTerminal.Common
         string Name { get; }
 
         bool ContainsPoint(Point point);
+
+        void AcceptVisitor(IControlVisitor visitor);
     }
 }

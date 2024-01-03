@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Xml.Linq;
 
 namespace DogecoinTerminal.Common
 {
-	public class TextControl : PageControl
+    public class TextControl : PageControl
 	{
 		public TextControl(XElement element)
 			: base(element)
@@ -52,6 +53,12 @@ namespace DogecoinTerminal.Common
 			{
 				Text = strings[StringDef];
 			}
+		}
+
+
+		public override void AcceptVisitor(IControlVisitor visitor)
+		{
+			visitor.VisitText(this);
 		}
 	}
 }

@@ -59,6 +59,26 @@ namespace DogecoinTerminal.Common
 
 
 			_renderScale = _renderDim / 100M;
+			Opacity = 255;
+		}
+
+		public float RenderScale
+		{
+			get
+			{
+				return (float)_renderScale;
+			}
+		}
+
+		public int Opacity
+		{
+			get;
+			set;
+		}
+
+		private Color GetOpacityColor()
+		{
+			return new Color(Opacity, Opacity, Opacity, Opacity);
 		}
 
 		public void Load(SpriteBatch spriteBatch)
@@ -75,6 +95,11 @@ namespace DogecoinTerminal.Common
 			return new Point((int)(((float)(screenCoord.X-_xPad)/(float)_renderDim)*100.0), (int)(((float)(screenCoord.Y-_yPad)/(float)_renderDim) * 100.0));
 		}
 
+		public Point VirtualCoordToWindowCoord(Point virtualCoord)
+		{
+			return new Point(_xPad + (int)Math.Round(virtualCoord.X * _renderScale),
+							 _yPad + (int)Math.Round(virtualCoord.Y * _renderScale));
+		}
 
 		public void DrawRectangle(TerminalColor color,
 								  Point start, Point end)
@@ -85,7 +110,7 @@ namespace DogecoinTerminal.Common
 					_yPad + (int)Math.Round(start.Y * _renderScale),
 					(int)Math.Round((end.X - start.X) * _renderScale),
 					(int)Math.Round((end.Y - start.Y) * _renderScale)),
-				Color.White);
+				GetOpacityColor());
 		}
 
 
@@ -98,7 +123,7 @@ namespace DogecoinTerminal.Common
 			_spriteBatch.DrawString(font, text,
 				new Vector2(_xPad + (int)(pos.X * _renderScale) - (textSize.X) / 2,
 					        _yPad + (int)(pos.Y * _renderScale) - (textSize.Y) / 2),
-				Color.White);
+				GetOpacityColor());
 
 		}
 
@@ -119,7 +144,7 @@ namespace DogecoinTerminal.Common
 					new Vector2(
 						_xPad + (int)((start.X - (imgDim.X / 2)) * _renderScale),
 					_yPad + (int)((start.Y - (imgDim.Y / 2)) * _renderScale)),
-					sourceRectangle, Color.White, 0, Vector2.Zero,
+					sourceRectangle, GetOpacityColor(), 0, Vector2.Zero,
 					new Vector2((float)target.width / sourceRectangle.Width,
 								(float)target.height / sourceRectangle.Height),
 
@@ -143,7 +168,7 @@ namespace DogecoinTerminal.Common
 					new Vector2(
 						_xPad + (int)( (start.X - (imgDim.X / 2)) * _renderScale),
 					_yPad + (int)((start.Y - (imgDim.Y / 2)) * _renderScale)),
-					null, Color.White, 0, Vector2.Zero, 
+					null, GetOpacityColor(), 0, Vector2.Zero, 
 					new Vector2((float)target.width/ image.Bounds.Width,
 								(float)target.height / image.Bounds.Height), 
 					

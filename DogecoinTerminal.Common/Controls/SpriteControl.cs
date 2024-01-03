@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Xml.Linq;
 
 namespace DogecoinTerminal.Common
 {
-	public class SpriteControl : PageControl
+    public class SpriteControl : PageControl
 	{
 		private int _spriteWidth = 0;
 		private int _spriteHeight = 0;
@@ -99,6 +100,12 @@ namespace DogecoinTerminal.Common
 			{
 				_currentFrame = 0;
 			}
+		}
+
+
+		public override void AcceptVisitor(IControlVisitor visitor)
+		{
+			visitor.VisitSprite(this);
 		}
 	}
 }
