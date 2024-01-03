@@ -6,12 +6,12 @@ using System.Text.Json;
 
 namespace DogecoinTerminal
 {
-	internal class TerminalSettingsService : ITerminalSettingsService
+	public class TerminalSettings : ITerminalSettings
     {
         private const string SETTINGS_FILE = "terminalsettings.json";
         private Dictionary<string, object> settings;
 
-        public TerminalSettingsService()
+        public TerminalSettings()
         {
             LoadSettings();
         }

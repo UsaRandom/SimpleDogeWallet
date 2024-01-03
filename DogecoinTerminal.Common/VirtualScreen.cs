@@ -42,7 +42,7 @@ namespace DogecoinTerminal.Common
 			else
 			{
 				//if not fullscreen, we render as a box, 100 pixels less than the smallest dim on the screen
-				var renderDim = Math.Min(displayWidth, displayHeight) - 400;
+				var renderDim = Math.Min(displayWidth, displayHeight) - 200;
 
 				graphicsDeviceManager.PreferredBackBufferHeight = renderDim;
 				graphicsDeviceManager.PreferredBackBufferWidth = renderDim;

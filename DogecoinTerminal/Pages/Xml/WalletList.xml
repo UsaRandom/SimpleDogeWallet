@@ -2,11 +2,6 @@
 <Page xmlns:common="DogecoinTerminal.Common">
 
 
-  <!-- 
-  
-  TODO: Add settings button and lock button
-            
-            -->
 
 
   <common:ImageControl
@@ -15,6 +10,14 @@
         BackgroundColor="DarkGrey"
 				EndPosition="15,95"
         ImageSource="Content\lock-fill.png"/>
+
+
+  <common:ImageControl
+				Name="SettingsButton"
+				StartPosition="85,85"
+        BackgroundColor="DarkGrey"
+				EndPosition="95,95"
+        ImageSource="Content\gear-fill.png"/>
 
 
 

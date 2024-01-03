@@ -47,8 +47,16 @@ namespace DogecoinTerminal.Pages
 
 					if (slot.IsEmpty)
 					{
+						/*
+						 * Notes:
+						 * 
+						 * I wouldn't mind pulling this out into some sort of wallet slot factory. 
+						 * It would be cool to support multiple slots.
+						 * 
+						 */
+
 						//push loading page to nav stack, so when pages switch, the loading screen is rendered between instead of wallet list page
-						await navigation.PushAsync<LoadingPage>();
+						await navigation.PushAsync<BlankPage>();
 
 						//ok, so now it's time to create a wallet and fill a wallet slot.
 
@@ -66,7 +74,10 @@ namespace DogecoinTerminal.Pages
 						 */
 						var enterPinResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-walletlist-newwallet-enterpin"]));
 
-						if (enterPinResponse.Response != PromptResponse.YesConfirm)
+						var enteredPin = (string)enterPinResponse.Value;
+
+						if (enterPinResponse.Response != PromptResponse.YesConfirm
+							|| string.IsNullOrEmpty(enteredPin))
 						{
 							return;
 						}
@@ -74,12 +85,11 @@ namespace DogecoinTerminal.Pages
 
 						var confirmPinResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-walletlist-newwallet-confirmpin"]));
 
-						var enteredPin = (string)enterPinResponse.Value;
 						var confirmPin = (string)confirmPinResponse.Value;
 
 						//confirm they said yes, and the responses match!
-						if (confirmPinResponse.Response != PromptResponse.YesConfirm ||
-							enteredPin != confirmPin)
+						if (confirmPinResponse.Response != PromptResponse.YesConfirm
+							|| enteredPin != confirmPin)
 
 						{
 							//remove loading page, return to wallet list page.
@@ -102,20 +112,24 @@ namespace DogecoinTerminal.Pages
 
 						//lets test out our message page
 
-						await navigation.PromptAsync<ShortMessagePage>(("message", "Prepare to write down backup phrases!"));
+						await navigation.PromptAsync<ShortMessagePage>(("message", "Prepare to write down seed phrases!"));
 
 						//then, we need to show the user their backup codes.
 
 						var mnemonic = slot.GetMnemonic();
 					
 
-						await navigation.TryInsertBeforeAsync<BackupCodePage, LoadingPage>(("mnemonic", mnemonic));
+						await navigation.TryInsertBeforeAsync<BackupCodePage, BlankPage>(("mnemonic", mnemonic));
 						navigation.Pop();
+
+
 
 					}
 					else
 					{
 						//Note: Might be nice to have some kind of authentication service for stuff like this.
+
+						await navigation.PushAsync<BlankPage>();
 
 						var numPadResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-enterslotpin-title"]));
 
@@ -124,9 +138,12 @@ namespace DogecoinTerminal.Pages
 						{
 
 							//we have a wallet page, lets show it!
+							await navigation.TryInsertBeforeAsync<WalletPage, BlankPage>(("slot", slot));
 
-							await navigation.PushAsync<WalletPage>(("slot", slot));
 						}
+
+						navigation.Pop();
+
 					}
 
 				});

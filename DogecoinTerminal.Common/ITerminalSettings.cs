@@ -1,6 +1,6 @@
 ﻿namespace DogecoinTerminal.Common
 {
-	public interface ITerminalSettingsService
+	public interface ITerminalSettings
 	{
 		T Get<T>(string settingName);
 
