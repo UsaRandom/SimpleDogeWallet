@@ -33,7 +33,7 @@ namespace DogecoinTerminal.Pages
             {
                 //ok, we want to remove this wallet.
                 //first put in a loading page for flicker
-                await navigation.PushAsync<LoadingPage>();
+                await navigation.PushAsync<BlankPage>();
 
                 var numPadResult = await navigation.PromptAsync<NumPadPage>();
 
@@ -62,20 +62,21 @@ namespace DogecoinTerminal.Pages
 
             OnClick("UpdatePinButton", async _ =>
             {
-				//User wants to update pin
+                //User wants to update pin
 
-				await navigation.PushAsync<LoadingPage>();
+                await navigation.PushAsync<BlankPage>();
 
-				var numPadResult = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-wallet-updatepin-newpin"]));
+                var numPadResult = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-wallet-updatepin-newpin"]));
 
+				var enteredPin = (string)numPadResult.Value;
 
-				if (numPadResult.Response != PromptResponse.YesConfirm)
+				if (numPadResult.Response != PromptResponse.YesConfirm
+                    || string.IsNullOrEmpty(enteredPin))
 				{
 					//just remove loading screen
 					navigation.Pop();
+                    return;
 				}
-
-                var enteredPin = (string)numPadResult.Value;
 
 				numPadResult = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-wallet-updatepin-confirmpin"]));
 

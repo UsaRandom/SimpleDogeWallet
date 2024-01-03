@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using DogecoinTerminal.Pages;
 using DogecoinTerminal.Common.Pages;
+using DogecoinTerminal.Common.BackgroundScenes;
 
 namespace DogecoinTerminal
 {
@@ -37,7 +38,7 @@ namespace DogecoinTerminal
 			TerminalColor.Init(_graphics.GraphicsDevice);
 
 
-			_screen.Init(_graphics, useFullScreen: false);
+            _screen.Init(_graphics, useFullScreen: true);
 
 			_nav = new Navigation(Services);
 
@@ -46,14 +47,15 @@ namespace DogecoinTerminal
             Services.AddService(_nav);
             Services.AddService(_screen);
             Services.AddService(new Images(GraphicsDevice));
-			Services.AddService<ITerminalSettingsService>(new TerminalSettingsService());
+			Services.AddService<ITerminalSettings>(new TerminalSettings());
 			Services.AddService<ITerminalService>(new TerminalService(Services));
 
+			_background = new MoonBackgroundScene(Services, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
 
-//            Services.AddService<IDogecoinService>(new QRDogecoinService(this));
+			//            Services.AddService<IDogecoinService>(new QRDogecoinService(this));
 
 
-            base.Initialize();
+			base.Initialize();
         }
 
         protected override void LoadContent()
@@ -89,22 +91,24 @@ namespace DogecoinTerminal
 			lastButtonState = mouseState.LeftButton;
 
 
+            _background.Update(gameTime, Services);
 			base.Update(gameTime);
         }
 
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(TerminalColor.Grey.Color);
+
+        IBackgroundScene _background;
+		protected override void Draw(GameTime gameTime)
+		{
+			GraphicsDevice.Clear(TerminalColor.Grey.Color);
 
 
-            _spriteBatch.Begin();
+			_spriteBatch.Begin();
 
-            _nav.CurrentPage.Draw(gameTime, Services);
-
+            _background.Draw(gameTime, _spriteBatch, Services);
+			_nav.CurrentPage.Draw(gameTime, Services);
 			_spriteBatch.End();
 
-
-            base.Draw(gameTime);
-        }
-    }
+			base.Draw(gameTime);
+		}
+	}
 }

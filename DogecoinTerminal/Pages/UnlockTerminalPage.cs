@@ -12,19 +12,17 @@ namespace DogecoinTerminal.Pages
 		{
 			OnClick(UNLOCK_BUTTON_NAME, async _ => {
 
+				await navigation.PushAsync<BlankPage>();
+
 				var numPadResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-enteroppin-title"]));
 
 				if (numPadResponse.Response == PromptResponse.YesConfirm
-					&& terminalService.Unlock( numPadResponse.Value.ToString()))
+					&& terminalService.Unlock(numPadResponse.Value.ToString()))
 				{
-					//Ok, so this is after we've entered the operator pin to unlock the terminal, we now request to navigate to a WalletList page
-					//await navigation.PushAsync<WalletListPage>();
-
-					await navigation.PushAsync<WalletListPage>();
-
-
+					await navigation.TryInsertBeforeAsync<WalletListPage, BlankPage>();
 				}
 
+				navigation.Pop();
 			});
 		}
 

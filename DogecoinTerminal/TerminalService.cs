@@ -16,7 +16,7 @@ namespace DogecoinTerminal
         private string _opPin;
         private IWalletSlot[] _slots;
 
-        private ITerminalSettingsService _settings;
+        private ITerminalSettings _settings;
 
         public bool IsUnlocked { get; private set; }
 

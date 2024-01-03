@@ -11,7 +11,7 @@
 				Name="BackButton"
 				StartPosition="5,5"
 				EndPosition="15,15"
-        ImageSource="Content\left-arrow-dim.png"/>
+        ImageSource="Content\left-arrow.png"/>
 
   <common:TextControl
         Name="Title"

@@ -49,7 +49,7 @@ namespace DogecoinTerminal
 
         public bool Send(string recipient, decimal amount)
         {
-            var settings = _services.GetService<ITerminalSettingsService>();
+            var settings = _services.GetService<ITerminalSettings>();
 
             var dustLimit = settings.Get<decimal>("dust-limit");
 
@@ -160,7 +160,7 @@ namespace DogecoinTerminal
                 _slot.UTXOStore.RemoveUTXO(utxo);
             }
 
-            var settings = _services.GetService<ITerminalSettingsService>();
+            var settings = _services.GetService<ITerminalSettings>();
 
             if (Remainder > settings.Get<decimal>("dust-limit"))
             {
