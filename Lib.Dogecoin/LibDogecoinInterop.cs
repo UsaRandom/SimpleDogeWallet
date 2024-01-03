@@ -1,4 +1,9 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Lib.Dogecoin
 {
@@ -300,6 +305,26 @@ namespace Lib.Dogecoin
 
 		[DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void dogecoin_free(IntPtr ptr);
+
+
+
+		/* Generate a BIP39 mnemonic and encrypt it with the TPM */
+
+		[DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int dogecoin_generate_mnemonic_encrypt_with_tpm(
+			[Out, MarshalAs(UnmanagedType.LPArray)] char[] mnemonic,
+			int file_num,
+			[MarshalAs(UnmanagedType.I1)] bool overwrite,
+			[MarshalAs(UnmanagedType.LPArray)] char[] lang,
+			[MarshalAs(UnmanagedType.LPArray)] char[] space,
+			[MarshalAs(UnmanagedType.LPArray)] char[] words);
+
+
+		/* Decrypt a BIP39 mnemonic with the TPM */
+		[DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int dogecoin_decrypt_mnemonic_with_tpm(
+			[Out, MarshalAs(UnmanagedType.LPArray)] char[] mnemonic,
+			int file_num);
 
 
 	}

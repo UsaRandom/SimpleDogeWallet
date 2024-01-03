@@ -1,10 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿
+using Microsoft.Xna.Framework;
 using System;
 using System.Xml.Linq;
 
 namespace DogecoinTerminal.Common
 {
-	public abstract class PageControl : IPageControl
+    public abstract class PageControl : IPageControl
 	{
 
 		public PageControl(XElement element)
@@ -48,5 +49,8 @@ namespace DogecoinTerminal.Common
 		public abstract void Draw(GameTime time, IServiceProvider services);
 
 		public abstract void Update(GameTime time, IServiceProvider services);
+
+
+		public abstract void AcceptVisitor(IControlVisitor visitor);
 	}
 }

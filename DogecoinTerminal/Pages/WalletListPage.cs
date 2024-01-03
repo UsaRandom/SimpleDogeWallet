@@ -110,19 +110,9 @@ namespace DogecoinTerminal.Pages
 						//TODO: now we need to confirm with an IDogecoinService (which isn't implimented currently, so lets skip)
 
 
-						//lets test out our message page
 
-						await navigation.PromptAsync<ShortMessagePage>(("message", "Prepare to write down seed phrases!"));
-
-						//then, we need to show the user their backup codes.
-
-						var mnemonic = slot.GetMnemonic();
-					
-
-						await navigation.TryInsertBeforeAsync<BackupCodePage, BlankPage>(("mnemonic", mnemonic));
+						await navigation.TryInsertBeforeAsync<WalletPage, BlankPage>(("slot", slot));
 						navigation.Pop();
-
-
 
 					}
 					else

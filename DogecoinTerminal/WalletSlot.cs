@@ -9,6 +9,9 @@ namespace DogecoinTerminal
 
 	internal class WalletSlot : IWalletSlot
     {
+
+
+
         //address file
         //key file
 
@@ -112,9 +115,19 @@ namespace DogecoinTerminal
             //create mnemonic
             using (var ctx = LibDogecoinContext.CreateContext())
             {
-                var newMnemonic = ctx.GenerateRandomEnglishMnemonic(LibDogecoinContext.ENTROPY_SIZE_256);
 
-                var masterKeys = ctx.GenerateHDMasterPubKeypairFromMnemonic(newMnemonic);
+                string newMnemonic = string.Empty;
+
+                if(Environment.OSVersion.Platform == PlatformID.Win32NT)
+                {
+                    newMnemonic = ctx.GenerateMnemonicEncryptWithTPM(SlotNumber);
+				}
+                else
+                {
+					newMnemonic = ctx.GenerateRandomEnglishMnemonic(LibDogecoinContext.ENTROPY_SIZE_256);
+				}
+
+				var masterKeys = ctx.GenerateHDMasterPubKeypairFromMnemonic(newMnemonic);
 
                 var pubKey = ctx.GetDerivedHDAddressByPath(masterKeys.privateKey, Crypto.HDPATH, false);
 

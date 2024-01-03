@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Xml.Linq;
 
 namespace DogecoinTerminal.Common
 {
-	public class ImageControl : PageControl
+    public class ImageControl : PageControl
 	{
 		private Point _imgDim;
 		private Point _center;
@@ -27,7 +28,7 @@ namespace DogecoinTerminal.Common
 			{
 				BackgroundColor = GetTerminalColor(backgroundAttr);
 			}
-			
+
 
 			_imgDim = new Point(EndPosition.X - StartPosition.X, EndPosition.Y - StartPosition.Y);
 			_center = new Point(StartPosition.X + (_imgDim.X / 2), StartPosition.Y + (_imgDim.Y / 2));
@@ -71,8 +72,15 @@ namespace DogecoinTerminal.Common
 
 		public override void Update(GameTime time, IServiceProvider services)
 		{
-			
-			
+
+
+			_imgDim = new Point(EndPosition.X - StartPosition.X, EndPosition.Y - StartPosition.Y);
+			_center = new Point(StartPosition.X + (_imgDim.X / 2), StartPosition.Y + (_imgDim.Y / 2));
+
+		}
+		public override void AcceptVisitor(IControlVisitor visitor)
+		{
+			visitor.VisitImage(this);
 		}
 	}
 }

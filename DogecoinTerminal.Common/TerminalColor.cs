@@ -8,12 +8,13 @@ namespace DogecoinTerminal.Common
         private Texture2D _texture;
         private Color _color;
 
-        private TerminalColor(GraphicsDevice graphicsDevice, byte r, byte g, byte b)
+        private TerminalColor(GraphicsDevice graphicsDevice, byte r, byte g, byte b, byte a = byte.MaxValue)
         {
-            _color = new Color(r, g, b);
+            _color = new Color(r, g, b, a);
             _texture = new Texture2D(graphicsDevice, 1, 1);
             _texture.SetData(new[] { _color });
         }
+
 
         public Texture2D Texture { get { return _texture; } }
 

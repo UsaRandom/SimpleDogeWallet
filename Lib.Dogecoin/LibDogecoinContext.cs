@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace Lib.Dogecoin
 {
@@ -366,6 +367,34 @@ namespace Lib.Dogecoin
 		}
 
 
+
+		public string GenerateMnemonicEncryptWithTPM(int fileNumber, bool overwrite = true, string lang = "eng", string space = " ")
+		{
+			lock(_lock)
+			{
+				var mnemonic = new char[2048];
+
+				LibDogecoinInterop.dogecoin_generate_mnemonic_encrypt_with_tpm(mnemonic, fileNumber, overwrite, lang.NullTerminate(), space.NullTerminate(), null);
+
+
+				return mnemonic.TerminateNull();
+			}
+		}
+
+
+
+		public string DecryptMnemonicWithTPM(int fileNumber, bool overwrite = true, string lang = "eng", string space = " ")
+		{
+			lock (_lock)
+			{
+				var mnemonic = new char[2048];
+
+				LibDogecoinInterop.dogecoin_decrypt_mnemonic_with_tpm(mnemonic, fileNumber);
+
+
+				return mnemonic.TerminateNull();
+			}
+		}
 
 
 

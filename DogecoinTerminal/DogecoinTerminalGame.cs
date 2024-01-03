@@ -8,6 +8,7 @@ using System;
 using DogecoinTerminal.Pages;
 using DogecoinTerminal.Common.Pages;
 using DogecoinTerminal.Common.BackgroundScenes;
+using System.Reflection.Metadata;
 
 namespace DogecoinTerminal
 {
@@ -21,6 +22,12 @@ namespace DogecoinTerminal
 
         private Navigation _nav;
 
+
+        public bool UseBackgroundScene { get; private set; }
+		public bool Fullscreen { get; private set; }
+		public bool DeveloperMode { get; private set; }
+
+
 		public DogecoinTerminalGame()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -33,12 +40,22 @@ namespace DogecoinTerminal
 
         protected override void Initialize()
         {
+            /*
+             *  Run Options
+             */
+            Fullscreen = false;
+            DeveloperMode = true;
+            UseBackgroundScene = false;
 
-            Strings.Current.SelectLanguage(Language.Languages["en"]);
+
+
+
+
+			Strings.Current.SelectLanguage(Language.Languages["en"]);
 			TerminalColor.Init(_graphics.GraphicsDevice);
 
 
-            _screen.Init(_graphics, useFullScreen: true);
+            _screen.Init(_graphics, useFullScreen: Fullscreen);
 
 			_nav = new Navigation(Services);
 
@@ -50,10 +67,14 @@ namespace DogecoinTerminal
 			Services.AddService<ITerminalSettings>(new TerminalSettings());
 			Services.AddService<ITerminalService>(new TerminalService(Services));
 
+            Services.AddService<Game>(this);
+
 			_background = new MoonBackgroundScene(Services, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
 
-			//            Services.AddService<IDogecoinService>(new QRDogecoinService(this));
+            //            Services.AddService<IDogecoinService>(new QRDogecoinService(this));
 
+
+            _moveHandler = new MoveHandlesControlVisitor(_screen);
 
 			base.Initialize();
         }
@@ -69,29 +90,50 @@ namespace DogecoinTerminal
 
         private ButtonState lastButtonState = ButtonState.Released;
 
-        protected override void Update(GameTime gameTime)
+        private MoveHandlesControlVisitor _moveHandler;
+
+		protected override void Update(GameTime gameTime)
 		{
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
 			_nav.CurrentPage.Update(gameTime, Services);
 
-
-			var mouseState = Mouse.GetState(Window);
-
-            if(mouseState.LeftButton == ButtonState.Pressed &&
-                lastButtonState == ButtonState.Released)
+            if (IsActive)
             {
-                Messenger.Default.Send(
-                    new UserClickMessage(
-                        _screen.WindowCoordToVirtualCoord(
-                            new Point(mouseState.X, mouseState.Y))));
-            }
+				var mouseState = Mouse.GetState(Window);
 
-			lastButtonState = mouseState.LeftButton;
+				if (mouseState.LeftButton == ButtonState.Pressed &&
+					lastButtonState == ButtonState.Released)
+				{
+					Messenger.Default.Send(
+						new UserClickMessage(
+							_screen.WindowCoordToVirtualCoord(
+								new Point(mouseState.X, mouseState.Y))));
+				}
+
+				lastButtonState = mouseState.LeftButton;
 
 
-            _background.Update(gameTime, Services);
+
+				if (DeveloperMode)
+				{
+					_moveHandler.UpdateMouse();
+
+					foreach (var control in _nav.CurrentPage.Controls)
+					{
+						control.AcceptVisitor(_moveHandler);
+					}
+				}
+			}
+
+
+            if (UseBackgroundScene)
+            {
+				_background.Update(gameTime, Services);
+			}
+
+
 			base.Update(gameTime);
         }
 
@@ -104,8 +146,27 @@ namespace DogecoinTerminal
 
 			_spriteBatch.Begin();
 
-            _background.Draw(gameTime, _spriteBatch, Services);
+
+            if (UseBackgroundScene)
+            {
+				_background.Draw(gameTime, _spriteBatch, Services);
+			}
+
 			_nav.CurrentPage.Draw(gameTime, Services);
+
+            if(DeveloperMode)
+            {
+				var handles = new DrawHandlesControlVisitor(_spriteBatch, _screen);
+
+				foreach (var control in _nav.CurrentPage.Controls)
+				{
+					control.AcceptVisitor(handles);
+				}
+
+				_screen.DrawText(_screen.WindowCoordToVirtualCoord(Mouse.GetState().Position).ToString(), TerminalColor.White, 2, new Point(50, 98));
+			}
+
+
 			_spriteBatch.End();
 
 			base.Draw(gameTime);
