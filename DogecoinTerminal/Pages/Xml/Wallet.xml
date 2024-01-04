@@ -1,87 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Page xmlns:common="DogecoinTerminal.Common">
-
-
-  <common:ImageControl StartPosition="40,5"
-         EndPosition="60,25"
-         Name="Doge"
-         ImageSource="Content/dogedrawn.png"/>
-
-
-  <common:ImageControl
-				Name="BackButton"
-				StartPosition="5,5"
-				EndPosition="15,15"
-        ImageSource="Content\left-arrow.png"/>
-
-
-  <common:TextControl Text="your wallet address here"
-                      Position="50,40"
-                      TextSize="4"
-                      Name="AddressText"
-                      Color="White"/>
-
-  <common:TextControl Text="your balance here"
-                      Position="50,30"
-                      TextSize="9"
-                      Name="BalanceText"
-                      Color="White"/>
-
-
-  <common:ButtonControl
-          StringDef="terminal-wallet-send"
-          StartPosition="10,50"
-          EndPosition="48,62"
-          BackgroundColor="DarkGrey"
-          ForegroundColor="White"
-          TextSize="4"
-          Name="SendButton"/>
-
-  <common:ButtonControl
-          StringDef="terminal-wallet-updatepin"
-          StartPosition="10,64"
-          Name="UpdatePinButton"
-          EndPosition="48,76"
-          BackgroundColor="DarkGrey"
-          ForegroundColor="White"
-          TextSize="4"
-          />
-
-  <common:ButtonControl
-          StringDef="terminal-wallet-refreshbalance"
-          StartPosition="10,78"
-          EndPosition="48,90"
-          BackgroundColor="Blue"
-          ForegroundColor="White"
-          TextSize="4"
-          Name="UpdateBalanceButton"/>
-
-
-
-  <common:ButtonControl
-          StringDef="terminal-wallet-receive"
-          StartPosition="52,50"
-          EndPosition="90,62"
-          BackgroundColor="DarkGrey"
-          ForegroundColor="White"
-          TextSize="4"
-          Name="ReceiveButton"/>
-
-  <common:ButtonControl
-          StringDef="terminal-wallet-showseed"
-          StartPosition="52,64"
-          EndPosition="90,76"
-          BackgroundColor="DarkGrey"
-          ForegroundColor="White"
-          TextSize="4"
-          Name="ShowSeedButton"/>
-
-  <common:ButtonControl
-          StringDef="terminal-wallet-remove"
-          StartPosition="52,78"
-          EndPosition="90,90"
-          BackgroundColor="Red"
-          ForegroundColor="White"
-          TextSize="4"
-          Name="RemoveButton"/>
+  <common:ImageControl Name="Doge" StartPosition="40,5" EndPosition="60,25" ImageSource="Content/dogedrawn.png" />
+  <common:ImageControl Name="BackButton" StartPosition="5,5" EndPosition="15,15" ImageSource="Content\left-arrow.png" />
+  <common:TextControl Name="AddressText" Color="White" Position="50,40" TextSize="4" />
+  <common:TextControl Name="BalanceText" Color="White" Position="50,30" TextSize="9" />
+  <common:ButtonControl StartPosition="10,50" EndPosition="48,62" TextSize="4" Name="SendButton" BackgroundColor="DarkGrey" ForegroundColor="White" StringDef="terminal-wallet-send" />
+  <common:ButtonControl StartPosition="10,64" EndPosition="48,76" TextSize="4" Name="UpdateBalanceButton" BackgroundColor="Blue" ForegroundColor="White" StringDef="terminal-wallet-refreshbalance" />
+  <common:ButtonControl StartPosition="52,50" EndPosition="90,62" TextSize="4" Name="ReceiveButton" BackgroundColor="DarkGrey" ForegroundColor="White" StringDef="terminal-wallet-receive" />
+  <common:ButtonControl StartPosition="52,64" EndPosition="90,76" TextSize="4" Name="ShowSeedButton" BackgroundColor="DarkGrey" ForegroundColor="White" StringDef="terminal-wallet-showseed" />
+  <common:ButtonControl StartPosition="52,78" EndPosition="90,90" TextSize="4" Name="RemoveButton" BackgroundColor="Red" ForegroundColor="White" StringDef="terminal-wallet-remove" />
 </Page>

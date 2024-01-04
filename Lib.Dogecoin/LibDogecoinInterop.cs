@@ -326,6 +326,10 @@ namespace Lib.Dogecoin
 			[Out, MarshalAs(UnmanagedType.LPArray)] char[] mnemonic,
 			int file_num);
 
+		[DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool dogecoin_list_encryption_keys_in_tpm(IntPtr names, out IntPtr count);
+
 
 	}
 }

@@ -24,6 +24,11 @@ namespace DogecoinTerminal.Common.Pages
 				Submit();
 			});
 
+			OnClick("BackButton", _ =>
+			{
+				Cancel();
+			});
+
 		}
 	}
 }
