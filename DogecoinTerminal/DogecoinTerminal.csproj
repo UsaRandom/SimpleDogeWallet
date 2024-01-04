@@ -43,16 +43,16 @@
     <None Update="Content\lock-fill.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Pages\Xml\BackupCode.xml">
+    <None Update="Pages\Xml\BackupCodePage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Pages\Xml\UnlockTerminal.xml">
+    <None Update="Pages\Xml\UnlockTerminalPage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Pages\Xml\Wallet.xml">
+    <None Update="Pages\Xml\WalletPage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Pages\Xml\WalletList.xml">
+    <None Update="Pages\Xml\WalletListPage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Strings\en.terminal.xml">

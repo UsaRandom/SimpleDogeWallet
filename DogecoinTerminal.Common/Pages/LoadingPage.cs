@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DogecoinTerminal.Common.Pages
 {
-	[PageDef("Pages/Xml/LoadingPage.xml")]
+    [PageDef("Pages/Xml/LoadingPage.xml")]
 	public class LoadingPage : Page
 	{
 

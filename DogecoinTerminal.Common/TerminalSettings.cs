@@ -1,6 +1,7 @@
 ﻿using DogecoinTerminal.Common;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 
@@ -16,13 +17,12 @@ namespace DogecoinTerminal
             LoadSettings();
         }
 
-        public T Get<T>(string settingName)
+        public T Get<T>(string settingName, T valueIfDefault = default)
         {
             if (settings.ContainsKey(settingName))
             {
                 if (typeof(T) == typeof(decimal))
                 {
-                    // Handle decimal conversion separately
                     return (T)Convert.ChangeType(decimal.Parse(settings[settingName].ToString()), typeof(T));
                 }
                 else
@@ -32,8 +32,8 @@ namespace DogecoinTerminal
             }
             else
             {
-                // You might want to throw an exception or handle this case based on your requirements
-                throw new KeyNotFoundException($"Setting '{settingName}' not found.");
+				Debug.WriteLine($"Setting '{settingName}' not found.");
+				return valueIfDefault;
             }
         }
 

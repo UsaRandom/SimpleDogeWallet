@@ -152,10 +152,10 @@ namespace DogecoinTerminal
         {
             var sum = 0M;
 
-            foreach (var utxo in UTXOStore.UTXOs)
-            {
-                sum += utxo.Amount;
-            }
+            //foreach (var utxo in UTXOStore.UTXOs)
+            //{
+            //    sum += utxo.Amount;
+            //}
 
             return sum.ToString("#,##0.000");
         }
@@ -167,15 +167,6 @@ namespace DogecoinTerminal
             {
                 return false;
             }
-
-
-
-            if (!UTXOStore.Unlock(_opPin, slotPin))
-            {
-                //UTXO file exists, but error parsing it.
-                return false;
-            }
-
 
 
             //if (!File.Exists(KeyFile))
@@ -224,8 +215,6 @@ namespace DogecoinTerminal
 
             File.WriteAllText(SlotAddressFile, Crypto.Encrypt(address, newOperatorPin));
 
-            UTXOStore.UpdateOperatorPin(newOperatorPin);
-
             //update key file
    //         var keyContent = Crypto.Decrypt(File.ReadAllText(KeyFile), _opPin);
       //      File.WriteAllText(KeyFile, Crypto.Encrypt(keyContent, newOperatorPin));
@@ -243,8 +232,6 @@ namespace DogecoinTerminal
             }
 
 
-            UTXOStore.UpdateSlotPin(newSlotPin);
-
             //update key file
      //       var keyContent = Crypto.Decrypt(Crypto.Decrypt(File.ReadAllText(KeyFile), _opPin), _slotPin);
         //    File.WriteAllText(KeyFile, Crypto.Encrypt(Crypto.Encrypt(keyContent, newSlotPin), _opPin));
@@ -255,11 +242,8 @@ namespace DogecoinTerminal
 
         public void ClearSlot()
         {
-            UTXOStore.OnWalletSlotDelete();
 
             File.Delete(SlotAddressFile);
-            File.Delete(KeyFile);
-
 
             _slotPin = string.Empty;
             _address = string.Empty;

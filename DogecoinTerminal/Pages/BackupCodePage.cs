@@ -1,4 +1,5 @@
 ﻿using DogecoinTerminal.Common;
+using DogecoinTerminal.Common.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DogecoinTerminal.Pages
 {
-	[PageDef("Pages/Xml/BackupCode.xml")]
+    [PageDef("Pages/Xml/BackupCodePage.xml")]
 	internal class BackupCodePage : Page
 	{
 		//We can pull in services just by adding to constructor

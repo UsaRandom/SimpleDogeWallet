@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DogecoinTerminal.Common.Pages
 {
-	[PageDef("Pages/Xml/NumPadPage.xml")]
+    [PageDef("Pages/Xml/NumPadPage.xml")]
 	public  class NumPadPage : PromptPage
 	{
 		private ImageControl _submitButton;

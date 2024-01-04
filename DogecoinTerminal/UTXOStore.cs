@@ -19,7 +19,7 @@ namespace DogecoinTerminal
             }
         }
 
-        private IList<UTXOInfo> _utxos;
+        private IList<UTXO> _utxos;
 
         public UTXOStore(IWalletSlot slot)
         {
@@ -50,11 +50,11 @@ namespace DogecoinTerminal
 
             }
 
-            _utxos = new List<UTXOInfo>();
+            _utxos = new List<UTXO>();
             return true;
         }
 
-        public IEnumerable<UTXOInfo> UTXOs
+        public IEnumerable<UTXO> UTXOs
         {
             get
             {
@@ -62,14 +62,14 @@ namespace DogecoinTerminal
             }
         }
 
-        public void AddUTXO(UTXOInfo utxoInfo)
+        public void AddUTXO(UTXO utxoInfo)
         {
             _utxos.Add(utxoInfo);
         }
 
-        public void RemoveUTXO(UTXOInfo utxoInfo)
+        public void RemoveUTXO(UTXO utxoInfo)
         {
-            UTXOInfo utxoToRemove = null;
+            UTXO utxoToRemove = null;
 
             foreach (var utxo in _utxos)
             {
@@ -101,7 +101,7 @@ namespace DogecoinTerminal
 
         private void LoadUTXOsFromString(string utxoString)
         {
-            _utxos = new List<UTXOInfo>();
+            _utxos = new List<UTXO>();
 
             if (!string.IsNullOrEmpty(utxoString))
             {
@@ -118,7 +118,7 @@ namespace DogecoinTerminal
 
                     var lineParts = line.Split('|');
 
-                    _utxos.Add(new UTXOInfo
+                    _utxos.Add(new UTXO
                     {
                         TransactionId = lineParts[0],
                         VOut = int.Parse(lineParts[1]),
