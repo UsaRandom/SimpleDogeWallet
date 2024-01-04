@@ -9,6 +9,7 @@ using DogecoinTerminal.Pages;
 using DogecoinTerminal.Common.BackgroundScenes;
 using System.Xml.Linq;
 using DogecoinTerminal.Common.Controls;
+using System.Runtime;
 
 namespace DogecoinTerminal
 {
@@ -25,10 +26,8 @@ namespace DogecoinTerminal
 
 		private ButtonControl _devButton;
 
-        public bool UseBackgroundScene { get; private set; }
-		public bool Fullscreen { get; private set; }
-		public bool DeveloperMode { get; private set; }
 
+		private ITerminalSettings _settings;
 
 		public DogecoinTerminalGame()
         {
@@ -43,14 +42,8 @@ namespace DogecoinTerminal
 
         protected override void Initialize()
         {
-            /*
-             *  Run Options
-             */
-            Fullscreen = false;
-            DeveloperMode = false;
-            UseBackgroundScene = true;
 
-
+			_settings = new TerminalSettings();
 
 
 
@@ -58,7 +51,7 @@ namespace DogecoinTerminal
 			TerminalColor.Init(_graphics.GraphicsDevice);
 
 
-            _screen.Init(_graphics, useFullScreen: Fullscreen);
+            _screen.Init(_graphics, useFullScreen: _settings.Get("terminal-fullscreen", false));
 
 			_nav = new Navigation(Services);
 
@@ -67,37 +60,27 @@ namespace DogecoinTerminal
             Services.AddService(_nav);
 			Services.AddService(_screen);
             Services.AddService(new Images(GraphicsDevice));
-			Services.AddService<ITerminalSettings>(new TerminalSettings());
+			Services.AddService(_settings);
 			Services.AddService<ITerminalService>(new TerminalService(Services));
-
 			Services.AddService<IMnemonicProvider>(new TPM2MnemonicProvider());
-
 			Services.AddService<Game>(this);
 
+
+			//background
 			_background = new MoonBackgroundScene(Services, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
 
-			//            Services.AddService<IDogecoinService>(new QRDogecoinService(this));
 
-
-
-			if (DeveloperMode)
-			{
-
-				var devButtonEl = new XElement("button");
-
-				devButtonEl.Add(new XAttribute("Name", "DevButton"));
-				devButtonEl.Add(new XAttribute("StartPosition", "0,97"));
-				devButtonEl.Add(new XAttribute("EndPosition", "4,99"));
-				devButtonEl.Add(new XAttribute("BackgroundColor", "Blue"));
-				devButtonEl.Add(new XAttribute("ForegroundColor", "White"));
-				devButtonEl.Add(new XAttribute("TextSize", "2"));
-				devButtonEl.Add(new XAttribute("Text", "copy"));
-
-				_devButton = new ButtonControl(devButtonEl);
-
-				_moveHandler = new MoveHandlesControlVisitor(_screen);
-			}
-
+			//dev tools
+			var devButtonEl = new XElement("button");
+			devButtonEl.Add(new XAttribute("Name", "DevButton"));
+			devButtonEl.Add(new XAttribute("StartPosition", "0,97"));
+			devButtonEl.Add(new XAttribute("EndPosition", "4,99"));
+			devButtonEl.Add(new XAttribute("BackgroundColor", "Blue"));
+			devButtonEl.Add(new XAttribute("ForegroundColor", "White"));
+			devButtonEl.Add(new XAttribute("TextSize", "2"));
+			devButtonEl.Add(new XAttribute("Text", "copy"));
+			_devButton = new ButtonControl(devButtonEl);
+			_moveHandler = new MoveHandlesControlVisitor(_screen);
 
 			base.Initialize();
         }
@@ -134,7 +117,7 @@ namespace DogecoinTerminal
 							_screen.WindowCoordToVirtualCoord(
 								new Point(mouseState.X, mouseState.Y))));
 
-					if (DeveloperMode)
+					if (_settings.Get("terminal-devmode", false))
 					{
 						if (_devButton.ContainsPoint(_screen.WindowCoordToVirtualCoord(
 								new Point(mouseState.X, mouseState.Y))))
@@ -157,7 +140,7 @@ namespace DogecoinTerminal
 
 
 
-				if (DeveloperMode)
+				if (_settings.Get("terminal-devmode", false))
 				{
 					_moveHandler.UpdateMouse();
 
@@ -170,7 +153,7 @@ namespace DogecoinTerminal
 			}
 
 
-            if (UseBackgroundScene)
+            if (_settings.Get("terminal-background", false))
             {
 				_background.Update(gameTime, Services);
 			}
@@ -189,14 +172,14 @@ namespace DogecoinTerminal
 			_spriteBatch.Begin();
 
 
-            if (UseBackgroundScene)
+            if (_settings.Get("terminal-background", false))
             {
 				_background.Draw(gameTime, _spriteBatch, Services);
 			}
 
 			_nav.CurrentPage.Draw(gameTime, Services);
 
-            if(DeveloperMode)
+            if(_settings.Get("terminal-devmode", false))
             {
 				var handles = new DrawHandlesControlVisitor(_spriteBatch, _screen);
 

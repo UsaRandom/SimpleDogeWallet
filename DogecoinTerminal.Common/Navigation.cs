@@ -2,10 +2,11 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DogecoinTerminal.Common.Pages;
 
 namespace DogecoinTerminal.Common
 {
-	public class Navigation : IReceiver<PromptResult>
+    public class Navigation : IReceiver<PromptResult>
 	{
 		private ConcurrentStack<IPage> _pageHistory = new();
 		private PromptResult _promptResult;

@@ -13,7 +13,7 @@ namespace DogecoinTerminal
         private LibDogecoinContext _ctx;
         private IWalletSlot _slot;
         private IServiceProvider _services;
-        private List<UTXOInfo> _txUTXOs;
+        private List<UTXO> _txUTXOs;
 
         public decimal Fee { get; private set; }
 
@@ -33,7 +33,7 @@ namespace DogecoinTerminal
             private set;
         }
 
-        public string Recipient { get; private set; }
+        public string To { get; private set; }
 
         public string From { get; private set; }
 
@@ -41,7 +41,7 @@ namespace DogecoinTerminal
         {
             _services = services;
             _slot = slot;
-            _txUTXOs = new List<UTXOInfo>();
+            _txUTXOs = new List<UTXO>();
             _ctx = LibDogecoinContext.CreateContext();
         }
 
@@ -110,7 +110,7 @@ namespace DogecoinTerminal
             Fee = fee;
             Amount = amount;
 
-            Recipient = recipient;
+            To = recipient;
             From = _slot.Address;
 
 
@@ -123,7 +123,7 @@ namespace DogecoinTerminal
                 }
             }
 
-            if (!_ctx.AddOutput(_workingTransactionId, Recipient, amountStr))
+            if (!_ctx.AddOutput(_workingTransactionId, To, amountStr))
             {
                 return false;
             }
@@ -164,7 +164,7 @@ namespace DogecoinTerminal
 
             if (Remainder > settings.Get<decimal>("dust-limit"))
             {
-                _slot.UTXOStore.AddUTXO(new UTXOInfo
+                _slot.UTXOStore.AddUTXO(new UTXO
                 {
                     TransactionId = Crypto.GetTransactionIdFromRaw(GetRawTransaction()),
                     VOut = 0,// by our convention, our first output is back to ourselves.

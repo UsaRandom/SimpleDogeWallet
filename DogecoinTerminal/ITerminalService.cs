@@ -58,35 +58,26 @@ namespace DogecoinTerminal
 
     internal interface IUTXOStore
     {
-        IEnumerable<UTXOInfo> UTXOs { get; }
+        IEnumerable<UTXO> UTXOs { get; }
 
-        bool Unlock(string opPin, string slotPin);
+        void AddUTXO(UTXO utxoInfo);
 
-        void AddUTXO(UTXOInfo utxoInfo);
-
-        void RemoveUTXO(UTXOInfo utxoInfo);
+        void RemoveUTXO(UTXO utxoInfo);
 
         void RemoveAll();
-
-        void OnWalletSlotDelete();
-
-        void UpdateOperatorPin(string newOperatorPin);
-
-        void UpdateSlotPin(string slotPin);
 
         void Save();
     }
 
     internal interface IDogecoinTransaction : IDisposable
     {
-
         decimal Fee { get; }
 
         decimal Amount { get; }
 
         decimal Total { get; }
 
-        string Recipient { get; }
+        string To { get; }
 
         string From { get; }
 

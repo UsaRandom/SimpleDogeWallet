@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DogecoinTerminal.Common.Pages
 {
-	[PageDef("Pages/Xml/ShortMessagePage.xml")]
+    [PageDef("Pages/Xml/ShortMessagePage.xml")]
 	public class ShortMessagePage : PromptPage
 	{
 		public ShortMessagePage(IPageOptions options) : base(options)

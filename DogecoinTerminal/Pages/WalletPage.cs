@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DogecoinTerminal.Pages
 {
-    [PageDef("Pages/Xml/Wallet.xml")]
+    [PageDef("Pages/Xml/WalletPage.xml")]
     internal class WalletPage : Page
     {
         public WalletPage(IPageOptions options, Navigation navigation, Strings strings, IMnemonicProvider mnemonicProvider) : base(options)

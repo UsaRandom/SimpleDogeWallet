@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace DogecoinTerminal.Pages
 {
-	[PageDef("Pages/Xml/SetupTerminal.xml")]
+    [PageDef("Pages/Xml/SetupTerminalPage.xml")]
 	internal class SetupTerminalPage : Page
 	{
 		private const string SETUP_BUTTON_NAME = "SetupButton";
 
-		public SetupTerminalPage(IPageOptions options, Navigation navigation, ITerminalService terminalService, Strings strings) : base(options)
+		public SetupTerminalPage(IPageOptions options) : base(options)
 		{
 			OnClick(SETUP_BUTTON_NAME, async _ => {
 

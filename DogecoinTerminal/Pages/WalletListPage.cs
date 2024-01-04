@@ -7,8 +7,8 @@ using System.Text;
 namespace DogecoinTerminal.Pages
 {
 
-	//I forgot we need this attribute to tell it which file to use for controls
-	[PageDef("Pages/Xml/WalletList.xml")]
+    //I forgot we need this attribute to tell it which file to use for controls
+    [PageDef("Pages/Xml/WalletListPage.xml")]
 	internal class WalletListPage : Page
 	{
 		private const string SETTINGS_BUTTON_NAME = "SettingsButton";

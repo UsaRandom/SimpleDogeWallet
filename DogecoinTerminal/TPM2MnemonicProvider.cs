@@ -11,7 +11,7 @@ namespace DogecoinTerminal
 	{
 		public string GetMnemonic(LibDogecoinContext ctx, int slotId)
 		{
-			return ctx.GenerateMnemonicEncryptWithTPM(slotId);
+			return ctx.GenerateMnemonicEncryptWithTPM(slotId+1);
 		}
 	}
 	internal class Simple24WordMnemonicProvider : IMnemonicProvider

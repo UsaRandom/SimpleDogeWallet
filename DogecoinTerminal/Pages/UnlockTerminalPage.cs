@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace DogecoinTerminal.Pages
 {
-	[PageDef("Pages/Xml/UnlockTerminal.xml")]
+    [PageDef("Pages/Xml/UnlockTerminalPage.xml")]
 	internal class UnlockTerminalPage : Page
 	{
 		private const string UNLOCK_BUTTON_NAME = "UnlockButton";
