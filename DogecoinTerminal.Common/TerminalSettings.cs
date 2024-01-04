@@ -59,10 +59,6 @@ namespace DogecoinTerminal
             {
                 settings = new Dictionary<string, object>();
             }
-
-            //load defaults
-            SetIfMissing("dust-limit", 0.001M);
-            SetIfMissing("fee-per-utxo", 0.02M);
         }
 
         private void SaveSettings()

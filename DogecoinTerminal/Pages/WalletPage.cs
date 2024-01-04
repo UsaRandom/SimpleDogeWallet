@@ -1,5 +1,6 @@
 ﻿using DogecoinTerminal.Common;
 using DogecoinTerminal.Common.Pages;
+using Lib.Dogecoin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace DogecoinTerminal.Pages
     [PageDef("Pages/Xml/Wallet.xml")]
     internal class WalletPage : Page
     {
-        public WalletPage(IPageOptions options, Navigation navigation, Strings strings) : base(options)
+        public WalletPage(IPageOptions options, Navigation navigation, Strings strings, IMnemonicProvider mnemonicProvider) : base(options)
         {
             var slot = options.GetOption<IWalletSlot>("slot");
 
@@ -58,50 +59,75 @@ namespace DogecoinTerminal.Pages
 
 			});
 
-
-
-            OnClick("UpdatePinButton", async _ =>
+            OnClick("ShowSeedButton", async _ =>
             {
-                //User wants to update pin
-
                 await navigation.PushAsync<BlankPage>();
 
-                var numPadResult = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-wallet-updatepin-newpin"]));
+                var acknowledge = await navigation.PromptAsync<ShortMessagePage>(("message", "Don't share seed phrase, have pen & paper ready!"));
 
-				var enteredPin = (string)numPadResult.Value;
-
-				if (numPadResult.Response != PromptResponse.YesConfirm
-                    || string.IsNullOrEmpty(enteredPin))
-				{
-					//just remove loading screen
-					navigation.Pop();
-                    return;
-				}
-
-				numPadResult = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-wallet-updatepin-confirmpin"]));
-
-				if (numPadResult.Response != PromptResponse.YesConfirm
-                    && enteredPin != (string)numPadResult.Value)
-				{
-
-                    //the new pin was not updated, so lets notify user!
-
-                    await navigation.PromptAsync<ShortMessagePage>(("message", "ERROR: Pin was NOT updated!"));
-
-					navigation.Pop();
-				}
-                else
+                if(acknowledge.Response == PromptResponse.YesConfirm)
                 {
-                    //update the pin
+                    string mnemonic = string.Empty;
 
-                    slot.UpdateSlotPin(enteredPin);
+                    using(var ctx = LibDogecoinContext.CreateContext())
+                    {
+                        mnemonic = mnemonicProvider.GetMnemonic(ctx, slot.SlotNumber);
+					}
 
-                    await navigation.PromptAsync<ShortMessagePage>(("message", "SUCCESS: Pin was updated!"));
+                    if(!string.IsNullOrEmpty(mnemonic))
+					{
+						await navigation.TryInsertBeforeAsync<BackupCodePage, BlankPage>(("mnemonic", mnemonic));
+					}
+                }
 
-					navigation.Pop();
+                navigation.Pop();
 
-				}
-			});
+            });
+
+
+
+   //         OnClick("UpdatePinButton", async _ =>
+   //         {
+   //             //User wants to update pin
+
+   //             await navigation.PushAsync<BlankPage>();
+
+   //             var numPadResult = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-wallet-updatepin-newpin"]));
+
+			//	var enteredPin = (string)numPadResult.Value;
+
+			//	if (numPadResult.Response != PromptResponse.YesConfirm
+   //                 || string.IsNullOrEmpty(enteredPin))
+			//	{
+			//		//just remove loading screen
+			//		navigation.Pop();
+   //                 return;
+			//	}
+
+			//	numPadResult = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-wallet-updatepin-confirmpin"]));
+
+			//	if (numPadResult.Response != PromptResponse.YesConfirm
+   //                 && enteredPin != (string)numPadResult.Value)
+			//	{
+
+   //                 //the new pin was not updated, so lets notify user!
+
+   //                 await navigation.PromptAsync<ShortMessagePage>(("message", "ERROR: Pin was NOT updated!"));
+
+			//		navigation.Pop();
+			//	}
+   //             else
+   //             {
+   //                 //update the pin
+
+   //                 slot.UpdateSlotPin(enteredPin);
+
+   //                 await navigation.PromptAsync<ShortMessagePage>(("message", "SUCCESS: Pin was updated!"));
+
+			//		navigation.Pop();
+
+			//	}
+			//});
 
 		}
     }

@@ -72,65 +72,76 @@ namespace DogecoinTerminal.Pages
 						 *  4. Either delete or show backup codes, depending on IDogecoinService's response.
 						 *  5. Open Wallet
 						 */
-						var enterPinResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-walletlist-newwallet-enterpin"]));
+						//var enterPinResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-walletlist-newwallet-enterpin"]));
 
-						var enteredPin = (string)enterPinResponse.Value;
+						//var enteredPin = (string)enterPinResponse.Value;
 
-						if (enterPinResponse.Response != PromptResponse.YesConfirm
-							|| string.IsNullOrEmpty(enteredPin))
-						{
-							return;
-						}
+						//if (enterPinResponse.Response != PromptResponse.YesConfirm
+						//	|| string.IsNullOrEmpty(enteredPin))
+						//{
+						//	return;
+						//}
 
 
-						var confirmPinResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-walletlist-newwallet-confirmpin"]));
+						//var confirmPinResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-walletlist-newwallet-confirmpin"]));
 
-						var confirmPin = (string)confirmPinResponse.Value;
+						//var confirmPin = (string)confirmPinResponse.Value;
 
-						//confirm they said yes, and the responses match!
-						if (confirmPinResponse.Response != PromptResponse.YesConfirm
-							|| enteredPin != confirmPin)
+						////confirm they said yes, and the responses match!
+						//if (confirmPinResponse.Response != PromptResponse.YesConfirm
+						//	|| enteredPin != confirmPin)
 
-						{
-							//remove loading page, return to wallet list page.
-							navigation.Pop();
-							return;
-						}
+						//{
+						//	//remove loading page, return to wallet list page.
+						//	navigation.Pop();
+						//	return;
+						//}
 
 
 						//alright, so i know what is going on with the exception.
 						//this is part of a refactor, so i'm going to hack it up real good.
 
-						var newSlotPin = (string)confirmPinResponse.Value;
+						//		var newSlotPin = (string)confirmPinResponse.Value;
 
-						slot.Init(newSlotPin);
 
+						var response = await navigation.PromptAsync<ShortMessagePage>(("message", $"Press 'Ok' to create a new Wallet here ({index + 1})"));
+
+						if(response.Response == PromptResponse.YesConfirm && slot.Init("420.69"))
+						{
+							await navigation.TryInsertBeforeAsync<WalletPage, BlankPage>(("slot", slot));
+						}
+
+						navigation.Pop();
 						//ok we've created our slot!
 
 						//TODO: now we need to confirm with an IDogecoinService (which isn't implimented currently, so lets skip)
 
 
 
-						await navigation.TryInsertBeforeAsync<WalletPage, BlankPage>(("slot", slot));
-						navigation.Pop();
 
 					}
 					else
 					{
 						//Note: Might be nice to have some kind of authentication service for stuff like this.
 
+					//	await navigation.PushAsync<BlankPage>();
+
+						//var numPadResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-enterslotpin-title"]));
+
+						//if (numPadResponse.Response == PromptResponse.YesConfirm &&
+						//	slot.Unlock(numPadResponse.Value.ToString()))
+						//{
+
+						//	//we have a wallet page, lets show it!
+						//	await navigation.TryInsertBeforeAsync<WalletPage, BlankPage>(("slot", slot));
+
+						//}
+
 						await navigation.PushAsync<BlankPage>();
 
-						var numPadResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-enterslotpin-title"]));
+						slot.Unlock("420.69");
 
-						if (numPadResponse.Response == PromptResponse.YesConfirm &&
-							slot.Unlock(numPadResponse.Value.ToString()))
-						{
-
-							//we have a wallet page, lets show it!
-							await navigation.TryInsertBeforeAsync<WalletPage, BlankPage>(("slot", slot));
-
-						}
+						await navigation.TryInsertBeforeAsync<WalletPage, BlankPage>(("slot", slot));
 
 						navigation.Pop();
 

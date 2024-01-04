@@ -383,7 +383,7 @@ namespace Lib.Dogecoin
 
 
 
-		public string DecryptMnemonicWithTPM(int fileNumber, bool overwrite = true, string lang = "eng", string space = " ")
+		public string DecryptMnemonicWithTPM(int fileNumber)
 		{
 			lock (_lock)
 			{
@@ -393,6 +393,48 @@ namespace Lib.Dogecoin
 
 
 				return mnemonic.TerminateNull();
+			}
+		}
+
+
+		public string[] ListKeysInTPM()
+		{
+			lock (_lock)
+			{
+				var keyNames = new List<string>();
+				int count;
+				IntPtr countPtr;
+				bool result;
+
+				count = 1000;
+
+				IntPtr[] keyNamePointers = new IntPtr[count];
+
+				result = LibDogecoinInterop.dogecoin_list_encryption_keys_in_tpm(Marshal.UnsafeAddrOfPinnedArrayElement(keyNamePointers, 0), out countPtr);
+
+				// Check the result
+				if (result)
+				{
+					// Retrieve the key names
+					for (int i = 0; i < count; i++)
+					{
+						if (keyNamePointers[i] == IntPtr.Zero)
+						{
+							break;
+						}
+						else
+						{
+							keyNames.Add(Marshal.PtrToStringUni(keyNamePointers[i]));
+
+							LibDogecoinInterop.dogecoin_free(keyNamePointers[i]);
+						}
+					}
+
+				}
+
+				Marshal.FreeCoTaskMem(countPtr);
+
+				return keyNames.ToArray();
 			}
 		}
 
