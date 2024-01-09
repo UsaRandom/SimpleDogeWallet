@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,14 @@ namespace DogecoinTerminal.Common.BackgroundScenes
 		//current offset, for x and y for tiling, resets when at display limits
 		private float _xOffset = 0;
 		private float _yOffset = 0;
+
+
+
+
+		private TimeSpan _idleTime = TimeSpan.Zero;
+		private MouseState _lastMouseState = Mouse.GetState();
+
+
 
 		public MoonBackgroundScene(IServiceProvider services, int width, int height)
 		{
@@ -91,6 +100,27 @@ namespace DogecoinTerminal.Common.BackgroundScenes
 
 		public void Update(GameTime gameTime, IServiceProvider services)
 		{
+			var newMouseState = Mouse.GetState();
+
+			if(newMouseState == _lastMouseState)
+			{
+				_idleTime = _idleTime.Add(gameTime.ElapsedGameTime);
+			}
+			else
+			{
+				services.GetService<VirtualScreen>().Opacity = 255;
+				_idleTime = TimeSpan.Zero;
+			}
+
+			if(_idleTime.TotalSeconds > 5)
+			{
+				services.GetService<VirtualScreen>().Opacity = 0;
+			}
+
+			_lastMouseState = newMouseState;
+
+
+
 			float elapsedMS = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
 			// Update the offsets for the background

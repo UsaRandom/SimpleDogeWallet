@@ -51,7 +51,7 @@ namespace DogecoinTerminal
         {
             var settings = _services.GetService<ITerminalSettings>();
 
-            var dustLimit = settings.Get<decimal>("dust-limit");
+            var dustLimit = settings.GetDecimal("dust-limit");
 
             if (amount < dustLimit)
             {
@@ -65,7 +65,7 @@ namespace DogecoinTerminal
             //it might make sense to order these
             var utxoEnumerator = _slot.UTXOStore.UTXOs.GetEnumerator();
 
-            decimal fee = settings.Get<decimal>("fee-per-utxo"); //fee per utxo
+            decimal fee = settings.GetDecimal("fee-per-utxo"); //fee per utxo
             decimal sum = 0M;
             int utxoCount = 0;
 
@@ -162,7 +162,7 @@ namespace DogecoinTerminal
 
             var settings = _services.GetService<ITerminalSettings>();
 
-            if (Remainder > settings.Get<decimal>("dust-limit"))
+            if (Remainder > settings.GetDecimal("dust-limit"))
             {
                 _slot.UTXOStore.AddUTXO(new UTXO
                 {

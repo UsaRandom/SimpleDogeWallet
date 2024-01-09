@@ -6,8 +6,19 @@ using System.Text;
 
 namespace DogecoinTerminal.Pages
 {
+	/*
+	 * Notes: 
+	 * 
+	 * So, we have to change a few things for TPM.
+	 * The wallet functionality is proven, but not flushed out.
+	 * We can create valid signed transactions if we are given UTXOs. 
+	 * 
+	 * How we get UTXOs, store keys, broadcast trasnactions,
+	 * 
+	 * 
+	 */
 
-    //I forgot we need this attribute to tell it which file to use for controls
+
     [PageDef("Pages/Xml/WalletListPage.xml")]
 	internal class WalletListPage : Page
 	{
@@ -27,13 +38,20 @@ namespace DogecoinTerminal.Pages
 
 
 			OnClick(SETTINGS_BUTTON_NAME, async _ => {
+
+				await navigation.PushAsync<BlankPage>();
+
 				var numPadResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-enteroppin-title"]));
 
 				if (numPadResponse.Response == PromptResponse.YesConfirm
 				   && terminalService.ConfirmOperatorPin(numPadResponse.Value.ToString()))
 				{
 
+					//Let's create a settings page! (puts it before our blank page, which we remove)
+					await navigation.TryInsertBeforeAsync<SettingsPage, BlankPage>();
 				}
+
+				navigation.Pop();
 			});
 
 

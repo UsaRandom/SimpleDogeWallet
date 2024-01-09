@@ -46,6 +46,9 @@
     <None Update="Pages\Xml\BackupCodePage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Pages\Xml\SettingsPage.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Pages\Xml\UnlockTerminalPage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

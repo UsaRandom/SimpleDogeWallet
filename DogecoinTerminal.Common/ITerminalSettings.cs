@@ -2,7 +2,10 @@
 {
 	public interface ITerminalSettings
 	{
-		T Get<T>(string settingName, T valueIfDefault = default);
+
+		bool GetBool(string settingName, bool valueIfEmpty = default);
+
+		decimal GetDecimal(string settingName, decimal valueIfEmpty = default);
 
 		void Set(string settingName, object value);
 
