@@ -10,34 +10,38 @@ namespace DogecoinTerminal
 	public class TerminalSettings : ITerminalSettings
     {
         private const string SETTINGS_FILE = "terminalsettings.json";
-        private Dictionary<string, object> settings;
+        private Dictionary<string, string> settings;
 
         public TerminalSettings()
         {
             LoadSettings();
         }
 
-        public T Get<T>(string settingName, T valueIfDefault = default)
+
+        public bool GetBool(string settingName, bool valueIfEmpty = default)
         {
-            if (settings.ContainsKey(settingName))
+            if(settings.ContainsKey(settingName))
             {
-                if (typeof(T) == typeof(decimal))
-                {
-                    return (T)Convert.ChangeType(decimal.Parse(settings[settingName].ToString()), typeof(T));
-                }
-                else
-                {
-                    return (T)Convert.ChangeType(settings[settingName], typeof(T));
-                }
+                return bool.Parse(settings[settingName]);
             }
-            else
-            {
-				Debug.WriteLine($"Setting '{settingName}' not found.");
-				return valueIfDefault;
-            }
+
+            return valueIfEmpty;
         }
 
-        public bool IsSet(string settingName)
+
+        public decimal GetDecimal(string settingName, decimal valueIfEmpty = default)
+        {
+            if(settings.ContainsKey(settingName))
+            {
+                return decimal.Parse(settings[settingName]);
+            }
+
+            return valueIfEmpty;
+        }
+
+
+
+		public bool IsSet(string settingName)
         {
             return settings.ContainsKey(settingName);
         }
@@ -53,11 +57,11 @@ namespace DogecoinTerminal
             if (File.Exists(SETTINGS_FILE))
             {
                 string json = File.ReadAllText(SETTINGS_FILE);
-                settings = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
+                settings = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
             }
             else
             {
-                settings = new Dictionary<string, object>();
+                settings = new Dictionary<string, string>();
             }
         }
 

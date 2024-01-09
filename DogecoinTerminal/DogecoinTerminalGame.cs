@@ -51,7 +51,7 @@ namespace DogecoinTerminal
 			TerminalColor.Init(_graphics.GraphicsDevice);
 
 
-            _screen.Init(_graphics, useFullScreen: _settings.Get("terminal-fullscreen", false));
+            _screen.Init(_graphics, useFullScreen: _settings.GetBool("terminal-fullscreen", false));
 
 			_nav = new Navigation(Services);
 
@@ -117,7 +117,7 @@ namespace DogecoinTerminal
 							_screen.WindowCoordToVirtualCoord(
 								new Point(mouseState.X, mouseState.Y))));
 
-					if (_settings.Get("terminal-devmode", false))
+					if (_settings.GetBool("terminal-devmode", false))
 					{
 						if (_devButton.ContainsPoint(_screen.WindowCoordToVirtualCoord(
 								new Point(mouseState.X, mouseState.Y))))
@@ -140,7 +140,7 @@ namespace DogecoinTerminal
 
 
 
-				if (_settings.Get("terminal-devmode", false))
+				if (_settings.GetBool("terminal-devmode", false))
 				{
 					_moveHandler.UpdateMouse();
 
@@ -153,7 +153,7 @@ namespace DogecoinTerminal
 			}
 
 
-            if (_settings.Get("terminal-background", false))
+            if (_settings.GetBool("terminal-background", false))
             {
 				_background.Update(gameTime, Services);
 			}
@@ -172,14 +172,14 @@ namespace DogecoinTerminal
 			_spriteBatch.Begin();
 
 
-            if (_settings.Get("terminal-background", false))
+            if (_settings.GetBool("terminal-background", false))
             {
 				_background.Draw(gameTime, _spriteBatch, Services);
 			}
 
 			_nav.CurrentPage.Draw(gameTime, Services);
 
-            if(_settings.Get("terminal-devmode", false))
+            if(_settings.GetBool("terminal-devmode", false))
             {
 				var handles = new DrawHandlesControlVisitor(_spriteBatch, _screen);
 
