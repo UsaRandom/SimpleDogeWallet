@@ -3,9 +3,9 @@ using System;
 using System.IO;
 
 
-namespace DogecoinTerminal
+namespace DogecoinTerminal.old
 {
-	internal class TerminalService : ITerminalService
+    internal class TerminalService : ITerminalService
     {
         public const int MAX_SLOT_COUNT = 6;
         private const string OP_PIN_VERIFY_FILE = "op_pin_verify.dtf";
@@ -24,7 +24,7 @@ namespace DogecoinTerminal
         {
             _slots = new IWalletSlot[MAX_SLOT_COUNT];
             _services = services;
-			_opPin = string.Empty;
+            _opPin = string.Empty;
             IsUnlocked = false;
         }
 
@@ -38,15 +38,15 @@ namespace DogecoinTerminal
 
         public IWalletSlot GetWalletSlot(int slot)
         {
-            if(IsUnlocked)
+            if (IsUnlocked)
             {
-				if (_slots[slot] == null)
-				{
-					_slots[slot] = new WalletSlot(_services, _opPin, slot);
-				}
+                if (_slots[slot] == null)
+                {
+                    _slots[slot] = new WalletSlot(_services, _opPin, slot);
+                }
 
-				return _slots[slot];
-			}
+                return _slots[slot];
+            }
 
             return null;
         }

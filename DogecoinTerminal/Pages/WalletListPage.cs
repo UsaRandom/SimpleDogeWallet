@@ -1,12 +1,13 @@
 ﻿using DogecoinTerminal.Common;
 using DogecoinTerminal.Common.Pages;
+using DogecoinTerminal.old;
 using Microsoft.Xna.Framework;
 using System;
 using System.Text;
 
 namespace DogecoinTerminal.Pages
 {
-	/*
+    /*
 	 * Notes: 
 	 * 
 	 * So, we have to change a few things for TPM.
