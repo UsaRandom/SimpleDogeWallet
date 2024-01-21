@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace DogecoinTerminal
+namespace DogecoinTerminal.old
 {
     internal class UTXOStore : IUTXOStore
     {

@@ -1,14 +1,14 @@
 ﻿using Lib.Dogecoin;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
 using System.Net;
 using System.Text;
+using DogecoinTerminal.Common;
 
-namespace DogecoinTerminal
+namespace DogecoinTerminal.old
 {
     //TODO: Gut it.
-	internal class WalletSlot : IWalletSlot
+    internal class WalletSlot : IWalletSlot
     {
 
 
@@ -69,31 +69,31 @@ namespace DogecoinTerminal
             {
                 if (!IsEmpty && _opPin != string.Empty && File.Exists(SlotAddressFile) && string.IsNullOrEmpty(_address))
                 {
-					_address = Crypto.Decrypt(File.ReadAllText(SlotAddressFile), _opPin);
+                    _address = Crypto.Decrypt(File.ReadAllText(SlotAddressFile), _opPin);
                 }
 
                 return _address;
             }
         }
 
-		public string ShortAddress
+        public string ShortAddress
         {
             get
             {
-                if(string.IsNullOrEmpty(_shortAddress) && !string.IsNullOrEmpty(Address))
-				{
-					var builder = new StringBuilder();
-					builder.Append(_address.Substring(0, 4));
-					builder.Append("..");
-					builder.Append(_address.Substring(_address.Length - 3, 3));
-					_shortAddress = builder.ToString();
-				}
+                if (string.IsNullOrEmpty(_shortAddress) && !string.IsNullOrEmpty(Address))
+                {
+                    var builder = new StringBuilder();
+                    builder.Append(_address.Substring(0, 4));
+                    builder.Append("..");
+                    builder.Append(_address.Substring(_address.Length - 3, 3));
+                    _shortAddress = builder.ToString();
+                }
 
                 return _shortAddress;
             }
         }
 
-		public string SlotPin
+        public string SlotPin
         {
             get
             {
@@ -107,7 +107,7 @@ namespace DogecoinTerminal
         }
 
 
-		public bool Init(string slotPin = "420.69")
+        public bool Init(string slotPin = "420.69")
         {
             ClearSlot();
 
@@ -124,7 +124,7 @@ namespace DogecoinTerminal
                     return false;
                 }
 
-				var masterKeys = ctx.GenerateHDMasterPubKeypairFromMnemonic(newMnemonic);
+                var masterKeys = ctx.GenerateHDMasterPubKeypairFromMnemonic(newMnemonic);
 
                 var pubKey = ctx.GetDerivedHDAddressByPath(masterKeys.privateKey, Crypto.HDPATH, false);
 
@@ -141,8 +141,8 @@ namespace DogecoinTerminal
 
             _isEmpty = false;
 
-			//new wallet slots are initialized unlocked.
-			Unlock(slotPin);
+            //new wallet slots are initialized unlocked.
+            Unlock(slotPin);
 
             return true;
         }
@@ -176,22 +176,22 @@ namespace DogecoinTerminal
             //}
 
 
-    //        try
-    //        {
-    //            var mnemonic = _services.GetService<IMnemonicProvider>().GetMnemonic(ctx, SlotNumber);
+            //        try
+            //        {
+            //            var mnemonic = _services.GetService<IMnemonicProvider>().GetMnemonic(ctx, SlotNumber);
 
-				//if (mnemonic.Split(' ').Length == 24)
-    //            {
-    //                _slotPin = slotPin;
-    //                IsUnlocked = true;
-    //                return true;
-    //            }
-    //        }
-    //        catch
-    //        {
-    //            //error parsing key file, most likely incorrect pin
-    //            return false;
-    //        }
+            //if (mnemonic.Split(' ').Length == 24)
+            //            {
+            //                _slotPin = slotPin;
+            //                IsUnlocked = true;
+            //                return true;
+            //            }
+            //        }
+            //        catch
+            //        {
+            //            //error parsing key file, most likely incorrect pin
+            //            return false;
+            //        }
 
             return true;
         }
@@ -216,8 +216,8 @@ namespace DogecoinTerminal
             File.WriteAllText(SlotAddressFile, Crypto.Encrypt(address, newOperatorPin));
 
             //update key file
-   //         var keyContent = Crypto.Decrypt(File.ReadAllText(KeyFile), _opPin);
-      //      File.WriteAllText(KeyFile, Crypto.Encrypt(keyContent, newOperatorPin));
+            //         var keyContent = Crypto.Decrypt(File.ReadAllText(KeyFile), _opPin);
+            //      File.WriteAllText(KeyFile, Crypto.Encrypt(keyContent, newOperatorPin));
 
 
             _opPin = newOperatorPin;
@@ -233,8 +233,8 @@ namespace DogecoinTerminal
 
 
             //update key file
-     //       var keyContent = Crypto.Decrypt(Crypto.Decrypt(File.ReadAllText(KeyFile), _opPin), _slotPin);
-        //    File.WriteAllText(KeyFile, Crypto.Encrypt(Crypto.Encrypt(keyContent, newSlotPin), _opPin));
+            //       var keyContent = Crypto.Decrypt(Crypto.Decrypt(File.ReadAllText(KeyFile), _opPin), _slotPin);
+            //    File.WriteAllText(KeyFile, Crypto.Encrypt(Crypto.Encrypt(keyContent, newSlotPin), _opPin));
 
             _slotPin = newSlotPin;
         }

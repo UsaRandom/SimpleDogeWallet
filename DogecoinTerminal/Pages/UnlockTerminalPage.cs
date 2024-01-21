@@ -1,5 +1,6 @@
 ﻿using DogecoinTerminal.Common;
 using DogecoinTerminal.Common.Pages;
+using DogecoinTerminal.old;
 using Microsoft.Xna.Framework;
 
 namespace DogecoinTerminal.Pages

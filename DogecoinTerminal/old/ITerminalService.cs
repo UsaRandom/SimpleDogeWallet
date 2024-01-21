@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DogecoinTerminal
+namespace DogecoinTerminal.old
 {
     internal interface ITerminalService
     {
@@ -27,7 +27,7 @@ namespace DogecoinTerminal
         string Address { get; }
 
         string ShortAddress { get; }
-        
+
         bool IsEmpty { get; }
         string SlotPin { get; }
 

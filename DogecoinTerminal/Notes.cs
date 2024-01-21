@@ -8,6 +8,7 @@ namespace DogecoinTerminal
 {
 	/*
 	 * Not production stuff, like a little playground.
+	 * FYI: this file isn't fed to the compiler
 	 */
 	internal class Notes
 	{
@@ -42,6 +43,56 @@ namespace DogecoinTerminal
 					.ConfirmPrompt<ShortMessagePage>(("message", "Don't share seed phrase, have pen & paper ready!"))
 					.If()
 					
+		}
+
+
+
+		public void WalletTypes()
+		{
+			//separate our terminal, wallet and common services/pages
+
+			/*
+			 * Terminal Pages:
+			 *  - Setup
+			 *  - Operator Pin Page
+			 *  - Unlock Terminal Pin Page
+			 *  - Home Page
+			 *  - Settings
+			 *  - Wallet Type Selector
+			 *  
+			 * Services:
+			 *	 - TerminalService 
+			 *		- await ConfirmOperatorPin():bool
+			 *		- 
+			 */
+
+
+			/*
+			 * Common Pages:
+			 *  - Mnemonics Display Page
+			 *  
+			 * Services:
+			 *  - Crypto.cs
+			 *  - TPM could be a shared service.
+			 *  - Selected Object
+			 *  
+			 *  
+			 */
+
+			/*
+			 * Wallet Services/Pages:
+			 *  - QRDogeWalletPage
+			 *  - UTXOStore
+			 *  - DogecoinTransaction
+			 * 
+			 */
+
+			
+
+			var qrDoge = new QRDogeWallet(int slot);
+
+
+
 		}
 
 	}

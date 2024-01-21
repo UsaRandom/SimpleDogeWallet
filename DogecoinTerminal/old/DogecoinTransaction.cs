@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using DogecoinTerminal.Common;
 
 
-namespace DogecoinTerminal
+namespace DogecoinTerminal.old
 {
-	internal class DogecoinTransaction : IDogecoinTransaction
+    internal class DogecoinTransaction : IDogecoinTransaction
     {
 
         private int _workingTransactionId;
@@ -65,6 +65,8 @@ namespace DogecoinTerminal
             //it might make sense to order these
             var utxoEnumerator = _slot.UTXOStore.UTXOs.GetEnumerator();
 
+
+            //TODO: Change this to fee per byte so we can support P2SH and multiple outputs
             decimal fee = settings.GetDecimal("fee-per-utxo"); //fee per utxo
             decimal sum = 0M;
             int utxoCount = 0;

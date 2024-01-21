@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DogecoinTerminal
+namespace DogecoinTerminal.old
 {
-	public interface IMnemonicProvider
-	{
-		string GetMnemonic(LibDogecoinContext ctx, int slotId);
-	}
+    public interface IMnemonicProvider
+    {
+        string GetMnemonic(LibDogecoinContext ctx, int slotId);
+    }
 
 
 

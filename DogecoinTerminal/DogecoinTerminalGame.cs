@@ -10,10 +10,11 @@ using DogecoinTerminal.Common.BackgroundScenes;
 using System.Xml.Linq;
 using DogecoinTerminal.Common.Controls;
 using System.Runtime;
+using DogecoinTerminal.old;
 
 namespace DogecoinTerminal
 {
-	public class DogecoinTerminalGame : Game
+    public class DogecoinTerminalGame : Game
     {   
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;

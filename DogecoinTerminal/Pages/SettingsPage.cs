@@ -1,5 +1,6 @@
 ﻿using DogecoinTerminal.Common;
 using DogecoinTerminal.Common.Pages;
+using DogecoinTerminal.old;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DogecoinTerminal.Pages
 {
-	[PageDef("Pages/Xml/SettingsPage.xml")]
+    [PageDef("Pages/Xml/SettingsPage.xml")]
 	internal class SettingsPage : Page
 	{
 		public SettingsPage(IPageOptions options, ITerminalSettings settings, Navigation navigation, ITerminalService terminalService) : base(options)

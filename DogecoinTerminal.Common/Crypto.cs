@@ -3,12 +3,10 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace DogecoinTerminal
+namespace DogecoinTerminal.Common
 {
-
-	internal class Crypto
+	public class Crypto
     {
-
 
         public const string HDPATH = "m/44'/3'/0'/0/0";
 
@@ -82,7 +80,7 @@ namespace DogecoinTerminal
         }
 
 
-        private static byte[] HexStringToByteArray(string hex)
+        public static byte[] HexStringToByteArray(string hex)
         {
             int length = hex.Length / 2;
             byte[] byteArray = new byte[length];
