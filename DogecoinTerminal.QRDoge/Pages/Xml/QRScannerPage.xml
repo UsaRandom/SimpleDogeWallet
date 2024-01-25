@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Page xmlns:common="DogecoinTerminal.Common">
+
+  <common:TextControl
+        Name="ScannerInstructions"
+        StringDef="qrdoge-qrscannerpage-instructions"
+        Color="White"
+        TextSize="4"
+        Position="50,10"/>
+
+</Page>
