@@ -62,6 +62,7 @@ namespace DogecoinTerminal
 			Services.AddService(_screen);
             Services.AddService(new Images(GraphicsDevice));
 			Services.AddService(_settings);
+			Services.AddService(GraphicsDevice);
 			Services.AddService<ITerminalService>(new TerminalService(Services));
 			Services.AddService<IMnemonicProvider>(new TPM2MnemonicProvider());
 			Services.AddService<Game>(this);

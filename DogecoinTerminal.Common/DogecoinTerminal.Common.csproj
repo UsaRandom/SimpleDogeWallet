@@ -52,6 +52,12 @@
     <None Update="Content\stars.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Pages\Xml\BlankPage.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Pages\Xml\DisplayQRPage.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Pages\Xml\LoadingPage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
