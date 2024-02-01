@@ -1,4 +1,5 @@
 ﻿using DogecoinTerminal.Common;
+using Lib.Dogecoin;
 using System;
 using System.Collections.Generic;
 

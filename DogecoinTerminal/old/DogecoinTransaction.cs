@@ -86,7 +86,7 @@ namespace DogecoinTerminal.old
 
                 _txUTXOs.Add(utxo);
 
-                if (!_ctx.AddUTXO(_workingTransactionId, utxo.TransactionId, utxo.VOut))
+                if (!_ctx.AddUTXO(_workingTransactionId, utxo.TxId, utxo.VOut))
                 {
                     return false;
                 }
@@ -168,7 +168,7 @@ namespace DogecoinTerminal.old
             {
                 _slot.UTXOStore.AddUTXO(new UTXO
                 {
-                    TransactionId = Crypto.GetTransactionIdFromRaw(GetRawTransaction()),
+                    TxId = Crypto.GetTransactionIdFromRaw(GetRawTransaction()),
                     VOut = 0,// by our convention, our first output is back to ourselves.
                     Amount = Remainder
                 });

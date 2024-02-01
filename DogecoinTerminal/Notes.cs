@@ -39,9 +39,6 @@ namespace DogecoinTerminal
 			navigation.Pop();
 
 
-			new TerminalFlowBuilder()
-					.ConfirmPrompt<ShortMessagePage>(("message", "Don't share seed phrase, have pen & paper ready!"))
-					.If()
 					
 		}
 
@@ -55,7 +52,6 @@ namespace DogecoinTerminal
 			 * Terminal Pages:
 			 *  - Setup
 			 *  - Operator Pin Page
-			 *  - Unlock Terminal Pin Page
 			 *  - Home Page
 			 *  - Settings
 			 *  - Wallet Type Selector
