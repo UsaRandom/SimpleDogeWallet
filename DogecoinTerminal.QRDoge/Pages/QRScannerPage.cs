@@ -12,6 +12,7 @@ namespace DogecoinTerminal.QRDoge.Pages
 	{
 		public QRScannerPage(IPageOptions options) : base(options)
 		{
+
 		}
 	}
 }

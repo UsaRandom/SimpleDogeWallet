@@ -100,24 +100,24 @@ namespace DogecoinTerminal.Common.BackgroundScenes
 
 		public void Update(GameTime gameTime, IServiceProvider services)
 		{
-			var newMouseState = Mouse.GetState();
+			//var newMouseState = Mouse.GetState();
 
-			if(newMouseState == _lastMouseState)
-			{
-				_idleTime = _idleTime.Add(gameTime.ElapsedGameTime);
-			}
-			else
-			{
-				services.GetService<VirtualScreen>().Opacity = 255;
-				_idleTime = TimeSpan.Zero;
-			}
+			//if(newMouseState == _lastMouseState)
+			//{
+			//	_idleTime = _idleTime.Add(gameTime.ElapsedGameTime);
+			//}
+			//else
+			//{
+			//	services.GetService<VirtualScreen>().Opacity = 255;
+			//	_idleTime = TimeSpan.Zero;
+			//}
 
-			if(_idleTime.TotalSeconds > 5)
-			{
-				services.GetService<VirtualScreen>().Opacity = 0;
-			}
+			//if(_idleTime.TotalSeconds > 5)
+			//{
+			//	services.GetService<VirtualScreen>().Opacity = 0;
+			//}
 
-			_lastMouseState = newMouseState;
+			//_lastMouseState = newMouseState;
 
 
 

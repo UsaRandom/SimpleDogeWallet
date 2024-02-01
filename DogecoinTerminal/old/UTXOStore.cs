@@ -1,4 +1,5 @@
 ﻿using DogecoinTerminal.Common;
+using Lib.Dogecoin;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -73,7 +74,7 @@ namespace DogecoinTerminal.old
 
             foreach (var utxo in _utxos)
             {
-                if (utxo.TransactionId == utxoInfo.TransactionId &&
+                if (utxo.TxId == utxoInfo.TxId &&
                     utxo.VOut == utxoInfo.VOut &&
                     utxo.Amount == utxoInfo.Amount)
                 {
@@ -120,7 +121,7 @@ namespace DogecoinTerminal.old
 
                     _utxos.Add(new UTXO
                     {
-                        TransactionId = lineParts[0],
+                        TxId = lineParts[0],
                         VOut = int.Parse(lineParts[1]),
                         Amount = decimal.Parse(lineParts[2])
                     });
@@ -134,7 +135,7 @@ namespace DogecoinTerminal.old
 
             foreach (var utxo in _utxos)
             {
-                utxoContent.Append(utxo.TransactionId + "|");
+                utxoContent.Append(utxo.TxId + "|");
                 utxoContent.Append(utxo.VOut + "|");
                 utxoContent.AppendLine(utxo.Amount.ToString());
             }
