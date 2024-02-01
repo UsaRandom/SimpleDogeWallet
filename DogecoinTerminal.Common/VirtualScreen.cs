@@ -1,150 +1,176 @@
 ﻿using FontStashSharp;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Touch;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+using System.IO;
 
 namespace DogecoinTerminal.Common
 {
-	/// <summary>
-	/// basically a 0-100 grid that is projected to the physical screen.
-	/// also provides a simplified interface for drawing to the screen.
-	/// </summary>
-	public class VirtualScreen
+    /// <summary>
+    /// basically a 0-100 grid that is projected to the physical screen.
+    /// provides a simplified interface for drawing to the screen.
+    /// </summary>
+    public class VirtualScreen
 	{
 		private SpriteBatch _spriteBatch;
 		private GraphicsDevice _graphicsDevice;
 
-		private InteractionMonitor _interactionMonitor;
+		private int _renderDim;
 
-		private SpriteFont _font;
-		private Game _game;
+		private decimal _renderScale;
 
-		private int _width;
-		private int _height;
-
-		private decimal _heightScale;
-		private decimal _widthScale;
+		private int _xPad;
+		private int _yPad;
 
 		private FontSystem _fontSystem;
 
-		public void Init(GraphicsDevice graphicsDevice, int height, int width)
+		public void Init(GraphicsDeviceManager graphicsDeviceManager, bool useFullScreen)
 		{
-			_graphicsDevice = graphicsDevice;
-
-			TerminalColor.Init(_graphicsDevice);
-			
-			_height = height;
-			_width = width;
+			var displayWidth = graphicsDeviceManager.GraphicsDevice.Adapter.CurrentDisplayMode.Width;
+			var displayHeight = graphicsDeviceManager.GraphicsDevice.Adapter.CurrentDisplayMode.Height;
 
 
-			_heightScale = _height / 100M;
-			_widthScale = _width / 100M;
-
-			_interactionMonitor = new InteractionMonitor();
-		}
-
-		public void Load(Game game, FontSystem fontSystem)
-		{
-			_game = game;
-			_fontSystem = fontSystem;
-		}
-
-
-		public void Update(AppPage page)
-		{
-			var touchState = TouchPanel.GetState();
-
-			var mouseState = Mouse.GetState(_game.Window);
-
-			var interactionResult = _interactionMonitor.GetInteraction(touchState, mouseState);
-
-			if(interactionResult.HasValue)
+			if (useFullScreen)
 			{
-				var interaction = interactionResult.Value;
+				graphicsDeviceManager.PreferredBackBufferWidth = displayWidth;
+				graphicsDeviceManager.PreferredBackBufferHeight = displayHeight;
+				graphicsDeviceManager.IsFullScreen = true;
 
-				var vertPos = (x: (int)(interaction.x / _widthScale),
-							   y: (int)(interaction.y / _heightScale));
+				_xPad = Math.Max(0, (displayWidth - displayHeight) / 2);
+				_yPad = Math.Max(0, (displayHeight - displayWidth) / 2);
+			}
+			else
+			{
+				//if not fullscreen, we render as a box, 100 pixels less than the smallest dim on the screen
+				var renderDim = Math.Min(displayWidth, displayHeight) - 200;
+
+				graphicsDeviceManager.PreferredBackBufferHeight = renderDim;
+				graphicsDeviceManager.PreferredBackBufferWidth = renderDim;
+				_xPad = 0;
+				_yPad = 0;
+			}
+
+			graphicsDeviceManager.ApplyChanges();
 
 
-				
-				foreach(var interactable in page.Interactables)
-				{
-					if (vertPos.x >= interactable.Start.x &&
-					   vertPos.y >= interactable.Start.y &&
-					   vertPos.x <= interactable.End.x &&
-					   vertPos.y <= interactable.End.y)
-					{
-						interactable.OnInteract(interaction.isFirst, interactable);
-						break;
-					}
-				}
+			_graphicsDevice = graphicsDeviceManager.GraphicsDevice;
+
+			_renderDim = Math.Min(graphicsDeviceManager.PreferredBackBufferHeight, graphicsDeviceManager.PreferredBackBufferWidth);
+
+
+			_renderScale = _renderDim / 100M;
+			Opacity = 255;
+		}
+
+		public float RenderScale
+		{
+			get
+			{
+				return (float)_renderScale;
 			}
 		}
 
+		public int Opacity
+		{
+			get;
+			set;
+		}
 
+		private Color GetOpacityColor()
+		{
+			return new Color(Opacity, Opacity, Opacity, Opacity);
+		}
 
-		public void Draw(SpriteBatch spriteBatch, AppPage page)
+		public void Load(SpriteBatch spriteBatch)
 		{
 			_spriteBatch = spriteBatch;
-
-			page.DrawScreen(this);
+			_fontSystem = new FontSystem();
+			_fontSystem.AddFont(File.ReadAllBytes(@"Content\ComicNeue-Bold.ttf"));
 		}
 
 
+		public Point WindowCoordToVirtualCoord(Point screenCoord)
+		{
+
+			return new Point((int)(((float)(screenCoord.X-_xPad)/(float)_renderDim)*100.0), (int)(((float)(screenCoord.Y-_yPad)/(float)_renderDim) * 100.0));
+		}
+
+		public Point VirtualCoordToWindowCoord(Point virtualCoord)
+		{
+			return new Point(_xPad + (int)Math.Round(virtualCoord.X * _renderScale),
+							 _yPad + (int)Math.Round(virtualCoord.Y * _renderScale));
+		}
 
 		public void DrawRectangle(TerminalColor color,
-								  (int x, int y) start, (int x, int y) end)
+								  Point start, Point end)
 		{
 			_spriteBatch.Draw(color.Texture,
 				new Rectangle(
-					(int)Math.Round(start.x * _widthScale),
-					(int)Math.Round(start.y * _heightScale),
-					(int)Math.Round((end.x - start.x) * _widthScale),
-					(int)Math.Round((end.y - start.y) * _heightScale)),
-				Color.White);
+					_xPad + (int)Math.Round(start.X * _renderScale),
+					_yPad + (int)Math.Round(start.Y * _renderScale),
+					(int)Math.Round((end.X - start.X) * _renderScale),
+					(int)Math.Round((end.Y - start.Y) * _renderScale)),
+				GetOpacityColor());
 		}
 
 
-		public void DrawText(string text, TerminalColor color, float scale, (int x, int y) pos)
+		public void DrawText(string text, TerminalColor color, int scale, Point pos)
 		{
-			SpriteFontBase font = _fontSystem.GetFont(scale * (float)Math.Min(_widthScale, _heightScale));
+			SpriteFontBase font = _fontSystem.GetFont((float)scale * (float)Math.Min(_renderScale, _renderScale));
 
 			var textSize = font.MeasureString(text);
 
 			_spriteBatch.DrawString(font, text,
-				new Vector2((int)(pos.x * _widthScale) - (textSize.X) / 2,
-					        (int)(pos.y * _heightScale) - (textSize.Y) / 2),
-				Color.White);
+				new Vector2(_xPad + (int)(pos.X * _renderScale) - (textSize.X) / 2,
+					        _yPad + (int)(pos.Y * _renderScale) - (textSize.Y) / 2),
+				GetOpacityColor());
 
 		}
 
-		internal void DrawImage(
+		public void DrawSprite(
 			Texture2D image,
-			(int x, int y) start,
-			(int width, int height) imgDim,
-			(int width, int height) imgOgDim)
+			Rectangle sourceRectangle,
+			Point start,
+			Point imgDim)
 		{
 
 			//determine target size
-			var target = (width: imgDim.width * _widthScale,
-						 height: imgDim.height * _heightScale);
+			var target = (width: imgDim.X * _renderScale,
+						 height: imgDim.Y * _renderScale);
 
 
 
 			_spriteBatch.Draw(image,
-					new Vector2((int)( (start.x - (imgDim.width / 2)) * _widthScale),
-					(int)((start.y - (imgDim.height / 2)) * _heightScale)),
-					null, Color.White, 0, Vector2.Zero, 
-					new Vector2((float)target.width/imgOgDim.width,
-								(float)target.width / imgOgDim.width), 
+					new Vector2(
+						_xPad + (int)((start.X - (imgDim.X / 2)) * _renderScale),
+					_yPad + (int)((start.Y - (imgDim.Y / 2)) * _renderScale)),
+					sourceRectangle, GetOpacityColor(), 0, Vector2.Zero,
+					new Vector2((float)target.width / sourceRectangle.Width,
+								(float)target.height / sourceRectangle.Height),
+
+					SpriteEffects.None, 0
+					);
+		}
+
+		public void DrawImage(
+			Texture2D image,
+			Point start,
+			Point imgDim)
+		{
+
+			//determine target size
+			var target = (width: imgDim.X * _renderScale,
+						 height: imgDim.Y * _renderScale);
+
+
+
+			_spriteBatch.Draw(image,
+					new Vector2(
+						_xPad + (int)( (start.X - (imgDim.X / 2)) * _renderScale),
+					_yPad + (int)((start.Y - (imgDim.Y / 2)) * _renderScale)),
+					null, GetOpacityColor(), 0, Vector2.Zero, 
+					new Vector2((float)target.width/ image.Bounds.Width,
+								(float)target.height / image.Bounds.Height), 
 					
 					SpriteEffects.None, 0
 					);

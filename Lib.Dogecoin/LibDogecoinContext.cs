@@ -1,5 +1,13 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
+using Lib.Dogecoin.Interop;
 
 namespace Lib.Dogecoin
 {
@@ -8,7 +16,18 @@ namespace Lib.Dogecoin
 		private static object _lock = new object();
 		private static LibDogecoinContext? _instance;
 
+		internal static IntPtr _mainChain;
+		internal static IntPtr _testChain;
+
+
 		private bool _disposed = false;
+
+		static LibDogecoinContext() {
+
+			_mainChain = LibDogecoinInterop.chain_from_b58_prefix("D".NullTerminate());
+			_testChain = LibDogecoinInterop.chain_from_b58_prefix("n".NullTerminate());
+		}
+
 
 
 		public static LibDogecoinContext CreateContext()
@@ -18,6 +37,8 @@ namespace Lib.Dogecoin
 				if (_instance == null || _instance._disposed)
 				{
 					_instance = new LibDogecoinContext();
+					
+
 					return _instance;
 				}
 
@@ -368,6 +389,77 @@ namespace Lib.Dogecoin
 
 
 
+		public string GenerateMnemonicEncryptWithTPM(int fileNumber, bool overwrite = true, string lang = "eng", string space = " ")
+		{
+			lock(_lock)
+			{
+				var mnemonic = new char[2048];
+
+				LibDogecoinInterop.dogecoin_generate_mnemonic_encrypt_with_tpm(mnemonic, fileNumber, overwrite, lang.NullTerminate(), space.NullTerminate(), null);
+
+
+				return mnemonic.TerminateNull();
+			}
+		}
+
+
+
+		public string DecryptMnemonicWithTPM(int fileNumber)
+		{
+			lock (_lock)
+			{
+				var mnemonic = new char[2048];
+
+				LibDogecoinInterop.dogecoin_decrypt_mnemonic_with_tpm(mnemonic, fileNumber);
+
+
+				return mnemonic.TerminateNull();
+			}
+		}
+
+
+		public string[] ListKeysInTPM()
+		{
+			//TODO: This can be simplified by just looking at the ./source/ folder where they are stored.
+			lock (_lock)
+			{
+				var keyNames = new List<string>();
+				int count;
+				IntPtr countPtr;
+				bool result;
+
+				count = 1000;
+
+				IntPtr[] keyNamePointers = new IntPtr[count];
+
+				result = LibDogecoinInterop.dogecoin_list_encryption_keys_in_tpm(Marshal.UnsafeAddrOfPinnedArrayElement(keyNamePointers, 0), out countPtr);
+
+				// Check the result
+				if (result)
+				{
+					// Retrieve the key names
+					for (int i = 0; i < count; i++)
+					{
+						if (keyNamePointers[i] == IntPtr.Zero)
+						{
+							break;
+						}
+						else
+						{
+							keyNames.Add(Marshal.PtrToStringUni(keyNamePointers[i]));
+
+							LibDogecoinInterop.dogecoin_free(keyNamePointers[i]);
+						}
+					}
+
+				}
+
+				Marshal.FreeCoTaskMem(countPtr);
+
+				return keyNames.ToArray();
+			}
+		}
+
 
 
 		public string KoinuToCoinString(ulong amount)
@@ -390,6 +482,39 @@ namespace Lib.Dogecoin
 			}
 		}
 
+		public bool BroadcastTransaction(string rawTransaction, bool isMainNet = true)
+		{
+			if(string.IsNullOrEmpty(rawTransaction) || rawTransaction.Length > 0x003D0900)
+			{
+				return false;
+			}
+			return true;
+			///* The above code is checking if the data is NULL, empty or larger than the maximum
+				//size of a p2p message. */
+				//if (data == NULL || strlen(data) == 0 || strlen(data) > DOGECOIN_MAX_P2P_MSG_SIZE)
+				//{
+				//	return showError("Transaction in invalid or to large.\n");
+				//}
+				//uint8_t* data_bin = dogecoin_malloc(strlen(data) / 2 + 1);
+				//size_t outlen = 0;
+				//utils_hex_to_bin(data, data_bin, strlen(data), &outlen);
+
+				//dogecoin_tx* tx = dogecoin_tx_new();
+				///* Deserializing the transaction and broadcasting it to the network. */
+				//if (dogecoin_tx_deserialize(data_bin, outlen, tx, NULL))
+				//{
+				//	broadcast_tx(chain, tx, ips, maxnodes, timeout, debug);
+				//}
+				//else
+				//{
+				//	showError("Transaction is invalid\n");
+				//	ret = 1;
+				//}
+				//dogecoin_free(data_bin);
+				//dogecoin_tx_free(tx);
+
+
+		}
 
 
 

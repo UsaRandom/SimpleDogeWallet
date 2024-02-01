@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,21 +11,32 @@ namespace DogecoinTerminal.Common
 {
 	public class Images
 	{
-		public static Texture2D DogeImage;
-		public static Texture2D ArrowImage;
+		private Dictionary<string, Texture2D> _imageDictionary = new();
+		private GraphicsDevice _graphicsDevice;
 
-		public static void Load(GraphicsDevice device)
+		public Images(GraphicsDevice graphicsDevice)
 		{
-			var fileStream = new FileStream("Content/dogedrawn.png", FileMode.Open);
-			DogeImage = Texture2D.FromStream(device, fileStream);
-			fileStream.Dispose();
-
-			fileStream = new FileStream("Content/arrow.png", FileMode.Open);
-			ArrowImage = Texture2D.FromStream(device, fileStream);
-			fileStream.Dispose();
+			_graphicsDevice = graphicsDevice;
 		}
 
-		public static (int width, int height) DogeImageDim = (2477, 2477);
-		public static (int width, int height) ArrowImageData = (231, 148);
+
+		public Texture2D GetImage(string path)
+		{
+			if (!_imageDictionary.ContainsKey(path))
+			{
+				_imageDictionary[path] = LoadImage(path);
+
+			}
+
+			return _imageDictionary[path];
+		}
+
+		private Texture2D LoadImage(string path)
+		{
+			using (var fileStream = new FileStream(path, FileMode.Open))
+			{
+				return Texture2D.FromStream(_graphicsDevice, fileStream);
+			}
+		}
 	}
 }

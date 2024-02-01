@@ -1,78 +1,44 @@
-﻿using DogecoinTerminal.Common.Components;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZXing;
-using ZXing.Common;
+using static System.Net.Mime.MediaTypeNames;
 using ZXing.QrCode;
+using ZXing;
+using Microsoft.Xna.Framework;
 
-namespace DogecoinTerminal.Common
+namespace DogecoinTerminal.Common.Pages
 {
-	public class DisplayQRPage : AppPage
+	[PageDef("Pages/Xml/DisplayQRPage.xml")]
+	public class DisplayQRPage : PromptPage
 	{
-		private GraphicsDevice _graphicsDevice;
-		private AppButton _confirmButton;
-		private AppButton _cancelButton;
+
 		private Texture2D _image;
-		private AppText Title;
 
-		public DisplayQRPage(Game game)
-			: base(game, true)
+		public DisplayQRPage(IPageOptions options, GraphicsDevice graphicsDevice) : base(options)
 		{
-			_graphicsDevice = game.GraphicsDevice;
-			Title = new AppText("Scan QR", TerminalColor.White, 6, (50, 10));
+			var qr = options.GetOption<string>("qr");
+			var msg = options.GetOption<string>("message");
 
-			Interactables.Add(Title);
 
-			_confirmButton = new AppButton("Next", (88, 88), (98, 98), TerminalColor.Green, TerminalColor.White, 5, (isFirst, self) =>
+			var msgControl = GetControl<TextControl>("MessageText");
+			msgControl.Text = msg;
+
+			OnClick("NextButton", _ =>
 			{
-				Game.Services.GetService<Router>().Return(true);
+
+				//PromptPages support the submit/cancel functionality
+				Submit();
 			});
 
-			_cancelButton = new AppButton("Cancel", (2, 88), (12, 98), TerminalColor.Red, TerminalColor.White, 5, (isFirst, self) =>
+			OnClick("BackButton", _ =>
 			{
-				Game.Services.GetService<Router>().Return(false);
+				Cancel();
 			});
 
-			Interactables.Add(_confirmButton);
-		}
-
-		public override void OnBack()
-		{
-			Game.Services.GetService<Router>().Back();
-		}
-
-		public override void Draw(VirtualScreen screen)
-		{
-			screen.DrawImage(_image, (50, 50), (40, 40), (480, 480));
-		}
-
-
-		protected override void OnNav(dynamic value, bool backable)
-		{
-			var parameters = (DisplayQRPageSettings)value;
-
-
-			Interactables.Remove(_cancelButton);
-			Interactables.Remove(_confirmButton);
-
-			if (parameters.EnableConfirm)
-			{
-				Interactables.Add(_confirmButton);
-			}
-
-			if (parameters.EnableCancel)
-			{
-				Interactables.Add(_cancelButton);
-			}
-
-			Title.Text = parameters.Title;
-
-			_image = new Texture2D(_graphicsDevice, 480, 480);
+			_image = new Texture2D(graphicsDevice, 480, 480);
 			var barcodeWriter = new BarcodeWriterPixelData()
 			{
 				Format = BarcodeFormat.QR_CODE,
@@ -83,25 +49,24 @@ namespace DogecoinTerminal.Common
 				}
 			};
 
-			var pixels = barcodeWriter.Write(parameters.QRData).Pixels;
+			var pixels = barcodeWriter.Write(qr).Pixels;
 
 			_image.SetData(pixels);
 		}
 
-
-		public struct DisplayQRPageSettings
+		~DisplayQRPage()
 		{
-			public DisplayQRPageSettings(string qrData, string title, bool enableConfirm, bool enableCancel=false)
-			{
-				QRData = qrData;
-				Title = title;
-				EnableConfirm = enableConfirm;
-				EnableCancel = enableCancel;
-			}
-			public string QRData;
-			public string Title;
-			public bool EnableConfirm;
-			public bool EnableCancel;
+			_image?.Dispose();
 		}
+
+		public override void Draw(GameTime gameTime, IServiceProvider services)
+		{
+			var screen = services.GetService<VirtualScreen>();
+
+			screen.DrawImage(_image, new Point(50,50), new Point(65, 65));
+
+			base.Draw(gameTime, services);
+		}
+
 	}
 }

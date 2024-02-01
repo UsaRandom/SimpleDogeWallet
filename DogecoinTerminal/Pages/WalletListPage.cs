@@ -1,195 +1,212 @@
-﻿using DogecoinTerminal.Common.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DogecoinTerminal.Common;
+﻿using DogecoinTerminal.Common;
+using DogecoinTerminal.Common.Pages;
+using DogecoinTerminal.old;
 using Microsoft.Xna.Framework;
+using System;
+using System.Text;
 
 namespace DogecoinTerminal.Pages
 {
-	internal class WalletListPage : AppPage
+    /*
+	 * Notes: 
+	 * 
+	 * So, we have to change a few things for TPM.
+	 * The wallet functionality is proven, but not flushed out.
+	 * We can create valid signed transactions if we are given UTXOs. 
+	 * 
+	 * How we get UTXOs, store keys, broadcast trasnactions,
+	 * 
+	 * 
+	 */
+
+
+    [PageDef("Pages/Xml/WalletListPage.xml")]
+	internal class WalletListPage : Page
 	{
+		private const string SETTINGS_BUTTON_NAME = "SettingsButton";
+		private const string LOCK_BUTTON_NAME = "LockButton";
 
+		private const string SLOT_BUTTON_PREFIX = "WalletSlotButton_";
 
-		private AppButton[] SlotButtons;
-
-
-
-		public WalletListPage(Game game)
-			:base(game, true)
+		public WalletListPage(IPageOptions options, Navigation navigation, Strings strings, ITerminalService terminalService) : base(options)
 		{
-			SlotButtons = new AppButton[6];
+
+			OnClick(LOCK_BUTTON_NAME, async _ => {
+				terminalService.Lock();
+				navigation.Pop();
+			});
 
 
-			Interactables.Add(
-				new AppText("Select a Wallet/Slot:", TerminalColor.White, 6, (50, 20))
-				) ;
 
+			OnClick(SETTINGS_BUTTON_NAME, async _ => {
 
+				await navigation.PushAsync<BlankPage>();
 
-			Interactables.Add(
-				new AppButton("Lock", (2, 88), (12, 98),
-					TerminalColor.DarkGrey, TerminalColor.White, 3,
-					(isFirst, self) =>
-					{
-						Game.Services.GetService<ITerminalService>().Lock();
-						Game.Services.GetService<Router>().Route("home", null, false);
-					}));
+				var numPadResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-enteroppin-title"]));
 
-			Interactables.Add(
-				new AppButton("Settings", (88, 88), (98, 98),
-					TerminalColor.DarkGrey, TerminalColor.White, 3,
-					(isFirst, self) =>
-					{
-						Game.Services.GetService<Router>().Route("pin", new PinCodePageSettings("Enter Operator Pin:", false), true, (pin) =>
-						{
-							if (Game.Services.GetService<ITerminalService>().ConfirmOperatorPin(pin))
-							{
-								Game.Services.GetService<Router>().Route("settings", null, true);
-							}
-						});
-					}));
-		}
-
-
-		public void AddSlotButtons()
-		{
-			AddSlotButton(0, (15, 40), (35, 60));
-			AddSlotButton(1, (40, 40), (60, 60));
-			AddSlotButton(2, (65, 40), (85, 60));
-			AddSlotButton(3, (15, 65), (35, 85));
-			AddSlotButton(4, (40, 65), (60, 85));
-			AddSlotButton(5, (65, 65), (85, 85));
-		}
-
-		public void AddSlotButton(int slotNumber, (int x, int y) start, (int x, int y) end)
-		{
-			var terminalService = Game.Services.GetService<ITerminalService>();
-			var router = Game.Services.GetService<Router>();
-
-			var slot = terminalService.GetWalletSlot(slotNumber);
-
-
-			//we zero index our arrays obviously, but users see slotnumber+1 because otherwise they complain...
-			SlotButtons[slotNumber] =
-				new AppButton(slot.IsEmpty ? $"(Slot {slotNumber+1})" : GetShortAddress(slot.Address), start, end,
-							slot.IsEmpty ? TerminalColor.LightGrey : TerminalColor.DarkGrey,
-							TerminalColor.White, 5,
-							(isFirst, self) =>
-							{
-								if(slot.IsEmpty)
-								{
-									router.Route("pin", new PinCodePageSettings("Enter Pin", false), true,
-									(enteredPin) =>
-									{
-										if (string.IsNullOrEmpty(enteredPin))
-										{
-											return;
-										}
-
-										router.Route("pin", new PinCodePageSettings("Confirm Pin", false), true,
-										(confirmPin) =>
-										{
-											if (enteredPin != confirmPin)
-											{
-												return;
-											}
-
-											
-											slot.Init(enteredPin);
-
-											var mnemonic = slot.GetMnemonic();
-
-											var dogeService = Game.Services.GetService<IDogecoinService>();
-
-											dogeService.OnNewAddress(slot.Address, enteredPin,
-												(Action<bool>)((canCreate) =>
-												{
-													//our typical dogecoinservice requires registering an address to watch
-													//so we need it's 'approval' to create a key. this is to protect users?
-													if(canCreate)
-													{
-														router.Route("msg", "Prepare to write down your backup phrases.", true, _ =>
-														{
-
-															router.Route("codes", new BackupCodePageSettings(slot.GetMnemonic(), true), true, _ =>
-															{
-																router.Route("wallet", slotNumber, true);
-															});
-														});
-													}
-													else
-													{
-														//our dogecoin provider can't service this address, or something, we have to clear the slot...
-														slot.ClearSlot();
-														router.Route("wallets", null, false);
-													}
-												}));
-
-									
-
-										});
-									});
-								}
-								else
-								{
-									router.Route("pin", new PinCodePageSettings("Enter Pin", false), true,
-												(enteredPin) =>
-												{
-													if(slot.Unlock(enteredPin))
-													{
-														router.Route("wallet", slotNumber, true);
-													}
-												});
-								}
-
-							});
-
-		}
-
-
-		private string GetShortAddress(string address)
-		{
-			var builder = new StringBuilder();
-			builder.Append(address.Substring(0, 4));
-			builder.Append("..");
-			builder.Append(address.Substring(address.Length - 3, 3));
-			return builder.ToString();
-		}
-
-
-		private void RefreshSlots()
-		{
-			if (SlotButtons[0] != null)
-			{
-				//refresh the slot buttons
-				foreach (var slotButton in SlotButtons)
+				if (numPadResponse.Response == PromptResponse.YesConfirm
+				   && terminalService.ConfirmOperatorPin(numPadResponse.Value.ToString()))
 				{
-					Interactables.Remove(slotButton);
+
+					//Let's create a settings page! (puts it before our blank page, which we remove)
+					await navigation.TryInsertBeforeAsync<SettingsPage, BlankPage>();
+				}
+
+				navigation.Pop();
+			});
+
+
+			for (var i = 0; i < TerminalService.MAX_SLOT_COUNT; i++)
+			{
+				//have to be careful with loops and callbacks
+				var index = i;
+				OnClick(SLOT_BUTTON_PREFIX + index, async _ => {
+
+					var slot = terminalService.GetWalletSlot(index);
+
+					if (slot.IsEmpty)
+					{
+						/*
+						 * Notes:
+						 * 
+						 * I wouldn't mind pulling this out into some sort of wallet slot factory. 
+						 * It would be cool to support multiple slots.
+						 * 
+						 */
+
+						//push loading page to nav stack, so when pages switch, the loading screen is rendered between instead of wallet list page
+						await navigation.PushAsync<BlankPage>();
+
+						//ok, so now it's time to create a wallet and fill a wallet slot.
+
+
+
+						//
+						// Steps to create a slot:
+						//
+						/*
+						 *  1. Create Pin.
+						 *  2. Create Slot.
+						 *  3. Notify IDogecoinService
+						 *  4. Either delete or show backup codes, depending on IDogecoinService's response.
+						 *  5. Open Wallet
+						 */
+						//var enterPinResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-walletlist-newwallet-enterpin"]));
+
+						//var enteredPin = (string)enterPinResponse.Value;
+
+						//if (enterPinResponse.Response != PromptResponse.YesConfirm
+						//	|| string.IsNullOrEmpty(enteredPin))
+						//{
+						//	return;
+						//}
+
+
+						//var confirmPinResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-walletlist-newwallet-confirmpin"]));
+
+						//var confirmPin = (string)confirmPinResponse.Value;
+
+						////confirm they said yes, and the responses match!
+						//if (confirmPinResponse.Response != PromptResponse.YesConfirm
+						//	|| enteredPin != confirmPin)
+
+						//{
+						//	//remove loading page, return to wallet list page.
+						//	navigation.Pop();
+						//	return;
+						//}
+
+
+						//alright, so i know what is going on with the exception.
+						//this is part of a refactor, so i'm going to hack it up real good.
+
+						//		var newSlotPin = (string)confirmPinResponse.Value;
+
+
+						var response = await navigation.PromptAsync<ShortMessagePage>(("message", $"Press 'Ok' to create a new Wallet here ({index + 1})"));
+
+						if(response.Response == PromptResponse.YesConfirm && slot.Init("420.69"))
+						{
+							await navigation.TryInsertBeforeAsync<WalletPage, BlankPage>(("slot", slot));
+						}
+
+						navigation.Pop();
+						//ok we've created our slot!
+
+						//TODO: now we need to confirm with an IDogecoinService (which isn't implimented currently, so lets skip)
+
+
+
+
+					}
+					else
+					{
+						//Note: Might be nice to have some kind of authentication service for stuff like this.
+
+					//	await navigation.PushAsync<BlankPage>();
+
+						//var numPadResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-enterslotpin-title"]));
+
+						//if (numPadResponse.Response == PromptResponse.YesConfirm &&
+						//	slot.Unlock(numPadResponse.Value.ToString()))
+						//{
+
+						//	//we have a wallet page, lets show it!
+						//	await navigation.TryInsertBeforeAsync<WalletPage, BlankPage>(("slot", slot));
+
+						//}
+
+						await navigation.PushAsync<BlankPage>();
+
+						slot.Unlock("420.69");
+
+						await navigation.TryInsertBeforeAsync<WalletPage, BlankPage>(("slot", slot));
+
+						navigation.Pop();
+
+					}
+
+				});
+			}
+		}
+
+
+
+
+		public override void Update(GameTime gameTime, IServiceProvider services)
+		{
+			//we can update wallet slot buttons, or we can create a new control and use it for wallet slots.
+
+
+			var terminalService = services.GetService<ITerminalService>();
+
+			for(var i = 0; i < TerminalService.MAX_SLOT_COUNT; i++)
+			{
+				var slot = terminalService.GetWalletSlot(i);
+				var slotButton = GetControl<ButtonControl>(SLOT_BUTTON_PREFIX + i);
+
+
+				if(slot.IsEmpty)
+				{
+					//tell slots to use the 'empty slot' string (not langugae specific)
+					slotButton.StringDef = "terminal-walletlist-emptyslot";
+					slotButton.BackgroundColor = TerminalColor.LightGrey;
+				}
+				else
+				{
+					//by setting StringDef to empty, we say not to use internationalization, use the provided string.
+					slotButton.StringDef = string.Empty;
+					slotButton.BackgroundColor = TerminalColor.DarkGrey;
+					slotButton.Text = slot.ShortAddress;
 				}
 			}
 
-			AddSlotButtons();
 
 
-			//refresh the slot buttons
-			foreach (var slotButton in SlotButtons)
-			{
-				Interactables.Add(slotButton);
-			}
+			base.Update(gameTime, services);
 		}
 
-		public override void OnBack()
-		{
-			RefreshSlots();
-		}
 
-		protected override void OnNav(dynamic value, bool backable)
-		{
-			Game.Services.GetService<Router>().ClearCallbackStack();
-			RefreshSlots();
-		}
 	}
+
 }

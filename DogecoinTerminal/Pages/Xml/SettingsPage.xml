@@ -1,0 +1,7 @@
+﻿<Page xmlns:common="DogecoinTerminal.Common">
+  <common:ImageControl Name="BackButton" StartPosition="5,5" EndPosition="15,15" ImageSource="Content\left-arrow.png" />
+  <common:ButtonControl StartPosition="10,59" EndPosition="48,69" TextSize="4" Name="EnableDevModeButton" BackgroundColor="Green" ForegroundColor="White" Text="Enable Dev Mode" />
+  <common:ButtonControl StartPosition="10,46" EndPosition="48,56" TextSize="4" Name="EnableBackgroundButton" BackgroundColor="Green" ForegroundColor="White" Text="Enable Background" />
+  <common:ButtonControl StartPosition="10,33" EndPosition="48,43" TextSize="4" Name="DeleteSlotsButton" BackgroundColor="Red" ForegroundColor="White" Text="Delete Slots" />
+  <common:ButtonControl StartPosition="10,20" EndPosition="48,30" TextSize="4" Name="FullscreenButton" BackgroundColor="Blue" ForegroundColor="White" Text="Fullscreen" />
+</Page>

@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34221.43
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DogecoinTerminal", "DogecoinTerminal\DogecoinTerminal.csproj", "{ACA376CB-E87D-4B73-AC0F-7263D79F348D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{801810BA-4081-4101-A3AE-856504B77906}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DogecoinTerminal.Common", "DogecoinTerminal.Common\DogecoinTerminal.Common.csproj", "{89206BAA-7CEF-4B68-949A-07D69AA5F48E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lib.Dogecoin", "Lib.Dogecoin\Lib.Dogecoin.csproj", "{1217E430-DCB0-4781-941D-E48B7494AA4F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DogecoinTerminal.QRDoge", "DogecoinTerminal.QRDoge\DogecoinTerminal.QRDoge.csproj", "{29C79D41-EA62-464A-AF05-2E3DFF18974B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ACA376CB-E87D-4B73-AC0F-7263D79F348D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACA376CB-E87D-4B73-AC0F-7263D79F348D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACA376CB-E87D-4B73-AC0F-7263D79F348D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACA376CB-E87D-4B73-AC0F-7263D79F348D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89206BAA-7CEF-4B68-949A-07D69AA5F48E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89206BAA-7CEF-4B68-949A-07D69AA5F48E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89206BAA-7CEF-4B68-949A-07D69AA5F48E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89206BAA-7CEF-4B68-949A-07D69AA5F48E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1217E430-DCB0-4781-941D-E48B7494AA4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1217E430-DCB0-4781-941D-E48B7494AA4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1217E430-DCB0-4781-941D-E48B7494AA4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1217E430-DCB0-4781-941D-E48B7494AA4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29C79D41-EA62-464A-AF05-2E3DFF18974B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29C79D41-EA62-464A-AF05-2E3DFF18974B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29C79D41-EA62-464A-AF05-2E3DFF18974B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29C79D41-EA62-464A-AF05-2E3DFF18974B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D2070304-E965-4B2F-B05B-8195F867352C}
+	EndGlobalSection
+EndGlobal

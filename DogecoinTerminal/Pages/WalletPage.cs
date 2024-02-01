@@ -1,235 +1,141 @@
-﻿
+﻿using DogecoinTerminal.Common;
+using DogecoinTerminal.Common.Pages;
+using DogecoinTerminal.old;
+using Lib.Dogecoin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DogecoinTerminal.Common.Components;
-using DogecoinTerminal.Common;
-using Microsoft.Xna.Framework;
-using static DogecoinTerminal.Common.DisplayQRPage;
-using System.Diagnostics.Metrics;
-using OpenCvSharp.ML;
 
 namespace DogecoinTerminal.Pages
 {
-	internal class WalletPage : AppPage
-	{
-		private int SlotNumber;
+    [PageDef("Pages/Xml/WalletPage.xml")]
+    internal class WalletPage : Page
+    {
+        public WalletPage(IPageOptions options, Navigation navigation, Strings strings, IMnemonicProvider mnemonicProvider) : base(options)
+        {
+            var slot = options.GetOption<IWalletSlot>("slot");
 
-		private List<Interactable> _walletControls; 
-
-
-		public WalletPage(Game game)
-			: base(game, true)
-		{
-			_walletControls = new List<Interactable>();
+            var addressTextControl = GetControl<TextControl>("AddressText");
+            addressTextControl.Text = slot.Address;
 
 
-		}
+            var balanceTextControl = GetControl<TextControl>("BalanceText");
+            balanceTextControl.Text = "Đ" + slot.CalculateBalance();
 
 
-		private void LoadWalletSlot(int slotNumber)
-		{
-			foreach(var control in _walletControls)
-			{
-				Interactables.Remove(control);
-			}
-			_walletControls = new List<Interactable>();
+            OnClick("BackButton", async _ =>
+            {
+                navigation.Pop();
+            });
 
-			SlotNumber = slotNumber;
+            OnClick("ReceiveButton", async _ =>
+            {
+				await navigation.PromptAsync<DisplayQRPage>(("message", slot.Address), ("qr", slot.Address));
 
-			var terminalService = Game.Services.GetService<ITerminalService>();
-			var router = Game.Services.GetService<Router>();
-			var slot = terminalService.GetWalletSlot(slotNumber);
-			var dogeService = Game.Services.GetService<IDogecoinService>();
-
-			var balanceStr = slot.CalculateBalance();
-			decimal balance = decimal.Parse(balanceStr);
+			});
 
 
-		
-			_walletControls.Add(new AppText(slot.Address, TerminalColor.White, 4, (50, 20)));
+            OnClick("RemoveButton", async _ =>
+            {
+                //ok, we want to remove this wallet.
+                //first put in a loading page for flicker
+                await navigation.PushAsync<BlankPage>();
 
-			_walletControls.Add( new AppText("Đ " + balanceStr, TerminalColor.White, 8, (50, 30)));
+                var numPadResult = await navigation.PromptAsync<NumPadPage>();
 
-
-			_walletControls.Add(
-				new AppButton("Send", (30, 40), (49, 55),
-							  TerminalColor.DarkGrey, TerminalColor.White, 4,
-							  (isFirst, self) =>
-							  {
-								  router.Route("pin", new PinCodePageSettings("Amount to Send:", true), true,
-									  (dynamic value) =>
-									  {
-										  var amountToSend = decimal.Parse(value);
-
-										  if(amountToSend > balance)
-										  {
-											  router.Route("msg", "Not enough dogecoin!", true);
-											  return;
-										  }
-
-										  router.Route("scanqr", "Scan Recipient's Address", true,
-											  (dynamic receipient) =>
-											  {
-											  //remove preceiding 'dogecoin:'
-											  if (receipient.Contains(":"))
-											  {
-												  receipient = receipient.Split(':')[1];
-											  }
+                //We need to get the users pin confirmed on delete.
+                if (numPadResult.Response == PromptResponse.YesConfirm
+                    && slot.SlotPin == (string)numPadResult.Value)
+                {
+                    //we've confirmed pin
+                    //now lets delete the slot.
+                    slot.ClearSlot();
+					//remove loading screen.
+					navigation.Pop();
+                    //remove wallet page
+                    navigation.Pop();
+				}
+                else
+                {
+                    //just remove loading screen
+					navigation.Pop();
+				}
 
 
-											  IDogecoinTransaction transaction = slot.CreateTransaction(receipient, amountToSend);
+			});
 
+            OnClick("ShowSeedButton", async _ =>
+            {
+                await navigation.PushAsync<BlankPage>();
 
-											  router.Route("msg",
-												  $"Sending: Đ {transaction.Amount.ToString("#,##0.00")}\nFrom: {transaction.From}\n"
-												  + $"To: {transaction.Recipient}\nFee: Đ {transaction.Fee.ToString("#,##0.00")}\nTotal: Đ {transaction.Total.ToString("#,##0.00")}", true,
-												  _ =>
-													  {
-															  dogeService.SendTransaction(transaction.GetRawTransaction(), slot.SlotPin,
-																(Action<bool>)((sendConfirmed) =>
-																{
+                var acknowledge = await navigation.PromptAsync<ShortMessagePage>(("message", "Don't share seed phrase, have pen & paper ready!"));
 
-																	if (sendConfirmed)
-																	{
-																		transaction.Commit();
-																		slot.UTXOStore.Save();
+                if(acknowledge.Response == PromptResponse.YesConfirm)
+                {
+                    string mnemonic = string.Empty;
 
-																		LoadWalletSlot(slot.SlotNumber);
-																	}
-																	transaction.Dispose();
-																}));
-														});
+                    using(var ctx = LibDogecoinContext.CreateContext())
+                    {
+                        mnemonic = mnemonicProvider.GetMnemonic(ctx, slot.SlotNumber);
+					}
 
+                    if(!string.IsNullOrEmpty(mnemonic))
+					{
+						await navigation.TryInsertBeforeAsync<BackupCodePage, BlankPage>(("mnemonic", mnemonic));
+					}
+                }
 
-											  });
+                navigation.Pop();
 
-
-									  });
-							  }));
-
-			_walletControls.Add(
-				new AppButton("Receive", (51, 40), (70, 55),
-							  TerminalColor.DarkGrey, TerminalColor.White, 4,
-							  (isFirst, self) =>
-							  {
-								  Game.Services.GetService<Router>().Route("displayqr", new DisplayQRPageSettings("dogecoin:"+slot.Address, slot.Address, false), true);
-							  }));
-
-			_walletControls.Add(
-				new AppButton("Update Pin", (30, 59), (49, 74),
-							  TerminalColor.DarkGrey, TerminalColor.White, 4,
-							  (isFirst, self) =>
-							  {
-
-								  Game.Services.GetService<Router>().Route("pin", new PinCodePageSettings("Enter New Pin:", false), true,
-									  (dynamic newPin) =>
-									  {
-										  Game.Services.GetService<Router>().Route("pin", new PinCodePageSettings("Confirm Pin:", false), true,
-										  (dynamic confirmPin) =>
-										  {
-											  if(newPin != confirmPin)
-											  {
-												  router.Route("msg", "Pins did not match!", false);
-												  return;
-											  }
-
-											  dogeService.UpdatePin(slot.Address, slot.SlotPin, newPin,
-												  (Action<bool>)((updatePinConfirmed) =>
-												  {
-													  if(updatePinConfirmed)
-													  {
-														  slot.UpdateSlotPin(newPin);
-														  router.Route("msg", "Pin Updated!", false);
-													  }
-													  else
-													  {
-														  router.Route("msg", "Could not update Pin!", false);
-													  }
-
-												  }));
-										  });
-									  });
-							  }));
-
-
-			_walletControls.Add(
-				new AppButton("Show Backup\n    Phrases", (51, 59), (70, 74),
-							  TerminalColor.DarkGrey, TerminalColor.White, 4,
-							  (isFirst, self) =>
-							  {
-								  Game.Services.GetService<Router>().Route("codes", new BackupCodePageSettings(slot.GetMnemonic(), false), true);
-							  }));
+            });
 
 
 
+   //         OnClick("UpdatePinButton", async _ =>
+   //         {
+   //             //User wants to update pin
 
-			_walletControls.Add(
-				new AppButton("Refresh Balance", (30, 78), (49, 93),
-							  TerminalColor.Blue, TerminalColor.White, 4,
-							  (isFirst, self) =>
-							  {
-								  Game.Services.GetService<IDogecoinService>().GetUTXOs(slot.Address, null, (utxos) =>
-								  {
-									  slot.UTXOStore.RemoveAll();
-									  
-									  foreach(var utxo in utxos)
-									  {
-										  slot.UTXOStore.AddUTXO(utxo);
-									  }
+   //             await navigation.PushAsync<BlankPage>();
 
-									  slot.UTXOStore.Save();
-									  LoadWalletSlot(slot.SlotNumber);
-								  });
-							  }));
+   //             var numPadResult = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-wallet-updatepin-newpin"]));
 
+			//	var enteredPin = (string)numPadResult.Value;
 
-			_walletControls.Add(
-				new AppButton("Delete", (51, 78), (70, 93),
-							  TerminalColor.Red, TerminalColor.White, 4,
-							  (isFirst, self) =>
-							  {
-								  Game.Services.GetService<Router>().Route("pin", new PinCodePageSettings("Confirm Pin to Delete:", false), true,
-									  (dynamic enteredPin) =>
-									  {
-										  if(enteredPin == slot.SlotPin)
-										  {
-											  dogeService.OnDeleteAddress(slot.Address, slot.SlotPin,
-											  () =>
-											  {
-												  slot.ClearSlot();
-												  slot.Lock();
-												  router.Route("wallets", null, false);
-											  });
-										  }
-									  });
-							  }));
+			//	if (numPadResult.Response != PromptResponse.YesConfirm
+   //                 || string.IsNullOrEmpty(enteredPin))
+			//	{
+			//		//just remove loading screen
+			//		navigation.Pop();
+   //                 return;
+			//	}
 
-			foreach(var control in _walletControls)
-			{
-				Interactables.Add(control);
-			}
-		}
+			//	numPadResult = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-wallet-updatepin-confirmpin"]));
 
+			//	if (numPadResult.Response != PromptResponse.YesConfirm
+   //                 && enteredPin != (string)numPadResult.Value)
+			//	{
 
+   //                 //the new pin was not updated, so lets notify user!
 
-		private void OnUpdatePinButtonClicked(bool isFirstInteraction, Interactable sender)
-		{
+   //                 await navigation.PromptAsync<ShortMessagePage>(("message", "ERROR: Pin was NOT updated!"));
+
+			//		navigation.Pop();
+			//	}
+   //             else
+   //             {
+   //                 //update the pin
+
+   //                 slot.UpdateSlotPin(enteredPin);
+
+   //                 await navigation.PromptAsync<ShortMessagePage>(("message", "SUCCESS: Pin was updated!"));
+
+			//		navigation.Pop();
+
+			//	}
+			//});
 
 		}
-
-		public override void OnBack()
-		{
-			Game.Services.GetService<Router>().ClearCallbackStack();
-
-
-		}
-
-		protected override void OnNav(dynamic value, bool backable)
-		{
-			LoadWalletSlot(value);
-		}
-	}
+    }
 }
