@@ -52,8 +52,8 @@ namespace DogecoinTerminal.Pages
             OnClick("ReceiveButton", async _ =>
             {
 				await navigation.PromptAsync<DisplayQRPage>(
-                        ("message", ""),//slot.Address),
-                        ("qr", "")//slot.Address)
+                        ("message", "he"),//slot.Address),
+                        ("qr", "he")//slot.Address)
                        );
 
 			});

@@ -4,12 +4,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using DogecoinTerminal.Common;
 using Microsoft.Xna.Framework.Input;
-using System;
 using DogecoinTerminal.Pages;
 using DogecoinTerminal.Common.BackgroundScenes;
 using System.Xml.Linq;
 using DogecoinTerminal.Common.Controls;
-using System.Runtime;
 
 namespace DogecoinTerminal
 {
@@ -27,7 +25,7 @@ namespace DogecoinTerminal
 
 		private ITerminalSettings _settings;
 
-		private SelectedTextInputControlVisitor _textInputSelector;
+		private SelectedControlVisitor _textInputSelector;
 
 		//dev tools
 		private ButtonState lastButtonState = ButtonState.Released;
@@ -49,9 +47,13 @@ namespace DogecoinTerminal
 
 			_settings = new TerminalSettings();
 
+			_settings.Set("terminal-devmode", false);
 
-
-			Strings.Current.SelectLanguage(Language.Languages["en"]);
+			
+			Strings.Current.SelectLanguage(
+				Language.Languages[_settings.GetString("language", "eng")]);
+			
+			
 			TerminalColor.Init(_graphics.GraphicsDevice);
 
 
@@ -66,14 +68,13 @@ namespace DogecoinTerminal
             Services.AddService(new Images(GraphicsDevice));
 			Services.AddService(_settings);
 			Services.AddService(GraphicsDevice);
-	//		Services.AddService<ITerminalService>(new TerminalService(Services));
-		//	Services.AddService<IMnemonicProvider>(new TPM2MnemonicProvider());
 			Services.AddService<Game>(this);
+			Services.AddService(Services);
 
 
 
 			//text input selector
-			_textInputSelector = new SelectedTextInputControlVisitor(_screen);
+			_textInputSelector = new SelectedControlVisitor(_screen);
 
 			//background
 			_background = new MoonBackgroundScene(Services, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
@@ -100,7 +101,7 @@ namespace DogecoinTerminal
 
             _screen.Load(_spriteBatch);
 
-            _nav.PushAsync<UnlockTerminalPage>();
+            _nav.PushAsync<LanguageSelectionPage>();
         }
 
 

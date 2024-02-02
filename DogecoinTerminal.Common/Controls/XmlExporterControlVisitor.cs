@@ -27,11 +27,6 @@ namespace DogecoinTerminal.Common.Controls
 
 		private XNamespace DTCommonNamespace { get; set; }
 
-		public void VisitTextInput(TextInputControl textInputControl)
-		{
-			VisitButton(textInputControl);
-		}
-
 		public void VisitButton(ButtonControl control)
 		{
 			XElement buttonControl = new XElement(DTCommonNamespace + "ButtonControl",

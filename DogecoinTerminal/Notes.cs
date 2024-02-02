@@ -41,13 +41,7 @@ namespace DogecoinTerminal
 
 		private void Playground()
 		{
-
-			var wallet = new SimpleTPM2WalletBuilder()
-								.UseProvidedMnemonic(string mnemonic)
-								.UseNewRandomMnemonic()
-								.
-
-
+			
 
 			var wallet = new SimpleTPM2Wallet();
 

@@ -59,6 +59,9 @@
     <None Update="Pages\Xml\BackupCodePage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Pages\Xml\LangaugeSelectionPage.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Pages\Xml\SettingsPage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -68,7 +71,7 @@
     <None Update="Pages\Xml\WalletPage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Strings\en.terminal.xml">
+    <None Update="Strings\eng.terminal.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

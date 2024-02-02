@@ -1,13 +1,8 @@
-﻿using FontStashSharp.RichText;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace DogecoinTerminal.Common
 {
@@ -16,28 +11,9 @@ namespace DogecoinTerminal.Common
 		public TextInputControl(XElement element)
 			: base(element)
 		{
-			IsSelected = true;
-		}
-
-		public bool IsSelected { get; set; }
-
-		public override void Draw(GameTime time, IServiceProvider services)
-		{
-			var screen = services.GetService<VirtualScreen>();
-
-			screen.DrawRectangle(BackgroundColor, StartPosition, EndPosition);
-
-			screen.DrawText(Text, ForegroundColor, TextSize,
-					new Point(StartPosition.X + ((EndPosition.X - StartPosition.X) / 2),
-							  StartPosition.Y + ((EndPosition.Y - StartPosition.Y) / 2)));
-
-
-			if (IsSelected)
-			{
-				screen.DrawRectangleBorder(TerminalColor.Blue, StartPosition, EndPosition);
-			}
 
 		}
+
 
 		private KeyboardState _previousState;
 		private bool _backspaceActive;
@@ -101,7 +77,7 @@ namespace DogecoinTerminal.Common
 
 					var character = ((char)key).ToString();
 
-					if("ABCDEF0123456789.".Contains(character))
+					if("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.".Contains(character))
 					{
 
 						if (useUpperCase)
@@ -126,10 +102,6 @@ namespace DogecoinTerminal.Common
 			}
 		}
 
-		public override void AcceptVisitor(IControlVisitor visitor)
-		{
-			visitor.VisitTextInput(this);
-		}
 
 
 	}

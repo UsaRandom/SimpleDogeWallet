@@ -23,11 +23,6 @@ namespace DogecoinTerminal.Common
             _batch = batch;
         }
 
-		public void VisitTextInput(TextInputControl textInputControl)
-		{
-			VisitButton(textInputControl);
-		}
-
 
 		public void VisitButton(ButtonControl control)
         {

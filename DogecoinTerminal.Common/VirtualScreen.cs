@@ -87,6 +87,10 @@ namespace DogecoinTerminal.Common
 			_spriteBatch = spriteBatch;
 			_fontSystem = new FontSystem();
 			_fontSystem.AddFont(File.ReadAllBytes(@"Content\ComicNeue-Bold.ttf"));
+			_fontSystem.AddFont(File.ReadAllBytes(@"Content\NotoSansJP-VariableFont_wght.ttf"));
+			_fontSystem.AddFont(File.ReadAllBytes(@"Content\NotoSansKR-VariableFont_wght.ttf"));
+			_fontSystem.AddFont(File.ReadAllBytes(@"Content\NotoSansSC-VariableFont_wght.ttf"));
+			_fontSystem.AddFont(File.ReadAllBytes(@"Content\NotoSansTC-VariableFont_wght.ttf"));
 		}
 
 

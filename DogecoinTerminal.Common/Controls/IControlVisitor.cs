@@ -9,7 +9,6 @@ namespace DogecoinTerminal.Common
 {
     public interface IControlVisitor
     {
-        void VisitTextInput(TextInputControl textInputControl);
         void VisitButton(ButtonControl buttonControl);
         void VisitImage(ImageControl imageControl);
         void VisitSprite(SpriteControl spriteControl);

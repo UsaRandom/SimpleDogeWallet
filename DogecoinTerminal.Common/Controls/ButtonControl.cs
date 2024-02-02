@@ -18,7 +18,11 @@ namespace DogecoinTerminal.Common
 			TextSize = int.Parse(element.Attribute(nameof(TextSize)).Value);
 			StringDef = element.Attribute(nameof(StringDef))?.Value;
 			Text = StringDef ?? element.Attribute(nameof(Text))?.Value;
+
+			IsSelected = false;
 		}
+	
+		public bool IsSelected { get; set; }
 
 		public string Text { get; set; }
 		public Point StartPosition { get; set; }
@@ -49,6 +53,11 @@ namespace DogecoinTerminal.Common
 			screen.DrawText(Text, ForegroundColor, TextSize,
 				new Point(StartPosition.X + ((EndPosition.X - StartPosition.X) / 2),
 						  StartPosition.Y + ((EndPosition.Y - StartPosition.Y) / 2)));
+
+			if(IsSelected)
+			{
+				screen.DrawRectangleBorder(TerminalColor.Blue, StartPosition, EndPosition);
+			}
 		}
 
 		public override void Update(GameTime time, IServiceProvider services)
