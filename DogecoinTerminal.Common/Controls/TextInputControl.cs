@@ -6,12 +6,18 @@ using System.Xml.Linq;
 
 namespace DogecoinTerminal.Common
 {
+	/*
+	 * TODO: Internationalization Support
+	 * 
+	 * Currently, this only supports latin characters and doesn't support japanes/korean/chinese input.
+	 * We'll have to bind directly to the keyboard input to support the other languages.
+	 * 
+	 */
 	public class TextInputControl : ButtonControl
 	{
 		public TextInputControl(XElement element)
 			: base(element)
 		{
-
 		}
 
 
@@ -20,10 +26,12 @@ namespace DogecoinTerminal.Common
 		private double _backKeyPressedTime;
 		private double _backspaceTimer;
 
+		public bool Editable { get; set; } = true;
+
 
 		public override void Update(GameTime time, IServiceProvider services)
 		{
-			if(IsSelected)
+			if(IsSelected && Editable)
 			{
 				var currentKeyboardState = Keyboard.GetState();
 

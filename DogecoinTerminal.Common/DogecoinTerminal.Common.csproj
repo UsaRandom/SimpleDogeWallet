@@ -80,6 +80,9 @@
     <None Update="Pages\Xml\NumPadPage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Pages\Xml\YesNoPage.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Pages\Xml\ShortMessagePage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

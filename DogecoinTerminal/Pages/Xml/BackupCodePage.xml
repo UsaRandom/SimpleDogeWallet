@@ -1,193 +1,58 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<Page xmlns:common="DogecoinTerminal.Common">
-
-  <common:ImageControl
-				Name="BackButton"
-				StartPosition="5,5"
-				EndPosition="15,15"
-        ImageSource="Content\left-arrow.png"/>
-
-  <common:TextControl
-        Name="Title"
-        Color="White"
-        StringDef="terminal-backupcodes-title"
-        TextSize="4"
-        Position="50,10"/>
-
-
-  <common:ImageControl
-				Name="NextButton"
-				StartPosition="85,85"
-				EndPosition="95,95"
-				BackgroundColor="Green"
-        ImageSource="Content\right-arrow.png"/>
+﻿<Page xmlns:common="DogecoinTerminal.Common">
+  <common:TextControl Name="Title" Color="White" Position="50,10" TextSize="4" StringDef="terminal-backupcodes-title" />
+  <common:ImageControl Name="NextButton" StartPosition="85,85" EndPosition="95,95" ImageSource="Content\right-arrow.png" BackgroundColor="Green" />
   
-  <common:ButtonControl StartPosition="10,20"
-                          EndPosition="28,28"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_0"
-                          TextSize="3"
-                          Text="1"/>
-  <common:ButtonControl StartPosition="10,30"
-                          EndPosition="28,38"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_1"
-                          TextSize="3"
-                          Text="2"/>
-  <common:ButtonControl StartPosition="10,40"
-                          EndPosition="28,48"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_2"
-                          TextSize="3"
-                          Text="3"/>
-  <common:ButtonControl StartPosition="10,50"
-                          EndPosition="28,58"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_3"
-                          TextSize="3"
-                          Text="4"/>
-  <common:ButtonControl StartPosition="10,60"
-                          EndPosition="28,68"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_4"
-                          TextSize="3"
-                          Text="5"/>
-  <common:ButtonControl StartPosition="10,70"
-                          EndPosition="28,78"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_5"
-                          TextSize="3"
-                          Text="6"/>
-  <common:ButtonControl StartPosition="30,20"
-                          EndPosition="48,28"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_6"
-                          TextSize="3"
-                          Text="7"/>
-  <common:ButtonControl StartPosition="30,30"
-                          EndPosition="48,38"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_7"
-                          TextSize="3"
-                          Text="8"/>
-  <common:ButtonControl StartPosition="30,40"
-                          EndPosition="48,48"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_8"
-                          TextSize="3"
-                          Text="9"/>
-  <common:ButtonControl StartPosition="30,50"
-                          EndPosition="48,58"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_9"
-                          TextSize="3"
-                          Text="10"/>
-  <common:ButtonControl StartPosition="30,60"
-                          EndPosition="48,68"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_10"
-                          TextSize="3"
-                          Text="11"/>
-  <common:ButtonControl StartPosition="30,70"
-                          EndPosition="48,78"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_11"
-                          TextSize="3"
-                          Text="12"/>
-  <common:ButtonControl StartPosition="50,20"
-                          EndPosition="68,28"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_12"
-                          TextSize="3"
-                          Text="13"/>
-  <common:ButtonControl StartPosition="50,30"
-                          EndPosition="68,38"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_13"
-                          TextSize="3"
-                          Text="14"/>
-  <common:ButtonControl StartPosition="50,40"
-                          EndPosition="68,48"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_14"
-                          TextSize="3"
-                          Text="15"/>
-  <common:ButtonControl StartPosition="50,50"
-                          EndPosition="68,58"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_15"
-                          TextSize="3"
-                          Text="16"/>
-  <common:ButtonControl StartPosition="50,60"
-                          EndPosition="68,68"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_16"
-                          TextSize="3"
-                          Text="17"/>
-  <common:ButtonControl StartPosition="50,70"
-                          EndPosition="68,78"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_17"
-                          TextSize="3"
-                          Text="18"/>
-  <common:ButtonControl StartPosition="70,20"
-                          EndPosition="88,28"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_18"
-                          TextSize="3"
-                          Text="19"/>
-  <common:ButtonControl StartPosition="70,30"
-                          EndPosition="88,38"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_19"
-                          TextSize="3"
-                          Text="20"/>
-  <common:ButtonControl StartPosition="70,40"
-                          EndPosition="88,48"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_20"
-                          TextSize="3"
-                          Text="21"/>
-  <common:ButtonControl StartPosition="70,50"
-                          EndPosition="88,58"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_21"
-                          TextSize="3"
-                          Text="22"/>
-  <common:ButtonControl StartPosition="70,60"
-                          EndPosition="88,68"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_22"
-                          TextSize="3"
-                          Text="23"/>
-  <common:ButtonControl StartPosition="70,70"
-                          EndPosition="88,78"
-                          BackgroundColor="DarkGrey"
-                          ForegroundColor="White"
-                          Name="BackupWordButton_23"
-                          TextSize="3"
-                          Text="24"/>
+  <common:TextControl Name="Num1Text" Color="White" Position="8,24" TextSize="3" Text="1." />
+  <common:TextControl Name="Num2Text" Color="White" Position="8,34" TextSize="3" Text="2." />
+  <common:TextControl Name="Num3Text" Color="White" Position="8,44" TextSize="3" Text="3." />
+  <common:TextControl Name="Num4Text" Color="White" Position="8,54" TextSize="3" Text="4." />
+  <common:TextControl Name="Num5Text" Color="White" Position="8,64" TextSize="3" Text="5." />
+  <common:TextControl Name="Num6Text" Color="White" Position="8,74" TextSize="3" Text="6." />
+  
+  <common:TextControl Name="Num7Text" Color="White" Position="31,24" TextSize="3" Text="7." />
+  <common:TextControl Name="Num8Text" Color="White" Position="31,34" TextSize="3" Text="8." />
+  <common:TextControl Name="Num9Text" Color="White" Position="31,44" TextSize="3" Text="9." />
+  <common:TextControl Name="Num10Text" Color="White" Position="31,54" TextSize="3" Text="10." />
+  <common:TextControl Name="Num11Text" Color="White" Position="31,64" TextSize="3" Text="11." />
+  <common:TextControl Name="Num12Text" Color="White" Position="31,74" TextSize="3" Text="12." />
+
+  <common:TextControl Name="Num13Text" Color="White" Position="54,24" TextSize="3" Text="13." />
+  <common:TextControl Name="Num14Text" Color="White" Position="54,34" TextSize="3" Text="14." />
+  <common:TextControl Name="Num15Text" Color="White" Position="54,44" TextSize="3" Text="15." />
+  <common:TextControl Name="Num16Text" Color="White" Position="54,54" TextSize="3" Text="16." />
+  <common:TextControl Name="Num17Text" Color="White" Position="54,64" TextSize="3" Text="17." />
+  <common:TextControl Name="Num18Text" Color="White" Position="54,74" TextSize="3" Text="18." />
+  
+  
+  <common:TextControl Name="Num19Text" Color="White" Position="77,24" TextSize="3" Text="19." />
+  <common:TextControl Name="Num20Text" Color="White" Position="77,34" TextSize="3" Text="20." />
+  <common:TextControl Name="Num21Text" Color="White" Position="77,44" TextSize="3" Text="21." />
+  <common:TextControl Name="Num22Text" Color="White" Position="77,54" TextSize="3" Text="22." />
+  <common:TextControl Name="Num23Text" Color="White" Position="77,64" TextSize="3" Text="23." />
+  <common:TextControl Name="Num24Text" Color="White" Position="77,74" TextSize="3" Text="24." />
+
+  <common:TextInputControl StartPosition="10,20" EndPosition="28,28" TextSize="3" Name="BackupWordButton_0" BackgroundColor="DarkGrey" ForegroundColor="White" />
+  <common:TextInputControl StartPosition="10,30" EndPosition="28,38" TextSize="3" Name="BackupWordButton_1" BackgroundColor="DarkGrey" ForegroundColor="White" />
+  <common:TextInputControl StartPosition="10,40" EndPosition="28,48" TextSize="3" Name="BackupWordButton_2" BackgroundColor="DarkGrey" ForegroundColor="White" />
+  <common:TextInputControl StartPosition="10,50" EndPosition="28,58" TextSize="3" Name="BackupWordButton_3" BackgroundColor="DarkGrey" ForegroundColor="White" />
+  <common:TextInputControl StartPosition="10,60" EndPosition="28,68" TextSize="3" Name="BackupWordButton_4" BackgroundColor="DarkGrey" ForegroundColor="White" />
+  <common:TextInputControl StartPosition="10,70" EndPosition="28,78" TextSize="3" Name="BackupWordButton_5" BackgroundColor="DarkGrey" ForegroundColor="White" />
+  <common:TextInputControl StartPosition="33,20" EndPosition="51,28" TextSize="3" Name="BackupWordButton_6" BackgroundColor="DarkGrey" ForegroundColor="White" />
+  <common:TextInputControl StartPosition="33,30" EndPosition="51,38" TextSize="3" Name="BackupWordButton_7" BackgroundColor="DarkGrey" ForegroundColor="White" />
+  <common:TextInputControl StartPosition="33,40" EndPosition="51,48" TextSize="3" Name="BackupWordButton_8" BackgroundColor="DarkGrey" ForegroundColor="White" />
+  <common:TextInputControl StartPosition="33,50" EndPosition="51,58" TextSize="3" Name="BackupWordButton_9" BackgroundColor="DarkGrey" ForegroundColor="White" />
+  <common:TextInputControl StartPosition="33,60" EndPosition="51,68" TextSize="3" Name="BackupWordButton_10" BackgroundColor="DarkGrey" ForegroundColor="White" />
+  <common:TextInputControl StartPosition="33,70" EndPosition="51,78" TextSize="3" Name="BackupWordButton_11" BackgroundColor="DarkGrey" ForegroundColor="White" />
+  <common:TextInputControl StartPosition="56,20" EndPosition="74,28" TextSize="3" Name="BackupWordButton_12" BackgroundColor="DarkGrey" ForegroundColor="White" />
+  <common:TextInputControl StartPosition="56,30" EndPosition="74,38" TextSize="3" Name="BackupWordButton_13" BackgroundColor="DarkGrey" ForegroundColor="White" />
+  <common:TextInputControl StartPosition="56,40" EndPosition="74,48" TextSize="3" Name="BackupWordButton_14" BackgroundColor="DarkGrey" ForegroundColor="White" />
+  <common:TextInputControl StartPosition="56,50" EndPosition="74,58" TextSize="3" Name="BackupWordButton_15" BackgroundColor="DarkGrey" ForegroundColor="White" />
+  <common:TextInputControl StartPosition="56,60" EndPosition="74,68" TextSize="3" Name="BackupWordButton_16" BackgroundColor="DarkGrey" ForegroundColor="White" />
+  <common:TextInputControl StartPosition="56,70" EndPosition="74,78" TextSize="3" Name="BackupWordButton_17" BackgroundColor="DarkGrey" ForegroundColor="White" />
+  <common:TextInputControl StartPosition="79,20" EndPosition="97,28" TextSize="3" Name="BackupWordButton_18" BackgroundColor="DarkGrey" ForegroundColor="White" />
+  <common:TextInputControl StartPosition="79,30" EndPosition="97,38" TextSize="3" Name="BackupWordButton_19" BackgroundColor="DarkGrey" ForegroundColor="White" />
+  <common:TextInputControl StartPosition="79,40" EndPosition="97,48" TextSize="3" Name="BackupWordButton_20" BackgroundColor="DarkGrey" ForegroundColor="White" />
+  <common:TextInputControl StartPosition="79,50" EndPosition="97,58" TextSize="3" Name="BackupWordButton_21" BackgroundColor="DarkGrey" ForegroundColor="White" />
+  <common:TextInputControl StartPosition="79,60" EndPosition="97,68" TextSize="3" Name="BackupWordButton_22" BackgroundColor="DarkGrey" ForegroundColor="White" />
+  <common:TextInputControl StartPosition="79,70" EndPosition="97,78" TextSize="3" Name="BackupWordButton_23" BackgroundColor="DarkGrey" ForegroundColor="White" />
 </Page>

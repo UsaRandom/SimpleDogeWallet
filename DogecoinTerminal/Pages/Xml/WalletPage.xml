@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Page xmlns:common="DogecoinTerminal.Common">
   <common:ImageControl Name="Doge" StartPosition="40,5" EndPosition="60,25" ImageSource="Content/dogedrawn.png" />
-  <common:ImageControl Name="BackButton" StartPosition="5,5" EndPosition="15,15" ImageSource="Content\left-arrow.png" />
   <common:TextControl Name="AddressText" Color="White" Position="50,40" TextSize="4" />
   <common:TextControl Name="BalanceText" Color="White" Position="50,30" TextSize="9" />
   <common:ButtonControl StartPosition="10,50" EndPosition="48,62" TextSize="4" Name="SendButton" BackgroundColor="DarkGrey" ForegroundColor="White" StringDef="terminal-wallet-send" />

@@ -3,4 +3,6 @@
   <String Id="common-numpad-title"><![CDATA[Enter Pin:]]></String>
   <String Id="common-loading-title"><![CDATA[Doing Only Good Everyday...]]></String>
   <String Id="common-shortmsg-okbutton"><![CDATA[Ok]]></String>
+  <String Id="common-yesno-yes"><![CDATA[Yes]]></String>
+  <String Id="common-yesno-no"><![CDATA[No]]></String>
 </Strings>

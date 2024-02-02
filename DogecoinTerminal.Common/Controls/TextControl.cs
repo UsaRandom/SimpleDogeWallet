@@ -18,7 +18,7 @@ namespace DogecoinTerminal.Common
 			Color = GetTerminalColor(element.Attribute(nameof(Color)));
 			TextSize = int.Parse(element.Attribute(nameof(TextSize)).Value);
 			StringDef = element.Attribute(nameof(StringDef))?.Value;
-			Text = StringDef ?? element.Attribute(nameof(Text))?.Value;
+			Text = StringDef ?? element.Attribute(nameof(Text))?.Value ?? string.Empty;
 		}
 
 		public string Text { get; set; }

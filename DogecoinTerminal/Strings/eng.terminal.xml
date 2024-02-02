@@ -16,10 +16,26 @@
  ● 10 minutes
  ● Privacy]]>
   </String>
-  
+
+  <String Id="terminal-setup-setupwallet"><![CDATA[Setup Wallet]]></String>
   <String Id="terminal-setup-newwallet"><![CDATA[New Wallet]]></String>
   <String Id="terminal-setup-loadwallet"><![CDATA[Load Wallet]]></String>
 
+  <String Id="terminal-setup-setpin"><![CDATA[Set your PIN]]></String>
+  <String Id="terminal-setup-confirmpin"><![CDATA[Confirm your PIN]]></String>
+
+  <Strings Id="terminal-backupcodes-title">
+<![CDATA[Write down backup phrases by hand on paper
+   and store them in a secure location.]]></Strings>
+
+  <Strings Id="terminal-backupcodes-load-title">
+    <![CDATA[Enter your 12 or 24 word backup phrases:]]>
+  </Strings>
+
+  <Strings Id="terminal-backupcodes-load-badmnemonic">
+    <![CDATA[Error using provided backup phrases.
+    Ensure there are 12/24 words.
+              Try Again?]]></Strings>
 
   <String Id="terminal-setuppage-setupbutton"><![CDATA[Setup]]></String>
   <String Id="terminal-unlockpage-unlockbutton"><![CDATA[Unlock]]></String>
@@ -31,7 +47,6 @@
   <Strings Id="terminal-walletlist-newwallet-enterpin"><![CDATA[Set Pin:]]></Strings>
   <Strings Id="terminal-walletlist-newwallet-confirmpin"><![CDATA[Confirm Pin:]]></Strings>
 
-  <Strings Id="terminal-backupcodes-title"><![CDATA[Seed Phrase:]]></Strings>
 
   <Strings Id="terminal-wallet-send"><![CDATA[Send]]></Strings>
   <Strings Id="terminal-wallet-receive"><![CDATA[Receive]]></Strings>

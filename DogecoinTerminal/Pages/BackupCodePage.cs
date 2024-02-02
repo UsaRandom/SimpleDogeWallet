@@ -9,36 +9,69 @@ using System.Threading.Tasks;
 namespace DogecoinTerminal.Pages
 {
     [PageDef("Pages/Xml/BackupCodePage.xml")]
-	internal class BackupCodePage : Page
+	internal class BackupCodePage : PromptPage
 	{
-		//We can pull in services just by adding to constructor
-		public BackupCodePage(IPageOptions options, Navigation navigation) : base(options)
+
+		private bool _editMode = false; 
+
+		public BackupCodePage(IPageOptions options) : base(options)
 		{
+			var title = options.GetOption<string>("title");
+
+			if(!string.IsNullOrEmpty(title))
+			{
+				var titleControl = GetControl<TextControl>("Title");
+				titleControl.StringDef = string.Empty;
+				titleControl.Text = title;
+			}
+
+			_editMode = options.GetOption<bool>("editmode");
+
 			var mnemonic = options.GetOption<string>("mnemonic");
 			
 
-			var words = mnemonic.Split(' ');
-
-			for (int i = 0; i < words.Length; i++)
+			if(!string.IsNullOrEmpty(mnemonic))
 			{
-				var wordControl = GetControl<ButtonControl>($"BackupWordButton_{i}");
+				var words = mnemonic.Split('-');
 
-				wordControl.Text = $"{i+1}. {words[i]}";
+				for (int i = 0; i < words.Length; i++)
+				{
+					var wordControl = GetControl<TextInputControl>($"BackupWordButton_{i}");
+
+					wordControl.Text =words[i];
+				}
 			}
 
+			if(!_editMode)
+			{
 
-			OnClick("BackButton", _ => {
+				for (int i = 0; i < 24; i++)
+				{
+					var wordControl = GetControl<TextInputControl>($"BackupWordButton_{i}");
 
+					wordControl.Editable = false;
+				}
 
-				//this creates some fliker... i'll have to address later.
-				navigation.Pop();
-
-			});
-
+			}
 
 			OnClick("NextButton", _ => {
 
-				navigation.Pop();
+				string mnemonic = string.Empty;
+				if (_editMode)
+				{
+					var wordList = new List<string>();
+
+					for (int i = 0; i < 24; i++)
+					{
+						var wordControl = GetControl<TextInputControl>($"BackupWordButton_{i}");
+
+						wordList.Add(wordControl.Text);
+					}
+
+					mnemonic = string.Join("-", wordList);
+				}
+
+				Submit(mnemonic);
 
 			});
 
