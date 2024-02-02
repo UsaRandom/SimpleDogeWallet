@@ -9,24 +9,16 @@ using System.Threading.Tasks;
 namespace DogecoinTerminal.Pages
 {
 	[PageDef("Pages/Xml/LangaugeSelectionPage.xml")]
-	internal class LanguageSelectionPage : Page
+	internal class LanguageSelectionPage : PromptPage
 	{
-		/*
-		 * 
-		 * [English](english.txt)
-		* [Japanese](japanese.txt)
-		* [Korean](korean.txt)
-		* [Spanish](spanish.txt)
-		* [Chinese (Simplified)](chinese_simplified.txt)
-		* [Chinese (Traditional)](chinese_traditional.txt)
-		* [French](french.txt)
-		* [Italian](italian.txt)
-		* [Czech](czech.txt)
-		* [Portuguese](portuguese.txt)
-		*/
 		public LanguageSelectionPage(IPageOptions options) : base(options)
 		{
 			SelectedLanguageCode = Strings.Current.Language.LanguageCode;
+
+			OnClick("SubmitButton", _ =>
+			{
+				Submit();
+			});
 
 			OnClick("EnglishButton", _ =>
 			{

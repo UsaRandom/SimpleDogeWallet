@@ -1,7 +1,14 @@
 ﻿<Page xmlns:common="DogecoinTerminal.Common">
   <common:ImageControl Name="Doge" StartPosition="42,5" EndPosition="57,20" ImageSource="Content/dogedrawn.png" />
   <common:TextControl Name="TitleText" Color="White" Position="50,23" TextSize="4" StringDef="terminal-title" />
-  <common:ButtonControl StartPosition="75,85" EndPosition="95,95" TextSize="4" Name="SetupButton" BackgroundColor="Green" ForegroundColor="White" StringDef="terminal-setuppage-setupbutton" />
+
+  <common:ImageControl
+				Name="SubmitButton"
+				StartPosition="85,85"
+				EndPosition="95,95"
+				BackgroundColor="Green"
+        ImageSource="Content\right-arrow.png"/>
+  
   <common:ButtonControl StartPosition="20,30" EndPosition="45,38" TextSize="4" Name="EnglishButton" BackgroundColor="DarkGrey" ForegroundColor="White" Text="English" />
   <common:ButtonControl StartPosition="55,30" EndPosition="80,38" TextSize="4" Name="JapaneseButton" BackgroundColor="DarkGrey" ForegroundColor="White" Text="日本語" />
   <common:ButtonControl StartPosition="20,40" EndPosition="45,48" TextSize="4" Name="KoreanButton" BackgroundColor="DarkGrey" ForegroundColor="White" Text="한국인" />

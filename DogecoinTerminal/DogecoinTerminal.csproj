@@ -23,6 +23,12 @@
   <ItemGroup>
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
+    <None Remove="Pages\Xml\SetupWalletPage.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Pages\Xml\SetupWalletPage.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico" />

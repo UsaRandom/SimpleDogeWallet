@@ -1,0 +1,23 @@
+﻿<Page xmlns:common="DogecoinTerminal.Common">
+
+
+  <common:ImageControl StartPosition="82,5"
+         EndPosition="95,18"
+         Name="Doge"
+         ImageSource="Content/dogedrawn.png"/>
+  
+  <common:TextControl Text="Setup Wallet"
+        Name="TitleText"
+        Color="White"
+        TextSize="6"
+        Position="50,10"/>
+
+
+  <common:TextControl Name="CreateNewInfoText" Color="White" Position="30,42" TextSize="3" StringDef="terminal-setup-newwalletinfo" />
+  <common:TextControl Name="LoadOldInfoText" Color="White" Position="73,42" TextSize="3" StringDef="terminal-setup-loadwalletinfo" />
+  <common:ButtonControl StartPosition="20,60" EndPosition="40,68" TextSize="4" Name="NewWalletButton" BackgroundColor="Green" ForegroundColor="White" StringDef="terminal-setup-newwallet" />
+  <common:ButtonControl StartPosition="60,60" EndPosition="80,68" TextSize="4" Name="LoadWalletButton" BackgroundColor="Green" ForegroundColor="White" StringDef="terminal-setup-loadwallet" />
+  
+  
+  
+</Page>

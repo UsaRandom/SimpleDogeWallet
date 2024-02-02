@@ -47,7 +47,7 @@ namespace DogecoinTerminal
 
 			_settings = new TerminalSettings();
 
-			_settings.Set("terminal-devmode", false);
+			_settings.Set("terminal-devmode", true);
 
 			
 			Strings.Current.SelectLanguage(
@@ -101,7 +101,7 @@ namespace DogecoinTerminal
 
             _screen.Load(_spriteBatch);
 
-            _nav.PushAsync<LanguageSelectionPage>();
+            _nav.PushAsync<StartPage>();
         }
 
 
