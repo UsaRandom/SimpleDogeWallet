@@ -13,83 +13,65 @@ namespace DogecoinTerminal
 	internal class Notes
 	{
 
-		private void Playground()
+
+		class SimpleWallet
 		{
-			var settings = new TerminalSettings();
+			string Address;
+			string GetMnemonic();
+			UTXO[] GetUTXOs();
+			void AddUTXO(UTXO utxo);
+			void RemoveUTXO(UTXO utxo);
+			decimal GetBalance();
+			long GetBalanceInKoinu();
+		}
 
-			await navigation.PushAsync<BlankPage>();
-
-			var acknowledge = await navigation.PromptAsync<ShortMessagePage>(("message", "Don't share seed phrase, have pen & paper ready!"));
-
-			if (acknowledge.Response == PromptResponse.YesConfirm)
+		class SimpleWalletFileStore
+		{
+			bool WalletExists
 			{
-				string mnemonic = string.Empty;
-
-				using (var ctx = LibDogecoinContext.CreateContext())
+				get
 				{
-					mnemonic = mnemonicProvider.GetMnemonic(ctx, slot.SlotNumber);
-				}
-
-				if (!string.IsNullOrEmpty(mnemonic))
-				{
-					await navigation.TryInsertBeforeAsync<BackupCodePage, BlankPage>(("mnemonic", mnemonic));
+					return false;
 				}
 			}
 
-			navigation.Pop();
-
-
-					
+			SimpleWallet TryUnlock(string pin);
+			bool UpdatePin(string oldPin, string newPin);
 		}
 
-
-
-		public void WalletTypes()
+		private void Playground()
 		{
-			//separate our terminal, wallet and common services/pages
 
-			/*
-			 * Terminal Pages:
-			 *  - Setup
-			 *  - Operator Pin Page
-			 *  - Home Page
-			 *  - Settings
-			 *  - Wallet Type Selector
-			 *  
-			 * Services:
-			 *	 - TerminalService 
-			 *		- await ConfirmOperatorPin():bool
-			 *		- 
-			 */
+			var wallet = new SimpleTPM2WalletBuilder()
+								.UseProvidedMnemonic(string mnemonic)
+								.UseNewRandomMnemonic()
+								.
 
 
-			/*
-			 * Common Pages:
-			 *  - Mnemonics Display Page
-			 *  
-			 * Services:
-			 *  - Crypto.cs
-			 *  - TPM could be a shared service.
-			 *  - Selected Object
-			 *  
-			 *  
-			 */
 
-			/*
-			 * Wallet Services/Pages:
-			 *  - QRDogeWalletPage
-			 *  - UTXOStore
-			 *  - DogecoinTransaction
-			 * 
-			 */
+			var wallet = new SimpleTPM2Wallet();
 
+			var address = wallet.Address;
+			var mnemonic = wallet.GetMnemonic();
+
+			wallet.AddUTXO(UTXO);
+			wallet.RemoveUTXO(UTXO);
+
+			wallet.GetBalance();
+
+			if(wallet.TryUnlock(pin))
+			{
+
+			}
+
+			wallet.SetPin();
 			
-
-			var qrDoge = new QRDogeWallet(int slot);
-
-
-
 		}
+
+	}
+
+	internal class SimpleTPM2Wallet
+	{
 
 	}
 }

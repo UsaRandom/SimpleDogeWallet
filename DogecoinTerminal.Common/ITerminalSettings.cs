@@ -3,6 +3,8 @@
 	public interface ITerminalSettings
 	{
 
+		string GetString(string settingName, string valueIfEmpty = default);
+
 		bool GetBool(string settingName, bool valueIfEmpty = default);
 
 		decimal GetDecimal(string settingName, decimal valueIfEmpty = default);

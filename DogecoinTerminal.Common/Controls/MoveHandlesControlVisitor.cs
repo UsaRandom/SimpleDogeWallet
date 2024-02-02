@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DogecoinTerminal.Common.Controls;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame;
@@ -45,6 +46,11 @@ namespace DogecoinTerminal.Common
 			}
 
 			_previousState = _currentState;
+		}
+
+		public void VisitTextInput(TextInputControl textInputControl)
+		{
+			VisitButton(textInputControl);
 		}
 
         public void VisitButton(ButtonControl control)

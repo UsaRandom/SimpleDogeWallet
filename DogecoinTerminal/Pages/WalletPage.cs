@@ -1,6 +1,5 @@
 ﻿using DogecoinTerminal.Common;
 using DogecoinTerminal.Common.Pages;
-using DogecoinTerminal.old;
 using Lib.Dogecoin;
 using System;
 using System.Collections.Generic;
@@ -12,27 +11,50 @@ namespace DogecoinTerminal.Pages
 {
     [PageDef("Pages/Xml/WalletPage.xml")]
     internal class WalletPage : Page
-    {
-        public WalletPage(IPageOptions options, Navigation navigation, Strings strings, IMnemonicProvider mnemonicProvider) : base(options)
-        {
-            var slot = options.GetOption<IWalletSlot>("slot");
+	{
+		private const string SETTINGS_BUTTON_NAME = "SettingsButton";
+		private const string LOCK_BUTTON_NAME = "LockButton";
 
+		public WalletPage(IPageOptions options, Navigation navigation, Strings strings) : base(options)
+        {
             var addressTextControl = GetControl<TextControl>("AddressText");
-            addressTextControl.Text = slot.Address;
+            addressTextControl.Text = "";// slot.Address;
 
 
             var balanceTextControl = GetControl<TextControl>("BalanceText");
-            balanceTextControl.Text = "Đ" + slot.CalculateBalance();
+            balanceTextControl.Text = "Đ";// slot.CalculateBalance();
 
 
-            OnClick("BackButton", async _ =>
+
+			OnClick(SETTINGS_BUTTON_NAME, async _ => {
+
+				await navigation.PushAsync<BlankPage>();
+
+				var numPadResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-enteroppin-title"]));
+
+				if (numPadResponse.Response == PromptResponse.YesConfirm)
+				 //  && terminalService.ConfirmOperatorPin(numPadResponse.Value.ToString()))
+				{
+
+					//Let's create a settings page! (puts it before our blank page, which we remove)
+					await navigation.TryInsertBeforeAsync<SettingsPage, BlankPage>();
+				}
+
+				navigation.Pop();
+			});
+
+
+			OnClick("BackButton", async _ =>
             {
                 navigation.Pop();
             });
 
             OnClick("ReceiveButton", async _ =>
             {
-				await navigation.PromptAsync<DisplayQRPage>(("message", slot.Address), ("qr", slot.Address));
+				await navigation.PromptAsync<DisplayQRPage>(
+                        ("message", ""),//slot.Address),
+                        ("qr", "")//slot.Address)
+                       );
 
 			});
 
@@ -46,12 +68,12 @@ namespace DogecoinTerminal.Pages
                 var numPadResult = await navigation.PromptAsync<NumPadPage>();
 
                 //We need to get the users pin confirmed on delete.
-                if (numPadResult.Response == PromptResponse.YesConfirm
-                    && slot.SlotPin == (string)numPadResult.Value)
+                if (numPadResult.Response == PromptResponse.YesConfirm)
+               //     && slot.SlotPin == (string)numPadResult.Value)
                 {
                     //we've confirmed pin
                     //now lets delete the slot.
-                    slot.ClearSlot();
+            //        slot.ClearSlot();
 					//remove loading screen.
 					navigation.Pop();
                     //remove wallet page
@@ -78,7 +100,7 @@ namespace DogecoinTerminal.Pages
 
                     using(var ctx = LibDogecoinContext.CreateContext())
                     {
-                        mnemonic = mnemonicProvider.GetMnemonic(ctx, slot.SlotNumber);
+                        mnemonic = "";//mnemonicProvider.GetMnemonic(ctx, slot.SlotNumber);
 					}
 
                     if(!string.IsNullOrEmpty(mnemonic))

@@ -10,7 +10,6 @@ using DogecoinTerminal.Common.BackgroundScenes;
 using System.Xml.Linq;
 using DogecoinTerminal.Common.Controls;
 using System.Runtime;
-using DogecoinTerminal.old;
 
 namespace DogecoinTerminal
 {
@@ -24,11 +23,15 @@ namespace DogecoinTerminal
 
         private Navigation _nav;
 
-
 		private ButtonControl _devButton;
 
-
 		private ITerminalSettings _settings;
+
+		private SelectedTextInputControlVisitor _textInputSelector;
+
+		//dev tools
+		private ButtonState lastButtonState = ButtonState.Released;
+		private MoveHandlesControlVisitor _moveHandler;
 
 		public DogecoinTerminalGame()
         {
@@ -63,10 +66,14 @@ namespace DogecoinTerminal
             Services.AddService(new Images(GraphicsDevice));
 			Services.AddService(_settings);
 			Services.AddService(GraphicsDevice);
-			Services.AddService<ITerminalService>(new TerminalService(Services));
-			Services.AddService<IMnemonicProvider>(new TPM2MnemonicProvider());
+	//		Services.AddService<ITerminalService>(new TerminalService(Services));
+		//	Services.AddService<IMnemonicProvider>(new TPM2MnemonicProvider());
 			Services.AddService<Game>(this);
 
+
+
+			//text input selector
+			_textInputSelector = new SelectedTextInputControlVisitor(_screen);
 
 			//background
 			_background = new MoonBackgroundScene(Services, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
@@ -96,14 +103,18 @@ namespace DogecoinTerminal
             _nav.PushAsync<UnlockTerminalPage>();
         }
 
-        private ButtonState lastButtonState = ButtonState.Released;
-
-        private MoveHandlesControlVisitor _moveHandler;
 
 		protected override void Update(GameTime gameTime)
 		{
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
+
+			_textInputSelector.UpdateMouse();
+			foreach (var control in _nav.CurrentPage.Controls)
+			{
+				control.AcceptVisitor(_textInputSelector);
+			}
+
 
 			_nav.CurrentPage.Update(gameTime, Services);
 
@@ -193,6 +204,7 @@ namespace DogecoinTerminal
 				_devButton.Draw(gameTime, Services);
 				_screen.DrawText(_screen.WindowCoordToVirtualCoord(Mouse.GetState().Position).ToString(), TerminalColor.White, 2, new Point(50, 98));
 			}
+
 
 
 			_spriteBatch.End();

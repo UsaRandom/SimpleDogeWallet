@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DogecoinTerminal.Common.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace DogecoinTerminal.Common
 {
     public interface IControlVisitor
     {
+        void VisitTextInput(TextInputControl textInputControl);
         void VisitButton(ButtonControl buttonControl);
         void VisitImage(ImageControl imageControl);
         void VisitSprite(SpriteControl spriteControl);

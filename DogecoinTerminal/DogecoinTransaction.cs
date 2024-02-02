@@ -6,12 +6,11 @@ using DogecoinTerminal.Common;
 
 namespace DogecoinTerminal.old
 {
-    internal class DogecoinTransaction : IDogecoinTransaction
+    internal class DogecoinTransaction
     {
 
         private int _workingTransactionId;
         private LibDogecoinContext _ctx;
-        private IWalletSlot _slot;
         private IServiceProvider _services;
         private List<UTXO> _txUTXOs;
 
@@ -37,7 +36,7 @@ namespace DogecoinTerminal.old
 
         public string From { get; private set; }
 
-        public DogecoinTransaction(IServiceProvider services, IWalletSlot slot)
+        public DogecoinTransaction(IServiceProvider services, slot)
         {
             _services = services;
             _slot = slot;

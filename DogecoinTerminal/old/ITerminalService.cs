@@ -37,6 +37,7 @@ namespace DogecoinTerminal.old
 
 
         bool Unlock(string slotPin);
+
         void Lock();
 
         bool Init(string slotPin);

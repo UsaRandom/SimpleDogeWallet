@@ -18,7 +18,19 @@ namespace DogecoinTerminal
         }
 
 
-        public bool GetBool(string settingName, bool valueIfEmpty = default)
+        public string GetString(string settingName, string valueIfEmpty = default)
+        {
+            if(settings.ContainsKey(settingName))
+            {
+                return settings[settingName];
+            }
+
+            return valueIfEmpty;
+        }
+
+
+
+		public bool GetBool(string settingName, bool valueIfEmpty = default)
         {
             if(settings.ContainsKey(settingName))
             {

@@ -1,6 +1,7 @@
 ﻿using FontStashSharp;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame;
 using System;
 using System.IO;
 
@@ -99,6 +100,19 @@ namespace DogecoinTerminal.Common
 		{
 			return new Point(_xPad + (int)Math.Round(virtualCoord.X * _renderScale),
 							 _yPad + (int)Math.Round(virtualCoord.Y * _renderScale));
+		}
+
+		public void DrawRectangleBorder(TerminalColor color, Point start, Point end)
+		{
+
+			_spriteBatch.DrawLine(_xPad + (int)Math.Round(start.X * _renderScale), _yPad + (int)Math.Round(start.Y * _renderScale), 
+				_xPad + (int)Math.Round(end.X * _renderScale), _yPad + (int)Math.Round(start.Y * _renderScale), color.Color);
+			_spriteBatch.DrawLine(_xPad + (int)Math.Round(start.X * _renderScale), _yPad + (int)Math.Round(start.Y * _renderScale),
+				_xPad + (int)Math.Round(start.X * _renderScale), _yPad + (int)Math.Round(end.Y * _renderScale), color.Color);
+			_spriteBatch.DrawLine(_xPad + (int)Math.Round(end.X * _renderScale), _yPad + (int)Math.Round(end.Y * _renderScale),
+				_xPad + (int)Math.Round(start.X * _renderScale), _yPad + (int)Math.Round(end.Y * _renderScale), color.Color);
+			_spriteBatch.DrawLine(_xPad + (int)Math.Round(end.X * _renderScale), _yPad + (int)Math.Round(end.Y * _renderScale),
+				_xPad + (int)Math.Round(end.X * _renderScale), _yPad + (int)Math.Round(start.Y * _renderScale), color.Color);
 		}
 
 		public void DrawRectangle(TerminalColor color,

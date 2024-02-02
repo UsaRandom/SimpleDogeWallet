@@ -1,6 +1,5 @@
 ﻿using DogecoinTerminal.Common;
 using DogecoinTerminal.Common.Pages;
-using DogecoinTerminal.old;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +11,7 @@ namespace DogecoinTerminal.Pages
     [PageDef("Pages/Xml/SettingsPage.xml")]
 	internal class SettingsPage : Page
 	{
-		public SettingsPage(IPageOptions options, ITerminalSettings settings, Navigation navigation, ITerminalService terminalService) : base(options)
+		public SettingsPage(IPageOptions options, ITerminalSettings settings, Navigation navigation) : base(options)
 		{
 			OnClick("BackButton", async _ =>
 			{
@@ -54,7 +53,7 @@ namespace DogecoinTerminal.Pages
 				{
 					for(var i = 0; i < 6; i++)
 					{
-						terminalService.ClearSlot(i);
+					//	terminalService.ClearSlot(i);
 					}
 				}
 
