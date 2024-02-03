@@ -6,10 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DogecoinTerminal.Pages
+namespace DogecoinTerminal.Common.Pages
 {
 	[PageDef("Pages/Xml/LangaugeSelectionPage.xml")]
-	internal class LanguageSelectionPage : PromptPage
+	public class LanguageSelectionPage : PromptPage
 	{
 		public LanguageSelectionPage(IPageOptions options) : base(options)
 		{

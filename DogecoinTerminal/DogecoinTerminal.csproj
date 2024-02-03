@@ -11,7 +11,6 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="DogecoinTransaction.cs" />
     <Compile Remove="Notes.cs" />
     <Compile Remove="old\IMnemonicProvider.cs" />
     <Compile Remove="old\ITerminalService.cs" />
@@ -35,7 +34,6 @@
     <EmbeddedResource Include="Icon.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="DogecoinTransaction.cs" />
     <None Include="Notes.cs" />
     <None Include="old\IMnemonicProvider.cs" />
     <None Include="old\ITerminalService.cs" />
@@ -60,12 +58,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Content\lock-fill.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Pages\Xml\BackupCodePage.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Pages\Xml\LangaugeSelectionPage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Pages\Xml\SettingsPage.xml">

@@ -1,11 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Page xmlns:common="DogecoinTerminal.Common">
-  <common:ImageControl Name="Doge" StartPosition="40,5" EndPosition="60,25" ImageSource="Content/dogedrawn.png" />
-  <common:TextControl Name="AddressText" Color="White" Position="50,40" TextSize="4" />
-  <common:TextControl Name="BalanceText" Color="White" Position="50,30" TextSize="9" />
-  <common:ButtonControl StartPosition="10,50" EndPosition="48,62" TextSize="4" Name="SendButton" BackgroundColor="DarkGrey" ForegroundColor="White" StringDef="terminal-wallet-send" />
-  <common:ButtonControl StartPosition="10,64" EndPosition="48,76" TextSize="4" Name="UpdateBalanceButton" BackgroundColor="Blue" ForegroundColor="White" StringDef="terminal-wallet-refreshbalance" />
-  <common:ButtonControl StartPosition="52,50" EndPosition="90,62" TextSize="4" Name="ReceiveButton" BackgroundColor="DarkGrey" ForegroundColor="White" StringDef="terminal-wallet-receive" />
-  <common:ButtonControl StartPosition="52,64" EndPosition="90,76" TextSize="4" Name="ShowSeedButton" BackgroundColor="DarkGrey" ForegroundColor="White" StringDef="terminal-wallet-showseed" />
-  <common:ButtonControl StartPosition="52,78" EndPosition="90,90" TextSize="4" Name="RemoveButton" BackgroundColor="Red" ForegroundColor="White" StringDef="terminal-wallet-remove" />
+  <common:ImageControl Name="Doge" StartPosition="42,5" EndPosition="58,21" ImageSource="Content/dogedrawn.png" />
+  <common:ImageControl Name="LockButton" StartPosition="5,85" EndPosition="15,95" ImageSource="Content\lock-fill.png" BackgroundColor="DarkGrey" />
+  <common:ImageControl Name="CopyButton" StartPosition="85,29" EndPosition="93,37" ImageSource="Content\copy-button.png" BackgroundColor="DarkGrey" />
+  <common:ImageControl Name="SettingsButton" StartPosition="17,85" EndPosition="27,95" ImageSource="Content\gear-fill.png" BackgroundColor="DarkGrey" />
+  <common:TextControl Name="AddressText" Color="White" Position="50,33" TextSize="4" Text="D7npQRBdDMnSdbtcdNuTCLKS3rdSSqmN9V" />
+  <common:TextControl Name="BalanceText" Color="White" Position="50,26" TextSize="9" Text="Đ 0.000" />
+  <common:ButtonControl StartPosition="75,85" EndPosition="95,95" TextSize="4" Name="SendButton" BackgroundColor="Green" ForegroundColor="White" StringDef="terminal-wallet-send" />
 </Page>

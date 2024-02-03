@@ -12,7 +12,7 @@ namespace DogecoinTerminal.Common.BackgroundScenes
 	public class MoonBackgroundScene : IBackgroundScene
 	{
 		private Texture2D _floatingObject;
-		private Vector2 _moonPosition;
+		private Vector2 _objectPosition;
 		private float _floatingObjectSpeed;
 
 		private int _width;
@@ -54,9 +54,12 @@ namespace DogecoinTerminal.Common.BackgroundScenes
 			_displayWidth = _width = width;
 			_displayHeight = _height = height;
 
-			// Set the initial moon and star positions and speeds
-			_moonPosition = new Vector2(width, 0.12f * height);
-	
+			// Set the initial object and star positions and speeds
+			_objectPosition = new Vector2(-100, 0.52f * height);
+
+			
+			_rotationSpeed = (float)(0.02f * (new Random().NextDouble() - 0.5));
+			_rotate = true;
 			_floatingObjectSpeed = 0.04f;
 			_moveXPerMS = 0.02f;
 
@@ -68,17 +71,14 @@ namespace DogecoinTerminal.Common.BackgroundScenes
 			_textureWidth = _tileTexture.Width;
 			_textureHeight = _tileTexture.Height;
 
-			_floatingObject = imageService.GetImage("Content/dogemoon.png");
-			__floatingObjectScale = (0.25f * Math.Min(width, height))/ ((float)_floatingObject.Bounds.Width);
+			_floatingObject = imageService.GetImage("Content/ogfreshdoge.png");
+			__floatingObjectScale = (0.14f * Math.Min(width, height))/ ((float)_floatingObject.Bounds.Width);
 
 		}
 
 
 		public void Draw(GameTime gameTime, SpriteBatch spriteBatch, IServiceProvider services)
 		{
-			// Draw the moon and stars
-
-
 
 			// Calculate the number of tiles to draw in each direction
 			int numTilesX = (int)Math.Ceiling(_displayWidth / (float)_textureWidth);
@@ -95,7 +95,7 @@ namespace DogecoinTerminal.Common.BackgroundScenes
 
 
 
-			spriteBatch.Draw(_floatingObject, _moonPosition, null, Color.White, _rotation, _floatingObject.Bounds.Center.ToVector2(), __floatingObjectScale, SpriteEffects.None, 0);
+			spriteBatch.Draw(_floatingObject, _objectPosition, null, Color.White, _rotation, _floatingObject.Bounds.Center.ToVector2(), __floatingObjectScale, SpriteEffects.None, 0);
 		}
 
 		public void Update(GameTime gameTime, IServiceProvider services)
@@ -160,51 +160,45 @@ namespace DogecoinTerminal.Common.BackgroundScenes
 			{
 				_rotation = 0;
 			}
-			_moonPosition.X -= _floatingObjectSpeed * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+			_objectPosition.X -= _floatingObjectSpeed * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-			if (_moonPosition.X < -(_floatingObject.Bounds.Width * __floatingObjectScale) - 10)
+			if (_objectPosition.X < -(_floatingObject.Bounds.Width * __floatingObjectScale) - 250)
 			{
 
 				var imageService = services.GetService<Images>();
 
 				var scale = 0.2f;
+				var randomInt = new Random().Next(0, 100);
 
-				switch(new Random().Next(0, 3))
+				//the moon can make text hard to read, so we reduce it's screen precense compared to others.
+				if(randomInt < 5)
 				{
-					case 0:
-						{
+					_floatingObject = imageService.GetImage("Content/dogemoon.png");
+					scale = 0.25f;
+					_rotationSpeed = 0;
+					_rotate = false;
+				}
+				else if(randomInt < 55)
+				{
+					_floatingObject = imageService.GetImage("Content/ogfreshdoge.png");
+					scale = 0.14f;
+					_rotationSpeed = (float)(0.02f * (new Random().NextDouble() - 0.5));
+					_rotate = true;
 
-							_floatingObject = imageService.GetImage("Content/dogemoon.png");
-							scale = 0.25f;
-							_rotationSpeed = 0;
-							_rotate = false;
-							break;
-						}
-					case 1:
-						{
-							_floatingObject = imageService.GetImage("Content/ogfreshdoge.png");
-							scale = 0.14f;
-							_rotationSpeed = (float)(0.02f * (new Random().NextDouble()-0.5));
-							_rotate = true;
-							break;
-						}
-					case 2:
-						{
-							_floatingObject = imageService.GetImage("Content/cheems.png");
-							scale = 0.14f;
-							_rotationSpeed = (float)(0.06f * (new Random().NextDouble() - 0.5));
-							_rotate = true;
-							break;
-						}
-					default:
-						break;
+				}
+				else
+				{
+					_floatingObject = imageService.GetImage("Content/cheems.png");
+					scale = 0.14f;
+					_rotationSpeed = (float)(0.06f * (new Random().NextDouble() - 0.5));
+					_rotate = true;
 				}
 
 				__floatingObjectScale = (scale * Math.Min(_displayWidth, _displayHeight)) / ((float)Math.Max(_floatingObject.Bounds.Width, _floatingObject.Bounds.Height));
 
-				_moonPosition.X = _width + (_floatingObject.Bounds.Width * __floatingObjectScale);
+				_objectPosition.X = _width + (_floatingObject.Bounds.Width * __floatingObjectScale);
 
-				_moonPosition.Y = (int)(new Random().NextDouble() * _displayHeight);
+				_objectPosition.Y = (int)(new Random().NextDouble() * _displayHeight);
 
 
 			}

@@ -6,10 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DogecoinTerminal.Pages
+namespace DogecoinTerminal.Common.Pages
 {
     [PageDef("Pages/Xml/BackupCodePage.xml")]
-	internal class BackupCodePage : PromptPage
+	public class BackupCodePage : PromptPage
 	{
 
 		private bool _editMode = false; 

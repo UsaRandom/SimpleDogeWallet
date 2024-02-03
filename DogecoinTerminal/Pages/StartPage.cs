@@ -14,7 +14,7 @@ namespace DogecoinTerminal.Pages
 	{
 		public StartPage(IPageOptions options, Navigation navigation) : base(options)
 		{
-			var hasWallet = File.Exists(DogecoinTerminalGame.ADDRESS_FILE);//detect
+			var hasWallet = File.Exists(SimpleDogeWallet.ADDRESS_FILE);//detect
 
 			if (!hasWallet)
 			{
@@ -25,6 +25,10 @@ namespace DogecoinTerminal.Pages
 
 					navigation.PushAsync<SetupWalletPage>();
 				});
+			}
+			else
+			{
+
 			}
 		}
 

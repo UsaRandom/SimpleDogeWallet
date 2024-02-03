@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Lib.Dogecoin;
 using System.IO;
+using System.Transactions;
 
 namespace DogecoinTerminal.Pages
 {
@@ -19,27 +20,27 @@ namespace DogecoinTerminal.Pages
 		private const int MIN_PIN_LENGTH = 4;
 
 
-		public SetupWalletPage(IPageOptions options, Navigation navigation, Strings strings, Game game) : base(options)
+		public SetupWalletPage(IPageOptions options, Navigation navigation, Strings strings, Game game, ITerminalSettings settings) : base(options)
 		{
 
 			OnClick("NewWalletButton", async _ =>
 			{
-				SetupWallet(true, navigation, strings);
+				SetupWallet(true, navigation, strings, settings);
 			});
 
 			OnClick("LoadWalletButton", async _ =>
 			{
-				SetupWallet(false, navigation, strings);
+				SetupWallet(false, navigation, strings, settings);
 			});
 
 		
 		}
 
 
-		private async void SetupWallet(bool isNew, Navigation navigation, Strings strings)
+		private async void SetupWallet(bool isNew, Navigation navigation, Strings strings, ITerminalSettings settings)
 		{
 
-			await navigation.PushAsync<BlankPage>();
+			await navigation.PushAsync<LoadingPage>();
 
 			var newPin = string.Empty;
 			var confirmPin = string.Empty;
@@ -75,7 +76,7 @@ namespace DogecoinTerminal.Pages
 
 				if (isNew)
 				{
-					mnemonic = ctx.GenerateMnemonicEncryptWithTPM(DogecoinTerminalGame.TPM_FILE_NUMBER, lang: strings.Language.LanguageCode, space: "-");
+					mnemonic = ctx.GenerateMnemonicEncryptWithTPM(SimpleDogeWallet.TPM_FILE_NUMBER, lang: strings.Language.LanguageCode, space: "-");
 				}
 				else
 				{
@@ -107,6 +108,11 @@ namespace DogecoinTerminal.Pages
 								}
 							}
 
+							//we have a valid mnemonic, encrypt it with key stored in tpm
+							var mnemonicKey = ctx.GenerateMnemonicEncryptWithTPM(SimpleDogeWallet.TPM_FILE_NUMBER, lang: "eng", space: "-");
+
+							File.WriteAllText(SimpleDogeWallet.LOADED_MNEMONIC_FILE, Crypto.Encrypt(mnemonic, mnemonicKey));
+
 							break;
 						}
 						else
@@ -129,6 +135,8 @@ namespace DogecoinTerminal.Pages
 					await navigation.PromptAsync<BackupCodePage>(("mnemonic", mnemonic), ("editmode", false));
 
 					createdWallet = true;
+
+					settings.Set("user-entered-mnemonic", !isNew);
 				}
 
 			}

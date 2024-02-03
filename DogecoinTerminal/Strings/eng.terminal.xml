@@ -26,7 +26,7 @@
 
   <Strings Id="terminal-backupcodes-title">
 <![CDATA[Write down backup phrases by hand on paper
-   and store them in a secure location.]]></Strings>
+    and store them in a secure location.]]></Strings>
 
   <Strings Id="terminal-backupcodes-load-title">
     <![CDATA[Enter your 12 or 24 word backup phrases:]]>

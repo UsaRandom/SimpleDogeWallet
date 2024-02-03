@@ -8,15 +8,12 @@ using DogecoinTerminal.Pages;
 using DogecoinTerminal.Common.BackgroundScenes;
 using System.Xml.Linq;
 using DogecoinTerminal.Common.Controls;
+using Lib.Dogecoin;
 
 namespace DogecoinTerminal
 {
     public class DogecoinTerminalGame : Game
     {
-
-		public const int TPM_FILE_NUMBER = 69; //nice
-		public const string ADDRESS_FILE = "address";
-
 		private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 		public FontSystem _fontSystem;
@@ -35,6 +32,7 @@ namespace DogecoinTerminal
 		private ButtonState lastButtonState = ButtonState.Released;
 		private MoveHandlesControlVisitor _moveHandler;
 
+
 		public DogecoinTerminalGame()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -52,7 +50,6 @@ namespace DogecoinTerminal
 			_settings = new TerminalSettings();
 
 			_settings.Set("terminal-devmode", false);
-
 			
 			Strings.Current.SelectLanguage(
 				Language.Languages[_settings.GetString("language", "eng")]);
@@ -106,7 +103,6 @@ namespace DogecoinTerminal
             _screen.Load(_spriteBatch);
 
 			//Just for testing wallet creation.
-			System.IO.File.Delete(ADDRESS_FILE);
 
             _nav.PushAsync<StartPage>();
         }

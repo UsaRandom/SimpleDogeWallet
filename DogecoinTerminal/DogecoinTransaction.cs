@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using DogecoinTerminal.Common;
 
 
-namespace DogecoinTerminal.old
+namespace DogecoinTerminal
 {
     internal class DogecoinTransaction
     {
@@ -36,10 +36,12 @@ namespace DogecoinTerminal.old
 
         public string From { get; private set; }
 
-        public DogecoinTransaction(IServiceProvider services, slot)
+        public SimpleDogeWallet Wallet { get; private set; }
+
+		public DogecoinTransaction(IServiceProvider services, SimpleDogeWallet wallet)
         {
             _services = services;
-            _slot = slot;
+            Wallet = wallet;
             _txUTXOs = new List<UTXO>();
             _ctx = LibDogecoinContext.CreateContext();
         }
@@ -62,7 +64,7 @@ namespace DogecoinTerminal.old
             _workingTransactionId = _ctx.StartTransaction();
 
             //it might make sense to order these
-            var utxoEnumerator = _slot.UTXOStore.UTXOs.GetEnumerator();
+            var utxoEnumerator = Wallet.UTXOs.GetEnumerator();
 
 
             //TODO: Change this to fee per byte so we can support P2SH and multiple outputs
@@ -112,7 +114,7 @@ namespace DogecoinTerminal.old
             Amount = amount;
 
             To = recipient;
-            From = _slot.Address;
+            From = Wallet.Address;
 
 
             if (Remainder > dustLimit)
@@ -136,7 +138,7 @@ namespace DogecoinTerminal.old
         {
             for (var i = 0; i < _txUTXOs.Count; i++)
             {
-                if (!_ctx.SignTransactionWithPrivateKey(_workingTransactionId, i, GetPrivateKeyFromMnemonic(_slot.GetMnemonic())))
+                if (!_ctx.SignTransactionWithPrivateKey(_workingTransactionId, i, GetPrivateKeyFromMnemonic(Wallet.GetMnemonic(_ctx))))
                 {
                     return false;
                 }
@@ -158,14 +160,14 @@ namespace DogecoinTerminal.old
         {
             foreach (var utxo in _txUTXOs)
             {
-                _slot.UTXOStore.RemoveUTXO(utxo);
+				Wallet.UTXOs.Remove(utxo);
             }
 
             var settings = _services.GetService<ITerminalSettings>();
 
             if (Remainder > settings.GetDecimal("dust-limit"))
             {
-                _slot.UTXOStore.AddUTXO(new UTXO
+				Wallet.UTXOs.Add(new UTXO
                 {
                     TxId = Crypto.GetTransactionIdFromRaw(GetRawTransaction()),
                     VOut = 0,// by our convention, our first output is back to ourselves.
@@ -173,7 +175,7 @@ namespace DogecoinTerminal.old
                 });
             }
 
-            _slot.UTXOStore.Save();
+			Wallet.Save();
         }
 
         public void Dispose()
