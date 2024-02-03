@@ -37,9 +37,33 @@
     Ensure there are 12/24 words.
               Try Again?]]></Strings>
 
+
+
+
+  <String Id="terminal-settings-title"><![CDATA[Settings]]></String>
+  <String Id="terminal-settings-background"><![CDATA[Background Scene]]></String>
+  <String Id="terminal-settings-fullscreen">
+    <![CDATA[    Fullscreen
+(Restart Required)]]></String>
+
+  <String Id="terminal-settings-devmode"><![CDATA[Developer Mode]]></String>
+  
+  
+  
   <String Id="terminal-setuppage-setupbutton"><![CDATA[Setup]]></String>
   <String Id="terminal-unlockpage-unlockbutton"><![CDATA[Unlock]]></String>
   <String Id="terminal-unlockpage-exitbutton"><![CDATA[Exit]]></String>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   <Strings Id="terminal-walletlist-emptyslot"><![CDATA[Empty Slot]]></Strings>
   <Strings Id="terminal-walletlist-title"><![CDATA[Select a Wallet/Slot]]></Strings>

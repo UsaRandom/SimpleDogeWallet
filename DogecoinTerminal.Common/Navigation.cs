@@ -98,6 +98,10 @@ namespace DogecoinTerminal.Common
 								throw new Exception($"Page {targetType.Name} does not exist in history stack.");
 							}
 						}
+						else
+						{
+							break;
+						}
 					}
 
 					Messenger.Default.Register(CurrentPage);

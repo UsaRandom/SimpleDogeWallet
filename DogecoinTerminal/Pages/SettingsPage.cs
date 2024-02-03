@@ -13,52 +13,42 @@ namespace DogecoinTerminal.Pages
 	{
 		public SettingsPage(IPageOptions options, ITerminalSettings settings, Navigation navigation) : base(options)
 		{
+			GetControl<CheckboxControl>("ToggleBackground").IsChecked = settings.GetBool("terminal-background");
+			GetControl<CheckboxControl>("ToggleFullscreen").IsChecked = settings.GetBool("terminal-fullscreen");
+			GetControl<CheckboxControl>("ToggleDevMode").IsChecked = settings.GetBool("terminal-devmode");
+
+
 			OnClick("BackButton", async _ =>
 			{
 				navigation.Pop();
 			});
 
 
-			OnClick("EnableDevModeButton", async _ =>
+			OnClick("ToggleBackground", async _ =>
 			{
-				var previousSetting = settings.GetBool("terminal-devmode", false);
-
-				settings.Set("terminal-devmode", !previousSetting);
+				var checkbox = GetControl<CheckboxControl>("ToggleBackground");
+				checkbox.IsChecked = !checkbox.IsChecked;
+				settings.Set("terminal-background", checkbox.IsChecked);
 			});
 
-			OnClick("EnableBackgroundButton", async _ =>
+			OnClick("ToggleFullscreen", async _ =>
 			{
-				var previousSetting = settings.GetBool("terminal-background", false);
+				var checkbox = GetControl<CheckboxControl>("ToggleFullscreen");
+				checkbox.IsChecked = !checkbox.IsChecked;
+				settings.Set("terminal-fullscreen", checkbox.IsChecked);
+			});
 
-				settings.Set("terminal-background", !previousSetting);
+			OnClick("ToggleDevMode", async _ =>
+			{
+				var checkbox = GetControl<CheckboxControl>("ToggleDevMode");
+				checkbox.IsChecked = !checkbox.IsChecked;
+				settings.Set("terminal-devmode", checkbox.IsChecked);
 			});
 
 
-			OnClick("FullscreenButton", async _ =>
-			{
-				var previousSetting = settings.GetBool("terminal-fullscreen", false);
-
-				settings.Set("terminal-fullscreen", !previousSetting);
-			});
 
 
-			OnClick("DeleteSlotsButton", async _ =>
-			{
 
-				//lets confirm
-
-				var response = await navigation.PromptAsync<ShortMessagePage>(("message", "WARNING: Pressing 'OK' deletes ALL wallet slots."));
-
-				if(response.Response == PromptResponse.YesConfirm)
-				{
-					for(var i = 0; i < 6; i++)
-					{
-					//	terminalService.ClearSlot(i);
-					}
-				}
-
-
-			});
 
 		}
 	}

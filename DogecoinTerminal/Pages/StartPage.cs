@@ -23,12 +23,15 @@ namespace DogecoinTerminal.Pages
 				{
 					await navigation.PromptAsync<LanguageSelectionPage>();
 
-					navigation.PushAsync<SetupWalletPage>();
+					await navigation.PushAsync<SetupWalletPage>();
 				});
 			}
 			else
 			{
-
+				Task.Run(async () =>
+				{
+					await navigation.PushAsync<UnlockTerminalPage>();
+				});
 			}
 		}
 

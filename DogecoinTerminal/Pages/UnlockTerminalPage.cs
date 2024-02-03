@@ -1,6 +1,7 @@
 ﻿using DogecoinTerminal.Common;
 using DogecoinTerminal.Common.Pages;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace DogecoinTerminal.Pages
 {
@@ -9,18 +10,26 @@ namespace DogecoinTerminal.Pages
 	{
 		private const string UNLOCK_BUTTON_NAME = "UnlockButton";
 
-		public UnlockTerminalPage(IPageOptions options, Navigation navigation, Strings strings, Game game) : base(options)
+		public UnlockTerminalPage(IPageOptions options, Navigation navigation, Strings strings, Game game, IServiceProvider services) : base(options)
 		{
 			OnClick(UNLOCK_BUTTON_NAME, async _ => {
 
-				await navigation.PushAsync<BlankPage>();
+				await navigation.PushAsync<LoadingPage>();
 
 				var numPadResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-enteroppin-title"]));
 
 				if (numPadResponse.Response == PromptResponse.YesConfirm)
 					//&& terminalService.Unlock(numPadResponse.Value.ToString()))
 				{
-					await navigation.TryInsertBeforeAsync<WalletPage, BlankPage>();
+					if(SimpleDogeWallet.TryOpen(numPadResponse.Value.ToString(),
+												services,
+												out SimpleDogeWallet simpleWallet))
+					{
+
+						await navigation.TryInsertBeforeAsync<WalletPage, LoadingPage>(("address", simpleWallet.Address),
+																					   ("balance", simpleWallet.GetBalance()));
+					}
+
 				}
 
 				navigation.Pop();
@@ -28,7 +37,7 @@ namespace DogecoinTerminal.Pages
 
 			OnClick("ExitButton", async _ =>
 			{
-			//	game.Exit();
+				game.Exit();
 			});
 		}
 

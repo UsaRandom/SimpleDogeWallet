@@ -145,7 +145,7 @@ namespace DogecoinTerminal.Pages
 
 			if (createdWallet)
 			{
-				await navigation.TryInsertBeforeAsync<WalletPage, StartPage>(("address", address));
+				await navigation.TryInsertBeforeAsync<WalletPage, LoadingPage>(("address", address));
 				await navigation.PopToPage<WalletPage>();
 			}
 			else

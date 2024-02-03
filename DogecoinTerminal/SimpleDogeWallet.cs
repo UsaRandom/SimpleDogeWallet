@@ -48,6 +48,11 @@ namespace DogecoinTerminal
 			SaveUTXOs();
 		}
 
+		public decimal GetBalance()
+		{
+			return UTXOs.Sum(utxo => utxo.Amount);
+		}
+
 		public List<UTXO> UTXOs
 		{
 			get;

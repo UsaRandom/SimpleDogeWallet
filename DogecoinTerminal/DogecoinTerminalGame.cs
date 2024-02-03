@@ -9,6 +9,7 @@ using DogecoinTerminal.Common.BackgroundScenes;
 using System.Xml.Linq;
 using DogecoinTerminal.Common.Controls;
 using Lib.Dogecoin;
+using System;
 
 namespace DogecoinTerminal
 {
@@ -70,7 +71,7 @@ namespace DogecoinTerminal
 			Services.AddService(_settings);
 			Services.AddService(GraphicsDevice);
 			Services.AddService<Game>(this);
-			Services.AddService(Services);
+			Services.AddService<IServiceProvider>(Services);
 
 
 
@@ -103,6 +104,8 @@ namespace DogecoinTerminal
             _screen.Load(_spriteBatch);
 
 			//Just for testing wallet creation.
+
+			//SimpleDogeWallet.ClearWallet();
 
             _nav.PushAsync<StartPage>();
         }

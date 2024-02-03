@@ -21,7 +21,7 @@
           Name="UnlockButton"/>
 
 
-  <common:TextInputControl StringDef="terminal-unlockpage-exitbutton"
+  <common:ButtonControl StringDef="terminal-unlockpage-exitbutton"
           StartPosition="45,75"
           EndPosition="55,80"
           BackgroundColor="DarkGrey"

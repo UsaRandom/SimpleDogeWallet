@@ -79,7 +79,8 @@ namespace DogecoinTerminal.Common.Pages
         {
             foreach (var control in Controls)
             {
-                if (control.ContainsPoint(message.ClickLocation))
+                if (control.ContainsPoint(message.ClickLocation) &&
+                    _controlEvents.ContainsKey(control.Name))
                 {
                     _controlEvents[control.Name].Invoke(message);
                 }

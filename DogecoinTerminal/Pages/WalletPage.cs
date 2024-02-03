@@ -47,6 +47,17 @@ namespace DogecoinTerminal.Pages
 			var pixels = barcodeWriter.Write(addressTextControl.Text).Pixels;
 
 			_qrCodeImage.SetData(pixels);
+
+
+			OnClick("SettingsButton", async _ =>
+			{
+				await navigation.PushAsync<SettingsPage>();
+			});
+			OnClick("LockButton", async _ =>
+			{
+				await navigation.TryInsertBeforeAsync<UnlockTerminalPage, WalletPage>();
+				await navigation.PopToPage<UnlockTerminalPage>();
+			});
 		}
 
 		public override void Draw(GameTime gameTime, IServiceProvider services)
