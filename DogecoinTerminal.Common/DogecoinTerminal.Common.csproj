@@ -38,6 +38,7 @@
     </PackageReference>
     <PackageReference Include="OpenCvSharp4" Version="4.9.0.20240103" />
     <PackageReference Include="ppy.SDL2-CS" Version="1.0.82" />
+    <PackageReference Include="TextCopy" Version="6.2.1" />
     <PackageReference Include="ZXing.Net" Version="0.16.9" />
     <PackageReference Include="ZXing.Net.Bindings.OpenCV.V4" Version="0.16.9" />
   </ItemGroup>

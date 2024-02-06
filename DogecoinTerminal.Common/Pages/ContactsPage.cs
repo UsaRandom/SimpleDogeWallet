@@ -13,16 +13,19 @@ namespace DogecoinTerminal.Common.Pages
 {
 
 	[PageDef("Pages/Xml/ContactsPage.xml")]
-	public class ContactsPage : Page
+	public class ContactsPage : PromptPage
 	{
 
 		private string _previousText;
+
+		private Contact _previousContact;
 
 		public ContactsPage(IPageOptions options, IClipboardService clipboard) : base(options)
 		{
 			EditMode = options.GetOption<bool>("edit-mode", true);
 			SelectedContact = default;
 			_previousText = default;
+			_previousContact = default;
 
 			if (EditMode)
 			{
@@ -38,19 +41,14 @@ namespace DogecoinTerminal.Common.Pages
 				GetControl<ImageControl>("CopyButton").Enabled = false;
 				GetControl<ImageControl>("DeleteButton").Enabled = false;
 			}
-		
 
-			foreach (var control in Controls)
+			OnClick("CopyButton", _ =>
 			{
-				if(control is ContactControl)
+				if(SelectedContact != default)
 				{
-					((ContactControl)control).Contact = new Contact
-					{
-						Name = "Imaginary Friend",
-						Address = "DLPaeuaJi2JLUcvYHD4ddLxadwnGaVSt4p"
-					};
+					clipboard.SetClipboardContents(SelectedContact.Address);
 				}
-			}
+			});
 
 			OnClick("PasteButton", _ =>
 			{
@@ -66,6 +64,7 @@ namespace DogecoinTerminal.Common.Pages
 		public override void Update(GameTime gameTime, IServiceProvider services)
 		{
 			var enteredText = GetControl<TextInputControl>("SearchBar").Text?.Trim() ?? string.Empty;
+			var contactService = services.GetService<ContactService>();
 
 			if (_previousText != enteredText)
 			{
@@ -74,26 +73,41 @@ namespace DogecoinTerminal.Common.Pages
 				//if valid P2PKH entered, we create a contact or return it to sending dogecoin app flow
 				if (isValidP2pkh)
 				{
+					Contact matchingContact = default;
+
+					//check to see if we have contact, create one
+					foreach (var contact in contactService.Contacts)
+					{
+						if (contact.Address == enteredText)
+						{
+							matchingContact = contact;
+						}
+					}
+
 					if (!EditMode)
 					{
-						//check to see if we have contact, create one
+						Submit(matchingContact ?? new Contact
+						{
+							Name = services.GetService<Strings>().GetString("common-contacts-unknown"),
+							Address = enteredText
+						});
 					}
 					else
 					{
-					
+						//edit mode, go to create contact screen
 					}
 				}
 				else
 				{
 					//if not a valid P2PKH address, we filter our results
 					//Update filter
-					var contactService = services.GetService<ContactService>();
+					
 
 					Contacts = contactService.Contacts.Where((contact) =>
 					{
 						//use levenstein distance to filter contacts
 						return contact.Name.ToLowerInvariant().Contains(enteredText.ToLowerInvariant()) ||
-							   contact.Address.ToLowerInvariant().Contains(enteredText.ToLowerInvariant()) ;
+							   contact.Address.Contains(enteredText);
 
 					}).ToList();
 
@@ -102,8 +116,82 @@ namespace DogecoinTerminal.Common.Pages
 				}
 			}
 
-
 			_previousText = enteredText;
+
+
+			//handle selection/buttons
+
+
+
+			
+
+			bool newContactSelected = false;
+
+			foreach (var control in Controls)
+			{
+				if(control is ContactControl)
+				{
+					var contactControl = (ContactControl)control;
+
+					if (contactControl.IsSelected && contactControl.Contact != _previousContact)
+					{
+						newContactSelected = true;
+						SelectedContact = contactControl.Contact;
+						break;
+					}
+				}
+			}
+
+			//disable previously selected contact
+			if(newContactSelected)
+			{
+				foreach (var control in Controls)
+				{
+					if (control is ContactControl)
+					{
+						var contactControl = (ContactControl)control;
+
+						if (contactControl.IsSelected && contactControl.Contact != SelectedContact)
+						{
+							contactControl.IsSelected = false;
+						}
+					}
+				}
+			}
+			else
+			{
+				SelectedContact = _previousContact;
+			}
+
+			_previousContact = SelectedContact;
+
+			if (EditMode)
+			{
+				if(SelectedContact != null)
+				{
+					GetControl<ImageControl>("EditButton").BackgroundColor = TerminalColor.Blue;
+					GetControl<ImageControl>("CopyButton").BackgroundColor = TerminalColor.DarkGrey;
+					GetControl<ImageControl>("DeleteButton").BackgroundColor = TerminalColor.Red;
+				}
+				else
+				{
+					GetControl<ImageControl>("EditButton").BackgroundColor = TerminalColor.LightGrey;
+					GetControl<ImageControl>("CopyButton").BackgroundColor = TerminalColor.LightGrey;
+					GetControl<ImageControl>("DeleteButton").BackgroundColor = TerminalColor.LightGrey;
+				}
+			}
+			else
+			{
+				if (SelectedContact != null)
+				{
+					GetControl<ImageControl>("SubmitButton").BackgroundColor = TerminalColor.Green;
+				}
+				else
+				{
+					GetControl<ImageControl>("SubmitButton").BackgroundColor = TerminalColor.LightGrey;
+				}
+			}
+
 
 			base.Update(gameTime, services);
 		}
@@ -113,6 +201,8 @@ namespace DogecoinTerminal.Common.Pages
 		{
 			// 9 contacts per page.
 			var contactsOnPage = Contacts.Skip((page - 1) * 9).Take(9).ToList();
+
+			SelectedContact = _previousContact = default;
 
 			foreach (var control in Controls)
 			{
@@ -153,38 +243,5 @@ namespace DogecoinTerminal.Common.Pages
 		public Contact SelectedContact { get; set; }
 
 
-		private static int EditDistance(string source1, string source2) 
-		{
-			var source1Length = source1.Length;
-			var source2Length = source2.Length;
-
-			var matrix = new int[source1Length + 1, source2Length + 1];
-
-			// First calculation, if one entry is empty return full length
-			if (source1Length == 0)
-				return source2Length;
-
-			if (source2Length == 0)
-				return source1Length;
-
-			// Initialization of matrix with row size source1Length and columns size source2Length
-			for (var i = 0; i <= source1Length; matrix[i, 0] = i++) { }
-			for (var j = 0; j <= source2Length; matrix[0, j] = j++) { }
-
-			// Calculate rows and collumns distances
-			for (var i = 1; i <= source1Length; i++)
-			{
-				for (var j = 1; j <= source2Length; j++)
-				{
-					var cost = (source2[j - 1] == source1[i - 1]) ? 0 : 1;
-
-					matrix[i, j] = Math.Min(
-						Math.Min(matrix[i - 1, j] + 1, matrix[i, j - 1] + 1),
-						matrix[i - 1, j - 1] + cost);
-				}
-			}
-			// return result
-			return matrix[source1Length, source2Length];
-		}
 	}
 }

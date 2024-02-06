@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using DogecoinTerminal.Common.Pages;
 
@@ -9,7 +10,6 @@ namespace DogecoinTerminal.Common
     public class Navigation : IReceiver<PromptResult>
 	{
 		private ConcurrentStack<IPage> _pageHistory = new();
-		private PromptResult _promptResult;
 		private IServiceProvider _serviceProvider;
 
 
@@ -21,12 +21,6 @@ namespace DogecoinTerminal.Common
 
 			Messenger.Default.Register(this);
 		}
-
-		public void Receive(PromptResult message)
-		{
-			_promptResult = message;
-		}
-
 
 		public IPage CurrentPage
 		{
@@ -174,17 +168,42 @@ namespace DogecoinTerminal.Common
 			});
 		}
 
+
+
+
+
+
+		private ConcurrentStack<PromptContext> _prompts = new ConcurrentStack<PromptContext>();
+
+		private class PromptContext
+		{
+			public PromptResult Result { get; set; }
+		}
+
+		public void Receive(PromptResult message)
+		{
+			lock (this)
+			{
+				_prompts.TryPeek(out PromptContext ctx);
+				ctx.Result = message;
+			}
+		}
+
 		public async Task<PromptResult> PromptAsync<T>(params (string key, object value)[] options) where T : IPage
 		{
-			_promptResult = default;
-
 			await PushAsync<T>(options);
 
-			return await Task.Run(() =>
+			return await Task.Run(async () =>
 			{
-				while (_promptResult == default) { }
+				var promptCtx = new PromptContext();
+
+				_prompts.Push(promptCtx);
+
+				while (promptCtx.Result == default) {}
+
+				_prompts.TryPop(out _);
 				Pop();
-				return _promptResult;
+				return promptCtx.Result;
 			});
 		}
 

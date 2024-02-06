@@ -57,7 +57,8 @@ namespace DogecoinTerminal
 			_settings = new TerminalSettings();
 
 			_settings.Set("terminal-devmode", false);
-			
+			_settings.Set("terminal-background", true);
+
 			Strings.Current.SelectLanguage(
 				Language.Languages[_settings.GetString("language", "eng")]);
 			
@@ -70,6 +71,7 @@ namespace DogecoinTerminal
 			_nav = new Navigation(Services);
 
 			_userInputService = new UserInputService(this);
+			_clipboardService = new TextCopyClipboardService();
 
 
 			Services.AddService(Strings.Current);
@@ -83,13 +85,8 @@ namespace DogecoinTerminal
 			Services.AddService<IServiceProvider>(Services);
 			Services.AddService(_userInputService);
 
-			//platform specific services
-			if(Environment.OSVersion.Platform == PlatformID.Win32NT)
-			{
-				_clipboardService = new WindowsClipboardService();
 
-				Services.AddService<IClipboardService>(_clipboardService);
-			}
+			Services.AddService<IClipboardService>(_clipboardService);
 
 
 			//text input selector

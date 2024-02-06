@@ -69,10 +69,6 @@ namespace DogecoinTerminal.Common.Controls
 				{
 					contactControl.IsSelected = true;
 				}
-				else
-				{
-					contactControl.IsSelected = false;
-				}
 			}
 		}
 	}

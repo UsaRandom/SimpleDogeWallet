@@ -33,8 +33,6 @@ namespace DogecoinTerminal.Common
 
 				var userInput = inputService.GetTextInput();
 
-				Debug.WriteLine(userInput);
-
 
 				if (!_backspaceActive && inputService.IsKeyDown(Keys.Back) && !string.IsNullOrEmpty(Text))
 				{
