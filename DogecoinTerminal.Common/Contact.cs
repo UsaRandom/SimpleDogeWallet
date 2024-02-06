@@ -28,7 +28,7 @@ namespace DogecoinTerminal
 			{
 				if (!string.IsNullOrEmpty(Address))
 				{
-					return Address.Substring(0, 4) + "..." + Address.Substring(Address.Length - 4, 4);
+					return Address.Substring(0, 6) + "..." + Address.Substring(Address.Length - 4, 4);
 				}
 				return string.Empty;
 			}

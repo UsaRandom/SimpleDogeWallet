@@ -58,6 +58,11 @@ namespace DogecoinTerminal.Pages
 				await navigation.TryInsertBeforeAsync<UnlockTerminalPage, WalletPage>();
 				await navigation.PopToPage<UnlockTerminalPage>();
 			});
+
+			OnClick("ContactsButton", async _ =>
+			{
+				await navigation.PushAsync<ContactsPage>(("edit-mode", true));
+			});
 		}
 
 		~WalletPage()
@@ -69,7 +74,7 @@ namespace DogecoinTerminal.Pages
 		public override void Draw(GameTime gameTime, IServiceProvider services)
 		{
 			var screen = services.GetService<VirtualScreen>();
-			screen.DrawImage(_qrCodeImage, new Point(50, 60), new Point(45, 45));
+			screen.DrawImage(_qrCodeImage, new Point(50, 60), new Point(40, 40));
 			base.Draw(gameTime, services);
 		}
 	}

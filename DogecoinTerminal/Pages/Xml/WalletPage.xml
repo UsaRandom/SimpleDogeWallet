@@ -4,6 +4,8 @@
   <common:ImageControl Name="LockButton" StartPosition="5,85" EndPosition="15,95" ImageSource="Content\lock-fill.png" BackgroundColor="DarkGrey" />
   <common:ImageControl Name="CopyButton" StartPosition="85,29" EndPosition="93,37" ImageSource="Content\copy-button.png" BackgroundColor="DarkGrey" />
   <common:ImageControl Name="SettingsButton" StartPosition="17,85" EndPosition="27,95" ImageSource="Content\gear-fill.png" BackgroundColor="DarkGrey" />
+  <common:ImageControl Name="ContactsButton" StartPosition="29,85" EndPosition="39,95" ImageSource="Content\contacts-icon.png" BackgroundColor="DarkGrey" />
+
   <common:TextControl Name="AddressText" Color="White" Position="50,33" TextSize="4" Text="D7npQRBdDMnSdbtcdNuTCLKS3rdSSqmN9V" />
   <common:TextControl Name="BalanceText" Color="White" Position="50,26" TextSize="9" Text="Đ 0.000" />
   <common:ButtonControl StartPosition="75,85" EndPosition="95,95" TextSize="4" Name="SendButton" BackgroundColor="Green" ForegroundColor="White" StringDef="terminal-wallet-send" />

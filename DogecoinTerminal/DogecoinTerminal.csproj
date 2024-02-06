@@ -28,6 +28,12 @@
     <ProjectReference Include="..\Lib.Dogecoin\Lib.Dogecoin.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="Content\gear-fill.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\lock-fill.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Pages\Xml\SettingsPage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

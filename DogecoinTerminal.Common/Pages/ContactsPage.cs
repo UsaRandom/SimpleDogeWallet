@@ -212,7 +212,57 @@ namespace DogecoinTerminal.Common.Pages
 					}
 					else
 					{
-						//edit mode, go to create contact screen
+						//edit mode, go to create contact screen/update screen
+
+						Task.Run(async () =>
+						{
+							Contact contactToUpdate = default;
+							foreach(var contact in _contactService.Contacts)
+							{
+								if(enteredText == contact.Address)
+								{
+									contactToUpdate = contact;
+									break;
+								}
+							}
+							PromptResult editAddResult;
+
+							if(contactToUpdate != null)
+							{
+								editAddResult = await services.GetService<Navigation>()
+															 .PromptAsync<UpdateContactPage>(
+																("contact", contactToUpdate));
+							}
+							else
+							{
+								editAddResult = await services.GetService<Navigation>()
+															 .PromptAsync<AddContactPage>(
+																("address", enteredText));
+
+							}
+
+							if (editAddResult.Response == PromptResponse.YesConfirm)
+							{
+								var updatedContact = (Contact)editAddResult.Value;
+
+
+								if(contactToUpdate == default)
+								{
+									_contactService.AddContact(updatedContact);
+								}
+								else
+								{
+									_contactService.UpdateContact(contactToUpdate, updatedContact);
+								}
+
+								Contacts = _contactService.Contacts;
+
+								GoToPage(0);
+							}
+						});
+
+						GetControl<TextInputControl>("SearchBar").Text = string.Empty;
+
 					}
 				}
 				else

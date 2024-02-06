@@ -3,7 +3,10 @@
 
   <String Id="terminal-contacts-title"><![CDATA[Contacts]]></String>
   <String Id="terminal-contacts-updatecontact-update"><![CDATA[Update]]></String>
-  
+  <String Id="terminal-contacts-addcontact-add"><![CDATA[Add]]></String>
+  <String Id="terminal-contacts-addcontact-title"><![CDATA[Add Contact]]></String>
+  <String Id="terminal-contacts-addcontact-hint"><![CDATA[Enter Name for Contact:]]></String>
+
   <String Id="terminal-qrscanner-hint"><![CDATA[Not Valid Dogecoin Address:]]></String>
   <String Id="terminal-qrscanner-title"><![CDATA[Scan QR Code]]></String>  
 

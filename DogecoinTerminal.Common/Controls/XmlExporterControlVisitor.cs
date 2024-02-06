@@ -58,7 +58,7 @@ namespace DogecoinTerminal.Common.Controls
 			}
 			else
 			{
-				buttonControl.Add(new XAttribute("Text", control.Text));
+				buttonControl.Add(new XAttribute("Text", control.Text ?? string.Empty));
 			}
 
 			PageElement.Add(buttonControl);

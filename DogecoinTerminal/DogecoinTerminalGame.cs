@@ -14,6 +14,7 @@ using System.Runtime.InteropServices;
 using DogecoinTerminal.Common.Interop;
 using MonoGame.Framework.Utilities;
 using DogecoinTerminal.Common.Pages;
+using DogecoinTerminal.Pages;
 
 namespace DogecoinTerminal
 {
@@ -122,7 +123,7 @@ namespace DogecoinTerminal
 
 			SimpleDogeWallet.ClearWallet();
 
-			_nav.PushAsync<ContactsPage>();
+			_nav.PushAsync<StartPage>();
         }
 
 		protected override void Update(GameTime gameTime)

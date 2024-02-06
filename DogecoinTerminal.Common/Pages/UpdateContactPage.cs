@@ -28,6 +28,7 @@ namespace DogecoinTerminal.Common.Pages
 		private TextInputControl _labelControl;
 		private TextInputControl _addressControl;
 
+
 		public UpdateContactPage(IPageOptions options, GraphicsDevice graphicsDevice, Navigation navigation, IClipboardService clipboardService) : base(options)
 		{
 			_contact = options.GetOption<Contact>("contact");
@@ -90,6 +91,7 @@ namespace DogecoinTerminal.Common.Pages
 
 		~UpdateContactPage()
 		{
+			_qrCodeImage?.Dispose();
 		}
 
 		private void UpdateQR()
@@ -117,7 +119,9 @@ namespace DogecoinTerminal.Common.Pages
 		public override void Draw(GameTime gameTime, IServiceProvider services)
 		{
 			var screen = services.GetService<VirtualScreen>();
+
 			screen.DrawImage(_qrCodeImage, new Point(50, 69), new Point(40, 40));
+
 			base.Draw(gameTime, services);
 		}
 
