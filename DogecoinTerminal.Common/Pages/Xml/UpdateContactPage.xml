@@ -4,7 +4,7 @@
 
   <common:ImageControl Name="BackButton" StartPosition="5,5" EndPosition="15,15" ImageSource="Content\left-arrow.png" />
 
-  <common:TextControl Name="TitleText" Color="White" Position="50,13" TextSize="6" StringDef="terminal-contacts-title" />
+  <common:TextControl Name="TitleText" Color="White" Position="50,13" TextSize="6"  />
 
   <common:ImageControl StartPosition="82,5"
          EndPosition="95,18"

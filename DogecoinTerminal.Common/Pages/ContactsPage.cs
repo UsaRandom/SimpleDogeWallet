@@ -11,7 +11,12 @@ using System.Threading.Tasks;
 
 namespace DogecoinTerminal.Common.Pages
 {
-
+	/*
+	 * Navigating to the Contacts Page:
+	 * 
+	 * If you have ("edit-mode", true) as an option, the Contacts page should be pushed into the nav stack (PushAsync)
+	 * If you are in contact select mode ("edit-mode", false), then you should use PromptAsync.
+	 */ 
 	[PageDef("Pages/Xml/ContactsPage.xml")]
 	public class ContactsPage : PromptPage
 	{
@@ -44,6 +49,26 @@ namespace DogecoinTerminal.Common.Pages
 				GetControl<ImageControl>("CopyButton").Enabled = false;
 				GetControl<ImageControl>("DeleteButton").Enabled = false;
 			}
+
+			OnClick("SubmitButton", _ =>
+			{
+				if(SelectedContact != default)
+				{
+					Submit(SelectedContact);
+				}
+			});
+
+			OnClick("BackButton", _ =>
+			{
+				if(!EditMode)
+				{
+					Cancel();
+				}
+				else
+				{
+					navigation.Pop();
+				}
+			});
 
 			OnClick("EditButton", async _ =>
 			{
@@ -89,6 +114,20 @@ namespace DogecoinTerminal.Common.Pages
 				var clipboardContent = clipboard.GetClipboardContents().Trim();
 
 				GetControl<TextInputControl>("SearchBar").Text = clipboardContent;
+			});
+
+			OnClick("QRButton", async  _ =>
+			{
+				await navigation.PushAsync<LoadingPage>();
+
+				var qrScanResult = await navigation.PromptAsync<QRScannerPage>();
+
+				if(qrScanResult.Response == PromptResponse.YesConfirm)
+				{
+					GetControl<TextInputControl>("SearchBar").Text = (string)qrScanResult.Value;
+				}
+
+				navigation.Pop();
 			});
 
 			OnClick("LeftArrow", _ =>

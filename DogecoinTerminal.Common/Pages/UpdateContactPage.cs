@@ -28,13 +28,15 @@ namespace DogecoinTerminal.Common.Pages
 		private TextInputControl _labelControl;
 		private TextInputControl _addressControl;
 
-		public UpdateContactPage(IPageOptions options, GraphicsDevice graphicsDevice, Navigation navigation) : base(options)
+		public UpdateContactPage(IPageOptions options, GraphicsDevice graphicsDevice, Navigation navigation, IClipboardService clipboardService) : base(options)
 		{
 			_contact = options.GetOption<Contact>("contact");
 
 			_graphicsDevice = graphicsDevice;
 			_address = _contact.Address;
 			_label = _contact.Name;
+
+			GetControl<TextControl>("TitleText").Text = _label;
 
 			_labelControl = GetControl<TextInputControl>("LabelText");
 			_addressControl = GetControl<TextInputControl>("AddressText");
@@ -44,8 +46,34 @@ namespace DogecoinTerminal.Common.Pages
 
 			OnClick("BackButton", _ =>
 			{
+				Cancel();
+			});
+
+			OnClick("LabelPasteButton", _ =>
+			{
+				_label = _labelControl.Text = clipboardService.GetClipboardContents();
+			});
+
+			OnClick("AddressPasteButton", _ =>
+			{
+				_address = _addressControl.Text = clipboardService.GetClipboardContents();
+			});
+
+
+			OnClick("QRButton", async _ =>
+			{
+				await navigation.PushAsync<LoadingPage>();
+
+				var qrScanResult = await navigation.PromptAsync<QRScannerPage>();
+
+				if (qrScanResult.Response == PromptResponse.YesConfirm)
+				{
+					_address = _addressControl.Text = (string)qrScanResult.Value;
+				}
+
 				navigation.Pop();
 			});
+
 
 			OnClick("UpdateButton", _ =>
 			{
