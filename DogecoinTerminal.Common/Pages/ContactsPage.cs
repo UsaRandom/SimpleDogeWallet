@@ -19,13 +19,16 @@ namespace DogecoinTerminal.Common.Pages
 		private string _previousText;
 
 		private Contact _previousContact;
+		private ContactService _contactService;
 
-		public ContactsPage(IPageOptions options, IClipboardService clipboard) : base(options)
+		public ContactsPage(IPageOptions options, IClipboardService clipboard, ContactService contactService, Navigation navigation) : base(options)
 		{
 			EditMode = options.GetOption<bool>("edit-mode", true);
 			SelectedContact = default;
 			_previousText = default;
 			_previousContact = default;
+
+			_contactService = contactService;
 
 			if (EditMode)
 			{
@@ -42,6 +45,37 @@ namespace DogecoinTerminal.Common.Pages
 				GetControl<ImageControl>("DeleteButton").Enabled = false;
 			}
 
+			OnClick("EditButton", async _ =>
+			{
+				if (SelectedContact != default)
+				{
+					var updateResult = await navigation.PromptAsync<UpdateContactPage>(("contact", SelectedContact));
+
+					if(updateResult.Response == PromptResponse.YesConfirm)
+					{
+						var updatedContact = (Contact)updateResult.Value;
+
+						foreach (var control in Controls)
+						{
+							if (control is ContactControl)
+							{
+								var contactControl = (ContactControl)control;
+
+								if (contactControl.IsSelected && contactControl.Contact == SelectedContact)
+								{
+									contactControl.Contact = updatedContact;
+									break;
+								}
+							}
+						}
+						_contactService.UpdateContact(SelectedContact, updatedContact);
+
+						SelectedContact = updatedContact;
+
+					}
+				}
+			});
+
 			OnClick("CopyButton", _ =>
 			{
 				if(SelectedContact != default)
@@ -57,6 +91,52 @@ namespace DogecoinTerminal.Common.Pages
 				GetControl<TextInputControl>("SearchBar").Text = clipboardContent;
 			});
 
+			OnClick("LeftArrow", _ =>
+			{
+				if(CurrentPage > 0)
+				{
+					CurrentPage--;
+					GoToPage(CurrentPage);
+				}
+			});
+
+			OnClick("RightArrow", _ =>
+			{
+				if (CurrentPage < PageCount-1)
+				{
+					CurrentPage++;
+					GoToPage(CurrentPage);
+				}
+			});
+
+			OnClick("DeleteButton", _ =>
+			{
+				if(SelectedContact != default)
+				{
+					_contactService.RemoveContact(SelectedContact);
+					_previousContact = default;
+					SelectedContact = default;
+
+					var enteredText = GetControl<TextInputControl>("SearchBar").Text?.Trim() ?? string.Empty;
+
+					if(enteredText !=  string.Empty)
+					{
+						Contacts = _contactService.Contacts.Where((contact) =>
+						{
+							//use levenstein distance to filter contacts
+							return contact.Name.ToLowerInvariant().Contains(enteredText.ToLowerInvariant()) ||
+								   contact.Address.Contains(enteredText);
+
+						}).OrderBy(c => c.Name).ToList();
+					}
+					else
+					{
+						Contacts = _contactService.Contacts;
+					}
+
+					GoToPage(0);
+				}
+			});
 
 		}
 
@@ -64,7 +144,6 @@ namespace DogecoinTerminal.Common.Pages
 		public override void Update(GameTime gameTime, IServiceProvider services)
 		{
 			var enteredText = GetControl<TextInputControl>("SearchBar").Text?.Trim() ?? string.Empty;
-			var contactService = services.GetService<ContactService>();
 
 			if (_previousText != enteredText)
 			{
@@ -76,7 +155,7 @@ namespace DogecoinTerminal.Common.Pages
 					Contact matchingContact = default;
 
 					//check to see if we have contact, create one
-					foreach (var contact in contactService.Contacts)
+					foreach (var contact in _contactService.Contacts)
 					{
 						if (contact.Address == enteredText)
 						{
@@ -103,13 +182,13 @@ namespace DogecoinTerminal.Common.Pages
 					//Update filter
 					
 
-					Contacts = contactService.Contacts.Where((contact) =>
+					Contacts = _contactService.Contacts.Where((contact) =>
 					{
 						//use levenstein distance to filter contacts
 						return contact.Name.ToLowerInvariant().Contains(enteredText.ToLowerInvariant()) ||
 							   contact.Address.Contains(enteredText);
 
-					}).ToList();
+					}).OrderBy(c => c.Name).ToList();
 
 					GoToPage(0);
 
@@ -200,7 +279,7 @@ namespace DogecoinTerminal.Common.Pages
 		private void GoToPage(int page)
 		{
 			// 9 contacts per page.
-			var contactsOnPage = Contacts.Skip((page - 1) * 9).Take(9).ToList();
+			var contactsOnPage = Contacts.Skip(page * 9).Take(9).ToList();
 
 			SelectedContact = _previousContact = default;
 
@@ -229,7 +308,30 @@ namespace DogecoinTerminal.Common.Pages
 
 			// Update the current page and page count.
 			CurrentPage = page;
-			PageCount = (int)Math.Ceiling((double)Contacts.Count / 9);
+			PageCount = Math.Max(1,(int)Math.Ceiling((double)Contacts.Count / 9));
+
+
+			if(CurrentPage + 1 == PageCount)
+			{
+				GetControl<ImageControl>("RightArrow").ImageSource = @"Content\simple-arrow-right-dim.png";
+			}
+			else
+			{
+				GetControl<ImageControl>("RightArrow").ImageSource = @"Content\simple-arrow-right.png";
+			}
+
+			if (CurrentPage == 0)
+			{
+				GetControl<ImageControl>("LeftArrow").ImageSource = @"Content\simple-arrow-left-dim.png";
+			}
+			else
+			{
+				GetControl<ImageControl>("LeftArrow").ImageSource = @"Content\simple-arrow-left.png";
+			}
+
+
+
+			GetControl<TextControl>("PageCountText").Text = $"{CurrentPage+1}/{PageCount}";
 		}
 
 		private int CurrentPage { get; set; }

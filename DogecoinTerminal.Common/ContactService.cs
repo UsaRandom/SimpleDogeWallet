@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -36,7 +37,7 @@ namespace DogecoinTerminal
 
 
 
-		public IEnumerable<Contact> Contacts
+		public IList<Contact> Contacts
 		{
 			get
 			{
@@ -50,7 +51,21 @@ namespace DogecoinTerminal
 			Save();
 		}
 
-		private void Save()
+		public void RemoveContact(Contact contact)
+		{
+			_contacts.Remove(contact);
+			Save();
+		}
+
+		public void UpdateContact(Contact oldContact, Contact newContact)
+		{
+			_contacts.Remove(oldContact);
+			_contacts.Add(newContact);
+			Save();
+		}
+
+
+		public void Save()
 		{
 			File.WriteAllText(CONTACT_LIST_FILE, JsonSerializer.Serialize(_contacts));
 		}

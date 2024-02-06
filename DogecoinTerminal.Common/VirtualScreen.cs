@@ -108,15 +108,21 @@ namespace DogecoinTerminal.Common
 
 		public void DrawRectangleBorder(TerminalColor color, Point start, Point end)
 		{
+			const float thickness = 3f;
 
 			_spriteBatch.DrawLine(_xPad + (int)Math.Round(start.X * _renderScale), _yPad + (int)Math.Round(start.Y * _renderScale), 
-				_xPad + (int)Math.Round(end.X * _renderScale), _yPad + (int)Math.Round(start.Y * _renderScale), color.Color);
+				_xPad + (int)Math.Round(end.X * _renderScale), _yPad + (int)Math.Round(start.Y * _renderScale), color.Color, thickness);
 			_spriteBatch.DrawLine(_xPad + (int)Math.Round(start.X * _renderScale), _yPad + (int)Math.Round(start.Y * _renderScale),
-				_xPad + (int)Math.Round(start.X * _renderScale), _yPad + (int)Math.Round(end.Y * _renderScale), color.Color);
+				_xPad + (int)Math.Round(start.X * _renderScale), _yPad + (int)Math.Round(end.Y * _renderScale), color.Color, thickness);
+
+			//bottom line
+			_spriteBatch.DrawLine(_xPad + (int)Math.Round(end.X * _renderScale)+1, _yPad + (int)Math.Round(end.Y * _renderScale)+1,
+				_xPad + (int)Math.Round(start.X * _renderScale)-1, _yPad + (int)Math.Round(end.Y * _renderScale) + 1, color.Color, thickness);
+
+
+
 			_spriteBatch.DrawLine(_xPad + (int)Math.Round(end.X * _renderScale), _yPad + (int)Math.Round(end.Y * _renderScale),
-				_xPad + (int)Math.Round(start.X * _renderScale), _yPad + (int)Math.Round(end.Y * _renderScale), color.Color);
-			_spriteBatch.DrawLine(_xPad + (int)Math.Round(end.X * _renderScale), _yPad + (int)Math.Round(end.Y * _renderScale),
-				_xPad + (int)Math.Round(end.X * _renderScale), _yPad + (int)Math.Round(start.Y * _renderScale), color.Color);
+				_xPad + (int)Math.Round(end.X * _renderScale), _yPad + (int)Math.Round(start.Y * _renderScale), color.Color, thickness);
 		}
 
 		public void DrawRectangle(TerminalColor color,

@@ -85,7 +85,7 @@
          BackgroundColor="DarkGrey"/>
 
 
-  <common:TextControl Name="PageCountText" Color="White" Position="20,90" TextSize="3" StringDef="terminal-contacts-pagecount" />
+  <common:TextControl Name="PageCountText" Color="White" Position="20,90" TextSize="3" />
 
   <common:ImageControl
 				Name="SubmitButton"
@@ -116,6 +116,20 @@
 				EndPosition="69,95"
 				BackgroundColor="DarkGrey"
         ImageSource="Content\copy-button.png"/>
+
+
+
+
+  <common:ImageControl StartPosition="2,45"
+         EndPosition="8,55"
+         Name="LeftArrow"
+         ImageSource="Content/simple-arrow-left-dim.png"/>
+
+
+  <common:ImageControl StartPosition="92,45"
+         EndPosition="98,55"
+         Name="RightArrow"
+         ImageSource="Content/simple-arrow-right.png"/>
 
 
 </Page>

@@ -18,7 +18,7 @@ namespace DogecoinTerminal
 			}
 			set
 			{
-				_name = value?.Substring(0, 16);
+				_name = value?.Substring(0, Math.Min(value.Length, 16));
 			}
 		}
 
