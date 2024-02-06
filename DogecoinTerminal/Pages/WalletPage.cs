@@ -60,6 +60,12 @@ namespace DogecoinTerminal.Pages
 			});
 		}
 
+		~WalletPage()
+		{
+			_qrCodeImage?.Dispose();
+		}
+
+
 		public override void Draw(GameTime gameTime, IServiceProvider services)
 		{
 			var screen = services.GetService<VirtualScreen>();

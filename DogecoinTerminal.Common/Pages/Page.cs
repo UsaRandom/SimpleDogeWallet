@@ -80,7 +80,8 @@ namespace DogecoinTerminal.Common.Pages
             foreach (var control in Controls)
             {
                 if (control.ContainsPoint(message.ClickLocation) &&
-                    _controlEvents.ContainsKey(control.Name))
+                    _controlEvents.ContainsKey(control.Name) &&
+                    control.Enabled)
                 {
                     _controlEvents[control.Name].Invoke(message);
                 }
@@ -108,7 +109,12 @@ namespace DogecoinTerminal.Common.Pages
 
         public void OnClick(string control, OnEvent onClick)
         {
-            _controlEvents[control] = onClick;
+            var targetControl = GetControl<IPageControl>(control);
+
+            if(targetControl != default)
+            {
+				_controlEvents[control] = onClick;
+			}
         }
 
 

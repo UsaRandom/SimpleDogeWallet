@@ -20,6 +20,7 @@ namespace DogecoinTerminal.Common.Pages
 		private TextControl _userTextControl;
 		private string		_regex = string.Empty;
 		private bool		_isValueMode = false;
+		private string		_hint = string.Empty;
 
 		public NumPadPage(IPageOptions options) : base(options)
 		{
@@ -34,7 +35,6 @@ namespace DogecoinTerminal.Common.Pages
 				var index = i;
 				OnClick($"Button_{i}", _ => {
 					AddText(index.ToString());
-				
 				});
 			}
 
@@ -48,7 +48,10 @@ namespace DogecoinTerminal.Common.Pages
 
 			OnClick("SubmitButton", _ =>
 			{
-				Submit(_userTextControl.Text);
+				if(CanSubmit())
+				{
+					Submit(_userTextControl.Text);
+				}
 			});
 		}
 
@@ -57,6 +60,7 @@ namespace DogecoinTerminal.Common.Pages
 		{
 			_regex = Options.GetOption<string>("regex", string.Empty);
 			_isValueMode = Options.GetOption<bool>("value-mode", false);
+			_hint = Options.GetOption("hint", string.Empty);
 
 			var title = Options.GetOption<string>("title");
 
@@ -65,6 +69,10 @@ namespace DogecoinTerminal.Common.Pages
 				_titleControl.StringDef = string.Empty;
 				_titleControl.Text = title;
 			}
+
+			AddText(Options.GetOption("start-value", string.Empty));
+
+			
 		}
 
 
@@ -99,7 +107,11 @@ namespace DogecoinTerminal.Common.Pages
 		{
 			if(!CanSubmit())
 			{
-				//how do we disable a control?
+				GetControl<ImageControl>("SubmitButton").BackgroundColor = TerminalColor.LightGrey;
+			}
+			else
+			{
+				GetControl<ImageControl>("SubmitButton").BackgroundColor = TerminalColor.Green;
 			}
 			base.Update(gameTime, services);
 		}

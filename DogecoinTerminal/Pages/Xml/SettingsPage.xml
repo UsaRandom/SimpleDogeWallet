@@ -1,19 +1,16 @@
 ﻿<Page xmlns:common="DogecoinTerminal.Common">
   <common:ImageControl Name="BackButton" StartPosition="5,5" EndPosition="15,15" ImageSource="Content\left-arrow.png" />
-
   <common:TextControl Name="TitleText" Color="White" Position="50,13" TextSize="6" StringDef="terminal-settings-title" />
-
-
   <common:TextControl Name="BackgroundText" Color="White" Position="20,24" TextSize="4" StringDef="terminal-settings-background" />
-  <common:CheckboxControl StartPosition="40,20" EndPosition="48,28" TextSize="4" Name="ToggleBackground" BackgroundColor="DarkGrey" ForegroundColor="White"/>
-
-
+  <common:CheckboxControl StartPosition="40,20" EndPosition="48,28" TextSize="4" Name="ToggleBackground" BackgroundColor="DarkGrey" ForegroundColor="White" Text="" />
   <common:TextControl Name="FullscreenText" Color="White" Position="20,34" TextSize="4" StringDef="terminal-settings-fullscreen" />
-  <common:CheckboxControl StartPosition="40,30" EndPosition="48,38" TextSize="4" Name="ToggleFullscreen" BackgroundColor="DarkGrey" ForegroundColor="White"/>
-
-
+  <common:CheckboxControl StartPosition="40,30" EndPosition="48,38" TextSize="4" Name="ToggleFullscreen" BackgroundColor="DarkGrey" ForegroundColor="White" Text="" />
   <common:TextControl Name="DevModeText" Color="White" Position="20,44" TextSize="4" StringDef="terminal-settings-devmode" />
-  <common:CheckboxControl StartPosition="40,40" EndPosition="48,48" TextSize="4" Name="ToggleDevMode" BackgroundColor="DarkGrey" ForegroundColor="White"/>
-
+  <common:CheckboxControl StartPosition="40,40" EndPosition="48,48" TextSize="4" Name="ToggleDevMode" BackgroundColor="DarkGrey" ForegroundColor="White" Text="X" />
+  <common:TextControl Name="DustLimitText" Color="White" Position="13,54" TextSize="4" StringDef="terminal-settings-dustlimit" />
+  <common:ButtonControl StartPosition="24,50" EndPosition="48,58" TextSize="4" Name="SetDustLimitButton" BackgroundColor="DarkGrey" ForegroundColor="White" Text="0.001" />
+  <common:TextControl Name="FeePerByteText" Color="White" Position="13,64" TextSize="4" StringDef="terminal-settings-feeperbyte" />
+  <common:ButtonControl StartPosition="24,60" EndPosition="48,68" TextSize="4" Name="SetFeePerByteButton"
+                        BackgroundColor="DarkGrey" ForegroundColor="White" Text="0.001" />
 
 </Page>

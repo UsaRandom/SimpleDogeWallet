@@ -1,8 +1,10 @@
 ﻿<Page xmlns:common="DogecoinTerminal.Common">
   <common:ImageControl Name="Doge" StartPosition="82,5" EndPosition="95,18" ImageSource="Content/dogedrawn.png" />
   <common:TextControl Name="TitleText" Color="White" Position="50,13" TextSize="6" StringDef="terminal-setup-setupwallet" />
-  <common:TextControl Name="CreateNewInfoText" Color="White" Position="30,46" TextSize="3" StringDef="terminal-setup-newwalletinfo" />
-  <common:TextControl Name="LoadOldInfoText" Color="White" Position="73,46" TextSize="3" StringDef="terminal-setup-loadwalletinfo" />
-  <common:ButtonControl StartPosition="20,64" EndPosition="39,73" TextSize="4" Name="NewWalletButton" BackgroundColor="Green" ForegroundColor="White" StringDef="terminal-setup-newwallet" />
-  <common:ButtonControl StartPosition="60,64" EndPosition="80,73" TextSize="4" Name="LoadWalletButton" BackgroundColor="Green" ForegroundColor="White" StringDef="terminal-setup-loadwallet" />
+  <common:TextControl Name="NewWalletTitle" Color="White" Position="74,35" TextSize="4" StringDef="terminal-setup-newwallet" />
+  <common:TextControl Name="LoadWalletTitle" Color="White" Position="26,35" TextSize="4" StringDef="terminal-setup-loadwallet" />
+  <common:TextControl Name="CreateNewInfoText" Color="White" Position="74,55" TextSize="3" StringDef="terminal-setup-newwalletinfo" />
+  <common:TextControl Name="LoadOldInfoText" Color="White" Position="26,56" TextSize="3" StringDef="terminal-setup-loadwalletinfo" />
+  <common:ImageControl Name="LoadWalletButton" StartPosition="35,75" EndPosition="45,85" ImageSource="Content\right-arrow.png" BackgroundColor="Blue" />
+  <common:ImageControl Name="NewWalletButton" StartPosition="82,75" EndPosition="92,85" ImageSource="Content\right-arrow.png" BackgroundColor="Green" />
 </Page>

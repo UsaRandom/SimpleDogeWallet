@@ -9,58 +9,29 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Notes.cs" />
-    <Compile Remove="old\IMnemonicProvider.cs" />
-    <Compile Remove="old\ITerminalService.cs" />
-    <Compile Remove="old\TerminalService.cs" />
-    <Compile Remove="old\TPM2MnemonicProvider.cs" />
-    <Compile Remove="old\UTXOStore.cs" />
-    <Compile Remove="old\WalletSlot.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Icon.ico" />
-    <None Remove="Icon.bmp" />
-    <None Remove="Pages\Xml\SetupWalletPage.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Pages\Xml\SetupWalletPage.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Icon.ico" />
-    <EmbeddedResource Include="Icon.bmp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Notes.cs" />
-    <None Include="old\IMnemonicProvider.cs" />
-    <None Include="old\ITerminalService.cs" />
-    <None Include="old\TerminalService.cs" />
-    <None Include="old\TPM2MnemonicProvider.cs" />
-    <None Include="old\UTXOStore.cs" />
-    <None Include="old\WalletSlot.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FontStashSharp.MonoGame" Version="1.3.4" />
+    <PackageReference Include="FontStashSharp.MonoGame" Version="1.3.6" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
-    <PackageReference Include="OpenCvSharp4.Windows" Version="4.8.0.20230708" />
-    <PackageReference Include="TextCopy" Version="6.2.1" />
+    <PackageReference Include="OpenCvSharp4.Windows" Version="4.9.0.20240103" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DogecoinTerminal.Common\DogecoinTerminal.Common.csproj" />
     <ProjectReference Include="..\Lib.Dogecoin\Lib.Dogecoin.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="Content\gear-fill.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Content\lock-fill.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Pages\Xml\SettingsPage.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Pages\Xml\SetupWalletPage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Pages\Xml\UnlockTerminalPage.xml">

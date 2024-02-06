@@ -95,5 +95,10 @@ namespace DogecoinTerminal.Common
 			_batch.DrawCircle(_screen.VirtualCoordToWindowCoord(center).ToVector2(), 1 * _screen.RenderScale, 16, TerminalColor.White.Color);
 
 		}
-    }
+
+		public void VisitContact(ContactControl contactControl)
+		{
+
+		}
+	}
 }

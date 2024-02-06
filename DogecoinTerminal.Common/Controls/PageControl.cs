@@ -11,6 +11,16 @@ namespace DogecoinTerminal.Common
 		public PageControl(XElement element)
 		{
 			Name = element.Attribute(nameof(Name)).Value;
+			var enabledAttr = element.Attribute(nameof(Enabled));
+
+			if(enabledAttr != null && bool.TryParse(enabledAttr.Value, out bool isEnabled))
+			{
+				Enabled = isEnabled;
+			}
+			else
+			{
+				Enabled = true;
+			}
 		}
 
 		protected Point GetPoint(XAttribute attribute)
@@ -43,6 +53,8 @@ namespace DogecoinTerminal.Common
 		}
 
 		public string Name { get; private set; }
+
+		public bool Enabled { get; set; }
 
 		public abstract bool ContainsPoint(Point point);
 

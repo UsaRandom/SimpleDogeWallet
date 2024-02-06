@@ -74,6 +74,8 @@ namespace DogecoinTerminal.Common
 
 		public override void Draw(GameTime time, IServiceProvider services)
 		{
+			if (!Enabled) return;
+
 			var imgages = services.GetService<Images>();
 			var screen = services.GetService<VirtualScreen>();
 
@@ -88,6 +90,8 @@ namespace DogecoinTerminal.Common
 
 		public override void Update(GameTime time, IServiceProvider services)
 		{
+			if (!Enabled) return;
+
 			_timeSinceLastFrame = _timeSinceLastFrame.Add(time.ElapsedGameTime);
 
 			if(_timeSinceLastFrame.Milliseconds > FrameTimeMs)

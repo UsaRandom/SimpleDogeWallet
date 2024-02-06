@@ -11,6 +11,8 @@ namespace DogecoinTerminal.Common
 
         string Name { get; }
 
+        bool Enabled { get; set; }
+
         bool ContainsPoint(Point point);
 
         void AcceptVisitor(IControlVisitor visitor);

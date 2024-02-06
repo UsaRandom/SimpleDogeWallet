@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -98,6 +99,68 @@ namespace DogecoinTerminal.Common
             string hash = Encoding.ASCII.GetString(data);
             return hash;
         }
+		public static bool VerifyP2PKHAddress(string address)
+		{
+			if (address.Length != 34 || !address.StartsWith("D"))
+			{
+				return false;
+			}
 
-    }
+			byte[] decodedAddress = DecodeBase58(address.Substring(1));
+			byte[] checksum = new byte[4];
+			Array.Copy(decodedAddress, decodedAddress.Length - 4, checksum, 0, 4);
+
+			byte[] expectedChecksum = Sha256(Sha256(decodedAddress.Take(decodedAddress.Length - 4).ToArray()));
+			Array.Copy(expectedChecksum, 0, checksum, 0, 4);
+
+			return checksum.SequenceEqual(expectedChecksum.Take(4));
+		}
+
+		private static byte[] DecodeBase58(string input)
+		{
+			const string base58chars = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+			int zeroCount = 0;
+			long result = 0;
+
+			for (int i = 0; i < input.Length; i++)
+			{
+				int digit = base58chars.IndexOf(input[i]);
+				if (digit < 0)
+				{
+					throw new ArgumentException("Invalid Base58 character", nameof(input));
+				}
+
+				result = result * 58 + digit;
+
+				if (input[i] == '1')
+				{
+					zeroCount++;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			byte[] output = new byte[input.Length - zeroCount];
+			for (int i = zeroCount; i < input.Length; i++)
+			{
+				int digit = base58chars.IndexOf(input[i]);
+				output[i - zeroCount] = (byte)(result % 256);
+				result /= 256;
+			}
+
+			Array.Reverse(output);
+			return output;
+		}
+
+		private static byte[] Sha256(byte[] data)
+		{
+			using (var sha256 = System.Security.Cryptography.SHA256.Create())
+			{
+				return sha256.ComputeHash(data);
+			}
+		}
+
+	}
 }

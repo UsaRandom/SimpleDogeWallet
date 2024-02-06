@@ -4,12 +4,16 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using DogecoinTerminal.Common;
 using Microsoft.Xna.Framework.Input;
-using DogecoinTerminal.Pages;
 using DogecoinTerminal.Common.BackgroundScenes;
 using System.Xml.Linq;
 using DogecoinTerminal.Common.Controls;
-using Lib.Dogecoin;
 using System;
+using System.Text;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using DogecoinTerminal.Common.Interop;
+using MonoGame.Framework.Utilities;
+using DogecoinTerminal.Common.Pages;
 
 namespace DogecoinTerminal
 {
@@ -33,6 +37,8 @@ namespace DogecoinTerminal
 		private ButtonState lastButtonState = ButtonState.Released;
 		private MoveHandlesControlVisitor _moveHandler;
 
+		private IClipboardService _clipboardService;
+		private IUserInputService _userInputService;
 
 		public DogecoinTerminalGame()
         {
@@ -63,16 +69,27 @@ namespace DogecoinTerminal
 
 			_nav = new Navigation(Services);
 
+			_userInputService = new UserInputService(this);
+
 
 			Services.AddService(Strings.Current);
             Services.AddService(_nav);
 			Services.AddService(_screen);
-            Services.AddService(new Images(GraphicsDevice));
+			Services.AddService(new ContactService());
+			Services.AddService(new Images(GraphicsDevice));
 			Services.AddService(_settings);
 			Services.AddService(GraphicsDevice);
 			Services.AddService<Game>(this);
 			Services.AddService<IServiceProvider>(Services);
+			Services.AddService(_userInputService);
 
+			//platform specific services
+			if(Environment.OSVersion.Platform == PlatformID.Win32NT)
+			{
+				_clipboardService = new WindowsClipboardService();
+
+				Services.AddService<IClipboardService>(_clipboardService);
+			}
 
 
 			//text input selector
@@ -99,17 +116,17 @@ namespace DogecoinTerminal
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+			_spriteBatch = new SpriteBatch(GraphicsDevice);
 
             _screen.Load(_spriteBatch);
 
 			//Just for testing wallet creation.
 
-			//SimpleDogeWallet.ClearWallet();
+			SimpleDogeWallet.ClearWallet();
 
-            _nav.PushAsync<StartPage>();
+			_nav.PushAsync<ContactsPage>();
         }
-
 
 		protected override void Update(GameTime gameTime)
 		{
@@ -150,7 +167,7 @@ namespace DogecoinTerminal
 								control.AcceptVisitor(xmlExporter);
 							}
 
-							TextCopy.ClipboardService.SetText(xmlExporter.PageElement.ToString());
+							_clipboardService.SetClipboardContents(xmlExporter.PageElement.ToString());
 						}
 					}
 

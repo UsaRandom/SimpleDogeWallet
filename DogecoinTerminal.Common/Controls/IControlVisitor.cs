@@ -13,5 +13,7 @@ namespace DogecoinTerminal.Common
         void VisitImage(ImageControl imageControl);
         void VisitSprite(SpriteControl spriteControl);
         void VisitText(TextControl textControl);
+
+        void VisitContact(ContactControl contactControl);
     }
 }

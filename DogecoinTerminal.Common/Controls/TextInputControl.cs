@@ -1,18 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DogecoinTerminal.Common.Interop;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Xml.Linq;
 
 namespace DogecoinTerminal.Common
 {
-	/*
-	 * TODO: Internationalization Support
-	 * 
-	 * Currently, this only supports latin characters and doesn't support japanes/korean/chinese input.
-	 * We'll have to bind directly to the keyboard input to support the other languages.
-	 * 
-	 */
 	public class TextInputControl : ButtonControl
 	{
 		public TextInputControl(XElement element)
@@ -21,7 +16,6 @@ namespace DogecoinTerminal.Common
 		}
 
 
-		private KeyboardState _previousState;
 		private bool _backspaceActive;
 		private double _backKeyPressedTime;
 		private double _backspaceTimer;
@@ -31,28 +25,18 @@ namespace DogecoinTerminal.Common
 
 		public override void Update(GameTime time, IServiceProvider services)
 		{
-			if(IsSelected && Editable)
+			if (!Enabled) return;
+
+			if (IsSelected && Editable)
 			{
-				var currentKeyboardState = Keyboard.GetState();
+				var inputService = services.GetService<IUserInputService>();
 
-				var currentKeys = currentKeyboardState.GetPressedKeys();
+				var userInput = inputService.GetTextInput();
 
-				var useUpperCase = ((currentKeyboardState.IsKeyDown(Keys.LeftShift) ||
-										currentKeyboardState.IsKeyDown(Keys.RightShift)) && !currentKeyboardState.CapsLock) ||
-										currentKeyboardState.CapsLock;
+				Debug.WriteLine(userInput);
 
 
-				// Determine which keys are newly pressed down
-				var newlyPressedKeys = new List<Keys>();
-				foreach (Keys key in currentKeys)
-				{
-					if (!_previousState.IsKeyDown(key))
-					{
-						newlyPressedKeys.Add(key);
-					}
-				}
-
-				if(newlyPressedKeys.Contains(Keys.Back) && Text.Length > 0)
+				if (!_backspaceActive && inputService.IsKeyDown(Keys.Back) && !string.IsNullOrEmpty(Text))
 				{
 					Text = Text.Substring(0, Text.Length - 1);
 					_backspaceActive = true;
@@ -60,7 +44,7 @@ namespace DogecoinTerminal.Common
 				}
 
 
-				if (!currentKeyboardState.IsKeyDown(Keys.Back))
+				if (_backspaceActive && !inputService.IsKeyDown(Keys.Back))
 				{
 					_backspaceActive = false;
 					_backKeyPressedTime = 0;
@@ -78,35 +62,8 @@ namespace DogecoinTerminal.Common
 						}
 					}
 				}
-			
-				// Do something with newly pressed keys
-				foreach (Keys key in newlyPressedKeys)
-				{
 
-					var character = ((char)key).ToString();
-
-					if("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.".Contains(character))
-					{
-
-						if (useUpperCase)
-						{
-							character = character.ToUpper();
-						}
-						else
-						{
-							character = character.ToLower();
-						}
-
-						Text += character;
-					}
-
-				}
-
-				_previousState = currentKeyboardState;
-			}
-			else
-			{
-				_previousState = default;
+				Text += userInput;
 			}
 		}
 

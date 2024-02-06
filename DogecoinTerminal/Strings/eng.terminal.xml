@@ -18,8 +18,8 @@
   </String>
 
   <String Id="terminal-setup-setupwallet"><![CDATA[Setup Wallet]]></String>
-  <String Id="terminal-setup-newwallet"><![CDATA[New Wallet]]></String>
-  <String Id="terminal-setup-loadwallet"><![CDATA[Load Wallet]]></String>
+  <String Id="terminal-setup-newwallet"><![CDATA[NEW WALLET]]></String>
+  <String Id="terminal-setup-loadwallet"><![CDATA[LOAD BACKUP]]></String>
 
   <String Id="terminal-setup-setpin"><![CDATA[Set your PIN]]></String>
   <String Id="terminal-setup-confirmpin"><![CDATA[Confirm your PIN]]></String>
@@ -45,9 +45,10 @@
   <String Id="terminal-settings-fullscreen">
     <![CDATA[    Fullscreen
 (Restart Required)]]></String>
-
-  <String Id="terminal-settings-devmode"><![CDATA[Developer Mode]]></String>
   
+  <String Id="terminal-settings-devmode"><![CDATA[Developer Mode]]></String>
+  <String Id="terminal-settings-dustlimit"><![CDATA[Dust Limit:]]></String> 
+
   
   
   <String Id="terminal-setuppage-setupbutton"><![CDATA[Setup]]></String>
@@ -84,8 +85,7 @@
 
   <Strings Id="terminal-wallet-remove"><![CDATA[Remove Wallet]]></Strings>
 
-  <String Id="terminal-enteroppin-title"><![CDATA[Enter Operator Pin to Unlock:]]></String>
-  <String Id="terminal-enterslotpin-title"><![CDATA[Enter Slot Pin to Unlock:]]></String>
+  <String Id="terminal-enteroppin-title"><![CDATA[Enter PIN to Unlock:]]></String>
   
   
 </Strings>

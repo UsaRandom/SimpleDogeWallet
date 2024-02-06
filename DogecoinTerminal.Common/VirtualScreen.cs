@@ -134,14 +134,20 @@ namespace DogecoinTerminal.Common
 
 		public void DrawText(string text, TerminalColor color, int scale, Point pos)
 		{
-			SpriteFontBase font = _fontSystem.GetFont((float)scale * (float)Math.Min(_renderScale, _renderScale));
+			if(color == null)
+			{
+				color = TerminalColor.White;
+			}
 
+			SpriteFontBase font = _fontSystem.GetFont((float)scale * (float)Math.Min(_renderScale, _renderScale));
+			
 			var textSize = font.MeasureString(text);
 
 			_spriteBatch.DrawString(font, text,
 				new Vector2(_xPad + (int)(pos.X * _renderScale) - (textSize.X) / 2,
 					        _yPad + (int)(pos.Y * _renderScale) - (textSize.Y) / 2),
-				GetOpacityColor());
+				 color.Color
+				);
 
 		}
 

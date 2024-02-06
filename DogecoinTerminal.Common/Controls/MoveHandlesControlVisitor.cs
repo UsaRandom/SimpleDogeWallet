@@ -179,5 +179,10 @@ namespace DogecoinTerminal.Common
 				control.Position = _screen.WindowCoordToVirtualCoord(_currentState.Position);
 			}
 		}
-    }
+
+		public void VisitContact(ContactControl contactControl)
+		{
+			
+		}
+	}
 }

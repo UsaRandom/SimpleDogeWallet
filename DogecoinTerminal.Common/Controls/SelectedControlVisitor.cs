@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DogecoinTerminal.Common.Controls;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -59,5 +60,20 @@ namespace DogecoinTerminal.Common.Controls
 		public void VisitSprite(SpriteControl spriteControl) { }
 
 		public void VisitText(TextControl textControl) { }
+
+		public void VisitContact(ContactControl contactControl)
+		{
+			if (_isSelecting)
+			{
+				if (contactControl.ContainsPoint(_screen.WindowCoordToVirtualCoord(new Point(_previousState.X, _previousState.Y))))
+				{
+					contactControl.IsSelected = true;
+				}
+				else
+				{
+					contactControl.IsSelected = false;
+				}
+			}
+		}
 	}
 }

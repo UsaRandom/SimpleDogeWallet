@@ -1,4 +1,5 @@
 ﻿using Cyotek.Drawing.BitmapFont;
+using DogecoinTerminal.Common.Controls;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -29,7 +30,14 @@ namespace DogecoinTerminal.Common.Controls
 
 		public void VisitButton(ButtonControl control)
 		{
-			XElement buttonControl = new XElement(DTCommonNamespace + "ButtonControl",
+			var buttonType = "ButtonControl";
+
+			if(control is CheckboxControl)
+			{
+				buttonType = "CheckboxControl";
+			}
+
+			XElement buttonControl = new XElement(DTCommonNamespace + buttonType,
 				new XAttribute("StartPosition", $"{control.StartPosition.X},{control.StartPosition.Y}"),
 				new XAttribute("EndPosition", $"{control.EndPosition.X},{control.EndPosition.Y}"),
 				new XAttribute("TextSize", control.TextSize),
@@ -109,6 +117,12 @@ namespace DogecoinTerminal.Common.Controls
 
 			PageElement.Add(textControl);
 		}
-	
+
+		public void VisitContact(ContactControl contactControl)
+		{
+
+		}
+
+
 	}
 }

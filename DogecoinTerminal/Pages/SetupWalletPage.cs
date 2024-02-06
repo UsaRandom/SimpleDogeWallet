@@ -174,7 +174,13 @@ namespace DogecoinTerminal.Pages
 		{
 			var screen = services.GetService<VirtualScreen>();
 
-			screen.DrawRectangle(TerminalColor.LightGrey, new Point(49, 28), new Point(50, 68));
+			screen.DrawRectangle(TerminalColor.DarkGrey, new Point(5, 30), new Point(48, 80));
+			screen.DrawRectangle(TerminalColor.DarkGrey, new Point(52, 30), new Point(95, 80));
+
+			screen.DrawRectangle(TerminalColor.Blue, new Point(5, 30), new Point(48, 40));
+			screen.DrawRectangle(TerminalColor.Green, new Point(52, 30), new Point(95, 40));
+
+
 
 			base.Draw(gameTime, services);
 		}

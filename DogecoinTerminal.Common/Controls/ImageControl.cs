@@ -45,6 +45,8 @@ namespace DogecoinTerminal.Common
 
 		public override bool ContainsPoint(Point point)
 		{
+			if (!Enabled) return false;
+
 			if (point.X >= StartPosition.X && point.X < EndPosition.X &&
 				point.Y >= StartPosition.Y && point.Y < EndPosition.Y)
 			{
@@ -55,6 +57,8 @@ namespace DogecoinTerminal.Common
 
 		public override void Draw(GameTime time, IServiceProvider services)
 		{
+			if (!Enabled) return;
+
 			var screen = services.GetService<VirtualScreen>();
 			var images = services.GetService<Images>();
 
@@ -72,7 +76,7 @@ namespace DogecoinTerminal.Common
 
 		public override void Update(GameTime time, IServiceProvider services)
 		{
-
+			if (!Enabled) return;
 
 			_imgDim = new Point(EndPosition.X - StartPosition.X, EndPosition.Y - StartPosition.Y);
 			_center = new Point(StartPosition.X + (_imgDim.X / 2), StartPosition.Y + (_imgDim.Y / 2));
