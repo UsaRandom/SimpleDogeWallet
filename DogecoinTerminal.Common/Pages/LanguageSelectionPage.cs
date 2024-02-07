@@ -11,12 +11,13 @@ namespace DogecoinTerminal.Common.Pages
 	[PageDef("Pages/Xml/LangaugeSelectionPage.xml")]
 	public class LanguageSelectionPage : PromptPage
 	{
-		public LanguageSelectionPage(IPageOptions options) : base(options)
+		public LanguageSelectionPage(IPageOptions options, ITerminalSettings settings) : base(options)
 		{
 			SelectedLanguageCode = Strings.Current.Language.LanguageCode;
 
 			OnClick("SubmitButton", _ =>
 			{
+				settings.Set("language", SelectedLanguageCode);
 				Submit();
 			});
 

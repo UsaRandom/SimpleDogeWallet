@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,6 +13,7 @@ namespace DogecoinTerminal
 	public class SimpleDogeWallet
 	{
 
+		public const int MIN_PIN_LENGTH = 4;
 		public const int TPM_FILE_NUMBER = 69; //nice
 		public const string ADDRESS_FILE = "address";
 		public const string LOADED_MNEMONIC_FILE = "loadedmnemonic";
@@ -79,6 +81,12 @@ namespace DogecoinTerminal
 			}
 		}
 
+		public static void UpdatePin(string oldPin, string newPin)
+		{
+			var address = Crypto.Decrypt(File.ReadAllText(ADDRESS_FILE), oldPin);
+
+			File.WriteAllText(ADDRESS_FILE, Crypto.Encrypt(address, newPin));
+		}
 
 		public static bool TryOpen(string pin, IServiceProvider services, out SimpleDogeWallet simpleDogeWallet)
 		{

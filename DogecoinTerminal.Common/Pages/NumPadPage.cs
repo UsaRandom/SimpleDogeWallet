@@ -17,7 +17,7 @@ namespace DogecoinTerminal.Common.Pages
 		private ImageControl _submitButton;
 
 		private TextControl _titleControl;
-		private TextControl _userTextControl;
+		private ButtonControl _userTextControl;
 		private string		_regex = string.Empty;
 		private bool		_isValueMode = false;
 		private string		_hint = string.Empty;
@@ -26,7 +26,9 @@ namespace DogecoinTerminal.Common.Pages
 		{
 			_titleControl = GetControl<TextControl>("Title");
 			_submitButton = GetControl<ImageControl>("SubmitButton");
-			_userTextControl = GetControl<TextControl>("UserText");
+			_userTextControl = GetControl<ButtonControl>("UserTextInput");
+
+			GetControl<TextControl>("HintText").Text = options.GetOption("hint", string.Empty);
 
 			HandleOptions();
 
@@ -120,7 +122,7 @@ namespace DogecoinTerminal.Common.Pages
 		{
 			if (!string.IsNullOrEmpty(_regex))
 			{
-				if (Regex.IsMatch(_userTextControl.Text, _regex))
+				if (!Regex.IsMatch(_userTextControl.Text, _regex))
 				{
 					return false;
 				}

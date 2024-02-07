@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Lib.Dogecoin;
 using System.IO;
 using System.Transactions;
+using System.Xml.Linq;
 
 namespace DogecoinTerminal.Pages
 {
@@ -17,11 +18,11 @@ namespace DogecoinTerminal.Pages
 	internal class SetupWalletPage : Page
 	{
 
-		private const int MIN_PIN_LENGTH = 4;
-
+		private Game _game;
 
 		public SetupWalletPage(IPageOptions options, Navigation navigation, Strings strings, Game game, ITerminalSettings settings) : base(options)
 		{
+			_game = game;
 
 			OnClick("NewWalletButton", async _ =>
 			{
@@ -45,9 +46,12 @@ namespace DogecoinTerminal.Pages
 			var newPin = string.Empty;
 			var confirmPin = string.Empty;
 
-			while (newPin != confirmPin || newPin.Length < MIN_PIN_LENGTH)
+			while (newPin != confirmPin || newPin.Length < SimpleDogeWallet.MIN_PIN_LENGTH)
 			{
-				var enterPin = await navigation.PromptAsync<NumPadPage>(("title", strings.GetString("terminal-setup-setpin")));
+				var enterPin = await navigation.PromptAsync<NumPadPage>(
+					("title", strings.GetString("terminal-setup-setpin")),
+					("hint", strings.GetString("terminal-setup-setpin-hint")),
+					("regex", ".{" + SimpleDogeWallet.MIN_PIN_LENGTH + ",16}"));
 
 				if (enterPin.Response == PromptResponse.YesConfirm)
 				{
@@ -59,7 +63,10 @@ namespace DogecoinTerminal.Pages
 					return;
 				}
 
-				var confirm = await navigation.PromptAsync<NumPadPage>(("title", strings.GetString("terminal-setup-confirmpin")));
+				var confirm = await navigation.PromptAsync<NumPadPage>(
+					("title", strings.GetString("terminal-setup-confirmpin")),
+					("hint", strings.GetString("terminal-setup-confirmpin-hint")),
+					("regex", ".{"+ SimpleDogeWallet.MIN_PIN_LENGTH + ",16}"));
 
 				if (confirm.Response == PromptResponse.YesConfirm)
 				{
@@ -145,6 +152,7 @@ namespace DogecoinTerminal.Pages
 
 			if (createdWallet)
 			{
+				_game.Services.AddService(LibDogecoinContext.CreateContext());
 				await navigation.TryInsertBeforeAsync<WalletPage, LoadingPage>(("address", address));
 				await navigation.PopToPage<WalletPage>();
 			}

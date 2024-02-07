@@ -12,7 +12,7 @@ namespace DogecoinTerminal.Pages
 {
 	internal class StartPage : Page
 	{
-		public StartPage(IPageOptions options, Navigation navigation) : base(options)
+		public StartPage(IPageOptions options, Navigation navigation, DogecoinTerminalGame game) : base(options)
 		{
 			var hasWallet = File.Exists(SimpleDogeWallet.ADDRESS_FILE);//detect
 
@@ -23,6 +23,8 @@ namespace DogecoinTerminal.Pages
 				{
 					await navigation.PromptAsync<LanguageSelectionPage>();
 
+
+
 					await navigation.PushAsync<SetupWalletPage>();
 				});
 			}
@@ -30,6 +32,8 @@ namespace DogecoinTerminal.Pages
 			{
 				Task.Run(async () =>
 				{
+					game.Services.AddService(Lib.Dogecoin.LibDogecoinContext.CreateContext());
+
 					await navigation.PushAsync<UnlockTerminalPage>();
 				});
 			}

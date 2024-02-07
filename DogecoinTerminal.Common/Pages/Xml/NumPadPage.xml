@@ -20,15 +20,22 @@
         TextSize="4"
         Position="50,10"/>
 
+
+
+  <common:ButtonControl
+			Name="UserTextInput"
+			StartPosition="26,14"
+			EndPosition="74,24"
+			BackgroundColor="DarkGrey"
+			ForegroundColor="White"
+			TextSize="8"/>
+
+
   <common:TextControl
-        Name="UserText"
+        Name="HintText"
         Color="White"
-        TextSize="8"
-        Position="50,20"/>
-
-
-
-
+        TextSize="3"
+        Position="50,27"/>
 
   <common:ImageControl
 				Name="SubmitButton"
@@ -43,6 +50,7 @@
 			Name="Button_1"
 			StartPosition="26,30"
 			EndPosition="40,43"
+		  Selectable="false"
 			BackgroundColor="DarkGrey"
 			ForegroundColor="White"
 			TextSize="6"/>
@@ -50,7 +58,8 @@
 	<common:ButtonControl Text="2"
 				Name="Button_2"
 				StartPosition="43,30"
-				EndPosition="57,43"
+      EndPosition="57,43"
+    Selectable="false"
 				BackgroundColor="DarkGrey"
 				ForegroundColor="White"
 				TextSize="6"/>
@@ -59,6 +68,7 @@
 				Name="Button_3"
 				StartPosition="60,30"
 				EndPosition="74,43"
+		  Selectable="false"
 				BackgroundColor="DarkGrey"
 				ForegroundColor="White"
 				TextSize="6"/>
@@ -66,7 +76,8 @@
 	<common:ButtonControl Text="4"
 				Name="Button_4"
 				StartPosition="26,47"
-				EndPosition="40,61"
+      EndPosition="40,61"
+    Selectable="false"
 				BackgroundColor="DarkGrey"
 				ForegroundColor="White"
 				TextSize="6"/>
@@ -74,7 +85,8 @@
 	<common:ButtonControl Text="5"
 				Name="Button_5"
 				StartPosition="43,47"
-				EndPosition="57,61"
+      EndPosition="57,61"
+    Selectable="false"
 				BackgroundColor="DarkGrey"
 				ForegroundColor="White"
 				TextSize="6"/>
@@ -82,7 +94,8 @@
 	<common:ButtonControl Text="6"
 				Name="Button_6"
 				StartPosition="60,47"
-				EndPosition="74,61"
+      EndPosition="74,61"
+    Selectable="false"
 				BackgroundColor="DarkGrey"
 				ForegroundColor="White"
 				TextSize="6"/>
@@ -91,7 +104,8 @@
 	<common:ButtonControl Text="7"
 				Name="Button_7"
 				StartPosition="26,64"
-				EndPosition="40,78"
+      EndPosition="40,78"
+    Selectable="false"
 				BackgroundColor="DarkGrey"
 				ForegroundColor="White"
 				TextSize="6"/>
@@ -100,6 +114,7 @@
 				Name="Button_8"
 				StartPosition="43,64"
 				EndPosition="57,78"
+		  Selectable="false"
 				BackgroundColor="DarkGrey"
 				ForegroundColor="White"
 				TextSize="6"/>
@@ -107,7 +122,8 @@
 	<common:ButtonControl Text="9"
 				Name="Button_9"
 				StartPosition="60,64"
-				EndPosition="74,78"
+      EndPosition="74,78"
+    Selectable="false"
 				BackgroundColor="DarkGrey"
 				ForegroundColor="White"
 				TextSize="6"/>
@@ -115,7 +131,8 @@
 	<common:ButtonControl Text="."
 				Name="Button_."
 				StartPosition="26,81"
-				EndPosition="40,95"
+      EndPosition="40,95"
+    Selectable="false"
 				BackgroundColor="DarkGrey"
 				ForegroundColor="White"
 				TextSize="6"/>
@@ -124,6 +141,7 @@
 				Name="Button_0"
 				StartPosition="43,81"
 				EndPosition="57,95"
+		  Selectable="false"
 				BackgroundColor="DarkGrey"
 				ForegroundColor="White"
 				TextSize="6"/>
@@ -132,6 +150,7 @@
 				Name="Button_Delete"
 				StartPosition="60,81"
 				EndPosition="74,95"
+		  Selectable="false"
 				BackgroundColor="DarkGrey"
         ImageSource="Content\delete-button.png"
 				TextSize="6"/>

@@ -7,6 +7,7 @@ namespace DogecoinTerminal.Common
 {
     public class ButtonControl : PageControl
 	{
+		private bool _selected = false;
 
 		public ButtonControl(XElement element)
 			: base(element)
@@ -19,10 +20,34 @@ namespace DogecoinTerminal.Common
 			StringDef = element.Attribute(nameof(StringDef))?.Value;
 			Text = StringDef ?? element.Attribute(nameof(Text))?.Value;
 
+			var selectableText = element.Attribute(nameof(Selectable))?.Value;
+
+			if (!string.IsNullOrEmpty(selectableText))
+			{
+				Selectable = bool.Parse(selectableText);
+			}
+
 			IsSelected = false;
 		}
 	
-		public bool IsSelected { get; set; }
+		public bool IsSelected
+		{
+			get
+			{
+				return _selected;
+			}
+			set
+			{
+				if (Selectable && value)
+				{
+					_selected = true;
+				}
+				else
+				{
+					_selected = false;
+				}
+			}
+		}
 
 		public string Text { get; set; }
 		public Point StartPosition { get; set; }
@@ -31,7 +56,8 @@ namespace DogecoinTerminal.Common
 		public TerminalColor ForegroundColor { get; set; }
 		public int TextSize { get; set; }
 
-
+		public bool Selectable { get; set; } = true;
+ 
 		public string StringDef { get; set; }
 
 		public override bool ContainsPoint(Point point)

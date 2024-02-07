@@ -1,8 +1,11 @@
 ﻿using DogecoinTerminal.Common;
 using DogecoinTerminal.Common.Pages;
+using Lib.Dogecoin;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,7 +17,7 @@ namespace DogecoinTerminal.Pages
 		public const decimal DEFAULT_DUST_LIMIT = 0.001M;
 		public const decimal DEFAULT_FEE_PER_BYTE = 0.001M;
 
-		public SettingsPage(IPageOptions options, ITerminalSettings settings, Navigation navigation, Strings strings) : base(options)
+		public SettingsPage(IPageOptions options, IServiceProvider services, ITerminalSettings settings, Navigation navigation, Strings strings, LibDogecoinContext ctx) : base(options)
 		{
 			GetControl<CheckboxControl>("ToggleBackground").IsChecked = settings.GetBool("terminal-background", true);
 			GetControl<CheckboxControl>("ToggleFullscreen").IsChecked = settings.GetBool("terminal-fullscreen", false);
@@ -54,14 +57,136 @@ namespace DogecoinTerminal.Pages
 
 			OnClick("SetDustLimitButton", async _ =>
 			{
-				var updateResult = navigation.PromptAsync<NumPadPage>(("title", strings["terminal-settings-dustlimit"]),
+				var updateResult = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-settings-dustlimit"]),
 																	("value-mode", true),
-																	("regex", "0\\.[0-9]{1,8}"));
+																	("start-value", settings.GetDecimal("dust-limit", DEFAULT_DUST_LIMIT).ToString()));
+
+				if(updateResult.Response == PromptResponse.YesConfirm)
+				{
+					var newDustLimit = decimal.Parse(updateResult.Value.ToString());
+
+					if(newDustLimit > 0)
+					{
+						settings.Set("dust-limit", newDustLimit);
+						GetControl<ButtonControl>("SetDustLimitButton").Text = newDustLimit.ToString();
+					}
+				}
+			});
+
+			OnClick("SetFeePerByteButton", async _ =>
+			{
+				var updateResult = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-settings-feeperbyte"]),
+																	("value-mode", true),
+																	("start-value", settings.GetDecimal("fee-per-byte", DEFAULT_DUST_LIMIT).ToString()));
+
+				if (updateResult.Response == PromptResponse.YesConfirm)
+				{
+					var newDustLimit = decimal.Parse(updateResult.Value.ToString());
+
+					if (newDustLimit > 0)
+					{
+						settings.Set("fee-per-byte", newDustLimit);
+						GetControl<ButtonControl>("SetFeePerByteButton").Text = newDustLimit.ToString();
+					}
+				}
+			});
+
+
+			OnClick("UpdatePinButton", async _ =>
+			{
+				await navigation.PushAsync<LoadingPage>();
+
+				var newPin = string.Empty;
+				var confirmPin = string.Empty;
+				
+				var oldPinResponse = await navigation.PromptAsync<NumPadPage>(
+					("title", strings.GetString("terminal-settings-oldpin")),
+					("regex", ".{" + SimpleDogeWallet.MIN_PIN_LENGTH + ",16}"));
+
+
+				if(oldPinResponse.Response == PromptResponse.NoCancelBack ||
+				   !SimpleDogeWallet.TryOpen((string)oldPinResponse.Value, services, out SimpleDogeWallet _))
+				{
+					navigation.Pop();
+					return;
+				}
+
+				var oldPin = (string)oldPinResponse.Value;
+
+				while (newPin != confirmPin || newPin.Length < SimpleDogeWallet.MIN_PIN_LENGTH)
+				{
+					var enterPin = await navigation.PromptAsync<NumPadPage>(
+						("title", strings.GetString("terminal-setup-setpin")),
+						("hint", strings.GetString("terminal-setup-setpin-hint")),
+						("regex", ".{"+ SimpleDogeWallet.MIN_PIN_LENGTH + ",16}"));
+
+					if (enterPin.Response == PromptResponse.YesConfirm)
+					{
+						newPin = (string)enterPin.Value;
+					}
+					else
+					{
+						navigation.Pop();
+						return;
+					}
+
+					var confirm = await navigation.PromptAsync<NumPadPage>(
+						("title", strings.GetString("terminal-setup-confirmpin")),
+						("hint", strings.GetString("terminal-setup-confirmpin-hint")),
+						("regex", ".{"+ SimpleDogeWallet.MIN_PIN_LENGTH + ",16}"));
+
+					if (confirm.Response == PromptResponse.YesConfirm)
+					{
+						confirmPin = (string)confirm.Value;
+					}
+				}
+
+				SimpleDogeWallet.UpdatePin(oldPin, confirmPin);
+
+				navigation.Pop();
+			});
+
+
+			OnClick("LanguageButton", async _ =>
+			{
+				await navigation.PromptAsync<LanguageSelectionPage>();
+			});
+
+			OnClick("BackupCodesButton", async _ =>
+			{
+				await navigation.PushAsync<LoadingPage>();
+
+				var oldPinResponse = await navigation.PromptAsync<NumPadPage>(
+					("title", strings.GetString("terminal-enteroppin-title")),
+					("regex", ".{" + SimpleDogeWallet.MIN_PIN_LENGTH + ",16}"));
+
+
+				if (oldPinResponse.Response == PromptResponse.YesConfirm &&
+				   SimpleDogeWallet.TryOpen((string)oldPinResponse.Value, services, out SimpleDogeWallet wallet))
+				{
+
+					await navigation.PromptAsync<BackupCodePage>(("title", strings.GetString("terminal-backupcodes-title")),
+												                 ("editmode", false),
+																 ("mnemonic", wallet.GetMnemonic(ctx)));
+				}
+
+				navigation.Pop();
+			});
+
+
+			OnClick("SPVButton", async _ =>
+			{
 
 			});
+
+			OnClick("DeleteButton", async _ =>
+			{
+
+			});
+
 		}
 
 
-		
+
 	}
 }
