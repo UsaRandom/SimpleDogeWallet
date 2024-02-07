@@ -413,6 +413,10 @@ namespace Lib.Dogecoin.Interop
 		[DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool dogecoin_spv_client_load(IntPtr spvClient, char[] file);
 
+		[DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		public static extern bool broadcast_raw_tx(IntPtr chain, char[] raw_hex_tx);
+
+
 		#endregion SPV
 
 	}

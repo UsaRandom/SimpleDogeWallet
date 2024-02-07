@@ -14,9 +14,6 @@ namespace DogecoinTerminal.Pages
     [PageDef("Pages/Xml/SettingsPage.xml")]
 	internal class SettingsPage : Page
 	{
-		public const decimal DEFAULT_DUST_LIMIT = 0.001M;
-		public const decimal DEFAULT_FEE_PER_UTXO = 0.002M;
-
 		public SettingsPage(IPageOptions options, IServiceProvider services, ITerminalSettings settings, Navigation navigation, Strings strings, LibDogecoinContext ctx) : base(options)
 		{
 			GetControl<CheckboxControl>("ToggleBackground").IsChecked = settings.GetBool("terminal-background", true);
@@ -24,8 +21,8 @@ namespace DogecoinTerminal.Pages
 			GetControl<CheckboxControl>("ToggleDevMode").IsChecked = settings.GetBool("terminal-devmode", false);
 
 
-			GetControl<ButtonControl>("SetDustLimitButton").Text = settings.GetDecimal("dust-limit", DEFAULT_DUST_LIMIT).ToString();
-			GetControl<ButtonControl>("SetFeePerUTXOButton").Text = settings.GetDecimal("fee-per-utxo", DEFAULT_FEE_PER_UTXO).ToString();
+			GetControl<ButtonControl>("SetDustLimitButton").Text = settings.GetDecimal("dust-limit").ToString();
+			GetControl<ButtonControl>("SetFeePerUTXOButton").Text = settings.GetDecimal("fee-per-utxo").ToString();
 
 			OnClick("BackButton", async _ =>
 			{
@@ -59,7 +56,7 @@ namespace DogecoinTerminal.Pages
 			{
 				var updateResult = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-settings-dustlimit"]),
 																	("value-mode", true),
-																	("start-value", settings.GetDecimal("dust-limit", DEFAULT_DUST_LIMIT).ToString()));
+																	("start-value", settings.GetDecimal("dust-limit").ToString()));
 
 				if(updateResult.Response == PromptResponse.YesConfirm)
 				{
@@ -75,9 +72,9 @@ namespace DogecoinTerminal.Pages
 
 			OnClick("SetFeePerUTXOButton", async _ =>
 			{
-				var updateResult = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-settings-feeperbyte"]),
+				var updateResult = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-settings-feeperutxo"]),
 																	("value-mode", true),
-																	("start-value", settings.GetDecimal("fee-per-utxo", DEFAULT_DUST_LIMIT).ToString()));
+																	("start-value", settings.GetDecimal("fee-per-utxo").ToString()));
 
 				if (updateResult.Response == PromptResponse.YesConfirm)
 				{
@@ -181,7 +178,23 @@ namespace DogecoinTerminal.Pages
 
 			OnClick("DeleteButton", async _ =>
 			{
+				await navigation.PushAsync<LoadingPage>();
 
+				var oldPinResponse = await navigation.PromptAsync<NumPadPage>(
+					("title", strings.GetString("terminal-enteroppin-title")),
+					("regex", ".{" + SimpleDogeWallet.MIN_PIN_LENGTH + ",16}"));
+
+
+				if (oldPinResponse.Response == PromptResponse.YesConfirm &&
+				   SimpleDogeWallet.TryOpen((string)oldPinResponse.Value, services, out SimpleDogeWallet wallet))
+				{
+					SimpleDogeWallet.ClearWallet();
+					await navigation.TryInsertBeforeAsync<StartPage, WalletPage>();
+					await navigation.PopToPage<StartPage>();
+					return;
+				}
+
+				navigation.Pop();
 			});
 
 		}

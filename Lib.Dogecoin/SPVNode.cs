@@ -264,7 +264,13 @@ namespace Lib.Dogecoin
 		}
 
 
-
+		~SPVNode()
+		{
+			if(_spvNodeRef != IntPtr.Zero)
+			{
+				LibDogecoinInterop.dogecoin_spv_client_free(_spvNodeRef);
+			}
+		}
 
 
 		private unsafe void CreateSPVClient()

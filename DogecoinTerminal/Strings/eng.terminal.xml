@@ -52,7 +52,7 @@
   <String Id="terminal-settings-dustlimit"><![CDATA[Dust Limit:]]></String>
   <String Id="terminal-settings-feeperutxo"><![CDATA[Fee per UTXO:]]></String>
 
-  <String Id="terminal-settings-oldpin"><![CDATA[Enter Current PIN]]></String>
+  <String Id="terminal-settings-oldpin"><![CDATA[Enter PIN]]></String>
   <String Id="terminal-settings-updatepin"><![CDATA[Update PIN]]></String>
   <String Id="terminal-settings-backupcodes"><![CDATA[Backup Codes]]></String>
   <String Id="terminal-settings-language"><![CDATA[Language]]></String>
@@ -63,18 +63,20 @@
   <String Id="terminal-setuppage-setupbutton"><![CDATA[Setup]]></String>
   <String Id="terminal-unlockpage-unlockbutton"><![CDATA[Unlock]]></String>
   <String Id="terminal-unlockpage-exitbutton"><![CDATA[Exit]]></String>
+
+
+
+
+  <String Id="terminal-send-confirmpin"><![CDATA[Confirm PIN to Send]]></String>
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+  <String Id="terminal-sendamount-title"><![CDATA[Amount to Send]]></String>
+
+
+
+
+
+
   <Strings Id="terminal-walletlist-emptyslot"><![CDATA[Empty Slot]]></Strings>
   <Strings Id="terminal-walletlist-title"><![CDATA[Select a Wallet/Slot]]></Strings>
 

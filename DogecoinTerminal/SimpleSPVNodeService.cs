@@ -59,7 +59,6 @@ namespace DogecoinTerminal
 			//	.StartAt(CurrentBlock.Hash, CurrentBlock.BlockHeight)
 				.UseCheckpointFile(SPV_CHECKPOINT_FILE)
 				.UseMainNet()
-				.EnableDebug()
 				.OnNextBlock(HandleOnBlock)
 				.OnTransaction(HandleOnTransaction)
 				.Build() ;
@@ -99,9 +98,14 @@ namespace DogecoinTerminal
 
 			foreach (var spentUtxo in tx.In)
 			{
+
 				if (_currentWallet.PendingSpentUTXOs.Remove(spentUtxo))
 				{
-					_currentWallet.UTXOs.Remove(spentUtxo);
+					walletChanged = true;
+				}
+
+				if (_currentWallet.UTXOs.Remove(spentUtxo))
+				{
 					walletChanged = true;
 				}
 			}

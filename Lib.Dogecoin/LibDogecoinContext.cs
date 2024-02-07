@@ -525,6 +525,14 @@ namespace Lib.Dogecoin
 
 
 
+		public bool BroadcastRawTransaction(string rawTransaction, bool isMainNet = true)
+		{
+			lock (_lock)
+			{
+				return LibDogecoinInterop.broadcast_raw_tx(_mainChain, rawTransaction.NullTerminate());
+			}
+		}
+
 		public void Dispose()
 		{
 			lock (_lock)

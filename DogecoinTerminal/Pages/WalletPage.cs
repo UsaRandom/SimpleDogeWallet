@@ -11,6 +11,7 @@ using static System.Net.Mime.MediaTypeNames;
 using ZXing.QrCode;
 using ZXing;
 using Microsoft.Xna.Framework;
+using OpenCvSharp;
 
 namespace DogecoinTerminal.Pages
 {
@@ -25,7 +26,7 @@ namespace DogecoinTerminal.Pages
 		private SimpleDogeWallet _wallet;
 		private SimpleSPVNodeService _spvNode;
 
-		public WalletPage(IPageOptions options, Navigation navigation, Strings strings, GraphicsDevice graphicsDevice, SimpleSPVNodeService spvNode) : base(options)
+		public WalletPage(IPageOptions options, IServiceProvider services,  IClipboardService clipboard, ITerminalSettings settings, Navigation navigation, Strings strings, GraphicsDevice graphicsDevice, SimpleSPVNodeService spvNode) : base(options)
         {
 			_wallet = options.GetOption<SimpleDogeWallet>("wallet");
 
@@ -44,7 +45,8 @@ namespace DogecoinTerminal.Pages
 
 
             var balanceTextControl = GetControl<TextControl>("BalanceText");
-			balanceTextControl.Text = $"Đ {_wallet.GetBalance():#.###}";
+			balanceTextControl.Text = $"Đ {(_wallet.GetBalance() ):#,0.000}";
+			GetControl<TextControl>("PendingBalanceText").Text = $"(Đ {(_wallet.GetPendingBalance()):#,0.000})";
 
 
 			_qrCodeImage = new Texture2D(graphicsDevice, 480, 480);
@@ -68,6 +70,11 @@ namespace DogecoinTerminal.Pages
 			{
 				await navigation.PushAsync<SettingsPage>();
 			});
+			OnClick("CopyButton", async _ =>
+			{
+				clipboard.SetClipboardContents(_wallet.Address);
+			});
+
 			OnClick("LockButton", async _ =>
 			{
 				await navigation.TryInsertBeforeAsync<UnlockTerminalPage, WalletPage>();
@@ -78,6 +85,104 @@ namespace DogecoinTerminal.Pages
 			{
 				await navigation.PushAsync<ContactsPage>(("edit-mode", true));
 			});
+
+
+			OnClick("SendButton", async _ =>
+			{
+				await navigation.PushAsync<LoadingPage>();
+
+				var destinationResult = await navigation.PromptAsync<ContactsPage>(("edit-mode", false));
+
+				if(destinationResult.Response != PromptResponse.YesConfirm)
+				{
+					navigation.Pop();
+					return;
+				}
+
+				var target = (Contact)destinationResult.Value;
+
+				var maxSpend = _wallet.GetBalance() - _wallet.GetPendingBalance();
+
+				maxSpend -= (_wallet.UTXOs.Count - _wallet.PendingSpentUTXOs.Count) * settings.GetDecimal("fee-per-utxo");
+
+				var amountResult = await navigation.PromptAsync<NumPadPage>(("value-mode", true),
+																			("title", "terminal-sendamount-title"),
+																			("hint", $"(Đ {maxSpend:#,0.000})"));
+
+
+				
+
+				if(amountResult.Response != PromptResponse.YesConfirm ||
+					!decimal.TryParse(amountResult?.Value.ToString(), out decimal amountToSend) ||
+					amountToSend < settings.GetDecimal("dust-limit") ||
+					amountToSend > maxSpend)
+				{
+					navigation.Pop();
+					return;
+				}
+
+				var sendYesNo = await navigation.PromptAsync<YesNoPage>(("message", $"Đ {amountToSend:#,0.000}  -> {target.Name} ({target.ShortAddress})"));
+
+				if(sendYesNo.Response != PromptResponse.YesConfirm)
+				{
+					navigation.Pop();
+					return;
+				}
+
+
+				var numPadResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-send-confirmpin"]));
+
+				if (numPadResponse.Response != PromptResponse.YesConfirm ||
+					!SimpleDogeWallet.TryOpen(numPadResponse.Value.ToString(),
+												services,
+												out SimpleDogeWallet simpleWallet))
+				{
+					navigation.Pop();
+					return;
+				}
+
+				//
+
+				var transaction = new DogecoinTransaction(services, _wallet);
+
+				if(!transaction.Send(target.Address, amountToSend))
+				{
+					await navigation.PromptAsync<ShortMessagePage>(("message", "Error creating transaction."));
+					navigation.Pop();
+					return;
+				}
+				if (!transaction.Sign())
+				{
+					await navigation.PromptAsync<ShortMessagePage>(("message", "Error signing transaction."));
+					navigation.Pop();
+					return;
+				}
+
+
+				
+
+
+
+				var rawTx = transaction.GetRawTransaction();
+
+				if (!LibDogecoinContext.Instance.BroadcastRawTransaction(rawTx))
+				{
+					await navigation.PromptAsync<ShortMessagePage>(("message", "Error broadcasting transaction."));
+					navigation.Pop();
+				}
+				else
+				{
+					transaction.Commit();
+					GetControl<TextControl>("PendingBalanceText").Text = $"(Đ {(_wallet.GetPendingBalance()):#,0.000})";
+
+					await navigation.PromptAsync<ShortMessagePage>(("message", "Transaction Broadcast!"));
+					navigation.Pop();
+				}
+
+
+			});
+
+
 
 			UpdateSPVText();
 		}
@@ -101,7 +206,7 @@ namespace DogecoinTerminal.Pages
 		public override void Draw(GameTime gameTime, IServiceProvider services)
 		{
 			var screen = services.GetService<VirtualScreen>();
-			screen.DrawImage(_qrCodeImage, new Point(50, 60), new Point(40, 40));
+			screen.DrawImage(_qrCodeImage, new Microsoft.Xna.Framework.Point(50, 60), new Microsoft.Xna.Framework.Point(40, 40));
 			base.Draw(gameTime, services);
 		}
 
@@ -109,6 +214,8 @@ namespace DogecoinTerminal.Pages
 		{
 			var balanceTextControl = GetControl<TextControl>("BalanceText");
 			balanceTextControl.Text = $"Đ {_wallet.GetBalance():#.###}";
+			GetControl<TextControl>("PendingBalanceText").Text = $"(Đ {(_wallet.GetPendingBalance()):#,0.000})";
+
 		}
 
 		public void Receive(SPVNodeBlockInfo message)

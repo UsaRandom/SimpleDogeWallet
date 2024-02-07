@@ -1,15 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<Page xmlns:common="DogecoinTerminal.Common">
+﻿<Page xmlns:common="DogecoinTerminal.Common">
   <common:ImageControl Name="Doge" StartPosition="42,5" EndPosition="58,21" ImageSource="Content/dogedrawn.png" />
   <common:ImageControl Name="LockButton" StartPosition="5,85" EndPosition="15,95" ImageSource="Content\lock-fill.png" BackgroundColor="DarkGrey" />
-  <common:ImageControl Name="CopyButton" StartPosition="85,29" EndPosition="93,37" ImageSource="Content\copy-button.png" BackgroundColor="DarkGrey" />
+  <common:ImageControl Name="CopyButton" StartPosition="86,31" EndPosition="94,39" ImageSource="Content\copy-button.png" BackgroundColor="DarkGrey" />
   <common:ImageControl Name="SettingsButton" StartPosition="17,85" EndPosition="27,95" ImageSource="Content\gear-fill.png" BackgroundColor="DarkGrey" />
   <common:ImageControl Name="ContactsButton" StartPosition="29,85" EndPosition="39,95" ImageSource="Content\contacts-icon.png" BackgroundColor="DarkGrey" />
-
-  <common:TextControl Name="AddressText" Color="White" Position="50,33" TextSize="4" Text="D7npQRBdDMnSdbtcdNuTCLKS3rdSSqmN9V" />
-  <common:TextControl Name="BalanceText" Color="White" Position="50,26" TextSize="9" Text="Đ 0.000" />
+  <common:TextControl Name="AddressText" Color="White" Position="50,35" TextSize="4" Text="" />
+  <common:TextControl Name="BalanceText" Color="White" Position="50,27" TextSize="9" Text="" />
+  <common:TextControl Name="PendingBalanceText" Color="Red" Position="50,32" TextSize="3" Text="" />
   <common:ButtonControl StartPosition="75,85" EndPosition="95,95" TextSize="4" Name="SendButton" BackgroundColor="Green" ForegroundColor="White" StringDef="terminal-wallet-send" />
-
-  <common:TextControl Name="SPVNodeInfo" Color="White" Position="50,97" TextSize="2" Text="" />
-
+  <common:TextControl Name="SPVNodeInfo" Color="White" Position="50,2" TextSize="2" Text="" />
 </Page>

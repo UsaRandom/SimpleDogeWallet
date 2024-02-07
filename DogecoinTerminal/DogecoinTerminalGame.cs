@@ -72,6 +72,16 @@ namespace DogecoinTerminal
 			_settings.Set("terminal-devmode", false);
 			_settings.Set("terminal-background", true);
 
+			if (!_settings.IsSet("dust-limit"))
+			{
+				_settings.Set("dust-limit", SimpleDogeWallet.DEFAULT_DUST_LIMIT);
+			}
+
+			if (!_settings.IsSet("fee-per-utxo"))
+			{
+				_settings.Set("fee-per-utxo", SimpleDogeWallet.DEFAULT_FEE_PER_UTXO);
+			}
+
 			Strings.Current.SelectLanguage(
 				Language.Languages[_settings.GetString("language", "eng")]);
 			

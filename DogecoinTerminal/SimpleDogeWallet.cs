@@ -12,6 +12,9 @@ namespace DogecoinTerminal
 {
 	public class SimpleDogeWallet
 	{
+		public const decimal DEFAULT_DUST_LIMIT = 0.001M;
+		public const decimal DEFAULT_FEE_PER_UTXO = 0.002M;
+
 
 		public const int MIN_PIN_LENGTH = 4;
 		public const int TPM_FILE_NUMBER = 69; //nice
@@ -233,6 +236,7 @@ namespace DogecoinTerminal
 			File.Delete(ADDRESS_FILE);
 			File.Delete(LOADED_MNEMONIC_FILE);
 			File.Delete(UTXO_FILE);
+			File.Delete(PENDING_UTXO_FILE);
 		}
 
 

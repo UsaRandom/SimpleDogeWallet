@@ -24,7 +24,6 @@ namespace DogecoinTerminal.Common
 		public string Text { get; set; }
 		public Point Position { get; set; }
 		public TerminalColor Color { get; set; }
-		public TerminalColor ForegroundColor { get; set; }
 		public int TextSize { get; set; }
 
 
@@ -43,7 +42,7 @@ namespace DogecoinTerminal.Common
 			var screen = services.GetService<VirtualScreen>();
 
 
-			screen.DrawText(Text, ForegroundColor, TextSize, Position);
+			screen.DrawText(Text, Color, TextSize, Position);
 		}
 
 		public override void Update(GameTime time, IServiceProvider services)
