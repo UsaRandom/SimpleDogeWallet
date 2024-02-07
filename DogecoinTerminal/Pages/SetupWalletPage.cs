@@ -20,25 +20,25 @@ namespace DogecoinTerminal.Pages
 
 		private Game _game;
 
-		public SetupWalletPage(IPageOptions options, Navigation navigation, Strings strings, Game game, ITerminalSettings settings) : base(options)
+		public SetupWalletPage(IPageOptions options, Navigation navigation, Strings strings, Game game, ITerminalSettings settings, LibDogecoinContext ctx) : base(options)
 		{
 			_game = game;
 
 			OnClick("NewWalletButton", async _ =>
 			{
-				SetupWallet(true, navigation, strings, settings);
+				SetupWallet(true, navigation, strings, settings, ctx);
 			});
 
 			OnClick("LoadWalletButton", async _ =>
 			{
-				SetupWallet(false, navigation, strings, settings);
+				SetupWallet(false, navigation, strings, settings, ctx);
 			});
 
 		
 		}
 
 
-		private async void SetupWallet(bool isNew, Navigation navigation, Strings strings, ITerminalSettings settings)
+		private async void SetupWallet(bool isNew, Navigation navigation, Strings strings, ITerminalSettings settings, LibDogecoinContext ctx)
 		{
 
 			await navigation.PushAsync<LoadingPage>();
@@ -77,88 +77,85 @@ namespace DogecoinTerminal.Pages
 			string address = string.Empty;
 			bool createdWallet = false;
 
-			using (var ctx = LibDogecoinContext.CreateContext())
+			string mnemonic = string.Empty;
+
+			if (isNew)
 			{
-				string mnemonic = string.Empty;
+				mnemonic = ctx.GenerateMnemonicEncryptWithTPM(SimpleDogeWallet.TPM_FILE_NUMBER, lang: strings.Language.LanguageCode, space: "-");
+			}
+			else
+			{
 
-				if (isNew)
+				while(true)
 				{
-					mnemonic = ctx.GenerateMnemonicEncryptWithTPM(SimpleDogeWallet.TPM_FILE_NUMBER, lang: strings.Language.LanguageCode, space: "-");
-				}
-				else
-				{
+					var getMnemonic = await navigation.PromptAsync<BackupCodePage>(("title", strings.GetString("terminal-backupcodes-load-title")),
+																					("editmode", true),
+																					("mnemonic", mnemonic));
 
-					while(true)
+					if (getMnemonic.Response == PromptResponse.YesConfirm)
 					{
-						var getMnemonic = await navigation.PromptAsync<BackupCodePage>(("title", strings.GetString("terminal-backupcodes-load-title")),
-																					   ("editmode", true),
-																					   ("mnemonic", mnemonic));
+						//we need to confirm
+						mnemonic = (string)getMnemonic.Value;
 
-						if (getMnemonic.Response == PromptResponse.YesConfirm)
+						if (!IsValidMnemonic(strings.Language.LanguageCode, mnemonic))
 						{
-							//we need to confirm
-							mnemonic = (string)getMnemonic.Value;
+							var retry = await navigation.PromptAsync<YesNoPage>(("message", strings.GetString("terminal-backupcodes-load-badmnemonic")));
 
-							if (!IsValidMnemonic(strings.Language.LanguageCode, mnemonic))
+
+							if(retry.Response == PromptResponse.YesConfirm)
 							{
-								var retry = await navigation.PromptAsync<YesNoPage>(("message", strings.GetString("terminal-backupcodes-load-badmnemonic")));
-
-
-								if(retry.Response == PromptResponse.YesConfirm)
-								{
-									continue;
-								}
-								else
-								{
-									navigation.Pop();
-									return;
-								}
+								continue;
 							}
-
-							//we have a valid mnemonic, encrypt it with key stored in tpm
-							var mnemonicKey = ctx.GenerateMnemonicEncryptWithTPM(SimpleDogeWallet.TPM_FILE_NUMBER, lang: "eng", space: "-");
-
-							File.WriteAllText(SimpleDogeWallet.LOADED_MNEMONIC_FILE, Crypto.Encrypt(mnemonic, mnemonicKey));
-
-							break;
+							else
+							{
+								navigation.Pop();
+								return;
+							}
 						}
-						else
-						{
-							navigation.Pop();
-							return;
-						}
+
+						//we have a valid mnemonic, encrypt it with key stored in tpm
+						var mnemonicKey = ctx.GenerateMnemonicEncryptWithTPM(SimpleDogeWallet.TPM_FILE_NUMBER, lang: "eng", space: "-");
+
+						File.WriteAllText(SimpleDogeWallet.LOADED_MNEMONIC_FILE, Crypto.Encrypt(mnemonic, mnemonicKey));
+
+						break;
 					}
-
-				}
-
-				var masterKeys = ctx.GenerateHDMasterPubKeypairFromMnemonic(mnemonic);
-
-				if (ctx.VerifyHDMasterPubKeyPair(masterKeys.privateKey, masterKeys.publicKey))
-				{
-					address = ctx.GetDerivedHDAddressByPath(masterKeys.privateKey, Crypto.HDPATH, false);
-
-					File.WriteAllText("address", Crypto.Encrypt(address, newPin));
-
-					await navigation.PromptAsync<BackupCodePage>(("mnemonic", mnemonic), ("editmode", false));
-
-					createdWallet = true;
-
-					settings.Set("user-entered-mnemonic", !isNew);
+					else
+					{
+						navigation.Pop();
+						return;
+					}
 				}
 
 			}
+
+			var masterKeys = ctx.GenerateHDMasterPubKeypairFromMnemonic(mnemonic);
+
+			if (ctx.VerifyHDMasterPubKeyPair(masterKeys.privateKey, masterKeys.publicKey))
+			{
+				address = ctx.GetDerivedHDAddressByPath(masterKeys.privateKey, Crypto.HDPATH, false);
+
+				File.WriteAllText("address", Crypto.Encrypt(address, newPin));
+
+				await navigation.PromptAsync<BackupCodePage>(("mnemonic", mnemonic), ("editmode", false));
+
+				createdWallet = true;
+
+				settings.Set("user-entered-mnemonic", !isNew);
+			}
+
+			
 
 			GC.Collect();
 
 			if (createdWallet)
 			{
-				_game.Services.AddService(LibDogecoinContext.CreateContext());
-				await navigation.TryInsertBeforeAsync<WalletPage, LoadingPage>(("address", address));
-				await navigation.PopToPage<WalletPage>();
+				await navigation.TryInsertBeforeAsync<UnlockTerminalPage, LoadingPage>(("address", address));
+				await navigation.PopToPage<UnlockTerminalPage>();
 			}
 			else
 			{
-				await navigation.PromptAsync<ShortMessagePage>(("message", "??????"));
+				await navigation.PromptAsync<ShortMessagePage>(("message", "i have no idea how you did that"));
 				navigation.Pop();
 			}
 		}

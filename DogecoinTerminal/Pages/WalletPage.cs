@@ -15,21 +15,36 @@ using Microsoft.Xna.Framework;
 namespace DogecoinTerminal.Pages
 {
     [PageDef("Pages/Xml/WalletPage.xml")]
-    internal class WalletPage : Page
+    internal class WalletPage : Page, IReceiver<SPVNodeBlockInfo>, IReceiver<SPVUpdatedWalletMessage>
 	{
 		private const string SETTINGS_BUTTON_NAME = "SettingsButton";
 		private const string LOCK_BUTTON_NAME = "LockButton";
 
 		private Texture2D _qrCodeImage;
 
-		public WalletPage(IPageOptions options, Navigation navigation, Strings strings, GraphicsDevice graphicsDevice) : base(options)
+		private SimpleDogeWallet _wallet;
+		private SimpleSPVNodeService _spvNode;
+
+		public WalletPage(IPageOptions options, Navigation navigation, Strings strings, GraphicsDevice graphicsDevice, SimpleSPVNodeService spvNode) : base(options)
         {
-            var addressTextControl = GetControl<TextControl>("AddressText");
-			addressTextControl.Text = options.GetOption<string>("address");// slot.Address;
+			_wallet = options.GetOption<SimpleDogeWallet>("wallet");
+
+			_spvNode = spvNode;
+
+			Messenger.Default.Register<SPVNodeBlockInfo>(this);
+			Messenger.Default.Register<SPVUpdatedWalletMessage>(this);
+
+
+			_spvNode.SetWallet(_wallet);
+			_spvNode.Start();
+
+			
+			var addressTextControl = GetControl<TextControl>("AddressText");
+			addressTextControl.Text = _wallet.Address;
 
 
             var balanceTextControl = GetControl<TextControl>("BalanceText");
-			balanceTextControl.Text = "Đ 0.000";// slot.CalculateBalance();
+			balanceTextControl.Text = $"Đ {_wallet.GetBalance():#.###}";
 
 
 			_qrCodeImage = new Texture2D(graphicsDevice, 480, 480);
@@ -63,11 +78,23 @@ namespace DogecoinTerminal.Pages
 			{
 				await navigation.PushAsync<ContactsPage>(("edit-mode", true));
 			});
+
+			UpdateSPVText();
 		}
 
 		~WalletPage()
 		{
 			_qrCodeImage?.Dispose();
+
+			Messenger.Default.Deregister<SPVNodeBlockInfo>(this);
+			Messenger.Default.Deregister<SPVUpdatedWalletMessage>(this);
+		}
+
+		private void UpdateSPVText()
+		{
+
+			GetControl<TextControl>("SPVNodeInfo").Text = $"{_spvNode.CurrentBlock.BlockHeight} @ {_spvNode.CurrentBlock.Timestamp.ToLocalTime()}";
+
 		}
 
 
@@ -76,6 +103,17 @@ namespace DogecoinTerminal.Pages
 			var screen = services.GetService<VirtualScreen>();
 			screen.DrawImage(_qrCodeImage, new Point(50, 60), new Point(40, 40));
 			base.Draw(gameTime, services);
+		}
+
+		public void Receive(SPVUpdatedWalletMessage message)
+		{
+			var balanceTextControl = GetControl<TextControl>("BalanceText");
+			balanceTextControl.Text = $"Đ {_wallet.GetBalance():#.###}";
+		}
+
+		public void Receive(SPVNodeBlockInfo message)
+		{
+			UpdateSPVText();
 		}
 	}
 }

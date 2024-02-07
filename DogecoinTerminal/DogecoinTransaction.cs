@@ -43,7 +43,7 @@ namespace DogecoinTerminal
             _services = services;
             Wallet = wallet;
             _txUTXOs = new List<UTXO>();
-            _ctx = LibDogecoinContext.CreateContext();
+            _ctx = services.GetService<LibDogecoinContext>();
         }
 
 
@@ -64,7 +64,7 @@ namespace DogecoinTerminal
             _workingTransactionId = _ctx.StartTransaction();
 
             //it might make sense to order these
-            var utxoEnumerator = Wallet.UTXOs.GetEnumerator();
+            var utxoEnumerator = Wallet.PendingSpentUTXOs.GetEnumerator();
 
 
             //TODO: Change this to fee per byte so we can support P2SH and multiple outputs
@@ -138,7 +138,7 @@ namespace DogecoinTerminal
         {
             for (var i = 0; i < _txUTXOs.Count; i++)
             {
-                if (!_ctx.SignTransactionWithPrivateKey(_workingTransactionId, i, GetPrivateKeyFromMnemonic(Wallet.GetMnemonic(_ctx))))
+                if (!_ctx.SignTransactionWithPrivateKey(_workingTransactionId, i, GetPrivateKeyFromMnemonic(Wallet.GetMnemonic())))
                 {
                     return false;
                 }
@@ -156,18 +156,27 @@ namespace DogecoinTerminal
             return _ctx.GetHDNodePrivateKeyWIFByPath(masterKeys.privateKey, Crypto.HDPATH, true);
         }
 
+
         public void Commit()
         {
+
+            foreach(var utxo in _txUTXOs)
+            {
+                Wallet.PendingSpentUTXOs.Add(utxo);
+            }
+
+            return;
+
             foreach (var utxo in _txUTXOs)
             {
-				Wallet.UTXOs.Remove(utxo);
+                Wallet.UTXOs.Remove(utxo);
             }
 
             var settings = _services.GetService<ITerminalSettings>();
 
             if (Remainder > settings.GetDecimal("dust-limit"))
             {
-				Wallet.UTXOs.Add(new UTXO
+                Wallet.UTXOs.Add(new UTXO
                 {
                     TxId = Crypto.GetTransactionIdFromRaw(GetRawTransaction()),
                     VOut = 0,// by our convention, our first output is back to ourselves.
@@ -175,13 +184,12 @@ namespace DogecoinTerminal
                 });
             }
 
-			Wallet.Save();
+            Wallet.Save();
         }
 
         public void Dispose()
         {
             _ctx.ClearTransaction(_workingTransactionId);
-            _ctx.Dispose();
         }
 
         public string GetRawTransaction()

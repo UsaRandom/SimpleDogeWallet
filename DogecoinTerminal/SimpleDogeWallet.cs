@@ -18,22 +18,24 @@ namespace DogecoinTerminal
 		public const string ADDRESS_FILE = "address";
 		public const string LOADED_MNEMONIC_FILE = "loadedmnemonic";
 		public const string UTXO_FILE = "utxos";
+		public const string PENDING_UTXO_FILE = "pending_utxos";
 
 		public const string USING_USER_ENTERED_MNEMONIC_SETTING = "user-entered-mnemonic";
 
 		private bool _usingUserEnteredMnemonic = false;
-
+		private LibDogecoinContext _ctx;
 
 		public SimpleDogeWallet(string address, IServiceProvider services)
 		{
 			Address = address;
 			Services = services;
 
+			PendingSpentUTXOs = new List<UTXO>();
+
+			_ctx = LibDogecoinContext.Instance;
 			_usingUserEnteredMnemonic = Services.GetService<ITerminalSettings>().GetBool(USING_USER_ENTERED_MNEMONIC_SETTING);
 
 			LoadUTXOs();
-
-
 		}
 
 
@@ -48,6 +50,29 @@ namespace DogecoinTerminal
 		public void Save()
 		{
 			SaveUTXOs();
+		}
+
+		public List<UTXO> PendingSpentUTXOs
+		{
+			get; private set;
+		}
+
+
+		public IEnumerable<UTXO> GetSpendableUTXOs()
+		{
+			return UTXOs.Where(utxo =>
+			{
+				if(!PendingSpentUTXOs.Contains(utxo))
+				{
+					return true;
+				}
+				return false;
+			});
+		}
+
+		public decimal GetPendingBalance()
+		{
+			return PendingSpentUTXOs.Sum(utxo => utxo.Amount);
 		}
 
 		public decimal GetBalance()
@@ -67,17 +92,17 @@ namespace DogecoinTerminal
 			set;
 		}
 
-		public string GetMnemonic(LibDogecoinContext ctx)
+		public string GetMnemonic()
 		{
 			if(Services.GetService<ITerminalSettings>().GetBool(USING_USER_ENTERED_MNEMONIC_SETTING, false))
 			{
-				var key = ctx.DecryptMnemonicWithTPM(TPM_FILE_NUMBER);
+				var key = _ctx.DecryptMnemonicWithTPM(TPM_FILE_NUMBER);
 
 				return Crypto.Decrypt(File.ReadAllText(LOADED_MNEMONIC_FILE), key);
 			}
 			else
 			{
-				return ctx.DecryptMnemonicWithTPM(TPM_FILE_NUMBER);
+				return _ctx.DecryptMnemonicWithTPM(TPM_FILE_NUMBER);
 			}
 		}
 
@@ -109,40 +134,72 @@ namespace DogecoinTerminal
 
 
 
+		//TODO: Remove duplicate code.
+
 		private void LoadUTXOs()
 		{
 			UTXOs = new List<UTXO>();
+			PendingSpentUTXOs = new List<UTXO>();
 
-			if (!File.Exists(UTXO_FILE))
+			if (File.Exists(UTXO_FILE))
 			{
-				return;
-			}
+				var utxoString = File.ReadAllText(UTXO_FILE);
 
-			var utxoString = File.ReadAllText(UTXO_FILE);
-
-			if (!string.IsNullOrEmpty(utxoString))
-			{
-				utxoString = utxoString.Replace("\r", string.Empty);
-
-				var lines = utxoString.Split('\n');
-
-				foreach (var line in lines)
+				if (!string.IsNullOrEmpty(utxoString))
 				{
-					if (string.IsNullOrEmpty(line))
+					utxoString = utxoString.Replace("\r", string.Empty);
+
+					var lines = utxoString.Split('\n');
+
+					foreach (var line in lines)
 					{
-						continue;
+						if (string.IsNullOrEmpty(line))
+						{
+							continue;
+						}
+
+						var lineParts = line.Split('|');
+
+						UTXOs.Add(new UTXO
+						{
+							TxId = lineParts[0],
+							VOut = int.Parse(lineParts[1]),
+							AmountKoinu = long.Parse(lineParts[2])
+						});
 					}
-
-					var lineParts = line.Split('|');
-
-					UTXOs.Add(new UTXO
-					{
-						TxId = lineParts[0],
-						VOut = int.Parse(lineParts[1]),
-						Amount = decimal.Parse(lineParts[2])
-					});
 				}
 			}
+
+			if (File.Exists(PENDING_UTXO_FILE))
+			{
+				var utxoString = File.ReadAllText(PENDING_UTXO_FILE);
+
+				if (!string.IsNullOrEmpty(utxoString))
+				{
+					utxoString = utxoString.Replace("\r", string.Empty);
+
+					var lines = utxoString.Split('\n');
+
+					foreach (var line in lines)
+					{
+						if (string.IsNullOrEmpty(line))
+						{
+							continue;
+						}
+
+						var lineParts = line.Split('|');
+
+						PendingSpentUTXOs.Add(new UTXO
+						{
+							TxId = lineParts[0],
+							VOut = int.Parse(lineParts[1]),
+							AmountKoinu = long.Parse(lineParts[2])
+						});
+					}
+				}
+			}
+
+			
 		}
 
 		private void SaveUTXOs()
@@ -153,10 +210,21 @@ namespace DogecoinTerminal
 			{
 				utxoContent.Append(utxo.TxId + "|");
 				utxoContent.Append(utxo.VOut + "|");
-				utxoContent.AppendLine(utxo.Amount.ToString());
+				utxoContent.AppendLine(utxo.AmountKoinu?.ToString());
 			}
 
 			File.WriteAllText(UTXO_FILE, utxoContent.ToString());
+
+			utxoContent = new StringBuilder();
+
+			foreach (var utxo in PendingSpentUTXOs)
+			{
+				utxoContent.Append(utxo.TxId + "|");
+				utxoContent.Append(utxo.VOut + "|");
+				utxoContent.AppendLine(utxo.AmountKoinu?.ToString());
+			}
+
+			File.WriteAllText(PENDING_UTXO_FILE, utxoContent.ToString());
 		}
 
 

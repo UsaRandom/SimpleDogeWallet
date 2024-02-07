@@ -15,7 +15,7 @@ namespace DogecoinTerminal.Pages
 	internal class SettingsPage : Page
 	{
 		public const decimal DEFAULT_DUST_LIMIT = 0.001M;
-		public const decimal DEFAULT_FEE_PER_BYTE = 0.001M;
+		public const decimal DEFAULT_FEE_PER_UTXO = 0.002M;
 
 		public SettingsPage(IPageOptions options, IServiceProvider services, ITerminalSettings settings, Navigation navigation, Strings strings, LibDogecoinContext ctx) : base(options)
 		{
@@ -25,7 +25,7 @@ namespace DogecoinTerminal.Pages
 
 
 			GetControl<ButtonControl>("SetDustLimitButton").Text = settings.GetDecimal("dust-limit", DEFAULT_DUST_LIMIT).ToString();
-			GetControl<ButtonControl>("SetFeePerByteButton").Text = settings.GetDecimal("fee-per-byte", DEFAULT_FEE_PER_BYTE).ToString();
+			GetControl<ButtonControl>("SetFeePerUTXOButton").Text = settings.GetDecimal("fee-per-utxo", DEFAULT_FEE_PER_UTXO).ToString();
 
 			OnClick("BackButton", async _ =>
 			{
@@ -73,20 +73,20 @@ namespace DogecoinTerminal.Pages
 				}
 			});
 
-			OnClick("SetFeePerByteButton", async _ =>
+			OnClick("SetFeePerUTXOButton", async _ =>
 			{
 				var updateResult = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-settings-feeperbyte"]),
 																	("value-mode", true),
-																	("start-value", settings.GetDecimal("fee-per-byte", DEFAULT_DUST_LIMIT).ToString()));
+																	("start-value", settings.GetDecimal("fee-per-utxo", DEFAULT_DUST_LIMIT).ToString()));
 
 				if (updateResult.Response == PromptResponse.YesConfirm)
 				{
-					var newDustLimit = decimal.Parse(updateResult.Value.ToString());
+					var newFeePerUTXO = decimal.Parse(updateResult.Value.ToString());
 
-					if (newDustLimit > 0)
+					if (newFeePerUTXO > 0)
 					{
-						settings.Set("fee-per-byte", newDustLimit);
-						GetControl<ButtonControl>("SetFeePerByteButton").Text = newDustLimit.ToString();
+						settings.Set("fee-per-utxo", newFeePerUTXO);
+						GetControl<ButtonControl>("SetFeePerUTXOButton").Text = newFeePerUTXO.ToString();
 					}
 				}
 			});
@@ -167,7 +167,7 @@ namespace DogecoinTerminal.Pages
 
 					await navigation.PromptAsync<BackupCodePage>(("title", strings.GetString("terminal-backupcodes-title")),
 												                 ("editmode", false),
-																 ("mnemonic", wallet.GetMnemonic(ctx)));
+																 ("mnemonic", wallet.GetMnemonic()));
 				}
 
 				navigation.Pop();

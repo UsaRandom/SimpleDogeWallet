@@ -15,6 +15,7 @@ using DogecoinTerminal.Common.Interop;
 using MonoGame.Framework.Utilities;
 using DogecoinTerminal.Common.Pages;
 using DogecoinTerminal.Pages;
+using Lib.Dogecoin;
 
 namespace DogecoinTerminal
 {
@@ -41,6 +42,10 @@ namespace DogecoinTerminal
 		private IClipboardService _clipboardService;
 		private IUserInputService _userInputService;
 
+
+		private SimpleSPVNodeService _spvNodeService;
+
+
 		public DogecoinTerminalGame()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -50,9 +55,16 @@ namespace DogecoinTerminal
             _screen = new VirtualScreen();
             _fontSystem = new FontSystem();
 
+			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
 		}
 
-        protected override void Initialize()
+		private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+		{
+			Debug.WriteLine(e.ToString());
+		}
+
+		protected override void Initialize()
         {
 
 			_settings = new TerminalSettings();
@@ -74,6 +86,8 @@ namespace DogecoinTerminal
 			_userInputService = new UserInputService(this);
 			_clipboardService = new TextCopyClipboardService();
 
+			_spvNodeService = new SimpleSPVNodeService();
+
 
 			Services.AddService(Strings.Current);
             Services.AddService(_nav);
@@ -85,7 +99,8 @@ namespace DogecoinTerminal
 			Services.AddService<Game>(this);
 			Services.AddService<IServiceProvider>(Services);
 			Services.AddService(_userInputService);
-
+			Services.AddService(LibDogecoinContext.Instance);
+			Services.AddService(_spvNodeService);
 
 			Services.AddService<IClipboardService>(_clipboardService);
 
@@ -109,10 +124,22 @@ namespace DogecoinTerminal
 			_devButton = new ButtonControl(devButtonEl);
 			_moveHandler = new MoveHandlesControlVisitor(_screen);
 
+
+
+			this.Exiting += DogecoinTerminalGame_Exiting;
+
+
+
+
 			base.Initialize();
         }
 
-        protected override void LoadContent()
+		private void DogecoinTerminalGame_Exiting(object sender, EventArgs e)
+		{
+			_spvNodeService.Stop();
+		}
+
+		protected override void LoadContent()
         {
 
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -121,7 +148,7 @@ namespace DogecoinTerminal
 
 			//Just for testing wallet creation.
 
-			SimpleDogeWallet.ClearWallet();
+	//		SimpleDogeWallet.ClearWallet();
 
 			_nav.PushAsync<StartPage>();
         }
@@ -233,5 +260,7 @@ namespace DogecoinTerminal
 
 			base.Draw(gameTime);
 		}
+
+
 	}
 }

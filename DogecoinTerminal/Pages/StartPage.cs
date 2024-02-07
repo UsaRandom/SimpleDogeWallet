@@ -23,8 +23,6 @@ namespace DogecoinTerminal.Pages
 				{
 					await navigation.PromptAsync<LanguageSelectionPage>();
 
-
-
 					await navigation.PushAsync<SetupWalletPage>();
 				});
 			}
@@ -32,7 +30,6 @@ namespace DogecoinTerminal.Pages
 			{
 				Task.Run(async () =>
 				{
-					game.Services.AddService(Lib.Dogecoin.LibDogecoinContext.CreateContext());
 
 					await navigation.PushAsync<UnlockTerminalPage>();
 				});

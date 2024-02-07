@@ -29,6 +29,13 @@ namespace Lib.Dogecoin
 		}
 
 
+		public static LibDogecoinContext Instance
+		{
+			get
+			{
+				return _instance ?? CreateContext();
+			}
+		}
 
 		public static LibDogecoinContext CreateContext()
 		{

@@ -50,7 +50,7 @@
   
   <String Id="terminal-settings-devmode"><![CDATA[Developer Mode]]></String>
   <String Id="terminal-settings-dustlimit"><![CDATA[Dust Limit:]]></String>
-  <String Id="terminal-settings-feeperbyte"><![CDATA[Fee per Byte:]]></String>
+  <String Id="terminal-settings-feeperutxo"><![CDATA[Fee per UTXO:]]></String>
 
   <String Id="terminal-settings-oldpin"><![CDATA[Enter Current PIN]]></String>
   <String Id="terminal-settings-updatepin"><![CDATA[Update PIN]]></String>

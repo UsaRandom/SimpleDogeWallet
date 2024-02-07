@@ -96,6 +96,11 @@ namespace Lib.Dogecoin
 			{
 				var content = File.ReadAllText(_file);
 
+				if (string.IsNullOrEmpty(content))
+				{
+					return null;
+				}
+
 				var parts = content.Split(":");
 
 				return new SPVCheckpoint
@@ -168,6 +173,8 @@ namespace Lib.Dogecoin
 			_startPoint = startPoint;
 		}
 
+		public bool IsRunning { get; private set; }
+
 		public bool IsMainNet { get; private set; }
 
 		public SPVNodeBlockInfo CurrentBlockInfo { get; private set; }
@@ -209,6 +216,8 @@ namespace Lib.Dogecoin
 
 			_thread = new Thread(() =>
 			{
+				IsRunning = true;
+
 				LibDogecoinInterop.dogecoin_spv_client_discover_peers(_spvNodeRef, null);
 
 				unsafe
@@ -241,6 +250,7 @@ namespace Lib.Dogecoin
 				}
 
 				LibDogecoinInterop.dogecoin_spv_client_runloop(_spvNodeRef);
+				IsRunning = false;
 			});
 
 			_thread.Start();

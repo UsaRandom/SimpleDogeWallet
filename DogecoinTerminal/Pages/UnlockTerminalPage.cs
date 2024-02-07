@@ -26,8 +26,7 @@ namespace DogecoinTerminal.Pages
 												out SimpleDogeWallet simpleWallet))
 					{
 
-						await navigation.TryInsertBeforeAsync<WalletPage, LoadingPage>(("address", simpleWallet.Address),
-																					   ("balance", simpleWallet.GetBalance()));
+						await navigation.TryInsertBeforeAsync<WalletPage, LoadingPage>(("wallet", simpleWallet));
 					}
 
 				}

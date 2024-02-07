@@ -8,9 +8,9 @@
   <common:TextControl Name="DevModeText" Color="White" Position="20,44" TextSize="4" StringDef="terminal-settings-devmode" />
   <common:CheckboxControl StartPosition="40,40" EndPosition="48,48" TextSize="4" Name="ToggleDevMode" BackgroundColor="DarkGrey" ForegroundColor="White" Text="X" />
   <common:TextControl Name="DustLimitText" Color="White" Position="13,54" TextSize="4" StringDef="terminal-settings-dustlimit" />
-  <common:ButtonControl StartPosition="24,50" EndPosition="48,58" TextSize="4" Name="SetDustLimitButton" BackgroundColor="DarkGrey" ForegroundColor="White" Text="0.001" />
-  <common:TextControl Name="FeePerByteText" Color="White" Position="13,64" TextSize="4" StringDef="terminal-settings-feeperbyte" />
-  <common:ButtonControl StartPosition="24,60" EndPosition="48,68" TextSize="4" Name="SetFeePerByteButton"
+  <common:ButtonControl StartPosition="26,50" EndPosition="48,58" TextSize="4" Name="SetDustLimitButton" BackgroundColor="DarkGrey" ForegroundColor="White" Text="0.001" />
+  <common:TextControl Name="FeePerByteText" Color="White" Position="13,64" TextSize="4" StringDef="terminal-settings-feeperutxo" />
+  <common:ButtonControl StartPosition="26,60" EndPosition="48,68" TextSize="4" Name="SetFeePerUTXOButton"
                         BackgroundColor="DarkGrey" ForegroundColor="White" Text="0.001" />
   
   <common:ButtonControl StartPosition="52,20" EndPosition="90,28" TextSize="4" Name="UpdatePinButton"

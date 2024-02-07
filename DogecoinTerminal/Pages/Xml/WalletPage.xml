@@ -9,4 +9,7 @@
   <common:TextControl Name="AddressText" Color="White" Position="50,33" TextSize="4" Text="D7npQRBdDMnSdbtcdNuTCLKS3rdSSqmN9V" />
   <common:TextControl Name="BalanceText" Color="White" Position="50,26" TextSize="9" Text="Đ 0.000" />
   <common:ButtonControl StartPosition="75,85" EndPosition="95,95" TextSize="4" Name="SendButton" BackgroundColor="Green" ForegroundColor="White" StringDef="terminal-wallet-send" />
+
+  <common:TextControl Name="SPVNodeInfo" Color="White" Position="50,97" TextSize="2" Text="" />
+
 </Page>
