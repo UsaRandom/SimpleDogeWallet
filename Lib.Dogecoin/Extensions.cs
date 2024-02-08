@@ -4,10 +4,9 @@ using System.Runtime.InteropServices;
 
 namespace Lib.Dogecoin
 {
-	public static class PublicExtensions
+	public static class Extensions
 	{
-
-		static PublicExtensions()
+		static Extensions()
 		{
 			freeDelegate = LibDogecoinInterop.dogecoin_free;
 		}
@@ -46,12 +45,15 @@ namespace Lib.Dogecoin
 			return address.TerminateNull();
 		}
 
-	}
+		public static SPVNodeBuilder UseCheckpointFile(this SPVNodeBuilder builder, string file)
+		{
+			builder.CheckpointTracker = new SPVFileCheckpointTracker(file);
 
-	internal static class Extensions
-	{
+			return builder;
+		}
 
-		public static char[] NullTerminate(this string str)
+
+		internal static char[] NullTerminate(this string str)
 		{
 			var result = new char[str.Length + 1];
 			str.CopyTo(0, result, 0, str.Length);
@@ -59,7 +61,7 @@ namespace Lib.Dogecoin
 			return result;
 		}
 
-		public static string TerminateNull(this char[] chars)
+		internal static string TerminateNull(this char[] chars)
 		{
 			int nullIndex = Array.IndexOf(chars, '\0');
 

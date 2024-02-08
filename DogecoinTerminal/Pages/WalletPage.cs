@@ -16,15 +16,15 @@ using OpenCvSharp;
 namespace DogecoinTerminal.Pages
 {
     [PageDef("Pages/Xml/WalletPage.xml")]
-    internal class WalletPage : Page, IReceiver<SPVNodeBlockInfo>, IReceiver<SPVUpdatedWalletMessage>
+    internal class WalletPage : Page, IReceiver<SPVNodeBlockInfo>, IReceiver<SPVUpdatedWalletMessage>, IReceiver<SPVSyncCompletedMessage>
 	{
-		private const string SETTINGS_BUTTON_NAME = "SettingsButton";
-		private const string LOCK_BUTTON_NAME = "LockButton";
 
 		private Texture2D _qrCodeImage;
 
 		private SimpleDogeWallet _wallet;
 		private SimpleSPVNodeService _spvNode;
+
+		private ButtonControl _sendButton;
 
 		public WalletPage(IPageOptions options, IServiceProvider services,  IClipboardService clipboard, ITerminalSettings settings, Navigation navigation, Strings strings, GraphicsDevice graphicsDevice, SimpleSPVNodeService spvNode) : base(options)
         {
@@ -34,11 +34,24 @@ namespace DogecoinTerminal.Pages
 
 			Messenger.Default.Register<SPVNodeBlockInfo>(this);
 			Messenger.Default.Register<SPVUpdatedWalletMessage>(this);
+			Messenger.Default.Register<SPVSyncCompletedMessage>(this);
 
 
 			_spvNode.SetWallet(_wallet);
 			_spvNode.Start();
 
+			_sendButton = GetControl<ButtonControl>("SendButton");
+
+			if(!_spvNode.SyncCompleted)
+			{
+				_sendButton.BackgroundColor = TerminalColor.Grey;
+				_sendButton.StringDef = "terminal-wallet-syncing";
+			}
+			else
+			{
+				_sendButton.BackgroundColor = TerminalColor.Green;
+				_sendButton.StringDef = "terminal-wallet-send";
+			}
 			
 			var addressTextControl = GetControl<TextControl>("AddressText");
 			addressTextControl.Text = _wallet.Address;
@@ -89,6 +102,11 @@ namespace DogecoinTerminal.Pages
 
 			OnClick("SendButton", async _ =>
 			{
+				if(!_spvNode.SyncCompleted)
+				{
+					return;
+				}
+
 				await navigation.PushAsync<LoadingPage>();
 
 				var destinationResult = await navigation.PromptAsync<ContactsPage>(("edit-mode", false));
@@ -193,6 +211,7 @@ namespace DogecoinTerminal.Pages
 
 			Messenger.Default.Deregister<SPVNodeBlockInfo>(this);
 			Messenger.Default.Deregister<SPVUpdatedWalletMessage>(this);
+			Messenger.Default.Deregister<SPVSyncCompletedMessage>(this);
 		}
 
 		private void UpdateSPVText()
@@ -221,6 +240,12 @@ namespace DogecoinTerminal.Pages
 		public void Receive(SPVNodeBlockInfo message)
 		{
 			UpdateSPVText();
+		}
+
+		public void Receive(SPVSyncCompletedMessage message)
+		{
+			_sendButton.BackgroundColor = TerminalColor.Green;
+			_sendButton.StringDef = "terminal-wallet-send";
 		}
 	}
 }

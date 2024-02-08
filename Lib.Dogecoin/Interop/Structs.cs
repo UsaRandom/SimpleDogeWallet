@@ -7,6 +7,44 @@ using System.Threading.Tasks;
 
 namespace Lib.Dogecoin.Interop
 {
+	[StructLayout(LayoutKind.Sequential)]
+	public struct sockaddr
+	{
+
+		public ushort sa_family;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 14)]
+		byte[] sa_data;
+
+	}
+
+	/* basic node structure */
+	[StructLayout(LayoutKind.Sequential)]
+	public unsafe struct dogecoin_node
+	{
+		public sockaddr addr;
+		public IntPtr event_bev;
+		public IntPtr timer_event;
+		public IntPtr nodegroup;
+		public int nodeid;
+		public ulong lastping;
+		public ulong time_started_con;
+		public ulong time_last_request;
+
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
+		public byte[] last_requested_inv;
+
+		public cstring* recvBuffer;
+		public ulong nonce;
+		public ulong services;
+		public uint state;
+		public uint missbehavescore;
+		public byte version_handshake;
+
+		public uint bestknownheight;
+
+		public uint hints; /* can be use for user defined state */
+	}
+
 
     [StructLayout(LayoutKind.Sequential)]
     public unsafe struct dogecoin_spv_client
@@ -25,7 +63,7 @@ namespace Lib.Dogecoin.Interop
         public dogecoin_headers_db_interface* headers_db;
 
         public delegate void header_connected_delegate(dogecoin_spv_client client);
-        public delegate void sync_completed_delegate(dogecoin_spv_client client);
+        public delegate void sync_completed_delegate(IntPtr client);
         public delegate bool header_message_processed_delegate(dogecoin_spv_client client, IntPtr node, dogecoin_block_header newtip);
         public delegate void sync_transaction_delegate(IntPtr ctx, IntPtr tx, uint pos, IntPtr blockindex);
 

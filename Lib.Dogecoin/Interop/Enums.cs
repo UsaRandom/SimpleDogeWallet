@@ -6,7 +6,21 @@ using System.Threading.Tasks;
 
 namespace Lib.Dogecoin.Interop
 {
-    public enum dogecoin_tx_out_type
+    [Flags]
+	public enum NODE_STATE
+	{
+		NODE_CONNECTING = (1 << 0),
+		NODE_CONNECTED = (1 << 1),
+		NODE_ERRORED = (1 << 2),
+		NODE_TIMEOUT = (1 << 3),
+		NODE_HEADERSYNC = (1 << 4),
+		NODE_BLOCKSYNC = (1 << 5),
+		NODE_MISSBEHAVED = (1 << 6),
+		NODE_DISCONNECTED = (1 << 7),
+		NODE_DISCONNECTED_FROM_REMOTE_PEER = (1 << 8),
+	}
+
+	public enum dogecoin_tx_out_type
     {
         DOGECOIN_TX_INVALID = -1,
         DOGECOIN_TX_NONSTANDARD,

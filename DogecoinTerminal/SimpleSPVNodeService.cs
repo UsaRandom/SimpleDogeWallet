@@ -47,6 +47,19 @@ namespace DogecoinTerminal
 			_currentWallet = wallet;
 		}
 
+		public bool SyncCompleted
+		{
+			get
+			{
+				return _spvNode.SyncComplete;
+			}
+		}
+
+		public void PrintDebug()
+		{
+			_spvNode?.PrintDebug();
+		}
+
 		public void Start()
 		{
 			if (_spvNode != null && _spvNode.IsRunning)
@@ -59,6 +72,7 @@ namespace DogecoinTerminal
 			//	.StartAt(CurrentBlock.Hash, CurrentBlock.BlockHeight)
 				.UseCheckpointFile(SPV_CHECKPOINT_FILE)
 				.UseMainNet()
+				.OnSyncCompleted(OnSyncComplete)
 				.OnNextBlock(HandleOnBlock)
 				.OnTransaction(HandleOnTransaction)
 				.Build() ;
@@ -66,7 +80,7 @@ namespace DogecoinTerminal
 			_spvNode.Start();
 		}
 
-		public void Rescan(SimpleDogeWallet wallet, SPVCheckpoint startPoint)
+		public void Rescan(SimpleDogeWallet wallet, SPVNodeBlockInfo startPoint)
 		{
 			wallet.UTXOs.Clear();
 			wallet.PendingSpentUTXOs.Clear();
@@ -85,6 +99,11 @@ namespace DogecoinTerminal
 
 		}
 
+		private void OnSyncComplete()
+		{
+			Messenger.Default.Send(new SPVSyncCompletedMessage());
+		}
+
 		private void HandleOnBlock(SPVNodeBlockInfo previous,  SPVNodeBlockInfo next)
 		{
 			CurrentBlock = next;
@@ -98,7 +117,6 @@ namespace DogecoinTerminal
 
 			foreach (var spentUtxo in tx.In)
 			{
-
 				if (_currentWallet.PendingSpentUTXOs.Remove(spentUtxo))
 				{
 					walletChanged = true;
@@ -140,6 +158,11 @@ namespace DogecoinTerminal
 
 
 	class SPVUpdatedWalletMessage
+	{
+
+	}
+
+	class SPVSyncCompletedMessage
 	{
 
 	}

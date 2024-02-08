@@ -98,6 +98,8 @@ namespace DogecoinTerminal
 
 			_spvNodeService = new SimpleSPVNodeService();
 
+			
+
 
 			Services.AddService(Strings.Current);
             Services.AddService(_nav);

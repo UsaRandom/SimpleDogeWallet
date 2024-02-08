@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -7,165 +8,28 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using Lib.Dogecoin.Interop;
 
 namespace Lib.Dogecoin
 {
-
-	public class SPVNodeBuilder
-	{
-		private SPVCheckpoint _start;
-		private bool _useMainNet = false;
-		private bool _useDebug = false;
-		private Action<SPVNodeTransaction> _onTransaction;
-		private Action<SPVNodeBlockInfo, SPVNodeBlockInfo> _onNextBlock;
-
-		public ISPVCheckpointTracker CheckpointTracker { get; set; }
-
-
-		public SPVNodeBuilder StartAt(SPVCheckpoint checkpoint)
-		{
-			_start = checkpoint;
-			return this;
-		}
-
-		public SPVNodeBuilder StartAt(string blockHash, uint blockHeight)
-		{
-			return StartAt(new SPVCheckpoint
-			{
-				BlockHash = blockHash,
-				BlockHeight = blockHeight
-			});
-		}
-
-		public SPVNodeBuilder EnableDebug()
-		{
-			_useDebug = true;
-			return this;
-		}
-
-		public SPVNodeBuilder UseMainNet()
-		{
-			_useMainNet = true;
-			return this;
-		}
-
-		public SPVNodeBuilder UseTestNet()
-		{
-			_useMainNet = false;
-			return this;
-		}
-
-		public SPVNodeBuilder OnTransaction(Action<SPVNodeTransaction> action)
-		{
-			_onTransaction = action;
-			return this;
-		}
-
-
-		public SPVNodeBuilder OnNextBlock(Action<SPVNodeBlockInfo, SPVNodeBlockInfo> action)
-		{
-			_onNextBlock = action;
-			return this;
-		}
-
-		public SPVNode Build()
-		{
-			var node = new SPVNode(CheckpointTracker, _useMainNet, _useDebug, _start);
-
-			node.OnTransaction = _onTransaction;
-			node.OnNextBlock = _onNextBlock;
-
-			return node;
-		}
-
-	}
-
-	internal class SPVFileCheckpointTracker : ISPVCheckpointTracker
-	{
-		private string _file;
-
-		public SPVFileCheckpointTracker(string file)
-		{
-			_file = file;
-		}
-
-		public SPVCheckpoint GetCheckpoint()
-		{
-			if (File.Exists(_file))
-			{
-				var content = File.ReadAllText(_file);
-
-				if (string.IsNullOrEmpty(content))
-				{
-					return null;
-				}
-
-				var parts = content.Split(":");
-
-				return new SPVCheckpoint
-				{
-					BlockHash = parts[0],
-					BlockHeight = uint.Parse(parts[1])
-				};
-			}
-
-			return null;
-		}
-
-		public void SaveCheckpoint(SPVCheckpoint checkpoint)
-		{
-			try
-			{
-				File.WriteAllText(_file, $"{checkpoint.BlockHash}:{checkpoint.BlockHeight}");
-			}
-			catch (Exception ex)
-			{
-				Debug.WriteLine($"Failed to save checkpoing: {checkpoint.BlockHash}:{checkpoint.BlockHeight}");
-				Debug.WriteLine(ex);
-			}
-		}
-	}
-
-	public static class SPVFileCheckpointTrackerExtensions
-	{
-		public static SPVNodeBuilder UseCheckpointFile(this SPVNodeBuilder builder, string file)
-		{
-			builder.CheckpointTracker = new SPVFileCheckpointTracker(file);
-
-			return builder;
-		}
-	}
-
-	public interface ISPVCheckpointTracker
-	{
-		SPVCheckpoint GetCheckpoint();
-
-		void SaveCheckpoint(SPVCheckpoint checkpoint);
-	}
-
-
-	public class SPVCheckpoint
-	{
-		public string BlockHash { get; set; }
-		public uint BlockHeight { get; set; }
-	}
-
 	public class SPVNode
 	{
 		private const int BLOCKS_BETWEEN_CHECKPOINTS = 10;
 
 		private uint _lastSPVCheckpointHeight = 0;
 
+		private bool _syncComplete = false;
 		private bool _isDebug;
 		private Thread _thread;
 		private IntPtr _spvNodeRef;
 		private static dogecoin_spv_client.sync_transaction_delegate syncTransactionCallback;
+		private static dogecoin_spv_client.sync_completed_delegate syncCompletedCallback;
 
 		private ISPVCheckpointTracker _checkpointTracker;
-		private SPVCheckpoint _startPoint;
+		private SPVNodeBlockInfo _startPoint;
 
-		public SPVNode(ISPVCheckpointTracker tracker, bool isMainNet, bool isDebug, SPVCheckpoint startPoint)
+		public SPVNode(ISPVCheckpointTracker tracker, bool isMainNet, bool isDebug, SPVNodeBlockInfo startPoint)
 		{
 			_checkpointTracker = tracker;
 			_isDebug = isDebug;
@@ -177,7 +41,26 @@ namespace Lib.Dogecoin
 
 		public bool IsMainNet { get; private set; }
 
+		public bool SyncComplete
+		{
+			get
+			{
+				if(!_syncComplete)
+				{
+					if(_spvNodeRef != IntPtr.Zero && IsRunning)
+					{
+						var spv = Marshal.PtrToStructure<dogecoin_spv_client>(_spvNodeRef);
+
+						return spv.called_sync_completed;
+					}
+				}
+				return _syncComplete;
+			}
+		}
+
 		public SPVNodeBlockInfo CurrentBlockInfo { get; private set; }
+
+		public Action OnSyncComplete { get; set; }
 
 		public Action<SPVNodeTransaction> OnTransaction { get; set; }
 
@@ -189,11 +72,7 @@ namespace Lib.Dogecoin
 			{
 				if (previousBlock.BlockHeight - _lastSPVCheckpointHeight >= BLOCKS_BETWEEN_CHECKPOINTS)
 				{
-					_checkpointTracker.SaveCheckpoint(new SPVCheckpoint
-					{
-						BlockHash = previousBlock.Hash,
-						BlockHeight = previousBlock.BlockHeight
-					});
+					_checkpointTracker.SaveCheckpoint(nextBlock);
 					_lastSPVCheckpointHeight = previousBlock.BlockHeight;
 				}
 			}
@@ -201,6 +80,55 @@ namespace Lib.Dogecoin
 			if (OnNextBlock != null)
 			{
 				OnNextBlock(previousBlock, nextBlock);
+			}
+		}
+
+		public unsafe void PrintDebug()
+		{
+			try
+			{
+				Debug.WriteLine("Thread Status: " + (IsRunning ? "Online" : "Offline"));
+
+				
+
+				var client = Marshal.PtrToStructure<dogecoin_spv_client>(_spvNodeRef);
+
+				var nodeGroup = Marshal.PtrToStructure<dogecoin_node_group>(client.nodegroup);
+
+				var nodeList = *nodeGroup.nodes;
+
+				Debug.WriteLine("Nodes: " + nodeList.len);
+
+				var connectedNodes = 0;
+				for (var i = 0; i < nodeList.len; i++)
+				{
+					dogecoin_node node = Marshal.PtrToStructure<dogecoin_node>(*(nodeList.data + i));
+
+					Debug.WriteLine($"{i}: {Enum.GetName((NODE_STATE)node.state)} - {DateTimeOffset.FromUnixTimeSeconds((long)node.lastping).ToLocalTime()}");
+					if((NODE_STATE)node.state == NODE_STATE.NODE_CONNECTED)
+					{
+						connectedNodes++;
+					}
+				}
+				
+				Debug.WriteLine("Connected Nodes: " + connectedNodes);
+
+				Debug.WriteLine($"Block.Hash: {this.CurrentBlockInfo.Hash}");
+				Debug.WriteLine($"Block.BlockHeight: {this.CurrentBlockInfo.BlockHeight}");
+				Debug.WriteLine($"Block.Timestamp: {this.CurrentBlockInfo.Timestamp.ToLocalTime()}");
+
+				Debug.WriteLine($"spv.stateflags: {client.stateflags}");
+				Debug.WriteLine($"spv.last_statecheck_time: {DateTimeOffset.FromUnixTimeSeconds((long)client.last_statecheck_time).ToLocalTime()}");
+				Debug.WriteLine($"spv.last_headersrequest_time: {DateTimeOffset.FromUnixTimeSeconds((long)client.last_headersrequest_time).ToLocalTime()}");
+		
+				Debug.WriteLine($"nodeGroup.desired_amount_connected_nodes: {nodeGroup.desired_amount_connected_nodes}");
+				Debug.WriteLine($"nodeGroup.clientstr: {nodeGroup.clientstr.TerminateNull()}");
+				
+
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine(ex);
 			}
 		}
 
@@ -228,7 +156,7 @@ namespace Lib.Dogecoin
 
 					if (headerDb.has_checkpoint_start(client.headers_db_ctx) == 0)
 					{
-						SPVCheckpoint checkpoint = null;
+						SPVNodeBlockInfo checkpoint = null;
 
 						if (_startPoint != null)
 						{
@@ -242,7 +170,7 @@ namespace Lib.Dogecoin
 						if (checkpoint != null)
 						{
 							headerDb.set_checkpoint_start(client.headers_db_ctx,
-														  HexStringToLittleEndianByteArray(checkpoint.BlockHash),
+														  HexStringToLittleEndianByteArray(checkpoint.Hash),
 														  checkpoint.BlockHeight);
 						}
 					}
@@ -279,13 +207,29 @@ namespace Lib.Dogecoin
 			var net = IsMainNet ? LibDogecoinContext._mainChain : LibDogecoinContext._testChain;
 
 			_spvNodeRef = LibDogecoinInterop.dogecoin_spv_client_new(net, _isDebug, true, false, true);
-
+			_syncComplete = false;
+			IsRunning = false;
+			
 
 			syncTransactionCallback = new dogecoin_spv_client.sync_transaction_delegate(SyncTransaction);
+			syncCompletedCallback = new dogecoin_spv_client.sync_completed_delegate(SyncCompleted);
 
 			Marshal.WriteIntPtr(_spvNodeRef,
 				Marshal.OffsetOf(typeof(dogecoin_spv_client),
 				nameof(dogecoin_spv_client.sync_transaction)).ToInt32(), Marshal.GetFunctionPointerForDelegate(syncTransactionCallback));
+
+			Marshal.WriteIntPtr(_spvNodeRef,
+				Marshal.OffsetOf(typeof(dogecoin_spv_client),
+				nameof(dogecoin_spv_client.sync_completed)).ToInt32(), Marshal.GetFunctionPointerForDelegate(syncCompletedCallback));
+		}
+
+		private unsafe void SyncCompleted(IntPtr spv)
+		{
+			_syncComplete = true;
+			if (OnSyncComplete != null)
+			{
+				OnSyncComplete();
+			}
 		}
 
 
@@ -328,7 +272,7 @@ namespace Lib.Dogecoin
 			var vinList = *transaction.vin;
 			for (var i = 0; i < vinList.len; i++)
 			{
-				dogecoin_tx_in vin = Marshal.PtrToStructure<dogecoin_tx_in>(*(vinList.data));
+				dogecoin_tx_in vin = Marshal.PtrToStructure<dogecoin_tx_in>(*(vinList.data + i));
 
 				inList.Add(new UTXO
 				{

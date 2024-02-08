@@ -64,14 +64,13 @@
   <String Id="terminal-unlockpage-unlockbutton"><![CDATA[Unlock]]></String>
   <String Id="terminal-unlockpage-exitbutton"><![CDATA[Exit]]></String>
 
-
-
-
   <String Id="terminal-send-confirmpin"><![CDATA[Confirm PIN to Send]]></String>
-  
-
   <String Id="terminal-sendamount-title"><![CDATA[Amount to Send]]></String>
 
+
+
+  <Strings Id="terminal-wallet-send"><![CDATA[Send]]></Strings>
+  <Strings Id="terminal-wallet-syncing"><![CDATA[Syncing...]]></Strings>
 
 
 
@@ -82,13 +81,6 @@
 
   <Strings Id="terminal-walletlist-newwallet-enterpin"><![CDATA[Set Pin:]]></Strings>
   <Strings Id="terminal-walletlist-newwallet-confirmpin"><![CDATA[Confirm Pin:]]></Strings>
-
-
-  <Strings Id="terminal-wallet-send"><![CDATA[Send]]></Strings>
-  <Strings Id="terminal-wallet-receive"><![CDATA[Receive]]></Strings>
-  <Strings Id="terminal-wallet-updatepin"><![CDATA[Update Pin]]></Strings>
-  <Strings Id="terminal-wallet-showseed"><![CDATA[Show Seed Phrases]]></Strings>
-  <Strings Id="terminal-wallet-refreshbalance"><![CDATA[Refresh Balance]]></Strings>
 
 
   <Strings Id="terminal-wallet-updatepin-newpin"><![CDATA[Enter New Pin:]]></Strings>

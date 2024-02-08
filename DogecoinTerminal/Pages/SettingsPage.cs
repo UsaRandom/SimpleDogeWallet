@@ -14,7 +14,7 @@ namespace DogecoinTerminal.Pages
     [PageDef("Pages/Xml/SettingsPage.xml")]
 	internal class SettingsPage : Page
 	{
-		public SettingsPage(IPageOptions options, IServiceProvider services, ITerminalSettings settings, Navigation navigation, Strings strings, LibDogecoinContext ctx) : base(options)
+		public SettingsPage(IPageOptions options, SimpleSPVNodeService spvService , IServiceProvider services, ITerminalSettings settings, Navigation navigation, Strings strings, LibDogecoinContext ctx) : base(options)
 		{
 			GetControl<CheckboxControl>("ToggleBackground").IsChecked = settings.GetBool("terminal-background", true);
 			GetControl<CheckboxControl>("ToggleFullscreen").IsChecked = settings.GetBool("terminal-fullscreen", false);
@@ -173,7 +173,7 @@ namespace DogecoinTerminal.Pages
 
 			OnClick("SPVButton", async _ =>
 			{
-
+				spvService.PrintDebug();
 			});
 
 			OnClick("DeleteButton", async _ =>
