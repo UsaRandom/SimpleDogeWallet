@@ -136,14 +136,23 @@ namespace DogecoinTerminal
 
         public bool Sign()
         {
-            for (var i = 0; i < _txUTXOs.Count; i++)
+            try
             {
-                if (!_ctx.SignTransactionWithPrivateKey(_workingTransactionId, i, GetPrivateKeyFromMnemonic(Wallet.GetMnemonic())))
-                {
-                    return false;
-                }
-            }
-            return true;
+				for (var i = 0; i < _txUTXOs.Count; i++)
+				{
+					if (!_ctx.SignTransactionWithPrivateKey(_workingTransactionId, i, GetPrivateKeyFromMnemonic(Wallet.GetMnemonic())))
+					{
+						return false;
+					}
+				}
+				return true;
+			}
+            finally
+            {
+                //force collection after signing
+				GC.Collect(0, GCCollectionMode.Forced, true);
+				GC.Collect(1, GCCollectionMode.Forced, true);
+			}
         }
 
 

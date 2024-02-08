@@ -81,7 +81,7 @@ namespace DogecoinTerminal.Pages
 
 			OnClick("SettingsButton", async _ =>
 			{
-				await navigation.PushAsync<SettingsPage>();
+				await navigation.PushAsync<SettingsPage>(("wallet", options.GetOption<SimpleDogeWallet>("wallet")));
 			});
 			OnClick("CopyButton", async _ =>
 			{
@@ -169,6 +169,8 @@ namespace DogecoinTerminal.Pages
 					navigation.Pop();
 					return;
 				}
+
+				//force garbage collection after signing
 				if (!transaction.Sign())
 				{
 					await navigation.PromptAsync<ShortMessagePage>(("message", "Error signing transaction."));
@@ -177,7 +179,6 @@ namespace DogecoinTerminal.Pages
 				}
 
 
-				
 
 
 

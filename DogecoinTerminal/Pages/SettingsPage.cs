@@ -173,7 +173,7 @@ namespace DogecoinTerminal.Pages
 
 			OnClick("SPVButton", async _ =>
 			{
-				spvService.PrintDebug();
+				await navigation.PushAsync<SPVNodePage>(("wallet", options.GetOption<SimpleDogeWallet>("wallet")));
 			});
 
 			OnClick("DeleteButton", async _ =>

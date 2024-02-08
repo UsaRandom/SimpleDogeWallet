@@ -1,0 +1,12 @@
+﻿<Page xmlns:common="DogecoinTerminal.Common">
+  <common:ImageControl Name="BackButton" StartPosition="5,5" EndPosition="15,15" ImageSource="Content\left-arrow.png" />
+  <common:TextControl Name="TitleText" Color="White" Position="50,13" TextSize="6" StringDef="terminal-spv-sync-title" />
+  <common:ImageControl Name="Doge" StartPosition="82,5" EndPosition="95,18" ImageSource="Content/dogedrawn.png" />
+  <common:TextControl Name="HashInfo" Color="White" Position="50,20" TextSize="3" StringDef="terminal-spv-sync-hash" />
+  <common:TextControl Name="HeightInfo" Color="White" Position="51,31" TextSize="3" StringDef="terminal-spv-sync-height" />
+  <common:TextInputControl StartPosition="2,22" EndPosition="88,28" TextSize="3" Name="BlockHashText" BackgroundColor="White" ForegroundColor="DarkGrey" />
+  <common:ImageControl Name="BlockHashPasteButton" StartPosition="90,21" EndPosition="98,29" ImageSource="Content/paste-button.png" BackgroundColor="DarkGrey" />
+  <common:TextInputControl StartPosition="20,33" EndPosition="87,40" TextSize="3" Name="BlockHeightText" BackgroundColor="White" ForegroundColor="DarkGrey" Text="" />
+  <common:ImageControl Name="BlockHeightPasteButton" StartPosition="90,33" EndPosition="98,41" ImageSource="Content/paste-button.png" BackgroundColor="DarkGrey" />
+  <common:ButtonControl StartPosition="75,85" EndPosition="95,95" TextSize="4" Name="SyncButton" BackgroundColor="Green" ForegroundColor="White" StringDef="terminal-spv-sync-rescan" />
+</Page>

@@ -39,6 +39,8 @@ namespace DogecoinTerminal
 			_usingUserEnteredMnemonic = Services.GetService<ITerminalSettings>().GetBool(USING_USER_ENTERED_MNEMONIC_SETTING);
 
 			LoadUTXOs();
+
+			_instance = this;
 		}
 
 
@@ -53,6 +55,15 @@ namespace DogecoinTerminal
 		public void Save()
 		{
 			SaveUTXOs();
+		}
+
+		private static SimpleDogeWallet _instance;
+		public static SimpleDogeWallet Instance
+		{
+			get
+			{
+				return _instance;
+			}
 		}
 
 		public List<UTXO> PendingSpentUTXOs

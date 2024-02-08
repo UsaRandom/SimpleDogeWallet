@@ -42,6 +42,27 @@ namespace DogecoinTerminal
 			private set;
 		}
 
+		public bool IsRunning
+		{
+			get
+			{
+				return _spvNode != null && _spvNode.IsRunning;
+			}
+		}
+
+		public int PeerCount
+		{
+			get
+			{
+				if (!IsRunning)
+				{
+					return 0;
+				}
+				return _spvNode.GetPeerCount();
+			}
+		}
+
+
 		public void SetWallet(SimpleDogeWallet wallet)
 		{
 			_currentWallet = wallet;
@@ -82,15 +103,18 @@ namespace DogecoinTerminal
 
 		public void Rescan(SimpleDogeWallet wallet, SPVNodeBlockInfo startPoint)
 		{
+			_spvNode?.Stop();
+
 			wallet.UTXOs.Clear();
 			wallet.PendingSpentUTXOs.Clear();
 
 			wallet.Save();
 
 			_spvNode = new SPVNodeBuilder()
-				.StartAt(startPoint)
+					.StartAt(startPoint)
 				.UseCheckpointFile(SPV_CHECKPOINT_FILE)
 				.UseMainNet()
+				.OnSyncCompleted(OnSyncComplete)
 				.OnNextBlock(HandleOnBlock)
 				.OnTransaction(HandleOnTransaction)
 				.Build();

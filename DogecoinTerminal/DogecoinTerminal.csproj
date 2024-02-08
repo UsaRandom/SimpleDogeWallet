@@ -37,6 +37,12 @@
     <None Update="Pages\Xml\SettingsPage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Pages\Xml\SPVRescanPage.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Pages\Xml\SPVNodePage.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Pages\Xml\SetupWalletPage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

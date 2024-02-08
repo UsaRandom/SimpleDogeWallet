@@ -83,6 +83,34 @@ namespace Lib.Dogecoin
 			}
 		}
 
+		public unsafe int GetPeerCount()
+		{
+			if(_spvNodeRef == IntPtr.Zero)
+			{
+				return 0;
+			}
+
+			var client = Marshal.PtrToStructure<dogecoin_spv_client>(_spvNodeRef);
+
+			var nodeGroup = Marshal.PtrToStructure<dogecoin_node_group>(client.nodegroup);
+
+			var nodeList = *nodeGroup.nodes;
+
+			var connectedNodes = 0;
+
+			for (var i = 0; i < nodeList.len; i++)
+			{
+				dogecoin_node node = Marshal.PtrToStructure<dogecoin_node>(*(nodeList.data + i));
+				
+				if ((NODE_STATE)node.state == NODE_STATE.NODE_CONNECTED)
+				{
+					connectedNodes++;
+				}
+			}
+
+			return connectedNodes;
+		}
+
 		public unsafe void PrintDebug()
 		{
 			try
@@ -151,6 +179,8 @@ namespace Lib.Dogecoin
 				unsafe
 				{
 					var client = Marshal.PtrToStructure<dogecoin_spv_client>(_spvNodeRef);
+
+					
 
 					var headerDb = *client.headers_db;
 
@@ -335,6 +365,9 @@ namespace Lib.Dogecoin
 		{
 			if (hex == null)
 				return null;
+
+			hex = hex.ToUpper();
+
 			if (hex.Length % 2 == 1)
 				hex = "0" + hex;
 
