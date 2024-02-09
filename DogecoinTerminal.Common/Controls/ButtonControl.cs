@@ -16,7 +16,7 @@ namespace DogecoinTerminal.Common
 			EndPosition = GetPoint(element.Attribute(nameof(EndPosition)));
 			BackgroundColor = GetTerminalColor(element.Attribute(nameof(BackgroundColor)));
 			ForegroundColor = GetTerminalColor(element.Attribute(nameof(ForegroundColor)));
-			TextSize = int.Parse(element.Attribute(nameof(TextSize)).Value);
+			TextSize = float.Parse(element.Attribute(nameof(TextSize)).Value);
 			StringDef = element.Attribute(nameof(StringDef))?.Value;
 			Text = StringDef ?? element.Attribute(nameof(Text))?.Value;
 
@@ -54,7 +54,7 @@ namespace DogecoinTerminal.Common
 		public Point EndPosition { get; set; }
 		public TerminalColor BackgroundColor { get; set; }
 		public TerminalColor ForegroundColor { get; set; }
-		public int TextSize { get; set; }
+		public float TextSize { get; set; }
 
 		public bool Selectable { get; set; } = true;
  

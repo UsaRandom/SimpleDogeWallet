@@ -45,9 +45,9 @@ namespace Lib.Dogecoin
 			return address.TerminateNull();
 		}
 
-		public static SPVNodeBuilder UseCheckpointFile(this SPVNodeBuilder builder, string file)
+		public static SPVNodeBuilder UseCheckpointFile(this SPVNodeBuilder builder, string file, int blocksBehind = 10)
 		{
-			builder.CheckpointTracker = new SPVFileCheckpointTracker(file);
+			builder.CheckpointTracker = new SPVFileCheckpointTracker(file, blocksBehind);
 
 			return builder;
 		}

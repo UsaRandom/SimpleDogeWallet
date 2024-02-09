@@ -138,7 +138,7 @@ namespace DogecoinTerminal.Common
 		}
 
 
-		public void DrawText(string text, TerminalColor color, int scale, Point pos)
+		public void DrawText(string text, TerminalColor color, float scale, Point pos)
 		{
 			if(color == null)
 			{

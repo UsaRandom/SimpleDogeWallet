@@ -193,7 +193,7 @@ namespace DogecoinTerminal.Common
 		{
 			await PushAsync<T>(options);
 
-			return await Task.Run(async () =>
+			return await Task.Run(() =>
 			{
 				var promptCtx = new PromptContext();
 

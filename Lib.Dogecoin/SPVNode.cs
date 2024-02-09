@@ -173,14 +173,13 @@ namespace Lib.Dogecoin
 			_thread = new Thread(() =>
 			{
 				IsRunning = true;
+				_syncComplete = false;
 
 				LibDogecoinInterop.dogecoin_spv_client_discover_peers(_spvNodeRef, null);
 
 				unsafe
 				{
 					var client = Marshal.PtrToStructure<dogecoin_spv_client>(_spvNodeRef);
-
-					
 
 					var headerDb = *client.headers_db;
 
@@ -219,6 +218,7 @@ namespace Lib.Dogecoin
 			var spv = Marshal.PtrToStructure<dogecoin_spv_client>(_spvNodeRef);
 
 			LibDogecoinInterop.dogecoin_node_group_shutdown(spv.nodegroup);
+
 		}
 
 

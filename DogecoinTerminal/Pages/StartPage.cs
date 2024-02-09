@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Diagnostics;
 
 namespace DogecoinTerminal.Pages
 {
@@ -14,26 +15,12 @@ namespace DogecoinTerminal.Pages
 	{
 		public StartPage(IPageOptions options, Navigation navigation, DogecoinTerminalGame game) : base(options)
 		{
-			var hasWallet = File.Exists(SimpleDogeWallet.ADDRESS_FILE);//detect
+		}
 
-			if (!hasWallet)
-			{
-				//start on the language selection screen:
-				Task.Run(async () =>
-				{
-					await navigation.PromptAsync<LanguageSelectionPage>();
+		public override void Update(GameTime gameTime, IServiceProvider services)
+		{
 
-					await navigation.PushAsync<SetupWalletPage>();
-				});
-			}
-			else
-			{
-				Task.Run(async () =>
-				{
-
-					await navigation.PushAsync<UnlockTerminalPage>();
-				});
-			}
+			base.Update(gameTime, services);
 		}
 
 	}

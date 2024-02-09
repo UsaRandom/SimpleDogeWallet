@@ -21,18 +21,6 @@ namespace DogecoinTerminal
 		{
 			_contacts = new List<Contact>();
 			Load();
-
-			if(_contacts.Count == 0)
-			{
-				for(var i = 0; i < 13; i++)
-				{
-					AddContact(new Contact
-					{
-						Name = "UnnamedContact" + Random.Shared.Next(),
-						Address = "DLPaeuaJi2JLUcvYHD4ddLxadwnGaVSt4p"
-					});
-				}
-			}
 		}
 
 

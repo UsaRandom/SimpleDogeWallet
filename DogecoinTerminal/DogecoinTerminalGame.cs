@@ -16,6 +16,9 @@ using MonoGame.Framework.Utilities;
 using DogecoinTerminal.Common.Pages;
 using DogecoinTerminal.Pages;
 using Lib.Dogecoin;
+using System.Diagnostics.Metrics;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace DogecoinTerminal
 {
@@ -111,7 +114,8 @@ namespace DogecoinTerminal
 			Services.AddService<Game>(this);
 			Services.AddService<IServiceProvider>(Services);
 			Services.AddService(_userInputService);
-			Services.AddService(LibDogecoinContext.Instance);
+
+
 			Services.AddService(_spvNodeService);
 
 			Services.AddService<IClipboardService>(_clipboardService);
@@ -160,9 +164,44 @@ namespace DogecoinTerminal
 
 			//Just for testing wallet creation.
 
-	//		SimpleDogeWallet.ClearWallet();
+			//		SimpleDogeWallet.ClearWallet();
 
-			_nav.PushAsync<StartPage>();
+			try
+			{
+				Services.AddService(LibDogecoinContext.Instance);
+				
+			} catch
+			{
+				var msg = $"Failed to load libdogecoin.\n\n"
+						+ "This is likely caused by your device having missing or misconfigured security\nhardware, like TPM2.0"
+						+ "\n"
+						+ "\nCheck windows security settings and ensure you see one of the following messages:" +
+								"\n - 'Your device meets the requirements for standard hardware security.'" +
+								"\n - 'Your device meets the requirements for enhanced hardware security.'" +
+								"\n - 'Your device has all Secured-core PC features enabled'\n\n"
+
+						+ "The following message means this wallet is not supported on your device =[\n"
+						+ " - 'Standard hardware security not supported'";
+
+				_nav.PushAsync<ExceptionPage>(("title","Not Supported"),("error", msg));
+
+				return;
+			}
+			var hasWallet = File.Exists(SimpleDogeWallet.ADDRESS_FILE);//detect
+
+			if (!hasWallet)
+			{
+				_nav.PushAsync<SetupWalletPage>();
+				//start on the language selection screen:
+				Task.Run(async () =>
+				{
+					await _nav.PromptAsync<LanguageSelectionPage>();
+				});
+			}
+			else
+			{
+				_nav.PushAsync<UnlockTerminalPage>();
+			}
         }
 
 		protected override void Update(GameTime gameTime)

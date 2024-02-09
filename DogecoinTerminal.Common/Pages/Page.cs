@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
 namespace DogecoinTerminal.Common.Pages
@@ -53,7 +54,7 @@ namespace DogecoinTerminal.Common.Pages
             }
             else
             {
-                Debug.WriteLine($"Loaded page, but couldn't find xml page def. Ensure page has PageDefAttribute and xml file exists.");
+                Debug.WriteLine($"{this.GetType().FullName}: Loaded page, but couldn't find xml page def. Ensure page has PageDefAttribute and xml file exists.");
             }
 
         }

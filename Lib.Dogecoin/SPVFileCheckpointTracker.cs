@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -11,9 +12,15 @@ namespace Lib.Dogecoin
 	{
 		private string _file;
 
-		public SPVFileCheckpointTracker(string file)
+		private int _blocksBehind = 10;
+
+		private ConcurrentQueue<SPVNodeBlockInfo> _previousBlocks;
+
+		public SPVFileCheckpointTracker(string file, int blocksBehind = 10)
 		{
 			_file = file;
+			_previousBlocks = new ConcurrentQueue<SPVNodeBlockInfo>();
+			_blocksBehind = blocksBehind;
 		}
 
 		public SPVNodeBlockInfo GetCheckpoint()
@@ -28,12 +35,18 @@ namespace Lib.Dogecoin
 				}
 
 				var parts = content.Split(":");
-
-				return new SPVNodeBlockInfo
+				
+				var checkpoint = new SPVNodeBlockInfo
 				{
 					Hash = parts[0],
 					BlockHeight = uint.Parse(parts[1])
 				};
+
+
+				_previousBlocks = new ConcurrentQueue<SPVNodeBlockInfo>();
+				_previousBlocks.Enqueue(checkpoint);
+
+				return checkpoint;
 			}
 
 			return null;
@@ -41,13 +54,29 @@ namespace Lib.Dogecoin
 
 		public void SaveCheckpoint(SPVNodeBlockInfo checkpoint)
 		{
+			_previousBlocks.Enqueue(checkpoint);
+
 			try
 			{
-				File.WriteAllText(_file, $"{checkpoint.Hash}:{checkpoint.BlockHeight}");
+				if(_previousBlocks.Count >= _blocksBehind)
+				{
+					if(_previousBlocks.TryDequeue(out SPVNodeBlockInfo checkpointToSave))
+					{
+						File.WriteAllText(_file, $"{checkpointToSave.Hash}:{checkpointToSave.BlockHeight}");
+					}
+					else
+					{
+						Debug.WriteLine($"Failed to save checkpoint: {checkpoint.Hash}:{checkpoint.BlockHeight}");
+					}
+
+				}
+				
+
+				
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine($"Failed to save checkpoing: {checkpoint.Hash}:{checkpoint.BlockHeight}");
+				Debug.WriteLine($"Failed to save checkpoint: {checkpoint.Hash}:{checkpoint.BlockHeight}");
 				Debug.WriteLine(ex);
 			}
 		}

@@ -8,9 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="dogecoin.dll">
+    <None Remove="dogecoin.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="dogecoin.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

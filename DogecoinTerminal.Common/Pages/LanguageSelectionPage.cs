@@ -18,7 +18,7 @@ namespace DogecoinTerminal.Common.Pages
 			OnClick("SubmitButton", _ =>
 			{
 				settings.Set("language", SelectedLanguageCode);
-				Submit();
+				Submit(SelectedLanguageCode);
 			});
 
 			OnClick("EnglishButton", _ =>

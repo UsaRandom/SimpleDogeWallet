@@ -95,7 +95,7 @@ namespace DogecoinTerminal.Pages
 					if (getMnemonic.Response == PromptResponse.YesConfirm)
 					{
 						//we need to confirm
-						mnemonic = (string)getMnemonic.Value;
+						mnemonic = ((string)getMnemonic.Value).Trim('-');
 
 						if (!IsValidMnemonic(strings.Language.LanguageCode, mnemonic))
 						{
@@ -129,7 +129,7 @@ namespace DogecoinTerminal.Pages
 
 			}
 
-			var masterKeys = ctx.GenerateHDMasterPubKeypairFromMnemonic(mnemonic);
+			var masterKeys = ctx.GenerateHDMasterPubKeypairFromMnemonic(mnemonic.Replace("-", " "));
 
 			if (ctx.VerifyHDMasterPubKeyPair(masterKeys.privateKey, masterKeys.publicKey))
 			{
@@ -166,7 +166,7 @@ namespace DogecoinTerminal.Pages
 			//TODO: Verify more than just the number of words.
 			var length = mnemonic.Split("-").Length;
 
-			if(length != 12 || length != 24)
+			if(!(length == 12 || length == 24))
 			{
 				return false;
 			}

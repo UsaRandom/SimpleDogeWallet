@@ -8,7 +8,6 @@ namespace DogecoinTerminal.Common
 {
 	public class Crypto
     {
-
         public const string HDPATH = "m/44'/3'/0'/0/0";
 
         public static string Encrypt(string plainText, string key)

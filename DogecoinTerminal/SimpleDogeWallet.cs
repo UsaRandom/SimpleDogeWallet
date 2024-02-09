@@ -17,7 +17,7 @@ namespace DogecoinTerminal
 
 
 		public const int MIN_PIN_LENGTH = 4;
-		public const int TPM_FILE_NUMBER = 69; //nice
+		public const int TPM_FILE_NUMBER = 420; //nice
 		public const string ADDRESS_FILE = "address";
 		public const string LOADED_MNEMONIC_FILE = "loadedmnemonic";
 		public const string UTXO_FILE = "utxos";
