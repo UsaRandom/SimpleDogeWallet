@@ -68,13 +68,9 @@ namespace Lib.Dogecoin
 
 		private void BeforeOnNextBlock(SPVNodeBlockInfo previousBlock, SPVNodeBlockInfo nextBlock)
 		{
-			if (_checkpointTracker != null && previousBlock != null)
+			if (_checkpointTracker != null)
 			{
-				if (previousBlock.BlockHeight - _lastSPVCheckpointHeight >= BLOCKS_BETWEEN_CHECKPOINTS)
-				{
-					_checkpointTracker.SaveCheckpoint(nextBlock);
-					_lastSPVCheckpointHeight = previousBlock.BlockHeight;
-				}
+				_checkpointTracker.SaveCheckpoint(nextBlock);
 			}
 
 			if (OnNextBlock != null)
@@ -206,9 +202,13 @@ namespace Lib.Dogecoin
 
 				}
 
+				
+				LibDogecoinInterop.dogecoin_node_group_connect_next_nodes(client.nodegroup);
 
-			//	LibDogecoinInterop.dogecoin_node_group_event_loop(client.nodegroup);
-				LibDogecoinInterop.dogecoin_spv_client_runloop(_spvNodeRef);
+		
+				LibDogecoinInterop.dogecoin_node_group_event_loop(client.nodegroup);
+				
+				
 				IsRunning = false;
 			});
 
@@ -261,7 +261,7 @@ namespace Lib.Dogecoin
 
 			var net = IsMainNet ? LibDogecoinContext._mainChain : LibDogecoinContext._testChain;
 
-			_spvNodeRef = LibDogecoinInterop.dogecoin_spv_client_new(net, _isDebug, true, false, true);
+			_spvNodeRef = LibDogecoinInterop.dogecoin_spv_client_new(net, _isDebug, true, false, true, 16);
 			_syncComplete = false;
 			IsRunning = false;
 			

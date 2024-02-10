@@ -343,7 +343,8 @@ namespace Lib.Dogecoin.Interop
             [MarshalAs(UnmanagedType.U1)] bool debug,
             [MarshalAs(UnmanagedType.U1)] bool headers_memonly,
             [MarshalAs(UnmanagedType.U1)] bool use_checkpoints,
-            [MarshalAs(UnmanagedType.U1)] bool full_sync);
+            [MarshalAs(UnmanagedType.U1)] bool full_sync,
+			int maxNodes);
 
 
 
@@ -434,6 +435,9 @@ namespace Lib.Dogecoin.Interop
 		[DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void dogecoin_node_group_event_loop(IntPtr group);
 
+		[DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void dogecoin_node_group_connect_next_nodes(IntPtr group);
+		
 		#endregion SPV
 
 	}
