@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using DogecoinTerminal.Common.Pages;
@@ -177,17 +178,19 @@ namespace DogecoinTerminal.Common
 
 		private class PromptContext
 		{
-			public PromptResult Result { get; set; }
+			public PromptResult Result { get; set; } = null;
 		}
 
 		public void Receive(PromptResult message)
 		{
-			lock (this)
+			lock (_lock)
 			{
 				_prompts.TryPeek(out PromptContext ctx);
 				ctx.Result = message;
 			}
 		}
+
+		private object _lock = new object();
 
 		public async Task<PromptResult> PromptAsync<T>(params (string key, object value)[] options) where T : IPage
 		{
@@ -199,7 +202,15 @@ namespace DogecoinTerminal.Common
 
 				_prompts.Push(promptCtx);
 
-				while (promptCtx.Result == default) {}
+				var exit = false;
+
+				while (!exit)
+				{
+					lock(_lock)
+					{
+						exit = promptCtx.Result != null;
+					}
+				}
 
 				_prompts.TryPop(out _);
 				Pop();

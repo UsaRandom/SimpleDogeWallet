@@ -55,7 +55,15 @@ namespace DogecoinTerminal.Common
                     {
                         using (StreamReader srDecrypt = new StreamReader(csDecrypt))
                         {
-                            return srDecrypt.ReadToEnd();
+                            try
+                            {
+
+								return srDecrypt.ReadToEnd();
+							}
+                            catch (Exception ex)
+                            {
+                                return null;
+                            }
                         }
                     }
                 }
