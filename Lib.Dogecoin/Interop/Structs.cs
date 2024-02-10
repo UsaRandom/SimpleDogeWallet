@@ -37,7 +37,7 @@ namespace Lib.Dogecoin.Interop
 		public ulong nonce;
 		public ulong services;
 		public uint state;
-		public uint missbehavescore;
+		public int missbehavescore;
 		public byte version_handshake;
 
 		public uint bestknownheight;

@@ -58,6 +58,7 @@ namespace DogecoinTerminal
             _screen = new VirtualScreen();
             _fontSystem = new FontSystem();
 
+
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
 		}
@@ -66,9 +67,27 @@ namespace DogecoinTerminal
 		{
 			Debug.WriteLine(e.ToString());
 		}
+		private void OnResize(Object o, EventArgs evt)
+		{
 
+			if ((_graphics.PreferredBackBufferWidth != _graphics.GraphicsDevice.Viewport.Width) ||
+					(_graphics.PreferredBackBufferHeight != _graphics.GraphicsDevice.Viewport.Height))
+			{
+		//		_graphics.PreferredBackBufferWidth = _graphics.GraphicsDevice.Viewport.Width;
+		//		_graphics.PreferredBackBufferHeight = _graphics.GraphicsDevice.Viewport.Height;
+
+				_background = new MoonBackgroundScene(Services, _graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height);
+
+				_screen.SetWindowDim(_graphics, false, _graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height);
+		//		_graphics.ApplyChanges();
+
+			}
+		}
+	
 		protected override void Initialize()
         {
+			Window.AllowUserResizing = true;
+			Window.ClientSizeChanged += OnResize;
 
 			_settings = new TerminalSettings();
 
@@ -124,9 +143,6 @@ namespace DogecoinTerminal
 			//text input selector
 			_textInputSelector = new SelectedControlVisitor(_screen);
 
-			//background
-			_background = new MoonBackgroundScene(Services, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
-
 
 			//dev tools
 			var devButtonEl = new XElement("button");
@@ -141,6 +157,8 @@ namespace DogecoinTerminal
 			_moveHandler = new MoveHandlesControlVisitor(_screen);
 
 
+			_background = new MoonBackgroundScene(Services, _graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height);
+
 
 			this.Exiting += DogecoinTerminalGame_Exiting;
 
@@ -149,6 +167,7 @@ namespace DogecoinTerminal
 
 			base.Initialize();
         }
+
 
 		private void DogecoinTerminalGame_Exiting(object sender, EventArgs e)
 		{

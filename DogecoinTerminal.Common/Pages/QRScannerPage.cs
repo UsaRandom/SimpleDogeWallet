@@ -77,49 +77,54 @@ namespace DogecoinTerminal.Common.Pages
 			{
 				if (_capture.Read(frame))
 				{
-					var next = frame.CvtColor(ColorConversionCodes.BGR2RGBA);
-
-					next.GetArray<Vec4b>(out Vec4b[] vec4bArray);
-
-					int[] intArray = new int[vec4bArray.Length];
-					for (int i = 0; i < vec4bArray.Length; i++)
+					try
 					{
-						intArray[i] = (vec4bArray[i][3] << 24) | (vec4bArray[i][2] << 16) | (vec4bArray[i][1] << 8) | vec4bArray[i][0];
+						var next = frame.CvtColor(ColorConversionCodes.BGR2RGBA);
+
+						next.GetArray<Vec4b>(out Vec4b[] vec4bArray);
+
+						int[] intArray = new int[vec4bArray.Length];
+						for (int i = 0; i < vec4bArray.Length; i++)
+						{
+							intArray[i] = (vec4bArray[i][3] << 24) | (vec4bArray[i][2] << 16) | (vec4bArray[i][1] << 8) | vec4bArray[i][0];
+						}
+						_cameraTexture.Dispose();
+
+						_cameraTexture = new Texture2D(_graphicsDevice, VIDEO_CAPTURE_WIDTH, VIDEO_CAPTURE_HEIGHT);
+
+
+						_cameraTexture.SetData(intArray);
+
+						var reader = new BarcodeReader();
+						var result = reader.Decode(frame);
+
+						screen.DrawImage(_cameraTexture, new XNA.Point(50, 57), new XNA.Point(78, 60));
+
+						next.Dispose();
+
+
+						if (result != default && !string.IsNullOrEmpty(result.Text))
+						{
+							string address = result.Text;
+							if(result.Text.StartsWith("dogecoin:"))
+							{
+								address = result.Text.Split(':')[1];
+							}
+
+							if(!Crypto.VerifyP2PKHAddress(address))
+							{
+								GetControl<TextControl>("HintText").Text = $"{_strings.GetString("terminal-qrscanner-hint")}\n{result.Text}";
+							}
+							else
+							{
+								_capture.Dispose();
+								Submit(address);
+							}
+
+						}
+
 					}
-					_cameraTexture.Dispose();
-
-					_cameraTexture = new Texture2D(_graphicsDevice, VIDEO_CAPTURE_WIDTH, VIDEO_CAPTURE_HEIGHT);
-
-
-					_cameraTexture.SetData(intArray);
-
-					var reader = new BarcodeReader();
-					var result = reader.Decode(frame);
-
-					screen.DrawImage(_cameraTexture, new XNA.Point(50, 57), new XNA.Point(78, 60));
-
-					next.Dispose();
-
-
-					if (result != default && !string.IsNullOrEmpty(result.Text))
-					{
-						string address = result.Text;
-						if(result.Text.StartsWith("dogecoin:"))
-						{
-							address = result.Text.Split(':')[1];
-						}
-
-						if(!Crypto.VerifyP2PKHAddress(address))
-						{
-							GetControl<TextControl>("HintText").Text = $"{_strings.GetString("terminal-qrscanner-hint")}\n{result.Text}";
-						}
-						else
-						{
-							_capture.Dispose();
-							Submit(address);
-						}
-
-					}
+					catch (Exception ex) { }
 
 				}
 			}

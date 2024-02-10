@@ -9,6 +9,13 @@ using System.Xml.Linq;
 
 namespace DogecoinTerminal.Common
 {
+
+	public enum TextAnchor
+	{
+		Center,
+		TopLeft
+	}
+
     public class TextControl : PageControl
 	{
 		public TextControl(XElement element)
@@ -19,7 +26,18 @@ namespace DogecoinTerminal.Common
 			TextSize = float.Parse(element.Attribute(nameof(TextSize)).Value);
 			StringDef = element.Attribute(nameof(StringDef))?.Value;
 			Text = StringDef ?? element.Attribute(nameof(Text))?.Value ?? string.Empty;
+
+			Anchor = TextAnchor.Center;
+
+			var anchorAttr = element.Attribute(nameof(Anchor));
+
+			if(anchorAttr != null )
+			{
+				Anchor = (TextAnchor)Enum.Parse(typeof(TextAnchor), anchorAttr.Value);
+			}
 		}
+
+		public TextAnchor Anchor { get; set; }
 
 		public string Text { get; set; }
 		public Point Position { get; set; }
@@ -42,7 +60,7 @@ namespace DogecoinTerminal.Common
 			var screen = services.GetService<VirtualScreen>();
 
 
-			screen.DrawText(Text, Color, TextSize, Position);
+			screen.DrawText(Text, Color, TextSize, Position, Anchor);
 		}
 
 		public override void Update(GameTime time, IServiceProvider services)

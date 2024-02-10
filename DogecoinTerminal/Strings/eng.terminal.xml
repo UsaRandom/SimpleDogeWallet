@@ -77,7 +77,14 @@
   <String Id="terminal-spv-offline"><![CDATA[(offline)]]></String>
   <String Id="terminal-spv-online"><![CDATA[(online)]]></String>
   <String Id="terminal-spv-peers"><![CDATA[Peers]]></String>
+
+  <String Id="terminal-spv-txcount"><![CDATA[Tx. Count]]></String>
+  <String Id="terminal-spv-spentutxo"><![CDATA[UTXOs Spent]]></String>
+  <String Id="terminal-spv-newutxo"><![CDATA[UTXOs Created]]></String>
+  <String Id="terminal-spv-netutxo"><![CDATA[Net UTXOs]]></String>
+
   
+
   <String Id="terminal-spv-currentblock"><![CDATA[Current Block]]></String>
   <String Id="terminal-spv-currentblock-hash"><![CDATA[Hash]]></String>
   <String Id="terminal-spv-currentblock-height"><![CDATA[Height]]></String>
@@ -88,7 +95,7 @@
   <String Id="terminal-spv-stop"><![CDATA[Stop]]></String>
 
   <String Id="terminal-spv-estimatemaxblock"><![CDATA[Estimated Block Height]]></String>
-  <String Id="terminal-spv-estimatemaxblock-hint"><![CDATA[(+/- a few blocks)]]></String>
+  <String Id="terminal-spv-estimatemaxblock-hint"><![CDATA[(not a great estimate mind you)]]></String>
   
   <String Id="terminal-spv-sync-title"><![CDATA[Rescan]]></String>
   <String Id="terminal-spv-sync-height"><![CDATA[Block Height:]]></String>

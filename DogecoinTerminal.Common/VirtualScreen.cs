@@ -25,32 +25,16 @@ namespace DogecoinTerminal.Common
 
 		private FontSystem _fontSystem;
 
-		public void Init(GraphicsDeviceManager graphicsDeviceManager, bool useFullScreen)
+
+		public void SetWindowDim(GraphicsDeviceManager graphicsDeviceManager, bool useFullScreen, int width, int height)
 		{
-			var displayWidth = graphicsDeviceManager.GraphicsDevice.Adapter.CurrentDisplayMode.Width;
-			var displayHeight = graphicsDeviceManager.GraphicsDevice.Adapter.CurrentDisplayMode.Height;
+			graphicsDeviceManager.PreferredBackBufferWidth = width;
+			graphicsDeviceManager.PreferredBackBufferHeight = height;
 
+			graphicsDeviceManager.IsFullScreen = useFullScreen;
 
-			if (useFullScreen)
-			{
-				graphicsDeviceManager.PreferredBackBufferWidth = displayWidth;
-				graphicsDeviceManager.PreferredBackBufferHeight = displayHeight;
-				graphicsDeviceManager.IsFullScreen = true;
-
-				_xPad = Math.Max(0, (displayWidth - displayHeight) / 2);
-				_yPad = Math.Max(0, (displayHeight - displayWidth) / 2);
-			}
-			else
-			{
-				//if not fullscreen, we render as a box, 100 pixels less than the smallest dim on the screen
-				var renderDim = Math.Min(displayWidth, displayHeight) - 200;
-
-				graphicsDeviceManager.PreferredBackBufferHeight = renderDim;
-				graphicsDeviceManager.PreferredBackBufferWidth = renderDim;
-				_xPad = 0;
-				_yPad = 0;
-			}
-
+			_xPad = Math.Max(0, (width - height) / 2);
+			_yPad = Math.Max(0, (height - width) / 2);
 			graphicsDeviceManager.ApplyChanges();
 
 
@@ -60,7 +44,15 @@ namespace DogecoinTerminal.Common
 
 
 			_renderScale = _renderDim / 100M;
-			Opacity = 255;
+		}
+
+
+		public void Init(GraphicsDeviceManager graphicsDeviceManager, bool useFullScreen)
+		{
+			SetWindowDim(graphicsDeviceManager,
+							useFullScreen,
+							graphicsDeviceManager.GraphicsDevice.Adapter.CurrentDisplayMode.Width - 200,
+							graphicsDeviceManager.GraphicsDevice.Adapter.CurrentDisplayMode.Height - 200);
 		}
 
 		public float RenderScale
@@ -75,7 +67,7 @@ namespace DogecoinTerminal.Common
 		{
 			get;
 			set;
-		}
+		} = 255;
 
 		private Color GetOpacityColor()
 		{
@@ -138,7 +130,7 @@ namespace DogecoinTerminal.Common
 		}
 
 
-		public void DrawText(string text, TerminalColor color, float scale, Point pos)
+		public void DrawText(string text, TerminalColor color, float scale, Point pos, TextAnchor anchor = TextAnchor.Center)
 		{
 			if(color == null)
 			{
@@ -149,11 +141,19 @@ namespace DogecoinTerminal.Common
 			
 			var textSize = font.MeasureString(text);
 
-			_spriteBatch.DrawString(font, text,
-				new Vector2(_xPad + (int)(pos.X * _renderScale) - (textSize.X) / 2,
-					        _yPad + (int)(pos.Y * _renderScale) - (textSize.Y) / 2),
-				 color.Color
-				);
+			Vector2 position;
+			if(anchor == TextAnchor.TopLeft)
+			{
+				position = new Vector2(_xPad + (int)(pos.X * _renderScale) ,
+							_yPad + (int)(pos.Y * _renderScale));
+			}
+			else
+			{
+				position = new Vector2(_xPad + (int)(pos.X * _renderScale) - (textSize.X) / 2,
+							_yPad + (int)(pos.Y * _renderScale) - (textSize.Y) / 2);
+			}
+
+			_spriteBatch.DrawString(font, text, position, color.Color);
 
 		}
 

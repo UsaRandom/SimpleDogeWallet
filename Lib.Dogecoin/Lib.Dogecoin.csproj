@@ -9,11 +9,19 @@
 
   <ItemGroup>
     <None Remove="dogecoin.dll" />
+    <None Remove="dogecoin.exp" />
+    <None Remove="dogecoin.pdb" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="dogecoin.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="dogecoin.exp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="dogecoin.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

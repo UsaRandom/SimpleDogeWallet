@@ -49,6 +49,7 @@ namespace DogecoinTerminal.Pages
 
 			OnClick("CopyButton", _ =>
 			{
+				spvNodeService.PrintDebug();
 				clipboard.SetClipboardContents(GetControl<TextControl>("SPVInfoText").Text);
 			});
 			OnClick("RescanButton", async _ =>
@@ -63,7 +64,7 @@ namespace DogecoinTerminal.Pages
 			var screen = services.GetService<VirtualScreen>();
 
 
-			screen.DrawRectangle(TerminalColor.Grey, new Point(10, 38), new Point(90, 62));
+			screen.DrawRectangle(TerminalColor.Grey, new Point(10, 38), new Point(90, 72));
 
 			base.Draw(gameTime, services);
 		}
@@ -83,6 +84,10 @@ namespace DogecoinTerminal.Pages
 			var sb = new StringBuilder();
 
 			sb.AppendLine($"{_strings.GetString("terminal-spv-peers")}: {_spvNodeService.PeerCount}");
+			sb.AppendLine($"{_strings.GetString("terminal-spv-txcount")}: {_spvNodeService.TxCount}");
+			sb.AppendLine($"{_strings.GetString("terminal-spv-spentutxo")}: {_spvNodeService.SpentUTXOCount}");
+			sb.AppendLine($"{_strings.GetString("terminal-spv-newutxo")}: {_spvNodeService.NewUTXOCount}");
+			sb.AppendLine($"{_strings.GetString("terminal-spv-netutxo")}: {_spvNodeService.NewUTXOCount-_spvNodeService.SpentUTXOCount}");
 			sb.AppendLine();
 			sb.AppendLine($"{_strings.GetString("terminal-spv-currentblock")}:");
 			sb.AppendLine($"->{_strings.GetString("terminal-spv-currentblock-hash")}: {_spvNodeService.CurrentBlock.Hash}");

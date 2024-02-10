@@ -176,11 +176,11 @@ namespace Lib.Dogecoin
 				_syncComplete = false;
 
 				LibDogecoinInterop.dogecoin_spv_client_discover_peers(_spvNodeRef, null);
+				var client = Marshal.PtrToStructure<dogecoin_spv_client>(_spvNodeRef);
+
 
 				unsafe
 				{
-					var client = Marshal.PtrToStructure<dogecoin_spv_client>(_spvNodeRef);
-
 					var headerDb = *client.headers_db;
 
 					if (headerDb.has_checkpoint_start(client.headers_db_ctx) == 0)
@@ -206,6 +206,8 @@ namespace Lib.Dogecoin
 
 				}
 
+
+			//	LibDogecoinInterop.dogecoin_node_group_event_loop(client.nodegroup);
 				LibDogecoinInterop.dogecoin_spv_client_runloop(_spvNodeRef);
 				IsRunning = false;
 			});
@@ -213,12 +215,32 @@ namespace Lib.Dogecoin
 			_thread.Start();
 		}
 
-		public void Stop()
+		public unsafe void Stop()
 		{
 			var spv = Marshal.PtrToStructure<dogecoin_spv_client>(_spvNodeRef);
 
 			LibDogecoinInterop.dogecoin_node_group_shutdown(spv.nodegroup);
+			
 
+			LibDogecoinInterop.dogecoin_node_group_event_break(spv.nodegroup);
+			//var nodeList = *nodeGroup.nodes;
+
+			//Debug.WriteLine("Nodes: " + nodeList.len);
+
+			//var connectedNodes = 0;
+			//for (var i = 0; i < nodeList.len; i++)
+			//{
+			//	dogecoin_node node = Marshal.PtrToStructure<dogecoin_node>(*(nodeList.data + i));
+
+			//	Debug.WriteLine($"{i}: {Enum.GetName((NODE_STATE)node.state)} - {DateTimeOffset.FromUnixTimeSeconds((long)node.lastping).ToLocalTime()}");
+			//	if ((NODE_STATE)node.state == NODE_STATE.NODE_CONNECTED || (NODE_STATE)node.state == NODE_STATE.NODE_CONNECTING)
+			//	{
+			//		connectedNodes++;
+			//	}
+			//	LibDogecoinInterop.dogecoin_node_free(*(nodeList.data + i));
+			//	Debug.WriteLine($"{i}: {Enum.GetName((NODE_STATE)node.state)} - {DateTimeOffset.FromUnixTimeSeconds((long)node.lastping).ToLocalTime()}");
+
+			//}
 		}
 
 
@@ -233,6 +255,9 @@ namespace Lib.Dogecoin
 
 		private unsafe void CreateSPVClient()
 		{
+			
+
+			LibDogecoinInterop.dogecoin_spv_client_free(_spvNodeRef);
 
 			var net = IsMainNet ? LibDogecoinContext._mainChain : LibDogecoinContext._testChain;
 

@@ -1,12 +1,15 @@
 ﻿using DogecoinTerminal.Common;
 using Lib.Dogecoin;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Transactions;
 
 namespace DogecoinTerminal
 {
@@ -19,44 +22,13 @@ namespace DogecoinTerminal
 		private SimpleDogeWallet _currentWallet;
 
 		private uint _staleTimerLastBlock;
-		private Timer _staleNodeTimer;
 		private uint _staleTimerCounter = 0;
 
 		public SimpleSPVNodeService()
 		{
-			_staleNodeTimer = new Timer()
-			{
-				AutoReset = true,
-				Interval = TimeSpan.FromMinutes(1).TotalMilliseconds
-			};
+			TxCount = 0;
 
-			_staleTimerLastBlock = 0;
-
-			_staleNodeTimer.Elapsed += (s, e) =>
-			{
-				
-
-				if(IsRunning && _staleTimerLastBlock == CurrentBlock.BlockHeight)
-				{
-					_staleTimerCounter++;
-
-					if(!SyncCompleted)
-					{
-						Stop();
-						Start();
-						_staleTimerCounter = 0;
-					}
-					else if(_staleTimerCounter >= 10 && SyncCompleted)
-					{
-						Stop();
-						Start();
-						_staleTimerCounter = 0;
-					}
-				}
-				_staleTimerLastBlock = CurrentBlock.BlockHeight;
-			};
-
-	//		_staleNodeTimer.Start();
+			Transactions = new ConcurrentQueue<SPVNodeTransaction>();
 
 			CurrentBlock = new SPVNodeBlockInfo()
 			{
@@ -64,6 +36,26 @@ namespace DogecoinTerminal
 				BlockHeight = 5079600,
 				Timestamp = DateTimeOffset.FromUnixTimeSeconds(1707271081)
 			};
+
+			//Task.Run(() =>
+			//{
+			//	while(!CancelToken.IsCancellationRequested)
+			//	{
+					
+			//		if (Transactions.TryDequeue(out SPVNodeTransaction tx))
+			//		{
+						
+			//		}
+			//	}
+			//});
+		}
+
+
+		private CancellationTokenSource CancelToken = new CancellationTokenSource();
+		private ConcurrentQueue<SPVNodeTransaction> Transactions
+		{
+			get;
+			set;
 		}
 
 
@@ -80,6 +72,21 @@ namespace DogecoinTerminal
 		{
 			get;
 			private set;
+		}
+
+		public ulong TxCount
+		{
+			get; private set;
+		}
+
+		public ulong SpentUTXOCount
+		{
+			get; private set;
+		}
+
+		public ulong NewUTXOCount
+		{
+			get; private set;
 		}
 
 		public bool IsRunning
@@ -148,10 +155,12 @@ namespace DogecoinTerminal
 				.UseMainNet()
 				.OnSyncCompleted(OnSyncComplete)
 				.OnNextBlock(HandleOnBlock)
+				.EnableDebug()
 				.OnTransaction(HandleOnTransaction)
 				.Build() ;
 
 			_spvNode.Start();
+
 		}
 
 		public void Rescan(SimpleDogeWallet wallet, SPVNodeBlockInfo startPoint)
@@ -172,6 +181,7 @@ namespace DogecoinTerminal
 				.OnTransaction(HandleOnTransaction)
 				.Build();
 
+			Transactions.Clear();
 			_spvNode.Start();
 
 		}
@@ -198,6 +208,10 @@ namespace DogecoinTerminal
 		{
 			bool walletChanged = false;
 
+			TxCount++;
+
+			SpentUTXOCount += (ulong)tx.In.Length;
+			NewUTXOCount += (ulong)tx.Out.Length;
 			foreach (var spentUtxo in tx.In)
 			{
 				if (_currentWallet.PendingSpentUTXOs.Remove(spentUtxo))
@@ -229,13 +243,16 @@ namespace DogecoinTerminal
 
 				Messenger.Default.Send(new SPVUpdatedWalletMessage());
 			}
-		
+
 		}
 
 
 		public void Stop()
 		{
 			_spvNode?.Stop();
+			TxCount = 0;
+			SpentUTXOCount = 0;
+			NewUTXOCount = 0;
 		}
 	}
 

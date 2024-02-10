@@ -81,7 +81,7 @@ namespace DogecoinTerminal.Common.BackgroundScenes
 		{
 
 			// Calculate the number of tiles to draw in each direction
-			int numTilesX = (int)Math.Ceiling(_displayWidth / (float)_textureWidth);
+			int numTilesX = (int)Math.Ceiling(_displayWidth / (float)_textureWidth) + 1;
 			int numTilesY = (int)Math.Ceiling(_displayHeight / (float)_textureHeight);
 
 			// Draw the background tiles

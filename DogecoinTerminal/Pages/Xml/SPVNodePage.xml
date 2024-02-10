@@ -9,8 +9,8 @@
   <common:TextControl Name="OnlineOfflineText" Color="Red" Position="50,18" TextSize="3"/>
   
 
-  <common:TextControl Name="SPVInfoText" Color="White" Position="50,50" TextSize="2" />
-  <common:ImageControl Name="CopyButton" StartPosition="81,53" EndPosition="89,61"
+  <common:TextControl Name="SPVInfoText" Color="White" Position="12,40" TextSize="2" Anchor="TopLeft"/>
+  <common:ImageControl Name="CopyButton" StartPosition="81,68" EndPosition="89,76"
                        ImageSource="Content\copy-button.png" BackgroundColor="DarkGrey" />
 
 
