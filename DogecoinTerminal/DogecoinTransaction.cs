@@ -161,7 +161,7 @@ namespace DogecoinTerminal
 
         private string GetPrivateKeyFromMnemonic(string mnemonic)
         {
-            var masterKeys = _ctx.GenerateHDMasterPubKeypairFromMnemonic(mnemonic);
+            var masterKeys = _ctx.GenerateHDMasterPubKeypairFromMnemonic(mnemonic.Replace("-", " "));
 
             return _ctx.GetHDNodePrivateKeyWIFByPath(masterKeys.privateKey, Crypto.HDPATH, true);
         }

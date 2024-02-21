@@ -116,7 +116,7 @@ namespace DogecoinTerminal.Pages
 						//we have a valid mnemonic, encrypt it with key stored in tpm
 						var mnemonicKey = ctx.GenerateMnemonicEncryptWithTPM(SimpleDogeWallet.TPM_FILE_NUMBER, lang: "eng", space: "-");
 
-						File.WriteAllText(SimpleDogeWallet.LOADED_MNEMONIC_FILE, Crypto.Encrypt(mnemonic, mnemonicKey));
+						File.WriteAllText(SimpleDogeWallet.LOADED_MNEMONIC_FILE, Crypto.Encrypt(mnemonic.Replace("-", " "), mnemonicKey));
 
 						break;
 					}
