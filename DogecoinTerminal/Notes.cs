@@ -14,58 +14,14 @@ namespace DogecoinTerminal
 	{
 
 
-		class SimpleWallet
-		{
-			string Address;
-			string GetMnemonic();
-			UTXO[] GetUTXOs();
-			void AddUTXO(UTXO utxo);
-			void RemoveUTXO(UTXO utxo);
-			decimal GetBalance();
-			long GetBalanceInKoinu();
-		}
-
-		class SimpleWalletFileStore
-		{
-			bool WalletExists
-			{
-				get
-				{
-					return false;
-				}
-			}
-
-			SimpleWallet TryUnlock(string pin);
-			bool UpdatePin(string oldPin, string newPin);
-		}
 
 		private void Playground()
 		{
 			
 
-			var wallet = new SimpleTPM2Wallet();
 
-			var address = wallet.Address;
-			var mnemonic = wallet.GetMnemonic();
-
-			wallet.AddUTXO(UTXO);
-			wallet.RemoveUTXO(UTXO);
-
-			wallet.GetBalance();
-
-			if(wallet.TryUnlock(pin))
-			{
-
-			}
-
-			wallet.SetPin();
-			
 		}
 
 	}
 
-	internal class SimpleTPM2Wallet
-	{
-
-	}
 }

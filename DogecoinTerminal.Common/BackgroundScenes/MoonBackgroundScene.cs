@@ -71,7 +71,7 @@ namespace DogecoinTerminal.Common.BackgroundScenes
 			_textureWidth = _tileTexture.Width;
 			_textureHeight = _tileTexture.Height;
 
-			_floatingObject = imageService.GetImage("Content/ogfreshdoge.png");
+			_floatingObject = imageService.GetImage("Content/dogemoon.png");
 			__floatingObjectScale = (0.14f * Math.Min(width, height))/ ((float)_floatingObject.Bounds.Width);
 
 		}

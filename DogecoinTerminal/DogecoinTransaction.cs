@@ -138,9 +138,10 @@ namespace DogecoinTerminal
         {
             try
             {
+                var pk = GetPrivateKeyFromMnemonic(Wallet.GetMnemonic());
 				for (var i = 0; i < _txUTXOs.Count; i++)
 				{
-					if (!_ctx.SignTransactionWithPrivateKey(_workingTransactionId, i, GetPrivateKeyFromMnemonic(Wallet.GetMnemonic())))
+					if (!_ctx.SignTransactionWithPrivateKey(_workingTransactionId, i, pk))
 					{
 						return false;
 					}
