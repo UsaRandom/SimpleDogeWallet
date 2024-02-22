@@ -64,7 +64,7 @@ namespace DogecoinTerminal
             _workingTransactionId = _ctx.StartTransaction();
 
             //it might make sense to order these
-            var utxoEnumerator = Wallet.GetSpendableUTXOs().GetEnumerator();
+            var utxoEnumerator = Wallet.UTXOs.GetEnumerator();
 
 
             //TODO: Change this to fee per byte so we can support P2SH and multiple outputs
@@ -169,12 +169,6 @@ namespace DogecoinTerminal
 
         public void Commit()
         {
-
-            foreach(var utxo in _txUTXOs)
-            {
-                Wallet.PendingSpentUTXOs.Add(utxo);
-            }
-
 
 			Wallet.Save();
 			return;

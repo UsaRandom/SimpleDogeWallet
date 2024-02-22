@@ -21,7 +21,6 @@ namespace DogecoinTerminal
 		public const string ADDRESS_FILE = "address";
 		public const string LOADED_MNEMONIC_FILE = "loadedmnemonic";
 		public const string UTXO_FILE = "utxos";
-		public const string PENDING_UTXO_FILE = "pending_utxos";
 
 		public const string USING_USER_ENTERED_MNEMONIC_SETTING = "user-entered-mnemonic";
 
@@ -33,7 +32,6 @@ namespace DogecoinTerminal
 			Address = address;
 			Services = services;
 
-			PendingSpentUTXOs = new List<UTXO>();
 
 			_ctx = LibDogecoinContext.Instance;
 			_usingUserEnteredMnemonic = Services.GetService<ITerminalSettings>().GetBool(USING_USER_ENTERED_MNEMONIC_SETTING);
@@ -64,29 +62,6 @@ namespace DogecoinTerminal
 			{
 				return _instance;
 			}
-		}
-
-		public List<UTXO> PendingSpentUTXOs
-		{
-			get; private set;
-		}
-
-
-		public IEnumerable<UTXO> GetSpendableUTXOs()
-		{
-			return UTXOs.Where(utxo =>
-			{
-				if(!PendingSpentUTXOs.Contains(utxo))
-				{
-					return true;
-				}
-				return false;
-			});
-		}
-
-		public decimal GetPendingBalance()
-		{
-			return PendingSpentUTXOs.Sum(utxo => utxo.Amount);
 		}
 
 		public decimal GetBalance()
@@ -153,7 +128,6 @@ namespace DogecoinTerminal
 		private void LoadUTXOs()
 		{
 			UTXOs = new List<UTXO>();
-			PendingSpentUTXOs = new List<UTXO>();
 
 			if (File.Exists(UTXO_FILE))
 			{
@@ -184,34 +158,6 @@ namespace DogecoinTerminal
 				}
 			}
 
-			if (File.Exists(PENDING_UTXO_FILE))
-			{
-				var utxoString = File.ReadAllText(PENDING_UTXO_FILE);
-
-				if (!string.IsNullOrEmpty(utxoString))
-				{
-					utxoString = utxoString.Replace("\r", string.Empty);
-
-					var lines = utxoString.Split('\n');
-
-					foreach (var line in lines)
-					{
-						if (string.IsNullOrEmpty(line))
-						{
-							continue;
-						}
-
-						var lineParts = line.Split('|');
-
-						PendingSpentUTXOs.Add(new UTXO
-						{
-							TxId = lineParts[0],
-							VOut = int.Parse(lineParts[1]),
-							AmountKoinu = long.Parse(lineParts[2])
-						});
-					}
-				}
-			}
 
 			
 		}
@@ -229,16 +175,6 @@ namespace DogecoinTerminal
 
 			File.WriteAllText(UTXO_FILE, utxoContent.ToString());
 
-			utxoContent = new StringBuilder();
-
-			foreach (var utxo in PendingSpentUTXOs)
-			{
-				utxoContent.Append(utxo.TxId + "|");
-				utxoContent.Append(utxo.VOut + "|");
-				utxoContent.AppendLine(utxo.AmountKoinu?.ToString());
-			}
-
-			File.WriteAllText(PENDING_UTXO_FILE, utxoContent.ToString());
 		}
 
 
@@ -247,7 +183,6 @@ namespace DogecoinTerminal
 			File.Delete(ADDRESS_FILE);
 			File.Delete(LOADED_MNEMONIC_FILE);
 			File.Delete(UTXO_FILE);
-			File.Delete(PENDING_UTXO_FILE);
 		}
 
 

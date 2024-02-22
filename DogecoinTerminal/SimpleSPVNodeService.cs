@@ -168,7 +168,6 @@ namespace DogecoinTerminal
 			_spvNode?.Stop();
 
 			wallet.UTXOs.Clear();
-			wallet.PendingSpentUTXOs.Clear();
 
 			wallet.Save();
 
@@ -212,13 +211,9 @@ namespace DogecoinTerminal
 
 			SpentUTXOCount += (ulong)tx.In.Length;
 			NewUTXOCount += (ulong)tx.Out.Length;
+
 			foreach (var spentUtxo in tx.In)
 			{
-				if (_currentWallet.PendingSpentUTXOs.Remove(spentUtxo))
-				{
-					walletChanged = true;
-				}
-
 				if (_currentWallet.UTXOs.Remove(spentUtxo))
 				{
 					walletChanged = true;

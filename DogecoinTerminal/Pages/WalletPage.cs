@@ -59,8 +59,6 @@ namespace DogecoinTerminal.Pages
 
             var balanceTextControl = GetControl<TextControl>("BalanceText");
 			balanceTextControl.Text = $"Đ {(_wallet.GetBalance() ):#,0.000}";
-			GetControl<TextControl>("PendingBalanceText").Text = $"(Đ {(_wallet.GetPendingBalance()):#,0.000})";
-
 
 			_qrCodeImage = new Texture2D(graphicsDevice, 480, 480);
 
@@ -119,9 +117,9 @@ namespace DogecoinTerminal.Pages
 
 				var target = (Contact)destinationResult.Value;
 
-				var maxSpend = _wallet.GetBalance() - _wallet.GetPendingBalance();
+				var maxSpend = _wallet.GetBalance();
 
-				maxSpend -= (_wallet.UTXOs.Count - _wallet.PendingSpentUTXOs.Count) * settings.GetDecimal("fee-per-utxo");
+				maxSpend -= _wallet.UTXOs.Count * settings.GetDecimal("fee-per-utxo");
 
 				var amountResult = await navigation.PromptAsync<NumPadPage>(("value-mode", true),
 																			("title", "terminal-sendamount-title"),
@@ -192,7 +190,6 @@ namespace DogecoinTerminal.Pages
 				else
 				{
 					transaction.Commit();
-					GetControl<TextControl>("PendingBalanceText").Text = $"(Đ {(_wallet.GetPendingBalance()):#,0.000})";
 
 					await navigation.PromptAsync<ShortMessagePage>(("message", "Transaction Broadcast!"));
 					navigation.Pop();
@@ -234,8 +231,6 @@ namespace DogecoinTerminal.Pages
 		{
 			var balanceTextControl = GetControl<TextControl>("BalanceText");
 			balanceTextControl.Text = $"Đ {_wallet.GetBalance():#.###}";
-			GetControl<TextControl>("PendingBalanceText").Text = $"(Đ {(_wallet.GetPendingBalance()):#,0.000})";
-
 		}
 
 		public void Receive(SPVNodeBlockInfo message)
