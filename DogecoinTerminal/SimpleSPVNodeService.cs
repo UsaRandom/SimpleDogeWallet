@@ -230,10 +230,12 @@ namespace DogecoinTerminal
 				var utxoAddress = newUtxo.ScriptPubKey.GetP2PKHAddress();
 
 				if (!string.IsNullOrEmpty(utxoAddress) &&
-					utxoAddress == _currentWallet.Address)
+					utxoAddress == _currentWallet.Address &&
+					!_currentWallet.UTXOs.Contains(newUtxo))
 				{
-					_currentWallet.UTXOs.Add(newUtxo);
-					walletChanged = true;
+						_currentWallet.UTXOs.Add(newUtxo);
+						walletChanged = true;
+					
 				}
 			}
 
