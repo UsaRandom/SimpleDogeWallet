@@ -82,6 +82,8 @@ namespace DogecoinTerminal.Pages
 			if (isNew)
 			{
 				mnemonic = ctx.GenerateMnemonicEncryptWithTPM(SimpleDogeWallet.TPM_FILE_NUMBER, lang: strings.Language.LanguageCode, space: "-");
+				await navigation.PromptAsync<BackupCodePage>(("mnemonic", mnemonic), ("editmode", false));
+
 			}
 			else
 			{
@@ -116,7 +118,7 @@ namespace DogecoinTerminal.Pages
 						//we have a valid mnemonic, encrypt it with key stored in tpm
 						var mnemonicKey = ctx.GenerateMnemonicEncryptWithTPM(SimpleDogeWallet.TPM_FILE_NUMBER, lang: "eng", space: "-");
 
-						File.WriteAllText(SimpleDogeWallet.LOADED_MNEMONIC_FILE, Crypto.Encrypt(mnemonic.Replace("-", " "), mnemonicKey));
+						File.WriteAllText(SimpleDogeWallet.LOADED_MNEMONIC_FILE, Crypto.Encrypt(mnemonic, mnemonicKey));
 
 						break;
 					}
@@ -136,8 +138,6 @@ namespace DogecoinTerminal.Pages
 				address = ctx.GetDerivedHDAddressByPath(masterKeys.privateKey, Crypto.HDPATH, false);
 
 				File.WriteAllText("address", Crypto.Encrypt(address, newPin));
-
-				await navigation.PromptAsync<BackupCodePage>(("mnemonic", mnemonic), ("editmode", false));
 
 				createdWallet = true;
 
