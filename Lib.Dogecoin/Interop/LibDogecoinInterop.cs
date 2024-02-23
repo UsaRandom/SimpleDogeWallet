@@ -430,9 +430,6 @@ namespace Lib.Dogecoin.Interop
 
 
 		[DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void dogecoin_node_group_event_loopbreak(IntPtr group);
-
-		[DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void dogecoin_node_group_event_loop(IntPtr group);
 
 		

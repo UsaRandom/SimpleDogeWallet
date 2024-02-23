@@ -220,8 +220,6 @@ namespace Lib.Dogecoin
 			var spv = Marshal.PtrToStructure<dogecoin_spv_client>(_spvNodeRef);
 
 			LibDogecoinInterop.dogecoin_node_group_shutdown(spv.nodegroup);
-			
-			LibDogecoinInterop.dogecoin_node_group_event_loopbreak(spv.nodegroup);
 
 			//var nodeList = *nodeGroup.nodes;
 
