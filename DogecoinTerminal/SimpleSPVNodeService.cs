@@ -114,10 +114,11 @@ namespace DogecoinTerminal
 
 				if(currentTime - _lastRefreshTime > _timeBetweenRefresh)
 				{
+					//peercount is an expensive call, so we only refresh so often
 					_peerCount = _spvNode.GetPeerCount();
+					_lastRefreshTime = currentTime;
 				}
 
-				_lastRefreshTime = currentTime;
 				return _peerCount;
 			}
 		}
