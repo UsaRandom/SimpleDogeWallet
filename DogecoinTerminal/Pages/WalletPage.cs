@@ -12,6 +12,7 @@ using ZXing.QrCode;
 using ZXing;
 using Microsoft.Xna.Framework;
 using OpenCvSharp;
+using System.Diagnostics;
 
 namespace DogecoinTerminal.Pages
 {
@@ -119,10 +120,10 @@ namespace DogecoinTerminal.Pages
 
 				var maxSpend = _wallet.GetBalance();
 
-				maxSpend -= _wallet.UTXOs.Count * settings.GetDecimal("fee-per-utxo");
+				maxSpend -= (_wallet.UTXOs.Count + 2) * settings.GetDecimal("fee-per-utxo");
 
 				var amountResult = await navigation.PromptAsync<NumPadPage>(("value-mode", true),
-																			("title", "terminal-sendamount-title"),
+																			("title", strings.GetString("terminal-sendamount-title")),
 																			("hint", $"(Đ {maxSpend:#,0.000})"));
 
 
@@ -182,6 +183,10 @@ namespace DogecoinTerminal.Pages
 
 				var rawTx = transaction.GetRawTransaction();
 
+				Debug.WriteLine($"Raw Transaction: {rawTx}");
+
+				//NOTE: this isn't really reliable... it could be a bad transaction and then say it's successful.
+
 				if (!LibDogecoinContext.Instance.BroadcastRawTransaction(rawTx))
 				{
 					await navigation.PromptAsync<ShortMessagePage>(("message", "Error broadcasting transaction."));
@@ -189,8 +194,6 @@ namespace DogecoinTerminal.Pages
 				}
 				else
 				{
-					transaction.Commit();
-
 					await navigation.PromptAsync<ShortMessagePage>(("message", "Transaction Broadcast!"));
 					navigation.Pop();
 				}

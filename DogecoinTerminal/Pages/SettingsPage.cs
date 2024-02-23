@@ -1,6 +1,7 @@
 ﻿using DogecoinTerminal.Common;
 using DogecoinTerminal.Common.Pages;
 using Lib.Dogecoin;
+using OpenCvSharp.Dnn;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -180,8 +181,16 @@ namespace DogecoinTerminal.Pages
 			{
 				await navigation.PushAsync<LoadingPage>();
 
+				var sendYesNo = await navigation.PromptAsync<YesNoPage>(("message", strings.GetString("terminal-settings-delete-confirm")));
+
+				if (sendYesNo.Response != PromptResponse.YesConfirm)
+				{
+					navigation.Pop();
+					return;
+				}
+
 				var oldPinResponse = await navigation.PromptAsync<NumPadPage>(
-					("title", strings.GetString("terminal-enteroppin-title")),
+					("title", strings.GetString("terminal-settings-delete-confirm-pin")),
 					("regex", ".{" + SimpleDogeWallet.MIN_PIN_LENGTH + ",16}"));
 
 
@@ -189,8 +198,10 @@ namespace DogecoinTerminal.Pages
 				   SimpleDogeWallet.TryOpen((string)oldPinResponse.Value, services, out SimpleDogeWallet wallet))
 				{
 					SimpleDogeWallet.ClearWallet();
-					await navigation.TryInsertBeforeAsync<StartPage, WalletPage>();
-					await navigation.PopToPage<StartPage>();
+					await navigation.PromptAsync<ShortMessagePage>(("message", strings.GetString("terminal-settings-delete-wallet-deleted")));
+					await navigation.TryInsertBeforeAsync<SetupWalletPage, WalletPage>();
+					await navigation.PromptAsync<LanguageSelectionPage>();
+					await navigation.PopToPage<SetupWalletPage>();
 					return;
 				}
 

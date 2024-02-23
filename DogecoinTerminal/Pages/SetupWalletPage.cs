@@ -79,11 +79,50 @@ namespace DogecoinTerminal.Pages
 
 			string mnemonic = string.Empty;
 
+
+			int tpmFileNumber = settings.GetInt("tpm-file-number", -1);
+
+			if (tpmFileNumber == -1)
+			{
+				//need to make sure we don't overwrite other keys,
+				// so we need to find a good key number.
+				var tpmKeys = ctx.ListKeysInTPM();
+				var takenNumbers = new List<int>();
+
+				// key names look like: "dogecoin_mnemonic_069"
+				foreach (var key in tpmKeys)
+				{
+					if (key.StartsWith("dogecoin_mnemonic_"))
+					{
+						int fileNumber = int.Parse(key.Split('_')[2]);
+						takenNumbers.Add(fileNumber);
+					}
+				}
+
+				for (var number = 0; number < 999; number++)
+				{
+					if (!takenNumbers.Contains(number))
+					{
+						tpmFileNumber = number;
+						break;
+					}
+				}
+
+				if (tpmFileNumber == -1)
+				{
+					await navigation.PromptAsync<ShortMessagePage>(("message", strings.GetString("terminal-setup-tpm-is-full")));
+					navigation.Pop();
+					return;
+				}
+
+				settings.Set("tpm-file-number", tpmFileNumber);
+			}
+
+
 			if (isNew)
 			{
-				mnemonic = ctx.GenerateMnemonicEncryptWithTPM(SimpleDogeWallet.TPM_FILE_NUMBER, lang: strings.Language.LanguageCode, space: "-");
+				mnemonic = ctx.GenerateMnemonicEncryptWithTPM(tpmFileNumber, lang: strings.Language.LanguageCode, space: "-");
 				await navigation.PromptAsync<BackupCodePage>(("mnemonic", mnemonic), ("editmode", false));
-
 			}
 			else
 			{
@@ -116,7 +155,7 @@ namespace DogecoinTerminal.Pages
 						}
 
 						//we have a valid mnemonic, encrypt it with key stored in tpm
-						var mnemonicKey = ctx.GenerateMnemonicEncryptWithTPM(SimpleDogeWallet.TPM_FILE_NUMBER, lang: "eng", space: "-");
+						var mnemonicKey = ctx.GenerateMnemonicEncryptWithTPM(tpmFileNumber, lang: "eng", space: "-");
 
 						File.WriteAllText(SimpleDogeWallet.LOADED_MNEMONIC_FILE, Crypto.Encrypt(mnemonic, mnemonicKey));
 

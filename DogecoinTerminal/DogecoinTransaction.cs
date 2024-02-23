@@ -67,10 +67,10 @@ namespace DogecoinTerminal
             var utxoEnumerator = Wallet.UTXOs.GetEnumerator();
 
 
-            //TODO: Change this to fee per byte so we can support P2SH and multiple outputs
+            //NOTE: I might want to change this to fee per byte.
             decimal fee = settings.GetDecimal("fee-per-utxo"); //fee per utxo
             decimal sum = 0M;
-            int utxoCount = 0;
+            int utxoCount = 2; //min 2 utxo (receipient + change)
 
             do
             {
@@ -137,8 +137,11 @@ namespace DogecoinTerminal
         public bool Sign()
         {
             try
-            {
-                var pk = GetPrivateKeyFromMnemonic(Wallet.GetMnemonic());
+			{
+				var masterKeys = _ctx.GenerateHDMasterPubKeypairFromMnemonic(Wallet.GetMnemonic().Replace("-", " "));
+
+				var pk = _ctx.GetHDNodePrivateKeyWIFByPath(masterKeys.privateKey, Crypto.HDPATH, true);
+		
 				for (var i = 0; i < _txUTXOs.Count; i++)
 				{
 					if (!_ctx.SignTransactionWithPrivateKey(_workingTransactionId, i, pk))
@@ -156,47 +159,6 @@ namespace DogecoinTerminal
 			}
         }
 
-
-
-
-        private string GetPrivateKeyFromMnemonic(string mnemonic)
-        {
-            var masterKeys = _ctx.GenerateHDMasterPubKeypairFromMnemonic(mnemonic.Replace("-", " "));
-
-            return _ctx.GetHDNodePrivateKeyWIFByPath(masterKeys.privateKey, Crypto.HDPATH, true);
-        }
-
-
-        public void Commit()
-        {
-
-			Wallet.Save();
-			return;
-
-            foreach (var utxo in _txUTXOs)
-            {
-                Wallet.UTXOs.Remove(utxo);
-            }
-
-            var settings = _services.GetService<ITerminalSettings>();
-
-            if (Remainder > settings.GetDecimal("dust-limit"))
-            {
-                Wallet.UTXOs.Add(new UTXO
-                {
-                    TxId = Crypto.GetTransactionIdFromRaw(GetRawTransaction()),
-                    VOut = 0,// by our convention, our first output is back to ourselves.
-                    Amount = Remainder
-                });
-            }
-
-            Wallet.Save();
-        }
-
-        public void Dispose()
-        {
-            _ctx.ClearTransaction(_workingTransactionId);
-        }
 
         public string GetRawTransaction()
         {

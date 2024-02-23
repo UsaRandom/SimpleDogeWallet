@@ -15,9 +15,8 @@ namespace DogecoinTerminal
 		public const decimal DEFAULT_DUST_LIMIT = 0.001M;
 		public const decimal DEFAULT_FEE_PER_UTXO = 0.002M;
 
-
+		
 		public const int MIN_PIN_LENGTH = 4;
-		public const int TPM_FILE_NUMBER = 420; //nice
 		public const string ADDRESS_FILE = "address";
 		public const string LOADED_MNEMONIC_FILE = "loadedmnemonic";
 		public const string UTXO_FILE = "utxos";
@@ -26,13 +25,14 @@ namespace DogecoinTerminal
 
 		private bool _usingUserEnteredMnemonic = false;
 		private LibDogecoinContext _ctx;
+		public int _tpmFileNumber;
 
 		public SimpleDogeWallet(string address, IServiceProvider services)
 		{
 			Address = address;
 			Services = services;
 
-
+			_tpmFileNumber = services.GetService<ITerminalSettings>().GetInt("tpm-file-number");
 			_ctx = LibDogecoinContext.Instance;
 			_usingUserEnteredMnemonic = Services.GetService<ITerminalSettings>().GetBool(USING_USER_ENTERED_MNEMONIC_SETTING);
 
@@ -85,13 +85,13 @@ namespace DogecoinTerminal
 		{
 			if(Services.GetService<ITerminalSettings>().GetBool(USING_USER_ENTERED_MNEMONIC_SETTING, false))
 			{
-				var key = _ctx.DecryptMnemonicWithTPM(TPM_FILE_NUMBER);
+				var key = _ctx.DecryptMnemonicWithTPM(_tpmFileNumber);
 
 				return Crypto.Decrypt(File.ReadAllText(LOADED_MNEMONIC_FILE), key);
 			}
 			else
 			{
-				return _ctx.DecryptMnemonicWithTPM(TPM_FILE_NUMBER);
+				return _ctx.DecryptMnemonicWithTPM(_tpmFileNumber);
 			}
 		}
 

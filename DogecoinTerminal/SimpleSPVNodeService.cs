@@ -27,36 +27,15 @@ namespace DogecoinTerminal
 		public SimpleSPVNodeService()
 		{
 			TxCount = 0;
-
-			Transactions = new ConcurrentQueue<SPVNodeTransaction>();
-
 			CurrentBlock = new SPVNodeBlockInfo()
 			{
 				Hash = "5bbc9176db424e1e55d94e0ec79f22974a225c2675d09b90e73b59e58c9f109f",
 				BlockHeight = 5079600,
 				Timestamp = DateTimeOffset.FromUnixTimeSeconds(1707271081)
 			};
-
-			//Task.Run(() =>
-			//{
-			//	while(!CancelToken.IsCancellationRequested)
-			//	{
-					
-			//		if (Transactions.TryDequeue(out SPVNodeTransaction tx))
-			//		{
-						
-			//		}
-			//	}
-			//});
 		}
 
 
-		private CancellationTokenSource CancelToken = new CancellationTokenSource();
-		private ConcurrentQueue<SPVNodeTransaction> Transactions
-		{
-			get;
-			set;
-		}
 
 
 		public uint EstimatedHeight
@@ -181,7 +160,6 @@ namespace DogecoinTerminal
 				.OnTransaction(HandleOnTransaction)
 				.Build();
 
-			Transactions.Clear();
 			_spvNode.Start();
 
 		}

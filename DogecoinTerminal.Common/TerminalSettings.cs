@@ -52,6 +52,16 @@ namespace DogecoinTerminal
         }
 
 
+		public int GetInt(string settingName, int valueIfEmpty = default)
+		{
+			if (settings.ContainsKey(settingName))
+			{
+				return int.Parse(settings[settingName]);
+			}
+
+			return valueIfEmpty;
+		}
+
 
 		public bool IsSet(string settingName)
         {
