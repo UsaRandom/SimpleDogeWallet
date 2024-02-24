@@ -138,6 +138,7 @@ namespace DogecoinTerminal.Pages
 						confirmPin = (string)confirm.Value;
 					}
 				}
+				await navigation.PromptAsync<ShortMessagePage>(("message", strings.GetString("terminal-settings-pin-updated")));
 
 				SimpleDogeWallet.UpdatePin(oldPin, confirmPin);
 

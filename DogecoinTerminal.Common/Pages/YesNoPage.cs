@@ -11,7 +11,6 @@ namespace DogecoinTerminal.Common.Pages
 	{
 		public YesNoPage(IPageOptions options) : base(options)
 		{
-			//ShortMessagePage requires a 'message' option provided to display.
 			var msg = options.GetOption<string>("message");
 
 			var msgControl = GetControl<TextControl>("MessageText");

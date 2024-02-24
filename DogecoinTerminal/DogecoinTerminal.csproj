@@ -58,6 +58,9 @@
     <None Update="Pages\Xml\SetupWalletPage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Pages\Xml\TransactionConfirmPage.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Pages\Xml\UnlockTerminalPage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

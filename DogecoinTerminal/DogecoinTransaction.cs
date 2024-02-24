@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using DogecoinTerminal.Common;
+using System.Linq;
 
 
 namespace DogecoinTerminal
@@ -63,14 +64,20 @@ namespace DogecoinTerminal
 
             _workingTransactionId = _ctx.StartTransaction();
 
-            //it might make sense to order these
-            var utxoEnumerator = Wallet.UTXOs.GetEnumerator();
+			//NOTE: I might want to change this to fee per byte.
+			decimal fee = settings.GetDecimal("fee-per-utxo"); //fee per utxo
+			decimal sum = 0M;
+			int utxoCount = 2; //min 2 utxo (receipient + change)
 
 
-            //NOTE: I might want to change this to fee per byte.
-            decimal fee = settings.GetDecimal("fee-per-utxo"); //fee per utxo
-            decimal sum = 0M;
-            int utxoCount = 2; //min 2 utxo (receipient + change)
+            //UTXOs who's value is greater than the fee + dustlimit * 2  (so it makes sense to spend it)
+            //Order by desc, so bigger UTXOs first.
+            var spendableUTXOs = Wallet.UTXOs.Where(utxo => utxo.Amount > (fee + dustLimit * 2))
+                                             .OrderByDescending(a => a.Amount);
+
+            var utxoEnumerator = spendableUTXOs.GetEnumerator();
+
+
 
             do
             {
@@ -110,7 +117,7 @@ namespace DogecoinTerminal
 
 
             Remainder = remainder;
-            Fee = fee;
+            Fee = totalFee;
             Amount = amount;
 
             To = recipient;

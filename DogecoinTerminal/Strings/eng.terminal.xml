@@ -21,10 +21,12 @@
   <String Id="terminal-setup-newwallet"><![CDATA[NEW WALLET]]></String>
   <String Id="terminal-setup-loadwallet"><![CDATA[LOAD BACKUP]]></String>
 
+
   <String Id="terminal-setup-setpin"><![CDATA[Set your PIN]]></String>
   <String Id="terminal-setup-confirmpin"><![CDATA[Confirm your PIN]]></String>
   <String Id="terminal-setup-setpin-hint"><![CDATA[(minimum of 4 characters)]]></String>
   <String Id="terminal-setup-confirmpin-hint"><![CDATA[(don't forget it!)]]></String>
+
 
   <String Id="terminal-setup-tpm-is-full"><![CDATA[Your TPM is full. Unable to create wallet.]]></String>
   
@@ -55,8 +57,12 @@
   <String Id="terminal-settings-dustlimit"><![CDATA[Dust Limit:]]></String>
   <String Id="terminal-settings-feeperutxo"><![CDATA[Fee per UTXO:]]></String>
 
-  <String Id="terminal-settings-oldpin"><![CDATA[Enter PIN]]></String>
+  <String Id="terminal-settings-oldpin"><![CDATA[Enter Old PIN]]></String>
+
   <String Id="terminal-settings-updatepin"><![CDATA[Update PIN]]></String>
+  <String Id="terminal-settings-pin-updated"><![CDATA[Your PIN has been updated!]]></String>
+
+
   <String Id="terminal-settings-backupcodes"><![CDATA[Seed Phrase]]></String>
   <String Id="terminal-settings-language"><![CDATA[Language]]></String>
   <String Id="terminal-settings-spv"><![CDATA[SPV Node]]></String>
@@ -82,8 +88,14 @@
   <String Id="terminal-send-confirmpin"><![CDATA[Confirm PIN to Send]]></String>
   <String Id="terminal-sendamount-title"><![CDATA[Amount to Send]]></String>
 
-
-
+  <String Id="terminal-send-confirm-title"><![CDATA[Confirm Transaction]]></String>
+  
+  <String Id="terminal-send-confirm-amount"><![CDATA[Amount:]]></String>
+  <String Id="terminal-send-confirm-to"><![CDATA[To:]]></String>
+  <String Id="terminal-send-confirm-fee"><![CDATA[Network Fee:]]></String>
+  <String Id="terminal-send-confirm-total"><![CDATA[Total:]]></String>
+  <String Id="terminal-send-confirm-confirm"><![CDATA[Confirm]]></String>
+  
   <Strings Id="terminal-wallet-send"><![CDATA[Send]]></Strings>
   <Strings Id="terminal-wallet-syncing"><![CDATA[Syncing...]]></Strings>
 

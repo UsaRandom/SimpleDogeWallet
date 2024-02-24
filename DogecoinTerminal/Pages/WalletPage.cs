@@ -138,7 +138,16 @@ namespace DogecoinTerminal.Pages
 					return;
 				}
 
-				var sendYesNo = await navigation.PromptAsync<YesNoPage>(("message", $"Đ {amountToSend:#,0.000}  -> {target.Name} ({target.ShortAddress})"));
+				var transaction = new DogecoinTransaction(services, _wallet);
+
+				if (!transaction.Send(target.Address, amountToSend))
+				{
+					await navigation.PromptAsync<ShortMessagePage>(("message", "Error creating transaction."));
+					navigation.Pop();
+					return;
+				}
+
+				var sendYesNo = await navigation.PromptAsync<TransactionConfirmPage>(("tx", transaction), ("target", target));
 
 				if(sendYesNo.Response != PromptResponse.YesConfirm)
 				{
@@ -160,14 +169,6 @@ namespace DogecoinTerminal.Pages
 
 				//
 
-				var transaction = new DogecoinTransaction(services, _wallet);
-
-				if(!transaction.Send(target.Address, amountToSend))
-				{
-					await navigation.PromptAsync<ShortMessagePage>(("message", "Error creating transaction."));
-					navigation.Pop();
-					return;
-				}
 
 				//force garbage collection after signing
 				if (!transaction.Sign())

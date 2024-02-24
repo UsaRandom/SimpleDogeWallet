@@ -13,7 +13,8 @@ namespace DogecoinTerminal.Common
 	public enum TextAnchor
 	{
 		Center,
-		TopLeft
+		TopLeft,
+		TopRight
 	}
 
     public class TextControl : PageControl

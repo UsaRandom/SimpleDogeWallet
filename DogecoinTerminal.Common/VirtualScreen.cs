@@ -147,6 +147,11 @@ namespace DogecoinTerminal.Common
 				position = new Vector2(_xPad + (int)(pos.X * _renderScale) ,
 							_yPad + (int)(pos.Y * _renderScale));
 			}
+			else if(anchor == TextAnchor.TopRight)
+			{
+				position = new Vector2(_xPad + (int)(pos.X * _renderScale) - textSize.X,
+							_yPad + (int)(pos.Y * _renderScale));
+			}
 			else
 			{
 				position = new Vector2(_xPad + (int)(pos.X * _renderScale) - (textSize.X) / 2,
