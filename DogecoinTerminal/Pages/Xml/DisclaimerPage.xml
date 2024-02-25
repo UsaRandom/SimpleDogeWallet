@@ -1,0 +1,16 @@
+﻿<Page xmlns:common="DogecoinTerminal.Common">
+
+  <common:ImageControl Name="Warning" StartPosition="42,5" EndPosition="58,21" ImageSource="Content/warning.png" />
+
+  <common:TextControl Name="TitleText" Color="White" Position="50,27" TextSize="6" StringDef="terminal-disclaimer-title"/>
+  <common:TextControl Name="DisclaimerText1" Color="White" Position="50,45" TextSize="3.5" StringDef="terminal-disclaimer-text1" />
+  <common:TextControl Name="DisclaimerText2" Color="White" Position="50,55" TextSize="3.5" StringDef="terminal-disclaimer-text2" />
+
+  <common:ImageControl Name="Cheems" StartPosition="80,51" EndPosition="91,68" ImageSource="Content/constructioncheems.png" />
+  
+  <common:ButtonControl Name="OkButton" StartPosition="75,85" EndPosition="95,95" TextSize="4"
+                       ForegroundColor="White" BackgroundColor="Red" StringDef="terminal-disclaimer-ok"/>
+  
+
+
+</Page>

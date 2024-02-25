@@ -47,6 +47,9 @@
     <None Update="Content\cheems.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Content\constructioncheems.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Content\contacts-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -100,6 +103,9 @@
     </None>
     <None Update="Content\trash-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\warning.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Pages\Xml\BackupCodePage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

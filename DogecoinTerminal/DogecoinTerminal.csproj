@@ -43,6 +43,9 @@
     <None Update="Content\lock-fill.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Pages\Xml\DisclaimerPage.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Pages\Xml\SettingsPage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
