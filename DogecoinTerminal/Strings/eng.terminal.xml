@@ -11,7 +11,7 @@
   <String Id="terminal-disclaimer-text2"><![CDATA[Proceed at your own risk!]]></String>
 
 
-  <String Id="terminal-disclaimer-ok"><![CDATA[Ok]]></String>
+  <String Id="terminal-disclaimer-wow"><![CDATA[wow]]></String>
 
   <String Id="terminal-setup-newwalletinfo">
     <![CDATA[What you’ll need:

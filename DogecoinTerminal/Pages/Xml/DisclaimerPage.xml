@@ -8,8 +8,8 @@
 
   <common:ImageControl Name="Cheems" StartPosition="80,51" EndPosition="91,68" ImageSource="Content/constructioncheems.png" />
   
-  <common:ButtonControl Name="OkButton" StartPosition="75,85" EndPosition="95,95" TextSize="4"
-                       ForegroundColor="White" BackgroundColor="Red" StringDef="terminal-disclaimer-ok"/>
+  <common:ButtonControl Name="WowButton" StartPosition="40,70" EndPosition="60,80" TextSize="4"
+                       ForegroundColor="White" BackgroundColor="DarkGrey"/>
   
 
 

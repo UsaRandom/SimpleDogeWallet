@@ -37,10 +37,7 @@
     <ProjectReference Include="..\Lib.Dogecoin\Lib.Dogecoin.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="Content\gear-fill.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Content\lock-fill.png">
+    <None Update="Content\wow.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Pages\Xml\DisclaimerPage.xml">

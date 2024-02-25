@@ -221,11 +221,13 @@ namespace DogecoinTerminal
 			}
 			else
 			{
-				_nav.PushAsync<UnlockTerminalPage>();
+				_nav.PushAsync<LoadingPage>();
+				_nav.TryInsertBeforeAsync<UnlockTerminalPage, LoadingPage>();
 
 				Task.Run(async () =>
 				{
 					await _nav.PromptAsync<DisclaimerPage>();
+					_nav.Pop();
 				});
 
 			}
