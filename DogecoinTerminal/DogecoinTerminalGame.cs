@@ -51,7 +51,9 @@ namespace DogecoinTerminal
 
 		public DogecoinTerminalGame()
         {
-            _graphics = new GraphicsDeviceManager(this);
+			Trace.Listeners.Add(new ConsoleTraceListener());
+
+			_graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 
@@ -65,8 +67,13 @@ namespace DogecoinTerminal
 
 		private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
-			Debug.WriteLine(e.ToString());
+			var exception = ((Exception)e.ExceptionObject);
+
+			Debug.WriteLine($"An unhandled exception occurred: {exception.Message}");
+			Debug.WriteLine("Stack trace:");
+			Debug.WriteLine(exception.StackTrace);
 		}
+
 		private void OnResize(Object o, EventArgs evt)
 		{
 

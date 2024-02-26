@@ -21,6 +21,8 @@
                         BackgroundColor="DarkGrey" ForegroundColor="White" StringDef="terminal-settings-language" />
   <common:ButtonControl StartPosition="52,50" EndPosition="90,58" TextSize="4" Name="SPVButton"
                         BackgroundColor="DarkGrey" ForegroundColor="White" StringDef="terminal-settings-spv" />
-  <common:ButtonControl StartPosition="52,60" EndPosition="90,68" TextSize="4" Name="DeleteButton"
+  <common:ButtonControl StartPosition="52,60" EndPosition="90,68" TextSize="4" Name="ClearPendingButton"
+                        BackgroundColor="DarkGrey" ForegroundColor="White" StringDef="terminal-settings-clearpending" />
+  <common:ButtonControl StartPosition="52,70" EndPosition="90,78" TextSize="4" Name="DeleteButton"
                         BackgroundColor="Red" ForegroundColor="White" StringDef="terminal-settings-delete" />
 </Page>

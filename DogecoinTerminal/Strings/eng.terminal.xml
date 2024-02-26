@@ -77,7 +77,15 @@
   <String Id="terminal-settings-backupcodes"><![CDATA[Seed Phrase]]></String>
   <String Id="terminal-settings-language"><![CDATA[Language]]></String>
   <String Id="terminal-settings-spv"><![CDATA[SPV Node]]></String>
+  <String Id="terminal-settings-clearpending"><![CDATA[Clear Pending]]></String>
   <String Id="terminal-settings-delete"><![CDATA[DELETE WALLET]]></String>
+
+  
+
+  <String Id="terminal-settings-clearpending-confirm">
+    <![CDATA[    You should only do this if the transaction failed to send,
+or it's been over >24 hours since it was sent. Press [Yes] to Clear.]]>
+  </String>
 
   <String Id="terminal-settings-delete-confirm">
 <![CDATA[               DELETE THIS WALLET?
@@ -108,9 +116,10 @@
   <String Id="terminal-send-confirm-confirm"><![CDATA[Confirm]]></String>
   
   <Strings Id="terminal-wallet-send"><![CDATA[Send]]></Strings>
+  <Strings Id="terminal-wallet-pending"><![CDATA[Pending Tx...]]></Strings>
   <Strings Id="terminal-wallet-syncing"><![CDATA[Syncing...]]></Strings>
 
-
+  
   <String Id="terminal-spv-title"><![CDATA[SPV Node]]></String>
   <String Id="terminal-spv-offline"><![CDATA[(offline)]]></String>
   <String Id="terminal-spv-online"><![CDATA[(online)]]></String>

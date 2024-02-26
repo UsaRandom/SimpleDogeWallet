@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using DogecoinTerminal.Common;
 using System.Linq;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 
 namespace DogecoinTerminal
@@ -171,5 +173,31 @@ namespace DogecoinTerminal
         {
             return _ctx.GetRawTransaction(_workingTransactionId);
         }
-    }
+
+		public async Task BroadcastAsync()
+		{
+			var processStartInfo = new ProcessStartInfo("sendtx.exe", "-s 25 "+GetRawTransaction())
+			{
+				UseShellExecute = false,
+				CreateNoWindow = true,
+				RedirectStandardOutput = true,
+				RedirectStandardError = true
+			};
+
+			using var process = new Process();
+			process.StartInfo = processStartInfo;
+			process.EnableRaisingEvents = true;
+
+			process.OutputDataReceived += (sender, e) => Console.WriteLine(e.Data);
+			process.ErrorDataReceived += (sender, e) => Console.WriteLine(e.Data);
+
+			process.Start();
+			process.BeginOutputReadLine();
+			process.BeginErrorReadLine();
+
+			await process.WaitForExitAsync();
+		}
+	}
+	
 }
+

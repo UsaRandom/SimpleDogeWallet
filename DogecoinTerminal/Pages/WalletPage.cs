@@ -17,7 +17,7 @@ using System.Diagnostics;
 namespace DogecoinTerminal.Pages
 {
     [PageDef("Pages/Xml/WalletPage.xml")]
-    internal class WalletPage : Page, IReceiver<SPVNodeBlockInfo>, IReceiver<SPVUpdatedWalletMessage>, IReceiver<SPVSyncCompletedMessage>
+    internal class WalletPage : Page, IReceiver<SPVNodeBlockInfo>, IReceiver<SPVUpdatedWalletMessage>, IReceiver<UpdateSendButtonMessage>
 	{
 
 		private Texture2D _qrCodeImage;
@@ -37,25 +37,17 @@ namespace DogecoinTerminal.Pages
 
 			Messenger.Default.Register<SPVNodeBlockInfo>(this);
 			Messenger.Default.Register<SPVUpdatedWalletMessage>(this);
-			Messenger.Default.Register<SPVSyncCompletedMessage>(this);
+			Messenger.Default.Register<UpdateSendButtonMessage>(this);
 
 
 			_spvNode.SetWallet(_wallet);
 			_spvNode.Start(isNew);
 
 			_sendButton = GetControl<ButtonControl>("SendButton");
-
-			if(!_spvNode.SyncCompleted)
-			{
-				_sendButton.BackgroundColor = TerminalColor.Grey;
-				_sendButton.StringDef = "terminal-wallet-syncing";
-			}
-			else
-			{
-				_sendButton.BackgroundColor = TerminalColor.Green;
-				_sendButton.StringDef = "terminal-wallet-send";
-			}
 			
+			UpdateSendButton();
+
+
 			var addressTextControl = GetControl<TextControl>("AddressText");
 			addressTextControl.Text = _wallet.Address;
 
@@ -103,7 +95,7 @@ namespace DogecoinTerminal.Pages
 
 			OnClick("SendButton", async _ =>
 			{
-				if(!_spvNode.SyncCompleted)
+				if(!_spvNode.SyncCompleted || _wallet.PendingAmount != 0)
 				{
 					return;
 				}
@@ -181,25 +173,33 @@ namespace DogecoinTerminal.Pages
 				}
 
 
-
-
+				_spvNode.Stop();
+				Debug.WriteLine("Stopped SPV Node");
 
 				var rawTx = transaction.GetRawTransaction();
+				var txId = Crypto.GetTransactionIdFromRaw(rawTx);
 
 				Debug.WriteLine($"Raw Transaction: {rawTx}");
+				Debug.WriteLine($"Transaction Id (hash): {txId}");
+				Debug.WriteLine("Attempting to Broadcast Transaction!");
 
-				//NOTE: this isn't really reliable... it could be a bad transaction and then say it's successful.
+				//NOTE: this isn't really reliable... it could be a bad broadcast and then say it's successful.
 
-				if (!LibDogecoinContext.Instance.BroadcastRawTransaction(rawTx))
-				{
-					await navigation.PromptAsync<ShortMessagePage>(("message", "Error broadcasting transaction."));
-					navigation.Pop();
-				}
-				else
-				{
-					await navigation.PromptAsync<ShortMessagePage>(("message", "Transaction Broadcast!"));
-					navigation.Pop();
-				}
+				await transaction.BroadcastAsync();
+
+				await navigation.PromptAsync<ShortMessagePage>(("message", "Broadcast Attempted! (check console for verification)"));
+
+				_wallet.PendingTxHash = txId;
+				_wallet.PendingAmount = transaction.Total;
+
+
+				UpdateSendButton();
+
+				_spvNode.Start();
+				Debug.WriteLine("Starting SPV Node");
+
+				navigation.Pop();
+				
 
 
 			});
@@ -215,13 +215,13 @@ namespace DogecoinTerminal.Pages
 
 			Messenger.Default.Deregister<SPVNodeBlockInfo>(this);
 			Messenger.Default.Deregister<SPVUpdatedWalletMessage>(this);
-			Messenger.Default.Deregister<SPVSyncCompletedMessage>(this);
+			Messenger.Default.Deregister<UpdateSendButtonMessage>(this);
 		}
 
 		private void UpdateSPVText()
 		{
 
-			GetControl<TextControl>("SPVNodeInfo").Text = $"{_spvNode.CurrentBlock.BlockHeight} @ {_spvNode.CurrentBlock.Timestamp.ToLocalTime()}";
+			GetControl<TextControl>("SPVNodeInfo").Text = $"{_spvNode.CurrentBlock.BlockHeight}/~{_spvNode.EstimatedHeight} @ {_spvNode.CurrentBlock.Timestamp.ToLocalTime()}";
 
 		}
 
@@ -235,8 +235,7 @@ namespace DogecoinTerminal.Pages
 
 		public void Receive(SPVUpdatedWalletMessage message)
 		{
-			var balanceTextControl = GetControl<TextControl>("BalanceText");
-			balanceTextControl.Text = $"Đ {_wallet.GetBalance():#.###}";
+			UpdateSendButton();
 		}
 
 		public void Receive(SPVNodeBlockInfo message)
@@ -244,10 +243,40 @@ namespace DogecoinTerminal.Pages
 			UpdateSPVText();
 		}
 
-		public void Receive(SPVSyncCompletedMessage message)
+		public void Receive(UpdateSendButtonMessage message)
 		{
-			_sendButton.BackgroundColor = TerminalColor.Green;
-			_sendButton.StringDef = "terminal-wallet-send";
+			UpdateSendButton();
+		}
+
+		private void UpdateSendButton()
+		{
+			GetControl<TextControl>("BalanceText").Text = $"Đ {_wallet.GetBalance():#.###}";
+
+			if(_wallet.PendingAmount == 0)
+			{
+				GetControl<TextControl>("PendingText").Text = string.Empty;
+			}
+			else
+			{
+				GetControl<TextControl>("PendingText").Text = $"(Đ -{_wallet.PendingAmount:#.###})";
+			}
+
+			if (!_spvNode.SyncCompleted)
+			{
+				_sendButton.BackgroundColor = TerminalColor.Grey;
+				_sendButton.StringDef = "terminal-wallet-syncing";
+			}
+			else if(_wallet.PendingAmount != 0)
+			{
+				_sendButton.BackgroundColor = TerminalColor.Red;
+				_sendButton.StringDef = "terminal-wallet-pending";
+			}
+			else
+			{
+				_sendButton.BackgroundColor = TerminalColor.Green;
+				_sendButton.StringDef = "terminal-wallet-send";
+			}
+			
 		}
 	}
 }

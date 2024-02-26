@@ -27,12 +27,20 @@ namespace DogecoinTerminal
 		private LibDogecoinContext _ctx;
 		public int _tpmFileNumber;
 
+		private decimal _pendingAmount;
+		private string _pendingHash;
+
+
 		public SimpleDogeWallet(string address, IServiceProvider services)
 		{
 			Address = address;
 			Services = services;
 
 			_tpmFileNumber = services.GetService<ITerminalSettings>().GetInt("tpm-file-number");
+
+			_pendingHash = services.GetService<ITerminalSettings>().GetString("pending-hash", string.Empty);
+			_pendingAmount = services.GetService<ITerminalSettings>().GetDecimal("pending-amount", 0);
+
 			_ctx = LibDogecoinContext.Instance;
 			_usingUserEnteredMnemonic = Services.GetService<ITerminalSettings>().GetBool(USING_USER_ENTERED_MNEMONIC_SETTING);
 
@@ -80,6 +88,36 @@ namespace DogecoinTerminal
 			get;
 			set;
 		}
+
+
+		public decimal PendingAmount
+		{
+			get
+			{
+				return _pendingAmount;
+			}
+			set
+			{
+				_pendingAmount = value;
+				Services.GetService<ITerminalSettings>().Set("pending-amount", _pendingAmount);
+			}
+		}
+
+		public string PendingTxHash
+		{
+			get
+			{
+				return _pendingHash;
+			}
+			set
+			{
+				_pendingHash = value;
+				Services.GetService<ITerminalSettings>().Set("pending-hash", _pendingHash);
+			}
+		}
+
+
+
 
 		public string GetMnemonic()
 		{

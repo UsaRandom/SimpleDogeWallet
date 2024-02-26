@@ -178,6 +178,30 @@ namespace DogecoinTerminal.Pages
 				await navigation.PushAsync<SPVNodePage>(("wallet", options.GetOption<SimpleDogeWallet>("wallet")));
 			});
 
+			OnClick("ClearPendingButton", async _ =>
+			{
+				await navigation.PushAsync<LoadingPage>();
+
+				var sendYesNo = await navigation.PromptAsync<YesNoPage>(("message", strings.GetString("terminal-settings-clearpending-confirm")));
+
+				if (sendYesNo.Response != PromptResponse.YesConfirm)
+				{
+					navigation.Pop();
+					return;
+				}
+
+				SimpleDogeWallet.Instance.PendingAmount = 0;
+				SimpleDogeWallet.Instance.PendingTxHash = string.Empty;
+
+
+				Messenger.Default.Send(new UpdateSendButtonMessage());
+
+				navigation.Pop();
+			});
+
+
+
+
 			OnClick("DeleteButton", async _ =>
 			{
 				await navigation.PushAsync<LoadingPage>();

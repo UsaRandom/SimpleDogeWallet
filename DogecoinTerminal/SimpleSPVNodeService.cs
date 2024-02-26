@@ -183,7 +183,7 @@ namespace DogecoinTerminal
 
 		private void OnSyncComplete()
 		{
-			Messenger.Default.Send(new SPVSyncCompletedMessage());
+			Messenger.Default.Send(new UpdateSendButtonMessage());
 		}
 
 		private void HandleOnBlock(SPVNodeBlockInfo previous,  SPVNodeBlockInfo next)
@@ -204,6 +204,12 @@ namespace DogecoinTerminal
 			bool walletChanged = false;
 
 			TxCount++;
+
+			if(tx.TxId.ToUpper() == _currentWallet.PendingTxHash.ToUpper())
+			{
+				_currentWallet.PendingTxHash = string.Empty;
+				_currentWallet.PendingAmount = 0;
+			}
 
 			SpentUTXOCount += (ulong)tx.In.Length;
 			NewUTXOCount += (ulong)tx.Out.Length;
@@ -255,7 +261,7 @@ namespace DogecoinTerminal
 
 	}
 
-	class SPVSyncCompletedMessage
+	class UpdateSendButtonMessage
 	{
 
 	}
