@@ -111,7 +111,7 @@ namespace DogecoinTerminal.Common.Pages
 
 			OnClick("PasteButton", _ =>
 			{
-				var clipboardContent = clipboard.GetClipboardContents().Trim();
+				var clipboardContent = clipboard.GetClipboardContents()?.Trim();
 
 				GetControl<TextInputControl>("SearchBar").Text = clipboardContent;
 			});

@@ -18,6 +18,13 @@ namespace DogecoinTerminal
 	{
 		private string SPV_CHECKPOINT_FILE = "spvcheckpoint";
 
+		public SPVNodeBlockInfo NEW_WALLET_START_BLOCK = new SPVNodeBlockInfo()
+		{
+			Hash = "32a1625e7fe68f3b5e237e4351d6df12e92eb7f9130b4d60a8b1c803f09fafee",
+			BlockHeight = 5105268,
+			Timestamp = DateTimeOffset.FromUnixTimeSeconds(1708906209)
+		};
+
 		private SPVNode _spvNode;
 		private SimpleDogeWallet _currentWallet;
 
@@ -27,12 +34,7 @@ namespace DogecoinTerminal
 		public SimpleSPVNodeService()
 		{
 			TxCount = 0;
-			CurrentBlock = new SPVNodeBlockInfo()
-			{
-				Hash = "5bbc9176db424e1e55d94e0ec79f22974a225c2675d09b90e73b59e58c9f109f",
-				BlockHeight = 5079600,
-				Timestamp = DateTimeOffset.FromUnixTimeSeconds(1707271081)
-			};
+			CurrentBlock = NEW_WALLET_START_BLOCK;
 		}
 
 
@@ -121,7 +123,7 @@ namespace DogecoinTerminal
 			_spvNode?.PrintDebug();
 		}
 
-		public void Start()
+		public void Start(bool isNew = false)
 		{
 			if (_spvNode != null && _spvNode.IsRunning)
 			{
@@ -129,27 +131,42 @@ namespace DogecoinTerminal
 			}
 
 
-			_spvNode = new SPVNodeBuilder()
-			//	.StartAt(CurrentBlock.Hash, CurrentBlock.BlockHeight)
-				.UseCheckpointFile(SPV_CHECKPOINT_FILE)
-				.UseMainNet()
-				.OnSyncCompleted(OnSyncComplete)
-				.OnNextBlock(HandleOnBlock)
-				.EnableDebug()
-				.OnTransaction(HandleOnTransaction)
-				.Build() ;
+			if (isNew)
+			{
+				_spvNode = new SPVNodeBuilder()
+					.StartAt(NEW_WALLET_START_BLOCK.Hash, NEW_WALLET_START_BLOCK.BlockHeight)
+					.UseCheckpointFile(SPV_CHECKPOINT_FILE)
+					.UseMainNet()
+					.OnSyncCompleted(OnSyncComplete)
+					.OnNextBlock(HandleOnBlock)
+					.EnableDebug()
+					.OnTransaction(HandleOnTransaction)
+					.Build();
+			}
+			else
+			{
+				_spvNode = new SPVNodeBuilder()
+					.UseCheckpointFile(SPV_CHECKPOINT_FILE)
+					.UseMainNet()
+					.OnSyncCompleted(OnSyncComplete)
+					.OnNextBlock(HandleOnBlock)
+					.EnableDebug()
+					.OnTransaction(HandleOnTransaction)
+					.Build();
+			}
+			
 
 			_spvNode.Start();
 
 		}
 
-		public void Rescan(SimpleDogeWallet wallet, SPVNodeBlockInfo startPoint)
+		public void Rescan(SPVNodeBlockInfo startPoint)
 		{
 			_spvNode?.Stop();
 
-			wallet.UTXOs.Clear();
+		//	wallet.UTXOs.Clear();
 
-			wallet.Save();
+			//wallet.Save();
 
 			_spvNode = new SPVNodeBuilder()
 					.StartAt(startPoint)

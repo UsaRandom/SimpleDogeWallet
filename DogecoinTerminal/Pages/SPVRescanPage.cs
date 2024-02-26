@@ -34,7 +34,7 @@ namespace DogecoinTerminal.Pages
 
 			OnClick("SyncButton", async _ =>
 			{
-				spvNodeService.Rescan(SimpleDogeWallet.Instance, new Lib.Dogecoin.SPVNodeBlockInfo()
+				spvNodeService.Rescan(new Lib.Dogecoin.SPVNodeBlockInfo()
 				{
 					Hash = GetControl<TextInputControl>("BlockHashText").Text,
 					BlockHeight = uint.Parse(Regex.Replace(GetControl<TextInputControl>("BlockHeightText").Text, @"[^\d]", ""))

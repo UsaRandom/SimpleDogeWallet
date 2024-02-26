@@ -7,7 +7,7 @@
   <String Id="terminal-disclaimer-title"><![CDATA[Warning: Work-in-Progress!]]></String>
   <String Id="terminal-disclaimer-text1">
     <![CDATA[The following program is of questionable quality and due to
- it's overall shoddiness it should not be used by anyone.]]></String>
+ the overall shoddiness it should not be used by anyone.]]></String>
   <String Id="terminal-disclaimer-text2"><![CDATA[Proceed at your own risk!]]></String>
 
 

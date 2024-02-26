@@ -11,6 +11,7 @@ namespace Lib.Dogecoin
 		private SPVNodeBlockInfo _start;
 		private bool _useMainNet = false;
 		private bool _useDebug = false;
+		private int _peerCount = 24;
 		private Action _onSyncCompleted;
 		private Action<SPVNodeTransaction> _onTransaction;
 		private Action<SPVNodeBlockInfo, SPVNodeBlockInfo> _onNextBlock;

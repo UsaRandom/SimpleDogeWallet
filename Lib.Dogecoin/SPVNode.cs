@@ -23,18 +23,20 @@ namespace Lib.Dogecoin
 		private bool _isDebug;
 		private Thread _thread;
 		private IntPtr _spvNodeRef;
+		private int _peerCount;
 		private static dogecoin_spv_client.sync_transaction_delegate syncTransactionCallback;
 		private static dogecoin_spv_client.sync_completed_delegate syncCompletedCallback;
 
 		private ISPVCheckpointTracker _checkpointTracker;
 		private SPVNodeBlockInfo _startPoint;
 
-		public SPVNode(ISPVCheckpointTracker tracker, bool isMainNet, bool isDebug, SPVNodeBlockInfo startPoint)
+		public SPVNode(ISPVCheckpointTracker tracker, bool isMainNet, bool isDebug, SPVNodeBlockInfo startPoint, int peerCount = 24)
 		{
 			_checkpointTracker = tracker;
 			_isDebug = isDebug;
 			IsMainNet = isMainNet;
 			_startPoint = startPoint;
+			_peerCount = peerCount;
 		}
 
 		public bool IsRunning { get; private set; }
@@ -132,14 +134,20 @@ namespace Lib.Dogecoin
 					if((NODE_STATE)node.state == NODE_STATE.NODE_CONNECTED)
 					{
 						connectedNodes++;
+
+						//last requested block id thingy
+
+
+						Debug.WriteLine("Best Known Height: " + node.bestknownheight);
+						Debug.WriteLine("Last Requested Block: " + LittleEndianByteArrayToHexString(node.last_requested_inv));
 					}
 				}
 				
 				Debug.WriteLine("Connected Nodes: " + connectedNodes);
 
-				Debug.WriteLine($"Block.Hash: {this.CurrentBlockInfo.Hash}");
-				Debug.WriteLine($"Block.BlockHeight: {this.CurrentBlockInfo.BlockHeight}");
-				Debug.WriteLine($"Block.Timestamp: {this.CurrentBlockInfo.Timestamp.ToLocalTime()}");
+				//Debug.WriteLine($"Block.Hash: {this.CurrentBlockInfo.Hash}");
+				//Debug.WriteLine($"Block.BlockHeight: {this.CurrentBlockInfo.BlockHeight}");
+				//Debug.WriteLine($"Block.Timestamp: {this.CurrentBlockInfo.Timestamp.ToLocalTime()}");
 
 				Debug.WriteLine($"spv.stateflags: {client.stateflags}");
 				Debug.WriteLine($"spv.last_statecheck_time: {DateTimeOffset.FromUnixTimeSeconds((long)client.last_statecheck_time).ToLocalTime()}");
@@ -206,7 +214,7 @@ namespace Lib.Dogecoin
 				LibDogecoinInterop.dogecoin_node_group_connect_next_nodes(client.nodegroup);
 
 		
-				LibDogecoinInterop.dogecoin_node_group_event_loop(client.nodegroup);
+				LibDogecoinInterop.dogecoin_spv_client_runloop(_spvNodeRef);
 				
 				
 				IsRunning = false;
@@ -259,7 +267,7 @@ namespace Lib.Dogecoin
 
 			var net = IsMainNet ? LibDogecoinContext._mainChain : LibDogecoinContext._testChain;
 
-			_spvNodeRef = LibDogecoinInterop.dogecoin_spv_client_new(net, _isDebug, true, false, true, 24);
+			_spvNodeRef = LibDogecoinInterop.dogecoin_spv_client_new(net, _isDebug, true, false, true, _peerCount);
 			_syncComplete = false;
 			IsRunning = false;
 			

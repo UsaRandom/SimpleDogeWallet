@@ -31,6 +31,8 @@ namespace DogecoinTerminal.Pages
         {
 			_wallet = options.GetOption<SimpleDogeWallet>("wallet");
 
+			var isNew = options.GetOption<bool>("is-new", false);
+
 			_spvNode = spvNode;
 
 			Messenger.Default.Register<SPVNodeBlockInfo>(this);
@@ -39,7 +41,7 @@ namespace DogecoinTerminal.Pages
 
 
 			_spvNode.SetWallet(_wallet);
-			_spvNode.Start();
+			_spvNode.Start(isNew);
 
 			_sendButton = GetControl<ButtonControl>("SendButton");
 

@@ -29,6 +29,8 @@ namespace DogecoinTerminal.Pages
 			_wowButton = GetControl<ButtonControl>("WowButton");
 
 			var wow = game.Content.Load<Song>("wow");
+			
+			MediaPlayer.Volume = 0.10f;
 
 			OnClick("WowButton", _ =>
 			{
