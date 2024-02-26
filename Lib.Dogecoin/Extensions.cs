@@ -15,21 +15,15 @@ namespace Lib.Dogecoin
 		private delegate void dogecoin_free_delegate(IntPtr target);
 		private static dogecoin_free_delegate freeDelegate;
 
-		public static string GetP2PKHAddress(this string scriptPubKey)
-		{
-			return UnsafeGetP2PKHAddress(scriptPubKey);
-		}
 
-		private static unsafe string UnsafeGetP2PKHAddress(string scriptPubKey)
+		public static unsafe string UnsafeGetP2PKHAddress(cstring* scriptPubKey)
 		{
 			char[] address = new char[35];
-
-			var cStr = LibDogecoinInterop.cstr_new(scriptPubKey.NullTerminate());
 
 			IntPtr freePtr = Marshal.GetFunctionPointerForDelegate(freeDelegate);
 			var partsPtr = LibDogecoinInterop.vector_new(16, freePtr);
 
-			var type = LibDogecoinInterop.dogecoin_script_classify(cStr, partsPtr);
+			var type = LibDogecoinInterop.dogecoin_script_classify(scriptPubKey, partsPtr);
 
 			if (type == dogecoin_tx_out_type.DOGECOIN_TX_PUBKEYHASH)
 			{
@@ -37,10 +31,10 @@ namespace Lib.Dogecoin
 				Marshal.Copy((*partsPtr).data[0], hash, 0, 20);
 
 				LibDogecoinInterop.dogecoin_p2pkh_addr_from_hash160(hash, LibDogecoinContext._mainChain, address, 35);
-			}
+		}
 
 			LibDogecoinInterop.vector_free(partsPtr, true);
-			LibDogecoinInterop.cstr_free(cStr, 1);
+			//LibDogecoinInterop.cstr_free(cStr, 1);
 
 			return address.TerminateNull();
 		}

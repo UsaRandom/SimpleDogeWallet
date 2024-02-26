@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lib.Dogecoin.Interop;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Lib.Dogecoin
 {
-	public class UTXO
+	public unsafe class UTXO
 	{
 
 		public override bool Equals(object? obj)
@@ -49,6 +50,6 @@ namespace Lib.Dogecoin
 			}
 		}
 
-		public string? ScriptPubKey { get; set; }
+		public cstring* ScriptPubKey { get; set; }
 	}
 }

@@ -175,6 +175,7 @@ namespace DogecoinTerminal
 				.OnSyncCompleted(OnSyncComplete)
 				.OnNextBlock(HandleOnBlock)
 				.OnTransaction(HandleOnTransaction)
+					.EnableDebug()
 				.Build();
 
 			_spvNode.Start();
@@ -199,13 +200,13 @@ namespace DogecoinTerminal
 		}
 
 
-		private void HandleOnTransaction(SPVNodeTransaction tx)
+		private unsafe void HandleOnTransaction(SPVNodeTransaction tx)
 		{
 			bool walletChanged = false;
 
 			TxCount++;
 
-			if(tx.TxId.ToUpper() == _currentWallet.PendingTxHash.ToUpper())
+			if(tx.TxId.ToUpper() == _currentWallet.PendingTxHash?.ToUpper())
 			{
 				_currentWallet.PendingTxHash = string.Empty;
 				_currentWallet.PendingAmount = 0;
@@ -224,7 +225,7 @@ namespace DogecoinTerminal
 
 			foreach (var newUtxo in tx.Out)
 			{
-				var utxoAddress = newUtxo.ScriptPubKey.GetP2PKHAddress();
+				var utxoAddress = LibDogecoinContext.Instance.UnsafeGetP2PKHAddress(newUtxo.ScriptPubKey);
 
 				if (!string.IsNullOrEmpty(utxoAddress) &&
 					utxoAddress == _currentWallet.Address &&
