@@ -13,7 +13,7 @@ namespace DogecoinTerminal
 	public class SimpleDogeWallet
 	{
 		public const decimal DEFAULT_DUST_LIMIT = 0.001M;
-		public const decimal DEFAULT_FEE_PER_UTXO = 0.01M;
+		public const decimal DEFAULT_FEE_PER_UTXO = 0.035M;
 
 		
 		public const int MIN_PIN_LENGTH = 4;
