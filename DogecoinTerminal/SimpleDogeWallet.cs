@@ -74,6 +74,10 @@ namespace DogecoinTerminal
 
 		public decimal GetBalance()
 		{
+			if(UTXOs.Count == 0)
+			{
+				return 0;
+			}
 			return UTXOs.Sum(utxo => utxo.Amount);
 		}
 

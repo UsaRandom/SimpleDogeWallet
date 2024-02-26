@@ -37,6 +37,9 @@
     <ProjectReference Include="..\Lib.Dogecoin\Lib.Dogecoin.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="contacts.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Content\wow.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

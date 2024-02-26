@@ -250,7 +250,7 @@ namespace DogecoinTerminal.Pages
 
 		private void UpdateSendButton()
 		{
-			GetControl<TextControl>("BalanceText").Text = $"Đ {_wallet.GetBalance():#.###}";
+			GetControl<TextControl>("BalanceText").Text = $"Đ {_wallet.GetBalance():#,0.000}";
 
 			if(_wallet.PendingAmount == 0)
 			{
@@ -258,7 +258,7 @@ namespace DogecoinTerminal.Pages
 			}
 			else
 			{
-				GetControl<TextControl>("PendingText").Text = $"(Đ -{_wallet.PendingAmount:#.###})";
+				GetControl<TextControl>("PendingText").Text = $"(Đ -{_wallet.PendingAmount:#,0.000})";
 			}
 
 			if (!_spvNode.SyncCompleted)

@@ -10,6 +10,7 @@ using Lib.Dogecoin;
 using System.IO;
 using System.Transactions;
 using System.Xml.Linq;
+using System.Runtime;
 
 namespace DogecoinTerminal.Pages
 {
@@ -33,7 +34,7 @@ namespace DogecoinTerminal.Pages
 			_ctx = ctx;
 			_strings = strings;
 			_navigation = navigation;
-
+			_settings = settings;
 
 			OnClick("NewWalletButton", async _ =>
 			{

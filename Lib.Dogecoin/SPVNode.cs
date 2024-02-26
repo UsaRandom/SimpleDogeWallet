@@ -397,7 +397,7 @@ namespace Lib.Dogecoin
 			if (hex == null)
 				return null;
 
-			hex = hex.ToUpper();
+			hex = hex.ToUpper().Trim();
 
 			if (hex.Length % 2 == 1)
 				hex = "0" + hex;
