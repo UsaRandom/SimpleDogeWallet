@@ -18,19 +18,13 @@ namespace DogecoinTerminal.Pages
 
 				var numPadResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-enteroppin-title"]));
 
-				if (numPadResponse.Response == PromptResponse.YesConfirm)
-					//&& terminalService.Unlock(numPadResponse.Value.ToString()))
-				{
-					if(SimpleDogeWallet.TryOpen(numPadResponse.Value.ToString(),
+				if (numPadResponse.Response == PromptResponse.YesConfirm &&
+					SimpleDogeWallet.TryOpen(numPadResponse.Value.ToString(),
 												services,
 												out SimpleDogeWallet simpleWallet))
-					{
-
-						await navigation.TryInsertBeforeAsync<WalletPage, LoadingPage>(("wallet", simpleWallet));
-					}
-
+				{
+					await navigation.TryInsertBeforeAsync<WalletPage, LoadingPage>(("wallet", simpleWallet)); 
 				}
-
 				navigation.Pop();
 			});
 

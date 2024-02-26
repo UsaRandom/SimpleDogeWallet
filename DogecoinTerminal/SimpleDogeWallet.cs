@@ -151,6 +151,11 @@ namespace DogecoinTerminal
 			{
 				var address = Crypto.Decrypt(File.ReadAllText(ADDRESS_FILE), pin);
 
+				if(!LibDogecoinContext.Instance.VerifyP2pkhAddress(address))
+				{
+					return false;
+				}
+
 				simpleDogeWallet = new SimpleDogeWallet(address, services);
 
 				

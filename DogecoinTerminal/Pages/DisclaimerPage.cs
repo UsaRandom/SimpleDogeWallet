@@ -22,7 +22,7 @@ namespace DogecoinTerminal.Pages
 
 		private bool _canPressWow = false;
 
-		private const int WAIT_TIME_SECONDS = 3;
+		private const int WAIT_TIME_SECONDS = 10;
 
 		public DisclaimerPage(IPageOptions options, Game game) : base(options)
 		{

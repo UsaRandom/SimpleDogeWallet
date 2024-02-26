@@ -178,11 +178,16 @@ namespace Lib.Dogecoin
 			}
 		}
 
-		public bool VerifyP2pkhAddress(string pubKey)
+		public bool VerifyP2pkhAddress(string address)
 		{
 			lock (_lock)
 			{
-				return 0 != LibDogecoinInterop.verifyP2pkhAddress(pubKey.NullTerminate(), (uint)pubKey.Length);
+				if (string.IsNullOrWhiteSpace(address))
+				{
+					return false;
+				}
+
+				return 0 != LibDogecoinInterop.verifyP2pkhAddress(address.NullTerminate(), (uint)address.Length);
 			}
 		}
 

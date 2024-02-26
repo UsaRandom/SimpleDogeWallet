@@ -343,24 +343,12 @@ namespace Lib.Dogecoin
 			}
 
 
-			if (txId.ToLower() == "aad2b6e2c198018b0638337a0ab3f00542d02193991976f5d3e7d6b0debdb312")
-			{
-				Console.WriteLine("This tx");
-			}
-
 			//handle outputs
 			var voutList = *transaction.vout;
 
 			for (int i = 0; i < voutList.len; i++)
 			{
 				dogecoin_tx_out vout = Marshal.PtrToStructure<dogecoin_tx_out>(*(voutList.data + i));
-
-				//var str = Marshal.PtrToStringUni((IntPtr)vout.script_pubkey->str, (int) vout.script_pubkey->len);
-
-				//if(str.Length != vout.script_pubkey->len)
-				//{
-				//	Debug.WriteLine("Len Doesn't Match!");
-				//}
 
 				outList.Add(new UTXO
 				{
