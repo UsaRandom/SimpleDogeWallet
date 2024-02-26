@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame;
 using System;
 using System.IO;
+using System.Runtime;
 
 namespace DogecoinTerminal.Common
 {
@@ -25,6 +26,7 @@ namespace DogecoinTerminal.Common
 
 		private FontSystem _fontSystem;
 
+		private ITerminalSettings _settings;
 
 		public void SetWindowDim(GraphicsDeviceManager graphicsDeviceManager, bool useFullScreen, int width, int height)
 		{
@@ -44,15 +46,21 @@ namespace DogecoinTerminal.Common
 
 
 			_renderScale = _renderDim / 100M;
+
+
+			_settings.Set("window-width", width);
+			_settings.Set("window-height", height);
 		}
 
 
-		public void Init(GraphicsDeviceManager graphicsDeviceManager, bool useFullScreen)
+		public void Init(GraphicsDeviceManager graphicsDeviceManager, bool useFullScreen, ITerminalSettings settings)
 		{
+			_settings = settings;
+
 			SetWindowDim(graphicsDeviceManager,
 							useFullScreen,
-							graphicsDeviceManager.GraphicsDevice.Adapter.CurrentDisplayMode.Width - 200,
-							graphicsDeviceManager.GraphicsDevice.Adapter.CurrentDisplayMode.Height - 200);
+							_settings.GetInt("window-width", graphicsDeviceManager.GraphicsDevice.Adapter.CurrentDisplayMode.Width - 200),
+							_settings.GetInt("window-height", graphicsDeviceManager.GraphicsDevice.Adapter.CurrentDisplayMode.Height - 200));
 		}
 
 		public float RenderScale

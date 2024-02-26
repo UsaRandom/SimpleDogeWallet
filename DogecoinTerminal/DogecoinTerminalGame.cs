@@ -87,7 +87,7 @@ namespace DogecoinTerminal
 
 				_screen.SetWindowDim(_graphics, false, _graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height);
 		//		_graphics.ApplyChanges();
-
+				
 			}
 		}
 	
@@ -118,7 +118,7 @@ namespace DogecoinTerminal
 			TerminalColor.Init(_graphics.GraphicsDevice);
 
 
-            _screen.Init(_graphics, useFullScreen: _settings.GetBool("terminal-fullscreen", false));
+            _screen.Init(_graphics, _settings.GetBool("terminal-fullscreen", false), _settings);
 
 			_nav = new Navigation(Services);
 
