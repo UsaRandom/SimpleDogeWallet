@@ -22,15 +22,15 @@ using System.Threading.Tasks;
 
 namespace DogecoinTerminal
 {
-    public class DogecoinTerminalGame : Game
-    {
+	public class DogecoinTerminalGame : Game
+	{
 		private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+		private SpriteBatch _spriteBatch;
 		public FontSystem _fontSystem;
 
-        public VirtualScreen _screen;
+		public VirtualScreen _screen;
 
-        private Navigation _nav;
+		private Navigation _nav;
 
 		private ButtonControl _devButton;
 
@@ -50,15 +50,15 @@ namespace DogecoinTerminal
 
 
 		public DogecoinTerminalGame()
-        {
+		{
 			Trace.Listeners.Add(new ConsoleTraceListener());
 
 			_graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+			Content.RootDirectory = "Content";
+			IsMouseVisible = true;
 
-            _screen = new VirtualScreen();
-            _fontSystem = new FontSystem();
+			_screen = new VirtualScreen();
+			_fontSystem = new FontSystem();
 
 
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -80,19 +80,19 @@ namespace DogecoinTerminal
 			if ((_graphics.PreferredBackBufferWidth != _graphics.GraphicsDevice.Viewport.Width) ||
 					(_graphics.PreferredBackBufferHeight != _graphics.GraphicsDevice.Viewport.Height))
 			{
-		//		_graphics.PreferredBackBufferWidth = _graphics.GraphicsDevice.Viewport.Width;
-		//		_graphics.PreferredBackBufferHeight = _graphics.GraphicsDevice.Viewport.Height;
+				//		_graphics.PreferredBackBufferWidth = _graphics.GraphicsDevice.Viewport.Width;
+				//		_graphics.PreferredBackBufferHeight = _graphics.GraphicsDevice.Viewport.Height;
 
 				_background = new MoonBackgroundScene(Services, _graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height);
 
 				_screen.SetWindowDim(_graphics, false, _graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height);
-		//		_graphics.ApplyChanges();
-				
+				//		_graphics.ApplyChanges();
+
 			}
 		}
-	
+
 		protected override void Initialize()
-        {
+		{
 			Window.AllowUserResizing = true;
 			Window.ClientSizeChanged += OnResize;
 
@@ -113,12 +113,12 @@ namespace DogecoinTerminal
 
 			Strings.Current.SelectLanguage(
 				Language.Languages[_settings.GetString("language", "eng")]);
-			
-			
+
+
 			TerminalColor.Init(_graphics.GraphicsDevice);
 
 
-            _screen.Init(_graphics, _settings.GetBool("terminal-fullscreen", false), _settings);
+			_screen.Init(_graphics, _settings.GetBool("terminal-fullscreen", false), _settings);
 
 			_nav = new Navigation(Services);
 
@@ -127,11 +127,11 @@ namespace DogecoinTerminal
 
 			_spvNodeService = new SimpleSPVNodeService();
 
-			
+
 
 
 			Services.AddService(Strings.Current);
-            Services.AddService(_nav);
+			Services.AddService(_nav);
 			Services.AddService(_screen);
 			Services.AddService(new ContactService());
 			Services.AddService(new Images(GraphicsDevice));
@@ -173,7 +173,7 @@ namespace DogecoinTerminal
 
 
 			base.Initialize();
-        }
+		}
 
 
 		private void DogecoinTerminalGame_Exiting(object sender, EventArgs e)
@@ -182,11 +182,11 @@ namespace DogecoinTerminal
 		}
 
 		protected override void LoadContent()
-        {
+		{
 
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _screen.Load(_spriteBatch);
+			_screen.Load(_spriteBatch);
 
 			//Just for testing wallet creation.
 
@@ -195,8 +195,9 @@ namespace DogecoinTerminal
 			try
 			{
 				Services.AddService(LibDogecoinContext.Instance);
-				
-			} catch
+
+			}
+			catch
 			{
 				var msg = $"Failed to load libdogecoin.\n\n"
 						+ "This is likely caused by your device having missing or misconfigured security\nhardware, like TPM2.0"
@@ -209,7 +210,7 @@ namespace DogecoinTerminal
 						+ "The following message means this wallet is not supported on your device =[\n"
 						+ " - 'Standard hardware security not supported'";
 
-				_nav.PushAsync<ExceptionPage>(("title","Not Supported"),("error", msg));
+				_nav.PushAsync<ExceptionPage>(("title", "Not Supported"), ("error", msg));
 
 				return;
 			}
@@ -217,13 +218,15 @@ namespace DogecoinTerminal
 
 			if (!hasWallet)
 			{
-				_nav.PushAsync<SetupWalletPage>();
+				_nav.PushAsync<LoadingPage>();
 
 				//start on the language selection screen:
 				Task.Run(async () =>
 				{
 					await _nav.PromptAsync<DisclaimerPage>();
 					await _nav.PromptAsync<LanguageSelectionPage>();
+					await _nav.TryInsertBeforeAsync<SetupWalletPage, LoadingPage>();
+					_nav.Pop();
 				});
 			}
 			else
@@ -254,8 +257,8 @@ namespace DogecoinTerminal
 
 			_nav.CurrentPage.Update(gameTime, Services);
 
-            if (IsActive)
-            {
+			if (IsActive)
+			{
 				var mouseState = Mouse.GetState(Window);
 
 				if (mouseState.LeftButton == ButtonState.Pressed &&
@@ -274,7 +277,7 @@ namespace DogecoinTerminal
 
 							var xmlExporter = new XmlExporterControlVisitor();
 
-							foreach(var control in _nav.CurrentPage.Controls)
+							foreach (var control in _nav.CurrentPage.Controls)
 							{
 								control.AcceptVisitor(xmlExporter);
 							}
@@ -302,17 +305,17 @@ namespace DogecoinTerminal
 			}
 
 
-            if (_settings.GetBool("terminal-background", false))
-            {
+			if (_settings.GetBool("terminal-background", false))
+			{
 				_background.Update(gameTime, Services);
 			}
 
 
 			base.Update(gameTime);
-        }
+		}
 
 
-        IBackgroundScene _background;
+		IBackgroundScene _background;
 		protected override void Draw(GameTime gameTime)
 		{
 			GraphicsDevice.Clear(TerminalColor.Grey.Color);
@@ -321,15 +324,15 @@ namespace DogecoinTerminal
 			_spriteBatch.Begin();
 
 
-            if (_settings.GetBool("terminal-background", false))
-            {
+			if (_settings.GetBool("terminal-background", false))
+			{
 				_background.Draw(gameTime, _spriteBatch, Services);
 			}
 
 			_nav.CurrentPage.Draw(gameTime, Services);
 
-            if(_settings.GetBool("terminal-devmode", false))
-            {
+			if (_settings.GetBool("terminal-devmode", false))
+			{
 				var handles = new DrawHandlesControlVisitor(_spriteBatch, _screen);
 
 				foreach (var control in _nav.CurrentPage.Controls)
