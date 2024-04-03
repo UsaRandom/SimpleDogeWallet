@@ -39,7 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Update="contacts.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Content\wow.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

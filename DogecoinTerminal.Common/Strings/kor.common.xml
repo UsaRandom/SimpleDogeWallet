@@ -8,11 +8,11 @@
   <String Id="terminal-contacts-addcontact-hint"><![CDATA[Enter Name for Contact:]]></String>
 
   <String Id="terminal-qrscanner-hint"><![CDATA[Not Valid Dogecoin Address:]]></String>
-  <String Id="terminal-qrscanner-title"><![CDATA[Scan QR Code]]></String>
+  <String Id="terminal-qrscanner-title"><![CDATA[Scan QR Code]]></String>  
 
   <String Id="common-contacts-unknown"><![CDATA[Unknown]]></String>
 
-
+  
   <String Id="common-numpad-title"><![CDATA[Enter Pin:]]></String>
   <String Id="common-loading-title"><![CDATA[Doing Only Good Everyday...]]></String>
   <String Id="common-shortmsg-okbutton"><![CDATA[Ok]]></String>

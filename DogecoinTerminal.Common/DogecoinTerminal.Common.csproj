@@ -107,6 +107,9 @@
     <None Update="Content\stars.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Content\tile.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Content\trash-icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

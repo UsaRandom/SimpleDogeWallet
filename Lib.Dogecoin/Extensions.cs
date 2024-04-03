@@ -31,7 +31,7 @@ namespace Lib.Dogecoin
 				Marshal.Copy((*partsPtr).data[0], hash, 0, 20);
 
 				LibDogecoinInterop.dogecoin_p2pkh_addr_from_hash160(hash, LibDogecoinContext._mainChain, address, 35);
-		}
+			}
 
 			LibDogecoinInterop.vector_free(partsPtr, true);
 			//LibDogecoinInterop.cstr_free(cStr, 1);

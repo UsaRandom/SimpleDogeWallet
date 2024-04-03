@@ -176,7 +176,7 @@ namespace DogecoinTerminal
 
 		public async Task BroadcastAsync()
 		{
-			var processStartInfo = new ProcessStartInfo("sendtx.exe", "-s 25 "+GetRawTransaction())
+			var processStartInfo = new ProcessStartInfo("sendtx.exe", "-m 64 -s 30 "+GetRawTransaction())
 			{
 				UseShellExecute = false,
 				CreateNoWindow = true,

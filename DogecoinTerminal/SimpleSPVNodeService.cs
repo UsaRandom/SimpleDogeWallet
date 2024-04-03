@@ -217,9 +217,20 @@ namespace DogecoinTerminal
 
 			foreach (var spentUtxo in tx.In)
 			{
-				if (_currentWallet.UTXOs.Remove(spentUtxo))
+				UTXO targetUtxoToRemove = default;
+
+				foreach(var utx in _currentWallet.UTXOs)
 				{
-					walletChanged = true;
+					if(spentUtxo.TxId == utx.TxId && spentUtxo.VOut == utx.VOut)
+					{
+						walletChanged = true;
+						targetUtxoToRemove = spentUtxo;
+						break;
+					}
+				}
+				if(targetUtxoToRemove != default)
+				{
+					_currentWallet.UTXOs.Remove(targetUtxoToRemove);
 				}
 			}
 

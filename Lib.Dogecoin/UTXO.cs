@@ -22,6 +22,21 @@ namespace Lib.Dogecoin
 
 		public static bool operator ==(UTXO left, UTXO right)
 		{
+			if ((object)left == null && (object)right == null)
+			{
+				return true;
+			}
+
+			if ((object)left == null)
+			{
+				return false;
+			}
+
+			if ((object)right == null)
+			{
+				return false;
+			}
+
 			return left.TxId == right.TxId &&
 					left.VOut == right.VOut;
 		}
@@ -29,6 +44,21 @@ namespace Lib.Dogecoin
 
 		public static bool operator !=(UTXO left, UTXO right)
 		{
+			if((object)left == null && (object)right == null)
+			{
+				return false;
+			}
+
+			if((object)left == null)
+			{
+				return true;
+			}
+
+			if((object)right == null)
+			{
+				return true;
+			}
+
 			return left.VOut != right.VOut || left.TxId != right.TxId;
 		}
 

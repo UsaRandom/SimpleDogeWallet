@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Strings>
+
+  <String Id="terminal-title"><![CDATA[Simple Đoge Wallet]]></String>
+
+
+  <String Id="terminal-disclaimer-title"><![CDATA[Warning: Work-in-Progress!]]></String>
+  <String Id="terminal-disclaimer-text1">
+    <![CDATA[The following program is of questionable quality and due to
+ the overall shoddiness it should not be used by anyone.]]>
+  </String>
+  <String Id="terminal-disclaimer-text2"><![CDATA[Proceed at your own risk!]]></String>
+
+
+  <String Id="terminal-disclaimer-wow"><![CDATA[wow]]></String>
+
+  <String Id="terminal-setup-newwalletinfo">
+    <![CDATA[What you’ll need:
+
+ ● 10 minutes
+ ● Privacy
+ ● Pen & Paper]]>
+  </String>
+
+  <String Id="terminal-setup-loadwalletinfo">
+    <![CDATA[What you’ll need:
+
+ ● 12-24 word backup phrases
+ ● 10 minutes
+ ● Privacy]]>
+  </String>
+
+  <String Id="terminal-setup-setupwallet"><![CDATA[Setup Wallet]]></String>
+  <String Id="terminal-setup-newwallet"><![CDATA[NEW WALLET]]></String>
+  <String Id="terminal-setup-loadwallet"><![CDATA[LOAD BACKUP]]></String>
+
+
+  <String Id="terminal-setup-setpin"><![CDATA[Set your PIN]]></String>
+  <String Id="terminal-setup-confirmpin"><![CDATA[Confirm your PIN]]></String>
+  <String Id="terminal-setup-setpin-hint"><![CDATA[(minimum of 4 characters)]]></String>
+  <String Id="terminal-setup-confirmpin-hint"><![CDATA[(don't forget it!)]]></String>
+
+
+  <String Id="terminal-setup-tpm-is-full"><![CDATA[Your TPM is full. Unable to create wallet.]]></String>
+
+
+  <Strings Id="terminal-backupcodes-title">
+    <![CDATA[Write down backup phrases by hand on paper
+    and store them in a secure location.]]>
+  </Strings>
+
+  <Strings Id="terminal-backupcodes-load-title">
+    <![CDATA[Enter your 12 or 24 word backup phrases:]]>
+  </Strings>
+
+  <Strings Id="terminal-backupcodes-load-badmnemonic">
+    <![CDATA[Error using provided backup phrases.
+    Ensure there are 12/24 words.
+              Try Again?]]>
+  </Strings>
+
+
+
+
+  <String Id="terminal-settings-title"><![CDATA[Settings]]></String>
+  <String Id="terminal-settings-background"><![CDATA[Background Scene]]></String>
+  <String Id="terminal-settings-fullscreen">
+    <![CDATA[    Fullscreen
+(Restart Required)]]>
+  </String>
+
+  <String Id="terminal-settings-devmode"><![CDATA[Developer Mode]]></String>
+  <String Id="terminal-settings-dustlimit"><![CDATA[Dust Limit:]]></String>
+  <String Id="terminal-settings-feeperutxo"><![CDATA[Fee per UTXO:]]></String>
+
+  <String Id="terminal-settings-oldpin"><![CDATA[Enter Old PIN]]></String>
+
+  <String Id="terminal-settings-updatepin"><![CDATA[Update PIN]]></String>
+  <String Id="terminal-settings-pin-updated"><![CDATA[Your PIN has been updated!]]></String>
+
+
+  <String Id="terminal-settings-backupcodes"><![CDATA[Seed Phrase]]></String>
+  <String Id="terminal-settings-language"><![CDATA[Language]]></String>
+  <String Id="terminal-settings-spv"><![CDATA[SPV Node]]></String>
+  <String Id="terminal-settings-clearpending"><![CDATA[Clear Pending]]></String>
+  <String Id="terminal-settings-delete"><![CDATA[DELETE WALLET]]></String>
+
+
+
+  <String Id="terminal-settings-clearpending-confirm">
+    <![CDATA[You should only do this if the tx failed to send,
+  or it's been over >24 hours since it was sent.
+          Do you want to continue?]]>
+  </String>
+
+  <String Id="terminal-settings-delete-confirm">
+    <![CDATA[               DELETE THIS WALLET?
+(ensure you have a backup of your seed phrases!)]]>
+  </String>
+
+  <String Id="terminal-settings-delete-confirm-pin">
+    <![CDATA[Confirm PIN to DELETE WALLET!]]>
+  </String>
+
+  <String Id="terminal-settings-delete-wallet-deleted">
+    <![CDATA[Your wallet was deleted!]]>
+  </String>
+
+
+  <String Id="terminal-setuppage-setupbutton"><![CDATA[Setup]]></String>
+  <String Id="terminal-unlockpage-unlockbutton"><![CDATA[Unlock]]></String>
+  <String Id="terminal-unlockpage-exitbutton"><![CDATA[Exit]]></String>
+
+  <String Id="terminal-send-confirmpin"><![CDATA[Confirm PIN to Send]]></String>
+  <String Id="terminal-sendamount-title"><![CDATA[Amount to Send]]></String>
+
+  <String Id="terminal-send-confirm-title"><![CDATA[Confirm Transaction]]></String>
+
+  <String Id="terminal-send-confirm-amount"><![CDATA[Amount:]]></String>
+  <String Id="terminal-send-confirm-to"><![CDATA[To:]]></String>
+  <String Id="terminal-send-confirm-fee"><![CDATA[Network Fee:]]></String>
+  <String Id="terminal-send-confirm-total"><![CDATA[Total:]]></String>
+  <String Id="terminal-send-confirm-confirm"><![CDATA[Confirm]]></String>
+
+  <Strings Id="terminal-wallet-send"><![CDATA[Send]]></Strings>
+  <Strings Id="terminal-wallet-pending"><![CDATA[Pending Tx...]]></Strings>
+  <Strings Id="terminal-wallet-syncing"><![CDATA[Syncing...]]></Strings>
+
+
+  <String Id="terminal-spv-title"><![CDATA[SPV Node]]></String>
+  <String Id="terminal-spv-offline"><![CDATA[(offline)]]></String>
+  <String Id="terminal-spv-online"><![CDATA[(online)]]></String>
+  <String Id="terminal-spv-peers"><![CDATA[Peers]]></String>
+
+  <String Id="terminal-spv-txcount"><![CDATA[Tx. Count]]></String>
+  <String Id="terminal-spv-spentutxo"><![CDATA[UTXOs Spent]]></String>
+  <String Id="terminal-spv-newutxo"><![CDATA[UTXOs Created]]></String>
+  <String Id="terminal-spv-netutxo"><![CDATA[Net UTXOs]]></String>
+
+
+
+  <String Id="terminal-spv-currentblock"><![CDATA[Current Block]]></String>
+  <String Id="terminal-spv-currentblock-hash"><![CDATA[Hash]]></String>
+  <String Id="terminal-spv-currentblock-height"><![CDATA[Height]]></String>
+  <String Id="terminal-spv-currentblock-time"><![CDATA[Timestamp]]></String>
+
+  <String Id="terminal-spv-rescan"><![CDATA[Rescan]]></String>
+  <String Id="terminal-spv-start"><![CDATA[Start]]></String>
+  <String Id="terminal-spv-stop"><![CDATA[Stop]]></String>
+
+  <String Id="terminal-spv-estimatemaxblock"><![CDATA[Estimated Block Height]]></String>
+  <String Id="terminal-spv-estimatemaxblock-hint"><![CDATA[(not a great estimate mind you)]]></String>
+
+  <String Id="terminal-spv-sync-title"><![CDATA[Rescan]]></String>
+  <String Id="terminal-spv-sync-height"><![CDATA[Block Height:]]></String>
+  <String Id="terminal-spv-sync-hash"><![CDATA[Block Hash:]]></String>
+  <String Id="terminal-spv-sync-rescan"><![CDATA[Rescan]]></String>
+
+
+
+  <Strings Id="terminal-walletlist-emptyslot"><![CDATA[Empty Slot]]></Strings>
+  <Strings Id="terminal-walletlist-title"><![CDATA[Select a Wallet/Slot]]></Strings>
+
+  <Strings Id="terminal-walletlist-newwallet-enterpin"><![CDATA[Set Pin:]]></Strings>
+  <Strings Id="terminal-walletlist-newwallet-confirmpin"><![CDATA[Confirm Pin:]]></Strings>
+
+
+  <Strings Id="terminal-wallet-updatepin-newpin"><![CDATA[Enter New Pin:]]></Strings>
+  <Strings Id="terminal-wallet-updatepin-confirmpin"><![CDATA[Confirm New Pin:]]></Strings>
+
+  <Strings Id="terminal-wallet-remove"><![CDATA[Remove Wallet]]></Strings>
+
+  <String Id="terminal-enteroppin-title"><![CDATA[Enter PIN to Unlock:]]></String>
+
+
+</Strings>
