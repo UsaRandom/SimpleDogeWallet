@@ -92,48 +92,53 @@ namespace DogecoinTerminal.Pages
 			string mnemonic = string.Empty;
 
 
-			int tpmFileNumber = _settings.GetInt("tpm-file-number", -1);
+			int tpmFileNumber = 1;
+			_settings.Set("tpm-file-number", 1);
 
-			if (tpmFileNumber == -1)
-			{
-				//need to make sure we don't overwrite other keys,
-				// so we need to find a good key number.
-				var tpmKeys = _ctx.ListKeysInTPM();
-				var takenNumbers = new List<int>();
+			//int tpmFileNumber = _settings.GetInt("tpm-file-number", -1);
 
-				// key names look like: "dogecoin_mnemonic_069"
-				foreach (var key in tpmKeys)
-				{
-					if (key.StartsWith("dogecoin_mnemonic_"))
-					{
-						int fileNumber = int.Parse(key.Split('_')[2]);
-						takenNumbers.Add(fileNumber);
-					}
-				}
+			//if (tpmFileNumber == -1)
+			//{
+			//	//need to make sure we don't overwrite other keys,
+			//	// so we need to find a good key number.
+			//	var tpmKeys = _ctx.ListKeysInTPM();
+			//	var takenNumbers = new List<int>();
 
-				for (var number = 0; number < 999; number++)
-				{
-					if (!takenNumbers.Contains(number))
-					{
-						tpmFileNumber = number;
-						break;
-					}
-				}
+			//	// key names look like: "dogecoin_mnemonic_069"
+			//	foreach (var key in tpmKeys)
+			//	{
+			//		if (key.StartsWith("dogecoin_mnemonic_"))
+			//		{
+			//			int fileNumber = int.Parse(key.Split('_')[2]);
+			//			takenNumbers.Add(fileNumber);
+			//		}
+			//	}
 
-				if (tpmFileNumber == -1)
-				{
-					await _navigation.PromptAsync<ShortMessagePage>(("message", _strings.GetString("terminal-setup-tpm-is-full")));
-					_navigation.Pop();
-					return;
-				}
+			//	for (var number = 0; number < 999; number++)
+			//	{
+			//		if (!takenNumbers.Contains(number))
+			//		{
+			//			tpmFileNumber = number;
+			//			break;
+			//		}
+			//	}
 
-				_settings.Set("tpm-file-number", tpmFileNumber);
-			}
+			//	if (tpmFileNumber == -1)
+			//	{
+			//		await _navigation.PromptAsync<ShortMessagePage>(("message", _strings.GetString("terminal-setup-tpm-is-full")));
+			//		_navigation.Pop();
+			//		return;
+			//	}
+
+			//	_settings.Set("tpm-file-number", tpmFileNumber);
+			//}
 
 
 			if (isNew)
 			{
-				mnemonic = _ctx.GenerateMnemonicEncryptWithTPM(tpmFileNumber, lang: _strings.Language.LanguageCode, space: "-");
+				mnemonic = _ctx.GenerateMnemonicEncryptWithSW(tpmFileNumber, lang: _strings.Language.LanguageCode, space: "-");
+
+//				mnemonic = _ctx.GenerateMnemonicEncryptWithTPM(tpmFileNumber, lang: _strings.Language.LanguageCode, space: "-");
 				await _navigation.PromptAsync<BackupCodePage>(("mnemonic", mnemonic), ("editmode", false));
 			}
 			else
@@ -167,7 +172,7 @@ namespace DogecoinTerminal.Pages
 						}
 
 						//we have a valid mnemonic, encrypt it with key stored in tpm
-						var mnemonicKey = _ctx.GenerateMnemonicEncryptWithTPM(tpmFileNumber, lang: "eng", space: "-");
+						var mnemonicKey = _ctx.GenerateMnemonicEncryptWithSW(tpmFileNumber, lang: "eng", space: "-");
 
 						File.WriteAllText(SimpleDogeWallet.LOADED_MNEMONIC_FILE, Crypto.Encrypt(mnemonic, mnemonicKey));
 

@@ -217,13 +217,15 @@ namespace DogecoinTerminal
 
 			if (!hasWallet)
 			{
-				_nav.PushAsync<SetupWalletPage>();
+				_nav.PushAsync<LoadingPage>();
 
 				//start on the language selection screen:
 				Task.Run(async () =>
 				{
 					await _nav.PromptAsync<DisclaimerPage>();
 					await _nav.PromptAsync<LanguageSelectionPage>();
+					await _nav.TryInsertBeforeAsync<SetupWalletPage, LoadingPage>();
+					_nav.Pop();
 				});
 			}
 			else

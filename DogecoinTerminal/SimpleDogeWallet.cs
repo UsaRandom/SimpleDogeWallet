@@ -127,13 +127,13 @@ namespace DogecoinTerminal
 		{
 			if(Services.GetService<ITerminalSettings>().GetBool(USING_USER_ENTERED_MNEMONIC_SETTING, false))
 			{
-				var key = _ctx.DecryptMnemonicWithTPM(_tpmFileNumber);
+				var key = _ctx.DecryptMnemonicWithSW(_tpmFileNumber);
 
 				return Crypto.Decrypt(File.ReadAllText(LOADED_MNEMONIC_FILE), key);
 			}
 			else
 			{
-				return _ctx.DecryptMnemonicWithTPM(_tpmFileNumber);
+				return _ctx.DecryptMnemonicWithSW(_tpmFileNumber);
 			}
 		}
 

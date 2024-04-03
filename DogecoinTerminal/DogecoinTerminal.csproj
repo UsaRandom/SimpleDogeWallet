@@ -17,6 +17,9 @@
     <Compile Remove="Notes.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="SimpleSPVNodeService.cs~RF12557e2.TMP" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Icon.bmp">
       <LogicalName>Icon.bmp</LogicalName>
     </EmbeddedResource>

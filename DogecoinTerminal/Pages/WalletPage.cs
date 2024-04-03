@@ -163,18 +163,17 @@ namespace DogecoinTerminal.Pages
 
 				//
 
+				_spvNode.Stop();
+				Debug.WriteLine("Stopped SPV Node");
 
 				//force garbage collection after signing
-				if (!transaction.Sign())
+				if (!transaction.Sign((string)numPadResponse.Value))
 				{
 					await navigation.PromptAsync<ShortMessagePage>(("message", "Error signing transaction."));
 					navigation.Pop();
 					return;
 				}
 
-
-				_spvNode.Stop();
-				Debug.WriteLine("Stopped SPV Node");
 
 				var rawTx = transaction.GetRawTransaction();
 				var txId = Crypto.GetTransactionIdFromRaw(rawTx);

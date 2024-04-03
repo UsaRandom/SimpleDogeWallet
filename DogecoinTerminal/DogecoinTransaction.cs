@@ -143,7 +143,7 @@ namespace DogecoinTerminal
             return true;
         }
 
-        public bool Sign()
+        public bool Sign(string password)
         {
             try
 			{

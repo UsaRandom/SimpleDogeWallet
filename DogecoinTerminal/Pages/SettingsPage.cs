@@ -163,10 +163,12 @@ namespace DogecoinTerminal.Pages
 				if (oldPinResponse.Response == PromptResponse.YesConfirm &&
 				   SimpleDogeWallet.TryOpen((string)oldPinResponse.Value, services, out SimpleDogeWallet wallet))
 				{
-
+					spvService.Stop();
 					await navigation.PromptAsync<BackupCodePage>(("title", strings.GetString("terminal-backupcodes-title")),
 												                 ("editmode", false),
 																 ("mnemonic", wallet.GetMnemonic()));
+
+					spvService.Start();
 				}
 
 				navigation.Pop();

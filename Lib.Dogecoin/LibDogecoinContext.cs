@@ -431,13 +431,26 @@ namespace Lib.Dogecoin
 
 
 
-		public string GenerateMnemonicEncryptWithTPM(int fileNumber, bool overwrite = true, string lang = "eng", string space = " ")
+		//public string GenerateMnemonicEncryptWithTPM(int fileNumber, bool overwrite = true, string lang = "eng", string space = " ")
+		//{
+		//	lock(_lock)
+		//	{
+		//		var mnemonic = new char[2048];
+
+		//		LibDogecoinInterop.dogecoin_generate_mnemonic_encrypt_with_tpm(mnemonic, fileNumber, overwrite, lang.NullTerminate(), space.NullTerminate(), null);
+
+
+		//		return mnemonic.TerminateNull();
+		//	}
+		//}
+
+		public string GenerateMnemonicEncryptWithSW(int fileNumber, bool overwrite = true, string lang = "eng", string space = " ")
 		{
-			lock(_lock)
+			lock (_lock)
 			{
 				var mnemonic = new char[2048];
 
-				LibDogecoinInterop.dogecoin_generate_mnemonic_encrypt_with_tpm(mnemonic, fileNumber, overwrite, lang.NullTerminate(), space.NullTerminate(), null);
+				LibDogecoinInterop.dogecoin_generate_mnemonic_encrypt_with_sw(mnemonic, fileNumber, overwrite, lang.NullTerminate(), space.NullTerminate(), null, null);
 
 
 				return mnemonic.TerminateNull();
@@ -446,13 +459,26 @@ namespace Lib.Dogecoin
 
 
 
-		public string DecryptMnemonicWithTPM(int fileNumber)
+		//public string DecryptMnemonicWithTPM(int fileNumber)
+		//{
+		//	lock (_lock)
+		//	{
+		//		var mnemonic = new char[2048];
+
+		//		LibDogecoinInterop.dogecoin_decrypt_mnemonic_with_tpm(mnemonic, fileNumber);
+
+
+		//		return mnemonic.TerminateNull();
+		//	}
+		//}
+
+		public string DecryptMnemonicWithSW(int fileNumber)
 		{
 			lock (_lock)
 			{
 				var mnemonic = new char[2048];
 
-				LibDogecoinInterop.dogecoin_decrypt_mnemonic_with_tpm(mnemonic, fileNumber);
+				LibDogecoinInterop.dogecoin_decrypt_mnemonic_with_sw(mnemonic, fileNumber, null);
 
 
 				return mnemonic.TerminateNull();
@@ -460,47 +486,47 @@ namespace Lib.Dogecoin
 		}
 
 
-		public string[] ListKeysInTPM()
-		{
-			//TODO: This can be simplified by just looking at the ./source/ folder where they are stored.
-			lock (_lock)
-			{
-				var keyNames = new List<string>();
-				int count;
-				IntPtr countPtr;
-				bool result;
+		//public string[] ListKeysInTPM()
+		//{
+		//	//TODO: This can be simplified by just looking at the ./source/ folder where they are stored.
+		//	lock (_lock)
+		//	{
+		//		var keyNames = new List<string>();
+		//		int count;
+		//		IntPtr countPtr;
+		//		bool result;
 
-				count = 1000;
+		//		count = 1000;
 
-				IntPtr[] keyNamePointers = new IntPtr[count];
+		//		IntPtr[] keyNamePointers = new IntPtr[count];
 
-				result = LibDogecoinInterop.dogecoin_list_encryption_keys_in_tpm(Marshal.UnsafeAddrOfPinnedArrayElement(keyNamePointers, 0), out countPtr);
+		//		result = LibDogecoinInterop.dogecoin_list_encryption_keys_in_tpm(Marshal.UnsafeAddrOfPinnedArrayElement(keyNamePointers, 0), out countPtr);
 
-				// Check the result
-				if (result)
-				{
-					// Retrieve the key names
-					for (int i = 0; i < count; i++)
-					{
-						if (keyNamePointers[i] == IntPtr.Zero)
-						{
-							break;
-						}
-						else
-						{
-							keyNames.Add(Marshal.PtrToStringUni(keyNamePointers[i]));
+		//		// Check the result
+		//		if (result)
+		//		{
+		//			// Retrieve the key names
+		//			for (int i = 0; i < count; i++)
+		//			{
+		//				if (keyNamePointers[i] == IntPtr.Zero)
+		//				{
+		//					break;
+		//				}
+		//				else
+		//				{
+		//					keyNames.Add(Marshal.PtrToStringUni(keyNamePointers[i]));
 
-							LibDogecoinInterop.dogecoin_free(keyNamePointers[i]);
-						}
-					}
+		//					LibDogecoinInterop.dogecoin_free(keyNamePointers[i]);
+		//				}
+		//			}
 
-				}
+		//		}
 
-				Marshal.FreeCoTaskMem(countPtr);
+		//		Marshal.FreeCoTaskMem(countPtr);
 
-				return keyNames.ToArray();
-			}
-		}
+		//		return keyNames.ToArray();
+		//	}
+		//}
 
 
 
