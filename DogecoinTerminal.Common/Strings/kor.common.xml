@@ -3,7 +3,7 @@
 
   <String Id="terminal-contacts-title"><![CDATA[연락처]]></String>
   <String Id="terminal-contacts-updatecontact-update"><![CDATA[업데이트]]></String>
-  <String Id="terminal-contacts-addcontact-add"><![CDATA[추가]></String>
+  <String Id="terminal-contacts-addcontact-add"><![CDATA[추가]]></String>
   <String Id="terminal-contacts-addcontact-title"><![CDATA[연럭초 추가]]></String>
   <String Id="terminal-contacts-addcontact-hint"><![CDATA[연락처 이름 입력하십시오:]]></String>
 

@@ -6,7 +6,8 @@
 
   <String Id="terminal-disclaimer-title"><![CDATA[경고: 개발 현재 진행중!]]></String>
   <String Id="terminal-disclaimer-text1">
-    <![CDATA[해당 프로그램의 품질이 완전하지 않으며 대체적인 조잡함으로 인하여 그 누구도 사용이 권장되지 않습니다.]]></String>
+    <![CDATA[  해당 프로그램의 품질이 완전하지 않으며 대체적인
+조잡함으로 인하여 그 누구도 사용이 권장되지 않습니다.]]></String>
   <String Id="terminal-disclaimer-text2"><![CDATA[자신의 책임하에 진행하십시오!]]></String>
 
 
