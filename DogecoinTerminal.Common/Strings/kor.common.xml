@@ -1,21 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Strings>
 
-  <String Id="terminal-contacts-title"><![CDATA[Contacts]]></String>
-  <String Id="terminal-contacts-updatecontact-update"><![CDATA[Update]]></String>
-  <String Id="terminal-contacts-addcontact-add"><![CDATA[Add]]></String>
-  <String Id="terminal-contacts-addcontact-title"><![CDATA[Add Contact]]></String>
-  <String Id="terminal-contacts-addcontact-hint"><![CDATA[Enter Name for Contact:]]></String>
+  <String Id="terminal-contacts-title"><![CDATA[연락처]]></String>
+  <String Id="terminal-contacts-updatecontact-update"><![CDATA[업데이트]]></String>
+  <String Id="terminal-contacts-addcontact-add"><![CDATA[추가]></String>
+  <String Id="terminal-contacts-addcontact-title"><![CDATA[연럭초 추가]]></String>
+  <String Id="terminal-contacts-addcontact-hint"><![CDATA[연락처 이름 입력하십시오:]]></String>
 
-  <String Id="terminal-qrscanner-hint"><![CDATA[Not Valid Dogecoin Address:]]></String>
-  <String Id="terminal-qrscanner-title"><![CDATA[Scan QR Code]]></String>  
+  <String Id="terminal-qrscanner-hint"><![CDATA[정상적인 도지코인 주소가 아닙니다:]]></String>
+  <String Id="terminal-qrscanner-title"><![CDATA[QR 코드 찍기]]></String>  
 
-  <String Id="common-contacts-unknown"><![CDATA[Unknown]]></String>
+  <String Id="common-contacts-unknown"><![CDATA[미등록 연락처]]></String>
 
   
-  <String Id="common-numpad-title"><![CDATA[Enter Pin:]]></String>
-  <String Id="common-loading-title"><![CDATA[Doing Only Good Everyday...]]></String>
-  <String Id="common-shortmsg-okbutton"><![CDATA[Ok]]></String>
-  <String Id="common-yesno-yes"><![CDATA[Yes]]></String>
-  <String Id="common-yesno-no"><![CDATA[No]]></String>
+  <String Id="common-numpad-title"><![CDATA[Pin 입력:]]></String>
+  <String Id="common-loading-title"><![CDATA[매일 좋은 일만 하자...]]></String>
+  <String Id="common-shortmsg-okbutton"><![CDATA[확인]]></String>
+  <String Id="common-yesno-yes"><![CDATA[네]]></String>
+  <String Id="common-yesno-no"><![CDATA[N아니요]]></String>
 </Strings>

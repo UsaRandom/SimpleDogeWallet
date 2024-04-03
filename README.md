@@ -1,93 +1,31 @@
-# DogecoinTerminal
+![image](https://github.com/UsaRandom/SimpleDogeWallet/assets/2897796/13cf2ead-92dc-470d-b64c-c0ac2d160831)
 
-DogecoinTerminal is a multi-user **offline** dogecoin wallet made using *Monogame* and *[libdogecoin](https://github.com/dogecoinfoundation/libdogecoin)* for maximum portability.
+# SimpleDogeWallet
 
-## What you'll need:
-
-DogecoinTerminal is designed to run on `An Always Offline Device with a Camera`, so you'll need:
-
-* An Always Offline Device with a Camera
-* An Android Device with a Camera. *(for QRDoge)*
-* An [Dogecoin](https://github.com/dogecoin/dogecoin) node *(for QRDoge)*
-
-
-![image](https://github.com/UsaRandom/DogecoinTerminal/assets/2897796/f0fb780f-2960-4a5c-8e46-4cf1ec3e675e)
-
-![image](https://github.com/UsaRandom/DogecoinTerminal/assets/2897796/f2ff4988-407c-489e-a37b-02f91d50a2ed)
+SimpleDogeWallet is a hot🔥, spv-node powered, self-custody, dogecoin wallet made using *Monogame* and *[libdogecoin](https://github.com/dogecoinfoundation/libdogecoin)*.
 
 
 
 # Important Notes
 
-* **DogecoinTerminal cannot send transactions out of the box** (read more on 'Bridging to the Network')
-* **Loading old keys not currently supported!** You *can* load them by hand, but getting UTXOs (balance) could also become annoying.
+* Very early. Keep that in mind.
+* This hot wallet doesn't rely on any additional infrastructure beyond the dogecoin network but doesn't have the growing space requirement of a full node. 
+* Can load 12 or 24 word backup phrases.
+* Keeps your keys secure *at rest* with TPM2.
+* Rescanning with the SPV Node allows you to start scanning for UTXOs at a point on the chain. If you make a new wallet, you can use this to 'skip ahead' to the current chain tip by getting the tip's block hash and height.
+
+# Building Yourself
+
+* "**Build libdogecoin**" dogecoin.dll and sendtx.exe come from libdogecoin. build them with win32, tpm2, net, and tools flags. Currently built with 0.1.4 + PR #205 + #207. 
+* "**Build with Visual Studio**"
 
 
-## Security
+# Security
+
+Your backup phrases are secured *at-rest* using TPM2, so it should be about as risky as transacting with a phone's hot wallet.
+
 --------
-
-Security comes from the device being offline, your ability to keep it offline, and your ability to keep it physically secure.
-
-Currently, wallet data (mnemonics/utxos) is encrypted when stored but it would be trivial to decrypt for a motiviated actor.
-
-Different network bridges might provide different levels of security.
-
-QRDoge isn't pretty, but you can observe the data before consuming it, which is useful in it's own right.
+![image](https://github.com/UsaRandom/SimpleDogeWallet/assets/2897796/8ddff94d-bce5-49e8-bc9e-e38ebb2053e2)
 
 
-
-## Settings
-----
-
-* `fee-per-utxo` (default: 0.02): Used to calculate network fees, `fee-per-utxo` * `count(UTXOsUsedInTransaction)` = `networkFee`
-* `dust-limit`: (default: 0.001): The dust limit used in transaction creation.
-
-
-
-## Bridging to the Network
-
-**DogecoinTerminal cannot send transactions on it's own**, it can only sign them.
-
-To send transactions, you'll need a bridge. (an implimentation of `IDogecoinService`)
-
-Currently there is one bridge, [DogecoinTerminal.QRDoge.QRDogeService](https://github.com/UsaRandom/DogecoinTerminal/blob/master/DogecoinTerminal.QRDoge/QRDogecoinService.cs).
-
-It uses QR codes to pass messages back and forth with it's companion app:
-
-### [QRDoge](https://github.com/UsaRandom/QRDoge)
-
-A rudamentary android companion app that acts as a bridge between your [Dogecoin Core Node](https://github.com/dogecoin/dogecoin) and DogecoinTerminal.
-
-
-![image](https://github.com/UsaRandom/DogecoinTerminal/assets/2897796/876af895-1897-46d0-be58-1e05c223e231)
-
-
-
-## Creating your own Bridge
-
-To create your own bridge, create a new project with a reference to `DogecoinTerminal.Common` and impliment the `IDogecoinService` interface.
-
-```csharp
-	//NOTE: not a final interface, only an example.
-	public interface IDogecoinService
-	{
-		void OnSetup(Action<bool> callback);
-
-		void OnNewAddress(string address, string pin, Action<bool> callback);
-
-		void OnDeleteAddress(string address, string pin, Action callback);
-
-		void UpdatePin(string address, string oldPin, string newPin, Action<bool> callback);
-
-		//These are the only two functions that are required to send/receive transactions.
-		//pin string param is likely going away, nothing depends on it currently.
-		void GetUTXOs(string address, string pin, Action<IEnumerable<UTXOInfo>> callback);
-
-		void SendTransaction(string transaction, string pin, Action<bool> callback);
-	}
-```
-
-
-The `DogecoinTerminal.Common.QRDoge.QRDogecoinService` class is a good reference on creating a service.
-
-
+![image](https://github.com/UsaRandom/SimpleDogeWallet/assets/2897796/40c8d513-1221-4289-a67f-c4ed9c5cdb6d)
