@@ -163,10 +163,15 @@ namespace DogecoinTerminal.Pages
 				if (oldPinResponse.Response == PromptResponse.YesConfirm &&
 				   SimpleDogeWallet.TryOpen((string)oldPinResponse.Value, services, out SimpleDogeWallet wallet))
 				{
+					var mnemonic = wallet.GetMnemonic().Trim();
 
-					await navigation.PromptAsync<BackupCodePage>(("title", strings.GetString("terminal-backupcodes-title")),
-												                 ("editmode", false),
-																 ("mnemonic", wallet.GetMnemonic()));
+					if(!string.IsNullOrEmpty(mnemonic))
+					{
+						await navigation.PromptAsync<BackupCodePage>(("title", strings.GetString("terminal-backupcodes-title")),
+																	 ("editmode", false),
+																	 ("mnemonic", mnemonic));
+					}
+
 				}
 
 				navigation.Pop();
