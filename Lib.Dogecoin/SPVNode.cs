@@ -329,6 +329,14 @@ namespace Lib.Dogecoin
 			nodeTransaction.Timestamp = blockTimestamp;
 
 
+			var txcstr = LibDogecoinInterop.cstr_new_sz(1024);
+
+			LibDogecoinInterop.dogecoin_tx_serialize(txcstr, (dogecoin_tx*)tx);
+
+			nodeTransaction.SizeBytes = (int)txcstr->len;
+
+			LibDogecoinInterop.cstr_free(txcstr, 1);
+
 			//handle inputs
 			var vinList = *transaction.vin;
 			for (var i = 0; i < vinList.len; i++)

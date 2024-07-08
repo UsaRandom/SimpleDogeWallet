@@ -16,7 +16,8 @@ namespace Lib.Dogecoin
 
 		public UTXO[] In { get; set; }
 
-		public UTXO[] Out { get; set;}
+		public UTXO[] Out { get; set; }
+		public int SizeBytes { get; set; }
 	}
 
 	

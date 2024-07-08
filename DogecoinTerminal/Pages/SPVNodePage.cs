@@ -1,6 +1,7 @@
 ﻿using DogecoinTerminal.Common;
 using DogecoinTerminal.Common.Pages;
 using FontStashSharp.RichText;
+using Lib.Dogecoin;
 using Lib.Dogecoin.Interop;
 using Microsoft.Xna.Framework;
 using System;
@@ -93,6 +94,11 @@ namespace DogecoinTerminal.Pages
 			sb.AppendLine($"->{_strings.GetString("terminal-spv-currentblock-hash")}: {_spvNodeService.CurrentBlock.Hash}");
 			sb.AppendLine($"->{_strings.GetString("terminal-spv-currentblock-height")}: {_spvNodeService.CurrentBlock.BlockHeight}");
 			sb.AppendLine($"->{_strings.GetString("terminal-spv-currentblock-time")}: {_spvNodeService.CurrentBlock.Timestamp.ToLocalTime()}");
+
+			var estimatedFee = Math.Max(services.GetService<ITerminalSettings>().GetDecimal("dust-limit") * services.GetService<ITerminalSettings>().GetDecimal("fee-coeff"),
+										_spvNodeService.EstimatedRate * 226 * services.GetService<ITerminalSettings>().GetDecimal("fee-coeff"));
+
+			sb.AppendLine($"->{_strings.GetString("terminal-spv-currentblock-fee")}: {estimatedFee}");
 			sb.AppendLine();
 			sb.AppendLine($"{_strings.GetString("terminal-spv-estimatemaxblock")}: {_spvNodeService.EstimatedHeight}");
 			sb.AppendLine(_strings.GetString("terminal-spv-estimatemaxblock-hint"));

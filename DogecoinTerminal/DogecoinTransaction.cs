@@ -49,9 +49,7 @@ namespace DogecoinTerminal
             _ctx = services.GetService<LibDogecoinContext>();
         }
 
-
-
-        public bool Send(string recipient, decimal amount)
+		public bool Send(string recipient, decimal amount)
         {
             var settings = _services.GetService<ITerminalSettings>();
 
@@ -66,10 +64,24 @@ namespace DogecoinTerminal
 
             _workingTransactionId = _ctx.StartTransaction();
 
+
+            //225 + 148 * (utxoInCount-1)
+
+
+            var rate = _services.GetService<SimpleSPVNodeService>().EstimatedRate;
+            var feeCoeff = _services.GetService<ITerminalSettings>().GetDecimal("fee-coeff");
+
+
+
+			var ratePerByte = rate * feeCoeff;
+
+
+
 			//NOTE: I might want to change this to fee per byte.
-			decimal fee = settings.GetDecimal("fee-per-utxo"); //fee per utxo
+			decimal fee = ratePerByte * 225;
+            decimal feePerUtxo = ratePerByte * 148;
 			decimal sum = 0M;
-			int utxoCount = 2; //min 2 utxo (receipient + change)
+			int utxoCount = 0; //min 2 utxo (receipient + change)
 
 
             //UTXOs who's value is greater than the fee + dustlimit * 2  (so it makes sense to spend it)
@@ -101,14 +113,14 @@ namespace DogecoinTerminal
                     return false;
                 }
 
-            } while (sum < amount + fee * utxoCount);
+            } while (sum < amount + (fee + feePerUtxo * (utxoCount-1)));
 
-            if (sum < amount + fee * utxoCount)
+            if (sum < amount + (fee + feePerUtxo * (utxoCount - 1)))
             {
                 return false;
             }
 
-            var totalFee = fee * utxoCount;
+            var totalFee = ((feePerUtxo * (utxoCount - 1)) + fee);
 
             var remainder = sum - totalFee - amount;
 

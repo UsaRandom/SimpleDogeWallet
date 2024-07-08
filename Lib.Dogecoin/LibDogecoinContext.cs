@@ -557,7 +557,48 @@ namespace Lib.Dogecoin
 
 
 		}
+		public byte[] utils_hex_to_uint8(string str)
+		{
+			if (str.Length > 2048)
+			{
+				throw new ArgumentException("Input string is too long");
+			}
 
+			byte[] buffer = new byte[2048];
+			int i;
+			for (i = 0; i < str.Length / 2; i++)
+			{
+				int c = 0;
+				if (str[i * 2] >= '0' && str[i * 2] <= '9')
+				{
+					c += (str[i * 2] - '0') << 4;
+				}
+				if (str[i * 2] >= 'a' && str[i * 2] <= 'f')
+				{
+					c += (10 + str[i * 2] - 'a') << 4;
+				}
+				if (str[i * 2] >= 'A' && str[i * 2] <= 'F')
+				{
+					c += (10 + str[i * 2] - 'A') << 4;
+				}
+				if (str[i * 2 + 1] >= '0' && str[i * 2 + 1] <= '9')
+				{
+					c += (str[i * 2 + 1] - '0');
+				}
+				if (str[i * 2 + 1] >= 'a' && str[i * 2 + 1] <= 'f')
+				{
+					c += (10 + str[i * 2 + 1] - 'a');
+				}
+				if (str[i * 2 + 1] >= 'A' && str[i * 2 + 1] <= 'F')
+				{
+					c += (10 + str[i * 2 + 1] - 'A');
+				}
+				buffer[i] = (byte)c;
+			}
+			byte[] result = new byte[i];
+			Array.Copy(buffer, result, i);
+			return result;
+		}
 
 
 		public bool BroadcastRawTransaction(string rawTransaction, bool isMainNet = true)

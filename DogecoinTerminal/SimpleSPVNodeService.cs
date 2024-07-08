@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Transactions;
+using ZXing;
 
 namespace DogecoinTerminal
 {
@@ -31,14 +32,34 @@ namespace DogecoinTerminal
 		private uint _staleTimerLastBlock;
 		private uint _staleTimerCounter = 0;
 
+		private const int SPV_CHECKPOINT_BLOCKS_BEHIND = 30;
+
+
+
+		long currentBlock = 0;
+		long currentMinFee = long.MaxValue;
+		long sumOfFees = 0;
+		int txsWithFee = 0;
+
+		long blockSize = 0;
+
+		private LimitedQueue<long> blockFees = new LimitedQueue<long>(30);
+		private LimitedQueue<UTXO> utxos = new LimitedQueue<UTXO>(25000);
+
+		
+
 		public SimpleSPVNodeService()
 		{
 			TxCount = 0;
 			CurrentBlock = NEW_WALLET_START_BLOCK;
+			blockFees.Enqueue(1000);
 		}
 
 
-
+		public decimal EstimatedRate
+		{
+			get; set;
+		}
 
 		public uint EstimatedHeight
 		{
@@ -135,7 +156,7 @@ namespace DogecoinTerminal
 			{
 				_spvNode = new SPVNodeBuilder()
 					.StartAt(NEW_WALLET_START_BLOCK.Hash, NEW_WALLET_START_BLOCK.BlockHeight)
-					.UseCheckpointFile(SPV_CHECKPOINT_FILE)
+					.UseCheckpointFile(SPV_CHECKPOINT_FILE, SPV_CHECKPOINT_BLOCKS_BEHIND)
 					.UseMainNet()
 					.OnSyncCompleted(OnSyncComplete)
 					.OnNextBlock(HandleOnBlock)
@@ -146,7 +167,7 @@ namespace DogecoinTerminal
 			else
 			{
 				_spvNode = new SPVNodeBuilder()
-					.UseCheckpointFile(SPV_CHECKPOINT_FILE)
+					.UseCheckpointFile(SPV_CHECKPOINT_FILE, SPV_CHECKPOINT_BLOCKS_BEHIND)
 					.UseMainNet()
 					.OnSyncCompleted(OnSyncComplete)
 					.OnNextBlock(HandleOnBlock)
@@ -170,7 +191,7 @@ namespace DogecoinTerminal
 
 			_spvNode = new SPVNodeBuilder()
 					.StartAt(startPoint)
-				.UseCheckpointFile(SPV_CHECKPOINT_FILE)
+				.UseCheckpointFile(SPV_CHECKPOINT_FILE, SPV_CHECKPOINT_BLOCKS_BEHIND)
 				.UseMainNet()
 				.OnSyncCompleted(OnSyncComplete)
 				.OnNextBlock(HandleOnBlock)
@@ -252,7 +273,64 @@ namespace DogecoinTerminal
 			{
 				_currentWallet.Save();
 
-				Messenger.Default.Send(new SPVUpdatedWalletMessage());
+				Messenger.Default.Send(new UpdateSendButtonMessage());
+			}
+
+
+
+
+			//Fee Calculation
+
+			if (tx.BlockHeight > currentBlock)
+			{
+				if (currentBlock != 0)
+				{
+					if (currentMinFee != long.MaxValue)
+					{
+						blockFees.Enqueue(currentMinFee);
+					}
+
+
+					EstimatedRate = ((decimal)(blockFees.Min()) / (decimal)100000000);
+					
+					currentMinFee = long.MaxValue;
+				}
+
+				currentBlock = tx.BlockHeight;
+				blockSize = 0;
+			}
+
+
+			bool allInputsPresent = true;
+			long inputVal = 0;
+
+			foreach (var input in tx.In)
+			{
+				var i = utxos.Where(o => o.TxId == input.TxId && o.VOut == input.VOut).FirstOrDefault();
+				if (i == default(UTXO))
+				{
+					allInputsPresent = false;
+					break;
+				}
+				inputVal += i.AmountKoinu.Value;
+			}
+
+			if (allInputsPresent)
+			{
+				var outputVal = tx.Out.Sum(o => o.AmountKoinu);
+				var fee = (inputVal - outputVal) / tx.SizeBytes;
+
+				if (fee <= currentMinFee)
+				{
+					currentMinFee = (long)fee;
+				}
+			}
+
+			blockSize += tx.SizeBytes;
+
+			foreach (var o in tx.Out)
+			{
+				utxos.Enqueue(o);
 			}
 
 		}
@@ -276,5 +354,31 @@ namespace DogecoinTerminal
 	class UpdateSendButtonMessage
 	{
 
+	}
+
+	class UpdateSPVTextMessage
+	{
+
+	}
+
+
+
+	class LimitedQueue<T> : Queue<T>
+	{
+		private readonly int _limit;
+
+		public LimitedQueue(int limit) : base(limit)
+		{
+			_limit = limit;
+		}
+
+		public new void Enqueue(T item)
+		{
+			if (Count >= _limit)
+			{
+				Dequeue(); // Kick out the oldest item
+			}
+			base.Enqueue(item);
+		}
 	}
 }

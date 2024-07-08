@@ -14,18 +14,12 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Notes.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Icon.bmp">
       <LogicalName>Icon.bmp</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Icon.ico">
       <LogicalName>Icon.ico</LogicalName>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Notes.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FontStashSharp.MonoGame" Version="1.3.6" />
@@ -38,9 +32,6 @@
     <ProjectReference Include="..\Lib.Dogecoin\Lib.Dogecoin.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="contacts.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Content\wow.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

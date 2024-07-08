@@ -66,7 +66,8 @@
   
   <String Id="terminal-settings-devmode"><![CDATA[Developer Mode]]></String>
   <String Id="terminal-settings-dustlimit"><![CDATA[Dust Limit:]]></String>
-  <String Id="terminal-settings-feeperutxo"><![CDATA[Fee per UTXO:]]></String>
+  <String Id="terminal-settings-feecoeff"><![CDATA[Fee Coefficient:]]></String>
+ 
 
   <String Id="terminal-settings-oldpin"><![CDATA[Enter Old PIN]]></String>
 
@@ -137,6 +138,7 @@
   <String Id="terminal-spv-currentblock-hash"><![CDATA[Hash]]></String>
   <String Id="terminal-spv-currentblock-height"><![CDATA[Height]]></String>
   <String Id="terminal-spv-currentblock-time"><![CDATA[Timestamp]]></String>
+  <String Id="terminal-spv-currentblock-fee"><![CDATA[Estimated Fee]]></String>
   
   <String Id="terminal-spv-rescan"><![CDATA[Rescan]]></String>
   <String Id="terminal-spv-start"><![CDATA[Start]]></String>

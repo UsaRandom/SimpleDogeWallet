@@ -23,7 +23,7 @@ namespace DogecoinTerminal.Pages
 
 
 			GetControl<ButtonControl>("SetDustLimitButton").Text = settings.GetDecimal("dust-limit").ToString();
-			GetControl<ButtonControl>("SetFeePerUTXOButton").Text = settings.GetDecimal("fee-per-utxo").ToString();
+			GetControl<ButtonControl>("SetFeeCoeffButton").Text = settings.GetDecimal("fee-coeff").ToString();
 
 			OnClick("BackButton", async _ =>
 			{
@@ -71,20 +71,21 @@ namespace DogecoinTerminal.Pages
 				}
 			});
 
-			OnClick("SetFeePerUTXOButton", async _ =>
+			OnClick("SetFeeCoeffButton", async _ =>
 			{
-				var updateResult = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-settings-feeperutxo"]),
+				var updateResult = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-settings-feecoeff"]),
 																	("value-mode", true),
-																	("start-value", settings.GetDecimal("fee-per-utxo").ToString()));
+																	("start-value", settings.GetDecimal("fee-coeff").ToString()));
 
 				if (updateResult.Response == PromptResponse.YesConfirm)
 				{
-					var newFeePerUTXO = decimal.Parse(updateResult.Value.ToString());
+					var newFeeCoeff = decimal.Parse(updateResult.Value.ToString());
 
-					if (newFeePerUTXO > 0)
+					if (newFeeCoeff > 0)
 					{
-						settings.Set("fee-per-utxo", newFeePerUTXO);
-						GetControl<ButtonControl>("SetFeePerUTXOButton").Text = newFeePerUTXO.ToString();
+						settings.Set("fee-coeff", newFeeCoeff);
+						Messenger.Default.Send(new UpdateSPVTextMessage());
+						GetControl<ButtonControl>("SetFeeCoeffButton").Text = newFeeCoeff.ToString();
 					}
 				}
 			});

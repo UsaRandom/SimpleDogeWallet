@@ -17,7 +17,7 @@ using System.Diagnostics;
 namespace DogecoinTerminal.Pages
 {
     [PageDef("Pages/Xml/WalletPage.xml")]
-    internal class WalletPage : Page, IReceiver<SPVNodeBlockInfo>, IReceiver<SPVUpdatedWalletMessage>, IReceiver<UpdateSendButtonMessage>
+    internal class WalletPage : Page, IReceiver<SPVNodeBlockInfo>, IReceiver<SPVUpdatedWalletMessage>, IReceiver<UpdateSendButtonMessage>, IReceiver<UpdateSPVTextMessage>
 	{
 
 		private Texture2D _qrCodeImage;
@@ -26,9 +26,11 @@ namespace DogecoinTerminal.Pages
 		private SimpleSPVNodeService _spvNode;
 
 		private ButtonControl _sendButton;
+		private IServiceProvider _services;
 
 		public WalletPage(IPageOptions options, IServiceProvider services,  IClipboardService clipboard, ITerminalSettings settings, Navigation navigation, Strings strings, GraphicsDevice graphicsDevice, SimpleSPVNodeService spvNode) : base(options)
         {
+			_services = services;
 			_wallet = options.GetOption<SimpleDogeWallet>("wallet");
 
 			var isNew = options.GetOption<bool>("is-new", false);
@@ -38,6 +40,7 @@ namespace DogecoinTerminal.Pages
 			Messenger.Default.Register<SPVNodeBlockInfo>(this);
 			Messenger.Default.Register<SPVUpdatedWalletMessage>(this);
 			Messenger.Default.Register<UpdateSendButtonMessage>(this);
+			Messenger.Default.Register<UpdateSPVTextMessage>(this);
 
 
 			_spvNode.SetWallet(_wallet);
@@ -141,6 +144,8 @@ namespace DogecoinTerminal.Pages
 					return;
 				}
 
+
+
 				var sendYesNo = await navigation.PromptAsync<TransactionConfirmPage>(("tx", transaction), ("target", target));
 
 				if(sendYesNo.Response != PromptResponse.YesConfirm)
@@ -171,6 +176,7 @@ namespace DogecoinTerminal.Pages
 					navigation.Pop();
 					return;
 				}
+
 
 
 				_spvNode.Stop();
@@ -216,12 +222,17 @@ namespace DogecoinTerminal.Pages
 			Messenger.Default.Deregister<SPVNodeBlockInfo>(this);
 			Messenger.Default.Deregister<SPVUpdatedWalletMessage>(this);
 			Messenger.Default.Deregister<UpdateSendButtonMessage>(this);
+			Messenger.Default.Deregister<UpdateSPVTextMessage>(this);
 		}
 
 		private void UpdateSPVText()
 		{
+			var estimatedFee = Math.Max(_services.GetService<ITerminalSettings>().GetDecimal("dust-limit") * _services.GetService<ITerminalSettings>().GetDecimal("fee-coeff"),
+										_spvNode.EstimatedRate * 226 * _services.GetService<ITerminalSettings>().GetDecimal("fee-coeff"));
 
-			GetControl<TextControl>("SPVNodeInfo").Text = $"{_spvNode.CurrentBlock.BlockHeight}/~{_spvNode.EstimatedHeight} @ {_spvNode.CurrentBlock.Timestamp.ToLocalTime()}";
+
+			GetControl<TextControl>("SPVNodeInfo").Text = $"{_spvNode.CurrentBlock.BlockHeight}/~{_spvNode.EstimatedHeight} @ {_spvNode.CurrentBlock.Timestamp.ToLocalTime()}\n" +
+				$"{estimatedFee}";
 
 		}
 
@@ -231,6 +242,11 @@ namespace DogecoinTerminal.Pages
 			var screen = services.GetService<VirtualScreen>();
 			screen.DrawImage(_qrCodeImage, new Microsoft.Xna.Framework.Point(50, 60), new Microsoft.Xna.Framework.Point(40, 40));
 			base.Draw(gameTime, services);
+		}
+
+		public void Receive(UpdateSPVTextMessage message)
+		{
+			UpdateSPVText();
 		}
 
 		public void Receive(SPVUpdatedWalletMessage message)

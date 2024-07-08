@@ -437,7 +437,18 @@ namespace Lib.Dogecoin.Interop
 
 		[DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void dogecoin_node_group_connect_next_nodes(IntPtr group);
-		
+
+
+		[DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		public static unsafe extern void dogecoin_tx_serialize(cstring* s, dogecoin_tx* tx);
+
+		[DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		public static unsafe extern cstring* cstr_new_sz(int sz);
+
+
+        [DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr utils_hex_to_uint8(char[] chars);
+
 		#endregion SPV
 
 	}

@@ -106,9 +106,9 @@ namespace DogecoinTerminal
 				_settings.Set("dust-limit", SimpleDogeWallet.DEFAULT_DUST_LIMIT);
 			}
 
-			if (!_settings.IsSet("fee-per-utxo"))
+			if (!_settings.IsSet("fee-coeff"))
 			{
-				_settings.Set("fee-per-utxo", SimpleDogeWallet.DEFAULT_FEE_PER_UTXO);
+				_settings.Set("fee-coeff", SimpleDogeWallet.DEFAULT_FEE_COEFF);
 			}
 
 			Strings.Current.SelectLanguage(
@@ -223,7 +223,7 @@ namespace DogecoinTerminal
 				//start on the language selection screen:
 				Task.Run(async () =>
 				{
-					await _nav.PromptAsync<DisclaimerPage>();
+				//	await _nav.PromptAsync<DisclaimerPage>();
 					await _nav.PromptAsync<LanguageSelectionPage>();
 					await _nav.TryInsertBeforeAsync<SetupWalletPage, LoadingPage>();
 					_nav.Pop();
@@ -236,7 +236,7 @@ namespace DogecoinTerminal
 
 				Task.Run(async () =>
 				{
-					await _nav.PromptAsync<DisclaimerPage>();
+			//		await _nav.PromptAsync<DisclaimerPage>();
 					_nav.Pop();
 				});
 
