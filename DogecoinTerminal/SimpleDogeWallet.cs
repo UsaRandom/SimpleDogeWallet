@@ -161,7 +161,10 @@ namespace DogecoinTerminal
 				{
 					simpleDogeWallet = new SimpleDogeWallet(address, services);
 				}
-
+				else
+				{
+					simpleDogeWallet = Instance;
+				}
 
 				return true;
 			}
