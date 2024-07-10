@@ -5,6 +5,7 @@ using DogecoinTerminal.Common;
 using System.Linq;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Threading;
 
 
 namespace DogecoinTerminal
@@ -77,7 +78,6 @@ namespace DogecoinTerminal
 
 
 
-			//NOTE: I might want to change this to fee per byte.
 			decimal fee = ratePerByte * 225;
             decimal feePerUtxo = ratePerByte * 148;
 			decimal sum = 0M;
@@ -187,7 +187,10 @@ namespace DogecoinTerminal
         }
 
 		public async Task BroadcastAsync()
-		{
+        { 
+            var cancelTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+            var cancelToken = cancelTokenSource.Token;
+
 			var processStartInfo = new ProcessStartInfo("sendtx.exe", "-m 64 -s 30 "+GetRawTransaction())
 			{
 				UseShellExecute = false,
@@ -207,7 +210,24 @@ namespace DogecoinTerminal
 			process.BeginOutputReadLine();
 			process.BeginErrorReadLine();
 
-			await process.WaitForExitAsync();
+			try
+			{
+				await process.WaitForExitAsync(cancelToken);
+			}
+			catch (OperationCanceledException)
+			{
+                try
+                {
+                    
+                    process.Kill();
+                }
+                catch
+                {
+                
+                }
+				Console.WriteLine("Process timed out after 30 seconds");
+			}
+
 		}
 	}
 	

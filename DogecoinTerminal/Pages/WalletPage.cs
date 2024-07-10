@@ -22,7 +22,6 @@ namespace DogecoinTerminal.Pages
 
 		private Texture2D _qrCodeImage;
 
-		private SimpleDogeWallet _wallet;
 		private SimpleSPVNodeService _spvNode;
 
 		private ButtonControl _sendButton;
@@ -31,7 +30,6 @@ namespace DogecoinTerminal.Pages
 		public WalletPage(IPageOptions options, IServiceProvider services,  IClipboardService clipboard, ITerminalSettings settings, Navigation navigation, Strings strings, GraphicsDevice graphicsDevice, SimpleSPVNodeService spvNode) : base(options)
         {
 			_services = services;
-			_wallet = options.GetOption<SimpleDogeWallet>("wallet");
 
 			var isNew = options.GetOption<bool>("is-new", false);
 
@@ -43,7 +41,7 @@ namespace DogecoinTerminal.Pages
 			Messenger.Default.Register<UpdateSPVTextMessage>(this);
 
 
-			_spvNode.SetWallet(_wallet);
+			_spvNode.SetWallet(SimpleDogeWallet.Instance);
 			_spvNode.Start(isNew);
 
 			_sendButton = GetControl<ButtonControl>("SendButton");
@@ -52,11 +50,11 @@ namespace DogecoinTerminal.Pages
 
 
 			var addressTextControl = GetControl<TextControl>("AddressText");
-			addressTextControl.Text = _wallet.Address;
+			addressTextControl.Text = SimpleDogeWallet.Instance.Address;
 
 
             var balanceTextControl = GetControl<TextControl>("BalanceText");
-			balanceTextControl.Text = $"Đ {(_wallet.GetBalance() ):#,0.000}";
+			balanceTextControl.Text = $"Đ {(SimpleDogeWallet.Instance.GetBalance() ):#,0.000}";
 
 			_qrCodeImage = new Texture2D(graphicsDevice, 480, 480);
 
@@ -81,7 +79,7 @@ namespace DogecoinTerminal.Pages
 			});
 			OnClick("CopyButton", async _ =>
 			{
-				clipboard.SetClipboardContents(_wallet.Address);
+				clipboard.SetClipboardContents(SimpleDogeWallet.Instance.Address);
 			});
 
 			OnClick("LockButton", async _ =>
@@ -98,7 +96,7 @@ namespace DogecoinTerminal.Pages
 
 			OnClick("SendButton", async _ =>
 			{
-				if(!_spvNode.SyncCompleted || _wallet.PendingAmount != 0)
+				if(!_spvNode.SyncCompleted || SimpleDogeWallet.Instance.PendingAmount != 0)
 				{
 					return;
 				}
@@ -115,9 +113,9 @@ namespace DogecoinTerminal.Pages
 
 				var target = (Contact)destinationResult.Value;
 
-				var maxSpend = _wallet.GetBalance();
+				var maxSpend = SimpleDogeWallet.Instance.GetBalance();
 
-				maxSpend -= (_wallet.UTXOs.Count + 2) * settings.GetDecimal("fee-per-utxo");
+				maxSpend -= (SimpleDogeWallet.Instance.UTXOs.Count + 2) * settings.GetDecimal("fee-per-utxo");
 
 				var amountResult = await navigation.PromptAsync<NumPadPage>(("value-mode", true),
 																			("title", strings.GetString("terminal-sendamount-title")),
@@ -135,7 +133,7 @@ namespace DogecoinTerminal.Pages
 					return;
 				}
 
-				var transaction = new DogecoinTransaction(services, _wallet);
+				var transaction = new DogecoinTransaction(services, SimpleDogeWallet.Instance);
 
 				if (!transaction.Send(target.Address, amountToSend))
 				{
@@ -195,8 +193,8 @@ namespace DogecoinTerminal.Pages
 
 				await navigation.PromptAsync<ShortMessagePage>(("message", "Broadcast Attempted! (check console for verification)"));
 
-				_wallet.PendingTxHash = txId;
-				_wallet.PendingAmount = transaction.Total;
+				SimpleDogeWallet.Instance.PendingTxHash = txId;
+				SimpleDogeWallet.Instance.PendingAmount = transaction.Total;
 
 
 				UpdateSendButton();
@@ -266,15 +264,15 @@ namespace DogecoinTerminal.Pages
 
 		private void UpdateSendButton()
 		{
-			GetControl<TextControl>("BalanceText").Text = $"Đ {_wallet.GetBalance():#,0.000}";
+			GetControl<TextControl>("BalanceText").Text = $"Đ {SimpleDogeWallet.Instance.GetBalance():#,0.000}";
 
-			if(_wallet.PendingAmount == 0)
+			if(SimpleDogeWallet.Instance.PendingAmount == 0)
 			{
 				GetControl<TextControl>("PendingText").Text = string.Empty;
 			}
 			else
 			{
-				GetControl<TextControl>("PendingText").Text = $"(Đ -{_wallet.PendingAmount:#,0.000})";
+				GetControl<TextControl>("PendingText").Text = $"(Đ -{SimpleDogeWallet.Instance.PendingAmount:#,0.000})";
 			}
 
 			if (!_spvNode.SyncCompleted)
@@ -282,7 +280,7 @@ namespace DogecoinTerminal.Pages
 				_sendButton.BackgroundColor = TerminalColor.Grey;
 				_sendButton.StringDef = "terminal-wallet-syncing";
 			}
-			else if(_wallet.PendingAmount != 0)
+			else if(SimpleDogeWallet.Instance.PendingAmount != 0)
 			{
 				_sendButton.BackgroundColor = TerminalColor.Red;
 				_sendButton.StringDef = "terminal-wallet-pending";

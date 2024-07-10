@@ -156,9 +156,13 @@ namespace DogecoinTerminal
 					return false;
 				}
 
-				simpleDogeWallet = new SimpleDogeWallet(address, services);
 
-				
+				if(Instance == null)
+				{
+					simpleDogeWallet = new SimpleDogeWallet(address, services);
+				}
+
+
 				return true;
 			}
 			catch (Exception ex)
