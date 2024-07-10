@@ -113,9 +113,22 @@ namespace DogecoinTerminal.Pages
 
 				var target = (Contact)destinationResult.Value;
 
+
 				var maxSpend = SimpleDogeWallet.Instance.GetBalance();
 
-				maxSpend -= (SimpleDogeWallet.Instance.UTXOs.Count + 2) * settings.GetDecimal("fee-per-utxo");
+
+				var rate = _services.GetService<SimpleSPVNodeService>().EstimatedRate;
+				var feeCoeff = _services.GetService<ITerminalSettings>().GetDecimal("fee-coeff");
+
+
+
+				var ratePerByte = rate * feeCoeff;
+
+
+
+				maxSpend -= ratePerByte * (225 +  (SimpleDogeWallet.Instance.UTXOs.Count - 1) * 148);
+
+
 
 				var amountResult = await navigation.PromptAsync<NumPadPage>(("value-mode", true),
 																			("title", strings.GetString("terminal-sendamount-title")),
@@ -229,8 +242,7 @@ namespace DogecoinTerminal.Pages
 										_spvNode.EstimatedRate * 226 * _services.GetService<ITerminalSettings>().GetDecimal("fee-coeff"));
 
 
-			GetControl<TextControl>("SPVNodeInfo").Text = $"{_spvNode.CurrentBlock.BlockHeight}/~{_spvNode.EstimatedHeight} @ {_spvNode.CurrentBlock.Timestamp.ToLocalTime()}\n" +
-				$"{estimatedFee}";
+			GetControl<TextControl>("SPVNodeInfo").Text = $"{_spvNode.CurrentBlock.BlockHeight}/~{_spvNode.EstimatedHeight} @ {_spvNode.CurrentBlock.Timestamp.ToLocalTime()} - {estimatedFee}";
 
 		}
 

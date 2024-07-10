@@ -84,9 +84,21 @@ namespace DogecoinTerminal
 			int utxoCount = 0; //min 2 utxo (receipient + change)
 
 
-            //UTXOs who's value is greater than the fee + dustlimit * 2  (so it makes sense to spend it)
-            //Order by desc, so bigger UTXOs first.
-            var spendableUTXOs = Wallet.UTXOs.Where(utxo => utxo.Amount > (fee + dustLimit * 2))
+
+
+            //detect if we are spending everything
+			var maxSpend = SimpleDogeWallet.Instance.GetBalance();
+            bool spendingAll = false;
+			maxSpend -= ratePerByte * (225 + (SimpleDogeWallet.Instance.UTXOs.Count - 1) * 148);
+
+            if(Math.Abs(maxSpend - amount) < dustLimit)
+            {
+                spendingAll = true;
+			}
+
+			//UTXOs who's value is greater than the fee + dustlimit * 2  (so it makes sense to spend it)
+			//Order by desc, so bigger UTXOs first.
+			var spendableUTXOs = Wallet.UTXOs.Where(utxo => utxo.Amount > (fee + dustLimit * 2))
                                              .OrderByDescending(a => a.Amount);
 
             var utxoEnumerator = spendableUTXOs.GetEnumerator();
@@ -138,7 +150,7 @@ namespace DogecoinTerminal
             From = Wallet.Address;
 
 
-            if (Remainder > dustLimit)
+            if (Remainder > dustLimit && !spendingAll)
             {
 
                 if (!_ctx.AddOutput(_workingTransactionId, From, remainderStr))
