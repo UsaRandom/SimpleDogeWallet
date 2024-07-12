@@ -1,13 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Strings>
 
+  <String Id="terminal-contacts-title"><![CDATA[연락처]]></String>
+  <String Id="terminal-contacts-updatecontact-update"><![CDATA[업데이트]]></String>
+  <String Id="terminal-contacts-addcontact-add"><![CDATA[추가]]></String>
+  <String Id="terminal-contacts-addcontact-title"><![CDATA[연럭초 추가]]></String>
+  <String Id="terminal-contacts-addcontact-hint"><![CDATA[연락처 이름 입력하십시오:]]></String>
+
+  <String Id="terminal-qrscanner-hint"><![CDATA[정상적인 도지코인 주소가 아닙니다:]]></String>
+  <String Id="terminal-qrscanner-title"><![CDATA[QR 코드 찍기]]></String>  
+
+  <String Id="common-contacts-unknown"><![CDATA[미등록 연락처]]></String>
+
+  
+  <String Id="common-numpad-title"><![CDATA[Pin 입력:]]></String>
+  <String Id="common-loading-title"><![CDATA[매일 좋은 일만 하자...]]></String>
+  <String Id="common-shortmsg-okbutton"><![CDATA[확인]]></String>
+  <String Id="common-yesno-yes"><![CDATA[네]]></String>
+  <String Id="common-yesno-no"><![CDATA[N아니요]]></String>
+
+
   <String Id="terminal-title"><![CDATA[간단한 도지 지갑]]></String>
 
 
   <String Id="terminal-disclaimer-title"><![CDATA[경고: 개발 현재 진행중!]]></String>
   <String Id="terminal-disclaimer-text1">
     <![CDATA[  해당 프로그램의 품질이 완전하지 않으며 대체적인
-조잡함으로 인하여 그 누구도 사용이 권장되지 않습니다.]]></String>
+조잡함으로 인하여 그 누구도 사용이 권장되지 않습니다.]]>
+  </String>
   <String Id="terminal-disclaimer-text2"><![CDATA[자신의 책임하에 진행하십시오!]]></String>
 
 
@@ -18,7 +38,8 @@
 
  ● 10 분
  ● 프라이버시
- ● 펜 & 종이]]></String>
+ ● 펜 & 종이]]>
+  </String>
 
   <String Id="terminal-setup-loadwalletinfo">
     <![CDATA[필요 준비물:
@@ -40,10 +61,11 @@
 
 
   <String Id="terminal-setup-tpm-is-full"><![CDATA[TPM이 가득차 있습니다. 지갑 생성 불가.]]></String>
-  
+
 
   <Strings Id="terminal-backupcodes-title">
-<![CDATA[종이에 백업 암호 구문 작성후 안전한 곳에 보관하기 바랍니다.]]></Strings>
+    <![CDATA[종이에 백업 암호 구문 작성후 안전한 곳에 보관하기 바랍니다.]]>
+  </Strings>
 
   <Strings Id="terminal-backupcodes-load-title">
     <![CDATA[12 또는 24 단어 백업 암호 구문 입력:]]>
@@ -52,7 +74,8 @@
   <Strings Id="terminal-backupcodes-load-badmnemonic">
     <![CDATA[백업 암호 구문 입력 에러.
     12/24 단어가 맞는지 확인하시기 바랍니다.
-              재시도?]]></Strings>
+              재시도?]]>
+  </Strings>
 
 
 
@@ -61,8 +84,9 @@
   <String Id="terminal-settings-background"><![CDATA[배경화면]]></String>
   <String Id="terminal-settings-fullscreen">
     <![CDATA[    전체화면
-(재시작 필요)]]></String>
-  
+(재시작 필요)]]>
+  </String>
+
   <String Id="terminal-settings-devmode"><![CDATA[개발자 모드]]></String>
   <String Id="terminal-settings-dustlimit"><![CDATA[Dust 제한:]]></String>
   <String Id="terminal-settings-feeperutxo"><![CDATA[UTXO 당 수수료:]]></String>
@@ -79,7 +103,7 @@
   <String Id="terminal-settings-clearpending"><![CDATA[대기건 정리]]></String>
   <String Id="terminal-settings-delete"><![CDATA[지갑 삭제]]></String>
 
-  
+
 
   <String Id="terminal-settings-clearpending-confirm">
     <![CDATA[송금 실패시에 만 하시기 바랍니다,
@@ -88,8 +112,9 @@
   </String>
 
   <String Id="terminal-settings-delete-confirm">
-<![CDATA[               해당 지갑 삭제?
-(암호 구문 백업이 있는지 꼭 확인 바랍니다!)]]></String>
+    <![CDATA[               해당 지갑 삭제?
+(암호 구문 백업이 있는지 꼭 확인 바랍니다!)]]>
+  </String>
 
   <String Id="terminal-settings-delete-confirm-pin">
     <![CDATA[PIN 입력하여 지갑 삭제!]]>
@@ -108,18 +133,18 @@
   <String Id="terminal-sendamount-title"><![CDATA[보낼 수량]]></String>
 
   <String Id="terminal-send-confirm-title"><![CDATA[송금 확인]]></String>
-  
+
   <String Id="terminal-send-confirm-amount"><![CDATA[수량:]]></String>
   <String Id="terminal-send-confirm-to"><![CDATA[받는 이:]]></String>
   <String Id="terminal-send-confirm-fee"><![CDATA[네트워크 수수료:]]></String>
   <String Id="terminal-send-confirm-total"><![CDATA[총합:]]></String>
   <String Id="terminal-send-confirm-confirm"><![CDATA[확인]]></String>
-  
+
   <Strings Id="terminal-wallet-send"><![CDATA[송금]]></Strings>
   <Strings Id="terminal-wallet-pending"><![CDATA[대기중 송금...]]></Strings>
   <Strings Id="terminal-wallet-syncing"><![CDATA[동기화...]]></Strings>
 
-  
+
   <String Id="terminal-spv-title"><![CDATA[SPV 노드]]></String>
   <String Id="terminal-spv-offline"><![CDATA[(오프라인)]]></String>
   <String Id="terminal-spv-online"><![CDATA[(온라인)]]></String>
@@ -130,20 +155,20 @@
   <String Id="terminal-spv-newutxo"><![CDATA[생성된 UTXO]]></String>
   <String Id="terminal-spv-netutxo"><![CDATA[Net UTXOs]]></String>
 
-  
+
 
   <String Id="terminal-spv-currentblock"><![CDATA[현제 블록]]></String>
   <String Id="terminal-spv-currentblock-hash"><![CDATA[해시]]></String>
   <String Id="terminal-spv-currentblock-height"><![CDATA[높이]]></String>
   <String Id="terminal-spv-currentblock-time"><![CDATA[타임스탬프]]></String>
-  
+
   <String Id="terminal-spv-rescan"><![CDATA[다시 스캔]]></String>
   <String Id="terminal-spv-start"><![CDATA[시작]]></String>
   <String Id="terminal-spv-stop"><![CDATA[종료]]></String>
 
   <String Id="terminal-spv-estimatemaxblock"><![CDATA[추정 블록 높이]]></String>
   <String Id="terminal-spv-estimatemaxblock-hint"><![CDATA[(그렇게 좋은 추정이 아닙니다)]]></String>
-  
+
   <String Id="terminal-spv-sync-title"><![CDATA[다시 스캔]]></String>
   <String Id="terminal-spv-sync-height"><![CDATA[블록 높이:]]></String>
   <String Id="terminal-spv-sync-hash"><![CDATA[블록 해시:]]></String>
@@ -164,6 +189,6 @@
   <Strings Id="terminal-wallet-remove"><![CDATA[지갑 제거]]></Strings>
 
   <String Id="terminal-enteroppin-title"><![CDATA[PIN 입력하여 잠금해제:]]></String>
-  
-  
+
+
 </Strings>

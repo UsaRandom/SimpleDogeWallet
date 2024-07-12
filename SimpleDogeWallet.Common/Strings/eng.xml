@@ -1,13 +1,34 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Strings>
 
+  <String Id="terminal-contacts-title"><![CDATA[Contacts]]></String>
+  <String Id="terminal-contacts-updatecontact-update"><![CDATA[Update]]></String>
+  <String Id="terminal-contacts-addcontact-add"><![CDATA[Add]]></String>
+  <String Id="terminal-contacts-addcontact-title"><![CDATA[Add Contact]]></String>
+  <String Id="terminal-contacts-addcontact-hint"><![CDATA[Enter Name for Contact:]]></String>
+
+  <String Id="terminal-qrscanner-hint"><![CDATA[Not Valid Dogecoin Address:]]></String>
+  <String Id="terminal-qrscanner-title"><![CDATA[Scan QR Code]]></String>
+
+  <String Id="common-contacts-unknown"><![CDATA[Unknown]]></String>
+
+
+  <String Id="common-numpad-title"><![CDATA[Enter Pin:]]></String>
+  <String Id="common-loading-title"><![CDATA[Doing Only Good Everyday...]]></String>
+  <String Id="common-shortmsg-okbutton"><![CDATA[Ok]]></String>
+  <String Id="common-yesno-yes"><![CDATA[Yes]]></String>
+  <String Id="common-yesno-no"><![CDATA[No]]></String>
+
+
+
   <String Id="terminal-title"><![CDATA[Simple Đoge Wallet]]></String>
 
 
   <String Id="terminal-disclaimer-title"><![CDATA[Warning: Work-in-Progress!]]></String>
   <String Id="terminal-disclaimer-text1">
     <![CDATA[The following program is of questionable quality and due to
- the overall shoddiness it should not be used by anyone.]]></String>
+ the overall shoddiness it should not be used by anyone.]]>
+  </String>
   <String Id="terminal-disclaimer-text2"><![CDATA[Proceed at your own risk!]]></String>
 
 
@@ -18,7 +39,8 @@
 
  ● 10 minutes
  ● Privacy
- ● Pen & Paper]]></String>
+ ● Pen & Paper]]>
+  </String>
 
   <String Id="terminal-setup-loadwalletinfo">
     <![CDATA[What you’ll need:
@@ -40,11 +62,12 @@
 
 
   <String Id="terminal-setup-tpm-is-full"><![CDATA[Your TPM is full. Unable to create wallet.]]></String>
-  
+
 
   <Strings Id="terminal-backupcodes-title">
-<![CDATA[Write down backup phrases by hand on paper
-    and store them in a secure location.]]></Strings>
+    <![CDATA[Write down backup phrases by hand on paper
+    and store them in a secure location.]]>
+  </Strings>
 
   <Strings Id="terminal-backupcodes-load-title">
     <![CDATA[Enter your 12 or 24 word backup phrases:]]>
@@ -53,7 +76,8 @@
   <Strings Id="terminal-backupcodes-load-badmnemonic">
     <![CDATA[Error using provided backup phrases.
     Ensure there are 12/24 words.
-              Try Again?]]></Strings>
+              Try Again?]]>
+  </Strings>
 
 
 
@@ -62,12 +86,13 @@
   <String Id="terminal-settings-background"><![CDATA[Background Scene]]></String>
   <String Id="terminal-settings-fullscreen">
     <![CDATA[    Fullscreen
-(Restart Required)]]></String>
-  
+(Restart Required)]]>
+  </String>
+
   <String Id="terminal-settings-devmode"><![CDATA[Developer Mode]]></String>
   <String Id="terminal-settings-dustlimit"><![CDATA[Dust Limit:]]></String>
   <String Id="terminal-settings-feecoeff"><![CDATA[Fee Coefficient:]]></String>
- 
+
 
   <String Id="terminal-settings-oldpin"><![CDATA[Enter Old PIN]]></String>
 
@@ -81,7 +106,7 @@
   <String Id="terminal-settings-clearpending"><![CDATA[Clear Pending]]></String>
   <String Id="terminal-settings-delete"><![CDATA[DELETE WALLET]]></String>
 
-  
+
 
   <String Id="terminal-settings-clearpending-confirm">
     <![CDATA[You should only do this if the tx failed to send,
@@ -90,8 +115,9 @@
   </String>
 
   <String Id="terminal-settings-delete-confirm">
-<![CDATA[               DELETE THIS WALLET?
-(ensure you have a backup of your seed phrases!)]]></String>
+    <![CDATA[               DELETE THIS WALLET?
+(ensure you have a backup of your seed phrases!)]]>
+  </String>
 
   <String Id="terminal-settings-delete-confirm-pin">
     <![CDATA[Confirm PIN to DELETE WALLET!]]>
@@ -110,18 +136,18 @@
   <String Id="terminal-sendamount-title"><![CDATA[Amount to Send]]></String>
 
   <String Id="terminal-send-confirm-title"><![CDATA[Confirm Transaction]]></String>
-  
+
   <String Id="terminal-send-confirm-amount"><![CDATA[Amount:]]></String>
   <String Id="terminal-send-confirm-to"><![CDATA[To:]]></String>
   <String Id="terminal-send-confirm-fee"><![CDATA[Network Fee:]]></String>
   <String Id="terminal-send-confirm-total"><![CDATA[Total:]]></String>
   <String Id="terminal-send-confirm-confirm"><![CDATA[Confirm]]></String>
-  
+
   <Strings Id="terminal-wallet-send"><![CDATA[Send]]></Strings>
   <Strings Id="terminal-wallet-pending"><![CDATA[Pending Tx...]]></Strings>
   <Strings Id="terminal-wallet-syncing"><![CDATA[Syncing...]]></Strings>
 
-  
+
   <String Id="terminal-spv-title"><![CDATA[SPV Node]]></String>
   <String Id="terminal-spv-offline"><![CDATA[(offline)]]></String>
   <String Id="terminal-spv-online"><![CDATA[(online)]]></String>
@@ -132,21 +158,21 @@
   <String Id="terminal-spv-newutxo"><![CDATA[UTXOs Created]]></String>
   <String Id="terminal-spv-netutxo"><![CDATA[Net UTXOs]]></String>
 
-  
+
 
   <String Id="terminal-spv-currentblock"><![CDATA[Current Block]]></String>
   <String Id="terminal-spv-currentblock-hash"><![CDATA[Hash]]></String>
   <String Id="terminal-spv-currentblock-height"><![CDATA[Height]]></String>
   <String Id="terminal-spv-currentblock-time"><![CDATA[Timestamp]]></String>
   <String Id="terminal-spv-currentblock-fee"><![CDATA[Estimated Fee]]></String>
-  
+
   <String Id="terminal-spv-rescan"><![CDATA[Rescan]]></String>
   <String Id="terminal-spv-start"><![CDATA[Start]]></String>
   <String Id="terminal-spv-stop"><![CDATA[Stop]]></String>
 
   <String Id="terminal-spv-estimatemaxblock"><![CDATA[Estimated Block Height]]></String>
   <String Id="terminal-spv-estimatemaxblock-hint"><![CDATA[(not a great estimate mind you)]]></String>
-  
+
   <String Id="terminal-spv-sync-title"><![CDATA[Rescan]]></String>
   <String Id="terminal-spv-sync-height"><![CDATA[Block Height:]]></String>
   <String Id="terminal-spv-sync-hash"><![CDATA[Block Hash:]]></String>
@@ -167,6 +193,5 @@
   <Strings Id="terminal-wallet-remove"><![CDATA[Remove Wallet]]></Strings>
 
   <String Id="terminal-enteroppin-title"><![CDATA[Enter PIN to Unlock:]]></String>
-  
-  
+
 </Strings>

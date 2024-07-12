@@ -10,9 +10,6 @@ namespace SimpleDogeWallet.Common
 		private static Strings _current;
 		private Dictionary<string, string> _strings = new();
 
-
-		
-
 		static Strings()
 		{
 			Current = new Strings();
