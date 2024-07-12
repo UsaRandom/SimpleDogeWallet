@@ -213,7 +213,12 @@ namespace SimpleDogeWallet
 
 		private void HandleOnBlock(SPVNodeBlockInfo previous,  SPVNodeBlockInfo next)
 		{
-			if(CurrentBlock.BlockHeight + 1 != next.BlockHeight)
+			if (!_spvNode.IsRunning)
+			{
+				return;
+			}
+
+			if (CurrentBlock.BlockHeight + 1 != next.BlockHeight)
 			{
 				Debug.WriteLine("Out of order? Ok on first block");
 			}
@@ -226,6 +231,11 @@ namespace SimpleDogeWallet
 
 		private unsafe void HandleOnTransaction(SPVNodeTransaction tx)
 		{
+			if(!_spvNode.IsRunning)
+			{
+				return;
+			}
+
 			bool walletChanged = false;
 
 			TxCount++;
