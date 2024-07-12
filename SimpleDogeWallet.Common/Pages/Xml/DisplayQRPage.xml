@@ -1,0 +1,11 @@
+﻿<Page xmlns:common="SimpleDogeWallet.Common">
+  <common:ImageControl Name="BackButton" StartPosition="5,5" EndPosition="15,15" ImageSource="Content\left-arrow.png" />
+  <common:TextControl Name="MessageText" Color="White" Position="50,10" TextSize="4" Text="D7yLi9JozR1wDNWaainGx8RZJuig9wxtA7" />
+
+  <common:ImageControl
+				Name="NextButton"
+				StartPosition="85,85"
+				EndPosition="95,95"
+				BackgroundColor="Green"
+        ImageSource="Content\right-arrow.png"/>
+</Page>

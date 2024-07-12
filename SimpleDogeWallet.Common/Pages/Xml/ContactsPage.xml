@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Page xmlns:common="SimpleDogeWallet.Common">
+
+  <common:ImageControl Name="BackButton" StartPosition="5,5" EndPosition="15,15" ImageSource="Content\left-arrow.png" />
+
+  <common:TextControl Name="TitleText" Color="White" Position="50,13" TextSize="6" StringDef="terminal-contacts-title" />
+
+  <common:ImageControl StartPosition="82,5"
+         EndPosition="95,18"
+         Name="Doge"
+         ImageSource="Content/dogedrawn.png"/>
+
+
+  <common:TextInputControl StartPosition="12,22" EndPosition="68, 28"
+                           TextSize="3" Name="SearchBar" 
+                           BackgroundColor="White" ForegroundColor="DarkGrey" />
+  
+  
+  
+  <common:ImageControl StartPosition="70,21"
+         EndPosition="78,29"
+         Name="PasteButton"
+         BackgroundColor="DarkGrey"
+         ImageSource="Content/paste-button.png"/>
+  
+  <common:ImageControl StartPosition="80,21"
+         EndPosition="88,29"
+         Name="QRButton"
+         BackgroundColor="DarkGrey"
+         ImageSource="Content/qr-icon.png"/>
+
+  <common:ContactControl StartPosition="10,32"
+         EndPosition="34,47"
+         Name="Contact0"
+         ForegroundColor="White"
+         BackgroundColor="DarkGrey"/>
+  <common:ContactControl StartPosition="38,32"
+         EndPosition="62,47"
+         Name="Contact1"
+         ForegroundColor="White"
+         BackgroundColor="DarkGrey"/>
+  <common:ContactControl StartPosition="66,32"
+         EndPosition="90,47"
+         Name="Contact2"
+         ForegroundColor="White"
+         BackgroundColor="DarkGrey"/>
+
+
+
+  <common:ContactControl StartPosition="10,49"
+         EndPosition="34,64"
+         Name="Contact3"
+         TextSize="4"
+         ForegroundColor="White"
+         BackgroundColor="DarkGrey"/>
+  <common:ContactControl StartPosition="38,49"
+         EndPosition="62,64"
+         Name="Contact4"
+         TextSize="3"
+         ForegroundColor="White"
+         BackgroundColor="DarkGrey"/>
+  <common:ContactControl StartPosition="66,49"
+         EndPosition="90,64"
+         TextSize="3"
+         Name="Contact5"
+         ForegroundColor="White"
+         BackgroundColor="DarkGrey"/>
+
+
+
+  <common:ContactControl StartPosition="10,66"
+         EndPosition="34,81"
+         Name="Contact6"
+         ForegroundColor="White"
+         BackgroundColor="DarkGrey"/>
+  <common:ContactControl StartPosition="38,66"
+         EndPosition="62,81"
+         Name="Contact7"
+         ForegroundColor="White"
+         BackgroundColor="DarkGrey"/>
+  <common:ContactControl StartPosition="66,66"
+         EndPosition="90,81"
+         Name="Contact8"
+         ForegroundColor="White"
+         BackgroundColor="DarkGrey"/>
+
+
+  <common:TextControl Name="PageCountText" Color="White" Position="20,90" TextSize="3" />
+
+  <common:ImageControl
+				Name="SubmitButton"
+				StartPosition="85,85"
+				EndPosition="95,95"
+        Enabled="false"
+				BackgroundColor="Green"
+        ImageSource="Content\right-arrow.png"/>
+
+
+  <common:ImageControl
+				Name="DeleteButton"
+				StartPosition="85,85"
+				EndPosition="95,95"
+				BackgroundColor="Red"
+        ImageSource="Content\trash-icon.png"/>
+
+  <common:ImageControl
+				Name="EditButton"
+				StartPosition="72,85"
+				EndPosition="82,95"
+				BackgroundColor="Blue"
+        ImageSource="Content\edit-icon.png"/>
+
+  <common:ImageControl
+				Name="CopyButton"
+				StartPosition="59,85"
+				EndPosition="69,95"
+				BackgroundColor="DarkGrey"
+        ImageSource="Content\copy-button.png"/>
+
+
+
+
+  <common:ImageControl StartPosition="2,45"
+         EndPosition="8,55"
+         Name="LeftArrow"
+         ImageSource="Content/simple-arrow-left-dim.png"/>
+
+
+  <common:ImageControl StartPosition="92,45"
+         EndPosition="98,55"
+         Name="RightArrow"
+         ImageSource="Content/simple-arrow-right.png"/>
+
+
+</Page>

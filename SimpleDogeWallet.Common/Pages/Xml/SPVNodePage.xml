@@ -1,0 +1,22 @@
+﻿<Page xmlns:common="SimpleDogeWallet.Common">
+  <common:ImageControl Name="Doge" StartPosition="82,5" EndPosition="95,18" ImageSource="Content/dogedrawn.png" />
+
+  <common:ImageControl Name="BackButton" StartPosition="5,5" EndPosition="15,15" ImageSource="Content\left-arrow.png" />
+  
+  <common:TextControl Name="TitleText" Color="White" Position="50,13" TextSize="6"
+                      StringDef="terminal-spv-title" />
+
+  <common:TextControl Name="OnlineOfflineText" Color="Red" Position="50,18" TextSize="3"/>
+  
+
+  <common:TextControl Name="SPVInfoText" Color="White" Position="12,40" TextSize="2" Anchor="TopLeft"/>
+  <common:ImageControl Name="CopyButton" StartPosition="81,68" EndPosition="89,76"
+                       ImageSource="Content\copy-button.png" BackgroundColor="DarkGrey" />
+
+
+  <common:ButtonControl Name="RescanButton" StartPosition="5,85" EndPosition="25,95" TextSize="4"
+                       ForegroundColor="White" BackgroundColor="Blue" StringDef="terminal-spv-rescan"/>
+  
+  <common:ButtonControl Name="StartStopButton" StartPosition="75,85" EndPosition="95,95" TextSize="4"
+                       ForegroundColor="White" BackgroundColor="Green" StringDef="terminal-spv-start"/>
+</Page>

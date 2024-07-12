@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Page xmlns:common="SimpleDogeWallet.Common">
+
+  <common:ImageControl StartPosition="40,25"
+         EndPosition="60,45"
+         Name="Doge"
+         ImageSource="Content/dogedrawn.png"/>
+
+  <common:TextControl StringDef="terminal-title"
+        Name="TitleText"
+        Color="White"
+        TextSize="6"
+        Position="50,50"/>
+
+  <common:ButtonControl StringDef="terminal-unlockpage-unlockbutton"
+          StartPosition="40,60"
+          EndPosition="60,70"
+          BackgroundColor="Green"
+          ForegroundColor="White"
+          TextSize="4"
+          Name="UnlockButton"/>
+
+
+  <common:ButtonControl StringDef="terminal-unlockpage-exitbutton"
+          StartPosition="45,75"
+          EndPosition="55,80"
+          BackgroundColor="DarkGrey"
+          ForegroundColor="White"
+          TextSize="3"
+          Name="ExitButton"/>
+
+</Page>

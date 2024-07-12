@@ -1,0 +1,22 @@
+﻿<Page xmlns:common="SimpleDogeWallet.Common">
+  <common:ImageControl Name="Doge" StartPosition="82,5" EndPosition="95,18" ImageSource="Content/dogedrawn.png" />
+
+  <common:ImageControl Name="BackButton" StartPosition="5,5" EndPosition="15,15" ImageSource="Content\left-arrow.png" />
+
+  <common:TextControl Name="TitleText" Color="White" Position="50,13" TextSize="6"
+                      StringDef="terminal-send-confirm-title" />
+
+  <common:TextControl Name="TransactionAmount" Color="White" Position="43,40" TextSize="5" Anchor="TopRight" StringDef="terminal-send-confirm-amount"/>
+  <common:TextControl Name="TransactionTo" Color="White" Position="43,46" TextSize="5" Anchor="TopRight" StringDef="terminal-send-confirm-to"/>
+  <common:TextControl Name="TransactionFee" Color="White" Position="43,52" TextSize="5" Anchor="TopRight" StringDef="terminal-send-confirm-fee"/>
+  <common:TextControl Name="TransactionTotal" Color="White" Position="43,60" TextSize="5" Anchor="TopRight" StringDef="terminal-send-confirm-total"/>
+
+
+  <common:TextControl Name="TransactionAmountVal" Color="White" Position="77,40" TextSize="5" Anchor="TopRight"/>
+  <common:TextControl Name="TransactionToVal" Color="White" Position="77,46" TextSize="5" Anchor="TopRight"/>
+  <common:TextControl Name="TransactionFeeVal" Color="White" Position="77,52" TextSize="5" Anchor="TopRight"/>
+  <common:TextControl Name="TransactionTotalVal" Color="White" Position="77,60" TextSize="5" Anchor="TopRight"/>
+
+  <common:ButtonControl StartPosition="75,85" EndPosition="95,95" TextSize="4" Name="SendButton" BackgroundColor="Green" ForegroundColor="White" StringDef="terminal-send-confirm-confirm" />
+
+</Page>
