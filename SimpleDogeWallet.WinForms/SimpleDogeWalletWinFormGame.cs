@@ -44,6 +44,8 @@ namespace SimpleDogeWallet.WinForms
 		protected override void Initialize()
 		{
 
+			base.Initialize();
+
 			_notifyIcon = new System.Windows.Forms.NotifyIcon();
 			_notifyIcon.Icon = new System.Drawing.Icon("Icon.ico");
 			_notifyIcon.Text = "Simple Doge Wallet";
@@ -60,7 +62,7 @@ namespace SimpleDogeWallet.WinForms
 			// Create a "Copy Address" button
 			ToolStripMenuItem copyAddressButton = new ToolStripMenuItem("Copy Address");
 			copyAddressButton.Click += (sender, e) => {
-				Clipboard.SetText("oh hi heres your dogecoin address");
+				Clipboard.SetText(_settings.GetString("address"));
 			};
 
 			// Create a label to display some text
@@ -74,7 +76,6 @@ namespace SimpleDogeWallet.WinForms
 			Exiting += SimpleDogeWalletGame_Exiting;
 
 
-			base.Initialize();
 		}
 
 
