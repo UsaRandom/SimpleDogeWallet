@@ -43,7 +43,8 @@ namespace SimpleDogeWallet
 		long blockSize = 0;
 
 		private LimitedQueue<long> blockFees = new LimitedQueue<long>(30);
-		private LimitedQueue<UTXO> utxos = new LimitedQueue<UTXO>(25000);
+		private UTXOSampleIndex utxos = new UTXOSampleIndex(25000);
+
 
 		
 
@@ -287,7 +288,7 @@ namespace SimpleDogeWallet
 
 
 			//Fee Calculation
-
+			
 			if (tx.BlockHeight > currentBlock)
 			{
 				if (currentBlock != 0)
@@ -313,7 +314,7 @@ namespace SimpleDogeWallet
 
 			foreach (var input in tx.In)
 			{
-				var i = utxos.Where(o => o.TxId == input.TxId && o.VOut == input.VOut).FirstOrDefault();
+				var i = utxos.GetUTXOOrDefault(input.TxId, input.VOut);
 				if (i == default(UTXO))
 				{
 					allInputsPresent = false;
@@ -339,6 +340,8 @@ namespace SimpleDogeWallet
 			{
 				utxos.Enqueue(o);
 			}
+
+			
 
 		}
 
@@ -369,6 +372,32 @@ namespace SimpleDogeWallet
 	}
 
 
+	class UTXOSampleIndex : Queue<UTXO>
+	{
+		private readonly int _limit;
+		private Dictionary<string, UTXO> _index;
+
+		public UTXOSampleIndex(int limit) : base(limit)
+		{
+			_limit = limit;
+			_index = new Dictionary<string, UTXO>(limit);
+		}
+
+		public new void Enqueue(UTXO item)
+		{
+			if (Count >= _limit)
+			{
+				var utxoToRemvoe = Dequeue(); // Kick out the oldest utxo
+				_index.Remove(utxoToRemvoe.TxId + utxoToRemvoe.VOut);
+			}
+			base.Enqueue(item);
+		}
+
+		public UTXO GetUTXOOrDefault(string txId, int vout)
+		{
+			return _index.GetValueOrDefault(txId + vout);
+		}
+	}
 
 	class LimitedQueue<T> : Queue<T>
 	{
