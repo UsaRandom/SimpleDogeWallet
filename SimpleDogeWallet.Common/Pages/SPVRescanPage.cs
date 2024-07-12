@@ -54,8 +54,8 @@ namespace SimpleDogeWallet.Pages
 				
 				spvNodeService.Rescan(new Lib.Dogecoin.SPVNodeBlockInfo()
 				{
-					Hash = GetControl<TextInputControl>("BlockHashText").Text,
-					BlockHeight = uint.Parse(Regex.Replace(GetControl<TextInputControl>("BlockHeightText").Text, @"[^\d]", ""))
+					Hash = hash,
+					BlockHeight = blockHeight
 				});
 				navigation.Pop();
 			});

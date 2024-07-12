@@ -6,7 +6,7 @@ using System;
 namespace SimpleDogeWallet.Pages
 {
     [PageDef("Pages/Xml/UnlockTerminalPage.xml")]
-	internal class UnlockTerminalPage : Page
+	public class UnlockTerminalPage : Page
 	{
 		private const string UNLOCK_BUTTON_NAME = "UnlockButton";
 

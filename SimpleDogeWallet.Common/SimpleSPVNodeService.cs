@@ -397,17 +397,17 @@ namespace SimpleDogeWallet
 	}
 
 
-	class SPVUpdatedWalletMessage
+	public class SPVUpdatedWalletMessage
 	{
 
 	}
 
-	class UpdateSendButtonMessage
+	public class UpdateSendButtonMessage
 	{
 
 	}
 
-	class UpdateSPVTextMessage
+	public class UpdateSPVTextMessage
 	{
 
 	}

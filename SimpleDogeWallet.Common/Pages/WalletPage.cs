@@ -17,7 +17,7 @@ using System.Diagnostics;
 namespace SimpleDogeWallet.Pages
 {
     [PageDef("Pages/Xml/WalletPage.xml")]
-    internal class WalletPage : Page, IReceiver<SPVNodeBlockInfo>, IReceiver<SPVUpdatedWalletMessage>, IReceiver<UpdateSendButtonMessage>, IReceiver<UpdateSPVTextMessage>
+    public class WalletPage : Page, IReceiver<SPVNodeBlockInfo>, IReceiver<SPVUpdatedWalletMessage>, IReceiver<UpdateSendButtonMessage>, IReceiver<UpdateSPVTextMessage>
 	{
 
 		private Texture2D _qrCodeImage;

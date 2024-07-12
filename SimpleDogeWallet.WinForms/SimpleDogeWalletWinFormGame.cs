@@ -4,16 +4,23 @@ using SimpleDogeWallet.Common.BackgroundScenes;
 using System;
 using SimpleDogeWallet;
 using System.Windows.Forms;
+using SimpleDogeWallet.Common;
+using Lib.Dogecoin;
+using System.Threading.Tasks;
+using SimpleDogeWallet.Pages;
+using SimpleDogeWallet.Common.Pages;
 
 
 
 namespace SimpleDogeWallet.WinForms
 {
-	public class SimpleDogeWalletWinFormGame : SimpleDogeWalletGame
+	public class SimpleDogeWalletWinFormGame : SimpleDogeWalletGame, IReceiver<SPVNodeBlockInfo>
 	{
 
-		private System.Windows.Forms.NotifyIcon _notifyIcon;
+		private ToolStripLabel _blockLabel;
+		private ToolStripLabel _currentFees;
 
+		private System.Windows.Forms.NotifyIcon _notifyIcon;
 		private System.Windows.Forms.Form _form;
 
 		protected override void OnResize(Object o, EventArgs evt)
@@ -32,6 +39,19 @@ namespace SimpleDogeWallet.WinForms
 
 			//}
 		}
+
+
+		public void Receive(SPVNodeBlockInfo message)
+		{
+			_blockLabel.Text = "Block: " + message.BlockHeight.ToString("N0");
+
+			var estimatedFee = Math.Max(_settings.GetDecimal("dust-limit") * _settings.GetDecimal("fee-coeff"),
+										_spvNodeService.EstimatedRate * 226 * _settings.GetDecimal("fee-coeff"));
+
+
+			_currentFees.Text = "Fees: " + estimatedFee.ToString("N5");
+		}
+
 		private void notifyIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
 		{
 			if (e.Button == System.Windows.Forms.MouseButtons.Left)
@@ -45,6 +65,8 @@ namespace SimpleDogeWallet.WinForms
 		{
 
 			base.Initialize();
+
+			Messenger.Default.Register(this);
 
 			_notifyIcon = new System.Windows.Forms.NotifyIcon();
 			_notifyIcon.Icon = new System.Drawing.Icon("Icon.ico");
@@ -66,8 +88,25 @@ namespace SimpleDogeWallet.WinForms
 			};
 
 			// Create a label to display some text
-			ToolStripLabel label = new ToolStripLabel("Simple Doge Wallet");
+			var openButton = new ToolStripButton("Simple Doge Wallet");
+
+			openButton.Click += (sender, e) =>
+			{
+				_form.Show();
+				_form.WindowState = System.Windows.Forms.FormWindowState.Normal;
+			};
+
+			_blockLabel = new ToolStripLabel("Block:");
+			_currentFees = new ToolStripLabel("Fees:");
+
+
+			contextMenu.Items.Add(openButton);
+			contextMenu.Items.Add(new ToolStripSeparator());
+			contextMenu.Items.Add(_blockLabel);
+			contextMenu.Items.Add(_currentFees);
+			contextMenu.Items.Add(new ToolStripSeparator());
 			contextMenu.Items.Add(copyAddressButton);
+			contextMenu.Items.Add(new ToolStripSeparator());
 			contextMenu.Items.Add(exitButton);
 
 			// Add the context menu to the notify icon
@@ -97,6 +136,17 @@ namespace SimpleDogeWallet.WinForms
 					form.WindowState = System.Windows.Forms.FormWindowState.Minimized;
 					form.Hide();
 					_notifyIcon.Visible = true;
+
+					Task.Run(async () =>
+					{
+						while(_nav.CurrentPage != null)
+						{
+							_nav.Pop();
+						}
+
+						await _nav.PushAsync<UnlockTerminalPage>();
+
+					});
 				}
 
 
