@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net;
 
 namespace SimpleDogeWallet
 {
@@ -134,9 +135,18 @@ namespace SimpleDogeWallet
 			File.WriteAllText(ADDRESS_FILE, Crypto.Encrypt(address, newPin));
 		}
 
-		public static bool TryOpen(string pin, IServiceProvider services, out SimpleDogeWallet simpleDogeWallet)
+		public static void Init(IServiceProvider services)
 		{
-			simpleDogeWallet = null;
+
+			if (Instance == null)
+			{
+				_instance = new SimpleDogeWallet(services.GetService<ITerminalSettings>().GetString("address"), services);
+			}
+
+		}
+
+		public static bool TryOpen(string pin)
+		{
 			try
 			{
 				var address = Crypto.Decrypt(File.ReadAllText(ADDRESS_FILE), pin);
@@ -146,15 +156,6 @@ namespace SimpleDogeWallet
 					return false;
 				}
 
-
-				if(Instance == null)
-				{
-					simpleDogeWallet = new SimpleDogeWallet(address, services);
-				}
-				else
-				{
-					simpleDogeWallet = Instance;
-				}
 
 				return true;
 			}
@@ -224,6 +225,9 @@ namespace SimpleDogeWallet
 
 		public static void ClearWallet()
 		{
+			_instance.Services.GetService<ITerminalSettings>().Set("address", string.Empty);
+			_instance = null;
+			
 			File.Delete(ADDRESS_FILE);
 			File.Delete(LOADED_MNEMONIC_FILE);
 			File.Delete(UTXO_FILE);

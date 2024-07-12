@@ -19,11 +19,9 @@ namespace SimpleDogeWallet.Pages
 				var numPadResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-enteroppin-title"]));
 
 				if (numPadResponse.Response == PromptResponse.YesConfirm &&
-					SimpleDogeWallet.TryOpen(numPadResponse.Value.ToString(),
-												services,
-												out SimpleDogeWallet simpleWallet))
+					SimpleDogeWallet.TryOpen(numPadResponse.Value.ToString()))
 				{
-					await navigation.TryInsertBeforeAsync<WalletPage, LoadingPage>(("wallet", simpleWallet)); 
+					await navigation.TryInsertBeforeAsync<WalletPage, LoadingPage>(("wallet", SimpleDogeWallet.Instance)); 
 				}
 				navigation.Pop();
 			});

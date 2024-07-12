@@ -104,7 +104,7 @@ namespace SimpleDogeWallet.Pages
 
 
 				if(oldPinResponse.Response == PromptResponse.NoCancelBack ||
-				   !SimpleDogeWallet.TryOpen((string)oldPinResponse.Value, services, out SimpleDogeWallet _))
+				   !SimpleDogeWallet.TryOpen((string)oldPinResponse.Value))
 				{
 					navigation.Pop();
 					return;
@@ -162,9 +162,9 @@ namespace SimpleDogeWallet.Pages
 
 
 				if (oldPinResponse.Response == PromptResponse.YesConfirm &&
-				   SimpleDogeWallet.TryOpen((string)oldPinResponse.Value, services, out SimpleDogeWallet wallet))
+				   SimpleDogeWallet.TryOpen((string)oldPinResponse.Value))
 				{
-					var mnemonic = wallet.GetMnemonic().Trim();
+					var mnemonic = SimpleDogeWallet.Instance.GetMnemonic().Trim();
 
 					if(!string.IsNullOrEmpty(mnemonic))
 					{
@@ -210,6 +210,7 @@ namespace SimpleDogeWallet.Pages
 
 			OnClick("DeleteButton", async _ =>
 			{
+				spvService.Stop();
 				await navigation.PushAsync<LoadingPage>();
 
 				var sendYesNo = await navigation.PromptAsync<YesNoPage>(("message", strings.GetString("terminal-settings-delete-confirm")));
@@ -226,7 +227,7 @@ namespace SimpleDogeWallet.Pages
 
 
 				if (oldPinResponse.Response == PromptResponse.YesConfirm &&
-				   SimpleDogeWallet.TryOpen((string)oldPinResponse.Value, services, out SimpleDogeWallet wallet))
+				   SimpleDogeWallet.TryOpen((string)oldPinResponse.Value))
 				{
 					SimpleDogeWallet.ClearWallet();
 					await navigation.PromptAsync<ShortMessagePage>(("message", strings.GetString("terminal-settings-delete-wallet-deleted")));
@@ -236,6 +237,7 @@ namespace SimpleDogeWallet.Pages
 					return;
 				}
 
+				spvService.Start();
 				navigation.Pop();
 			});
 

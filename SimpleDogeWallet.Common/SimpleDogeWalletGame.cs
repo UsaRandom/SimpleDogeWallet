@@ -229,6 +229,9 @@ namespace SimpleDogeWallet
 			}
 			else
 			{
+				SimpleDogeWallet.Init(Services);
+				_spvNodeService.Start();
+
 				_nav.PushAsync<LoadingPage>();
 				_nav.TryInsertBeforeAsync<UnlockTerminalPage, LoadingPage>();
 

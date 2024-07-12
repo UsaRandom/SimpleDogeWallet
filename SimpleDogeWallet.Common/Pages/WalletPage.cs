@@ -41,7 +41,6 @@ namespace SimpleDogeWallet.Pages
 			Messenger.Default.Register<UpdateSPVTextMessage>(this);
 
 
-			_spvNode.SetWallet(SimpleDogeWallet.Instance);
 			_spvNode.Start(isNew);
 
 			_sendButton = GetControl<ButtonControl>("SendButton");
@@ -169,9 +168,7 @@ namespace SimpleDogeWallet.Pages
 				var numPadResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-send-confirmpin"]));
 
 				if (numPadResponse.Response != PromptResponse.YesConfirm ||
-					!SimpleDogeWallet.TryOpen(numPadResponse.Value.ToString(),
-												services,
-												out SimpleDogeWallet simpleWallet))
+					!SimpleDogeWallet.TryOpen(numPadResponse.Value.ToString()))
 				{
 					navigation.Pop();
 					return;

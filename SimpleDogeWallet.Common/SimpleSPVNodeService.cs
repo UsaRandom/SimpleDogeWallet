@@ -27,7 +27,6 @@ namespace SimpleDogeWallet
 		};
 
 		private SPVNode _spvNode;
-		private SimpleDogeWallet _currentWallet;
 
 		private uint _staleTimerLastBlock;
 		private uint _staleTimerCounter = 0;
@@ -125,11 +124,6 @@ namespace SimpleDogeWallet
 			}
 		}
 
-
-		public void SetWallet(SimpleDogeWallet wallet)
-		{
-			_currentWallet = wallet;
-		}
 
 		public bool SyncCompleted
 		{
@@ -240,10 +234,10 @@ namespace SimpleDogeWallet
 
 			TxCount++;
 
-			if(tx.TxId.ToUpper() == _currentWallet.PendingTxHash?.ToUpper())
+			if(tx.TxId.ToUpper() == SimpleDogeWallet.Instance.PendingTxHash?.ToUpper())
 			{
-				_currentWallet.PendingTxHash = string.Empty;
-				_currentWallet.PendingAmount = 0;
+				SimpleDogeWallet.Instance.PendingTxHash = string.Empty;
+				SimpleDogeWallet.Instance.PendingAmount = 0;
 			}
 
 			SpentUTXOCount += (ulong)tx.In.Length;
@@ -253,7 +247,7 @@ namespace SimpleDogeWallet
 			{
 				UTXO targetUtxoToRemove = default;
 
-				foreach(var utx in _currentWallet.UTXOs)
+				foreach(var utx in SimpleDogeWallet.Instance.UTXOs)
 				{
 					if(spentUtxo.TxId == utx.TxId && spentUtxo.VOut == utx.VOut)
 					{
@@ -264,7 +258,7 @@ namespace SimpleDogeWallet
 				}
 				if(targetUtxoToRemove != default)
 				{
-					_currentWallet.UTXOs.Remove(targetUtxoToRemove);
+					SimpleDogeWallet.Instance.UTXOs.Remove(targetUtxoToRemove);
 				}
 			}
 
@@ -273,10 +267,10 @@ namespace SimpleDogeWallet
 				var utxoAddress = LibDogecoinContext.Instance.UnsafeGetP2PKHAddress(newUtxo.ScriptPubKey);
 
 				if (!string.IsNullOrEmpty(utxoAddress) &&
-					utxoAddress == _currentWallet.Address &&
-					!_currentWallet.UTXOs.Contains(newUtxo))
+					utxoAddress == SimpleDogeWallet.Instance.Address &&
+					!SimpleDogeWallet.Instance.UTXOs.Contains(newUtxo))
 				{
-						_currentWallet.UTXOs.Add(newUtxo);
+						SimpleDogeWallet.Instance.UTXOs.Add(newUtxo);
 						walletChanged = true;
 					
 				}
@@ -284,7 +278,7 @@ namespace SimpleDogeWallet
 
 			if (walletChanged)
 			{
-				_currentWallet.Save();
+				SimpleDogeWallet.Instance.Save();
 
 				Messenger.Default.Send(new UpdateSendButtonMessage());
 			}

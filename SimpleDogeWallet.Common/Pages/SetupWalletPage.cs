@@ -197,6 +197,10 @@ namespace SimpleDogeWallet.Pages
 
 				File.WriteAllText("address", Crypto.Encrypt(address, newPin));
 
+				_settings.Set("address", address);
+
+				SimpleDogeWallet.Init(_services);
+
 				createdWallet = true;
 			}
 
@@ -206,9 +210,7 @@ namespace SimpleDogeWallet.Pages
 
 			if (createdWallet)
 			{
-				SimpleDogeWallet.TryOpen(newPin, _services, out SimpleDogeWallet simpleWallet);
-				
-				await _navigation.TryInsertBeforeAsync<WalletPage, LoadingPage>(("wallet", simpleWallet), ("is-new", isNew));
+				await _navigation.TryInsertBeforeAsync<WalletPage, LoadingPage>(("wallet", SimpleDogeWallet.Instance), ("is-new", isNew));
 				await _navigation.PopToPage<WalletPage>();
 			}
 			else
