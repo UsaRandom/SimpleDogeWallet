@@ -334,10 +334,23 @@ namespace Lib.Dogecoin.Interop
 
 
 
-        #region SPV
+		[DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int dogecoin_generate_mnemonic(
+			[MarshalAs(UnmanagedType.LPArray)] char[] entropy_size,
+			[MarshalAs(UnmanagedType.LPArray)] char[] language,
+			[MarshalAs(UnmanagedType.LPArray)] char[] space,
+			[MarshalAs(UnmanagedType.LPArray)] char[] entropy,
+			[MarshalAs(UnmanagedType.LPArray)] char[] filepath,
+			[Out, MarshalAs(UnmanagedType.LPArray)] char[] entropy_out,
+            [Out] out int size,
+            [Out, MarshalAs(UnmanagedType.LPArray)] char[] words);
 
 
-        [DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+
+		#region SPV
+
+
+		[DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr dogecoin_spv_client_new(
             IntPtr chainparams,
             [MarshalAs(UnmanagedType.U1)] bool debug,

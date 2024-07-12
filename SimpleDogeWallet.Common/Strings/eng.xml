@@ -26,8 +26,7 @@
 
   <String Id="terminal-disclaimer-title"><![CDATA[Warning: Work-in-Progress!]]></String>
   <String Id="terminal-disclaimer-text1">
-    <![CDATA[The following program is of questionable quality and due to
- the overall shoddiness it should not be used by anyone.]]>
+    <![CDATA[The following program is a work in progress.]]>
   </String>
   <String Id="terminal-disclaimer-text2"><![CDATA[Proceed at your own risk!]]></String>
 
@@ -45,7 +44,7 @@
   <String Id="terminal-setup-loadwalletinfo">
     <![CDATA[What you’ll need:
 
- ● 12-24 word backup phrases
+ ● 12 word backup phrases
  ● 10 minutes
  ● Privacy]]>
   </String>
@@ -70,12 +69,12 @@
   </Strings>
 
   <Strings Id="terminal-backupcodes-load-title">
-    <![CDATA[Enter your 12 or 24 word backup phrases:]]>
+    <![CDATA[Enter your 12 word backup phrases:]]>
   </Strings>
 
   <Strings Id="terminal-backupcodes-load-badmnemonic">
     <![CDATA[Error using provided backup phrases.
-    Ensure there are 12/24 words.
+    Ensure there are 12 words.
               Try Again?]]>
   </Strings>
 
@@ -109,7 +108,7 @@
 
 
   <String Id="terminal-settings-clearpending-confirm">
-    <![CDATA[You should only do this if the tx failed to send,
+    <![CDATA[You should only do this if the transaction failed to send,
   or it's been over >24 hours since it was sent.
           Do you want to continue?]]>
   </String>

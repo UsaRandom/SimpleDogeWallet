@@ -1,4 +1,5 @@
 ﻿
+using Lib.Dogecoin;
 using System;
 using System.Windows.Forms;
 

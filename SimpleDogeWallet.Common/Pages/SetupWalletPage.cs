@@ -133,7 +133,14 @@ namespace SimpleDogeWallet.Pages
 
 			if (isNew)
 			{
-				mnemonic = _ctx.GenerateMnemonicEncryptWithTPM(tpmFileNumber, lang: _strings.Language.LanguageCode, space: "-");
+
+				//we have a valid mnemonic, encrypt it with key stored in tpm
+				var mnemonicKey = _ctx.GenerateMnemonicEncryptWithTPM(tpmFileNumber, lang: "eng", space: "-");
+
+				mnemonic = _ctx.GenerateMnemonic(_strings.Language.LanguageCode, LibDogecoinContext.ENTROPY_SIZE_128);
+
+				File.WriteAllText(SimpleDogeWallet.LOADED_MNEMONIC_FILE, Crypto.Encrypt(mnemonic, mnemonicKey));
+
 				await _navigation.PromptAsync<BackupCodePage>(("mnemonic", mnemonic), ("editmode", false));
 			}
 			else
@@ -191,8 +198,6 @@ namespace SimpleDogeWallet.Pages
 				File.WriteAllText("address", Crypto.Encrypt(address, newPin));
 
 				createdWallet = true;
-
-				_settings.Set("user-entered-mnemonic", !isNew);
 			}
 
 			

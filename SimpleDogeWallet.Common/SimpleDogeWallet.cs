@@ -21,9 +21,7 @@ namespace SimpleDogeWallet
 		public const string LOADED_MNEMONIC_FILE = "loadedmnemonic";
 		public const string UTXO_FILE = "utxos";
 
-		public const string USING_USER_ENTERED_MNEMONIC_SETTING = "user-entered-mnemonic";
 
-		private bool _usingUserEnteredMnemonic = false;
 		private LibDogecoinContext _ctx;
 		public int _tpmFileNumber;
 
@@ -42,7 +40,6 @@ namespace SimpleDogeWallet
 			_pendingAmount = services.GetService<ITerminalSettings>().GetDecimal("pending-amount", 0);
 
 			_ctx = LibDogecoinContext.Instance;
-			_usingUserEnteredMnemonic = Services.GetService<ITerminalSettings>().GetBool(USING_USER_ENTERED_MNEMONIC_SETTING);
 
 			LoadUTXOs();
 
@@ -125,16 +122,9 @@ namespace SimpleDogeWallet
 
 		public string GetMnemonic()
 		{
-			if(Services.GetService<ITerminalSettings>().GetBool(USING_USER_ENTERED_MNEMONIC_SETTING, false))
-			{
-				var key = _ctx.DecryptMnemonicWithTPM(_tpmFileNumber);
+			var key = _ctx.DecryptMnemonicWithTPM(_tpmFileNumber);
 
-				return Crypto.Decrypt(File.ReadAllText(LOADED_MNEMONIC_FILE), key);
-			}
-			else
-			{
-				return _ctx.DecryptMnemonicWithTPM(_tpmFileNumber);
-			}
+			return Crypto.Decrypt(File.ReadAllText(LOADED_MNEMONIC_FILE), key);
 		}
 
 		public static void UpdatePin(string oldPin, string newPin)

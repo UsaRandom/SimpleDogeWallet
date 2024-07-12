@@ -45,7 +45,7 @@ namespace SimpleDogeWallet.Common.Pages
 			if(!_editMode)
 			{
 
-				for (int i = 0; i < 24; i++)
+				for (int i = 0; i < 12; i++)
 				{
 					var wordControl = GetControl<TextInputControl>($"BackupWordButton_{i}");
 
@@ -61,7 +61,7 @@ namespace SimpleDogeWallet.Common.Pages
 				{
 					var wordList = new List<string>();
 
-					for (int i = 0; i < 24; i++)
+					for (int i = 0; i < 12; i++)
 					{
 						var wordControl = GetControl<TextInputControl>($"BackupWordButton_{i}");
 

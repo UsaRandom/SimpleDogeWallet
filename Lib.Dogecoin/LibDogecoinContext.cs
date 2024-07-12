@@ -503,6 +503,23 @@ namespace Lib.Dogecoin
 		}
 
 
+		public string GenerateMnemonic(string lang, string entropySize, string space = "-")
+		{
+			char[] mnemonic = new char[769];
+			char[] entropyOut = new char[65];
+			int size = 0;
+
+
+			LibDogecoinInterop.dogecoin_generate_mnemonic(
+				entropySize.NullTerminate(),
+				lang.NullTerminate(),
+				space.NullTerminate(),
+				null,
+				null, entropyOut, out size, mnemonic);
+
+			return mnemonic.TerminateNull();
+		}
+
 
 		public string KoinuToCoinString(ulong amount)
 		{
