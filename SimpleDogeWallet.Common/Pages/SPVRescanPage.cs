@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using OpenCvSharp.ImgHash;
 
 namespace SimpleDogeWallet.Pages
 {
@@ -34,6 +35,23 @@ namespace SimpleDogeWallet.Pages
 
 			OnClick("SyncButton", async _ =>
 			{
+
+				var hash = GetControl<TextInputControl>("BlockHashText").Text;
+				var height = GetControl<TextInputControl>("BlockHeightText").Text;
+
+				if(string.IsNullOrWhiteSpace(hash) || string.IsNullOrWhiteSpace(height))
+				{
+					return;
+				}
+
+				uint blockHeight = 0;
+
+				try
+				{
+					blockHeight = uint.Parse(Regex.Replace(height, @"[^\d]", ""));
+				}
+				catch { return; }
+				
 				spvNodeService.Rescan(new Lib.Dogecoin.SPVNodeBlockInfo()
 				{
 					Hash = GetControl<TextInputControl>("BlockHashText").Text,

@@ -84,24 +84,28 @@ namespace SimpleDogeWallet.Pages
 
 			var sb = new StringBuilder();
 
-			sb.AppendLine($"{_strings.GetString("terminal-spv-peers")}: {_spvNodeService.PeerCount}");
-			sb.AppendLine($"{_strings.GetString("terminal-spv-txcount")}: {_spvNodeService.TxCount}");
-			sb.AppendLine($"{_strings.GetString("terminal-spv-spentutxo")}: {_spvNodeService.SpentUTXOCount}");
-			sb.AppendLine($"{_strings.GetString("terminal-spv-newutxo")}: {_spvNodeService.NewUTXOCount}");
-			sb.AppendLine($"{_strings.GetString("terminal-spv-netutxo")}: {_spvNodeService.NewUTXOCount-_spvNodeService.SpentUTXOCount}");
+			sb.AppendLine($"->{_strings.GetString("terminal-spv-peers")}: {_spvNodeService.PeerCount}");
 			sb.AppendLine();
-			sb.AppendLine($"{_strings.GetString("terminal-spv-currentblock")}:");
-			sb.AppendLine($"->{_strings.GetString("terminal-spv-currentblock-hash")}: {_spvNodeService.CurrentBlock.Hash}");
+			sb.AppendLine($"->{_strings.GetString("terminal-spv-txcount")}: {_spvNodeService.TxCount}");
+			sb.AppendLine($"->{_strings.GetString("terminal-spv-spentutxo")}: {_spvNodeService.SpentUTXOCount}");
+			sb.AppendLine($"->{_strings.GetString("terminal-spv-newutxo")}: {_spvNodeService.NewUTXOCount}");
+			sb.AppendLine($"->{_strings.GetString("terminal-spv-netutxo")}: {_spvNodeService.NewUTXOCount-_spvNodeService.SpentUTXOCount}");
+			sb.AppendLine();
 			sb.AppendLine($"->{_strings.GetString("terminal-spv-currentblock-height")}: {_spvNodeService.CurrentBlock.BlockHeight}");
+			sb.AppendLine($"->{_strings.GetString("terminal-spv-estimatemaxblock")}: {_spvNodeService.EstimatedHeight}");
+			sb.AppendLine($"->{_strings.GetString("terminal-spv-currentblock-hash")}: {_spvNodeService.CurrentBlock.Hash}");
 			sb.AppendLine($"->{_strings.GetString("terminal-spv-currentblock-time")}: {_spvNodeService.CurrentBlock.Timestamp.ToLocalTime()}");
 
+			sb.AppendLine();
 			var estimatedFee = Math.Max(services.GetService<ITerminalSettings>().GetDecimal("dust-limit") * services.GetService<ITerminalSettings>().GetDecimal("fee-coeff"),
 										_spvNodeService.EstimatedRate * 226 * services.GetService<ITerminalSettings>().GetDecimal("fee-coeff"));
 
+
+			sb.AppendLine($"->{_strings.GetString("terminal-spv-last-block-size")}: {_spvNodeService.LastBlockSize:P2}");
+			sb.AppendLine($"->{_strings.GetString("terminal-spv-average-block-size")}: {_spvNodeService.AverageBlockSize:P2}");
 			sb.AppendLine($"->{_strings.GetString("terminal-spv-currentblock-fee")}: {estimatedFee}");
 			sb.AppendLine();
-			sb.AppendLine($"{_strings.GetString("terminal-spv-estimatemaxblock")}: {_spvNodeService.EstimatedHeight}");
-			sb.AppendLine(_strings.GetString("terminal-spv-estimatemaxblock-hint"));
+		//	sb.AppendLine(_strings.GetString("terminal-spv-estimatemaxblock-hint"));
 
 			GetControl<TextControl>("SPVInfoText").Text = sb.ToString();
 

@@ -42,6 +42,7 @@ namespace SimpleDogeWallet
 
 		long blockSize = 0;
 
+		private LimitedQueue<decimal> blockSizes = new LimitedQueue<decimal>(30);
 		private LimitedQueue<long> blockFees = new LimitedQueue<long>(30);
 		private UTXOSampleIndex utxos = new UTXOSampleIndex(25000);
 
@@ -125,6 +126,38 @@ namespace SimpleDogeWallet
 			}
 		}
 
+		public decimal LastBlockSize
+		{
+			get
+			{
+				lock (blockSizes)
+				{
+					if (blockSizes.Count > 0)
+					{
+						return blockSizes.Last();
+					}
+				}
+
+				return 0;
+			}
+		}
+
+		public decimal AverageBlockSize
+		{
+			get
+			{
+				lock (blockSizes)
+				{
+					if (blockSizes.Count > 0)
+					{
+						return blockSizes.Average();
+					}
+				}
+
+				return 0;
+			}
+		}
+
 
 		public bool SyncCompleted
 		{
@@ -182,8 +215,11 @@ namespace SimpleDogeWallet
 
 			utxos.Clear();
 			blockFees.Clear();
+			blockSizes.Clear();
 
 			currentBlock = startPoint.BlockHeight;
+
+			blockSize = 0;
 			EstimatedRate = 1000;
 			//	wallet.UTXOs.Clear();
 
@@ -307,6 +343,9 @@ namespace SimpleDogeWallet
 				}
 
 				currentBlock = tx.BlockHeight;
+				
+				blockSizes.Enqueue((decimal)blockSize / 1000000M);
+
 				blockSize = 0;
 			}
 
@@ -387,18 +426,24 @@ namespace SimpleDogeWallet
 
 		public new void Enqueue(UTXO item)
 		{
-			if (Count >= _limit)
+			lock (this)
 			{
-				var utxoToRemvoe = Dequeue(); // Kick out the oldest utxo
-				_index.Remove(utxoToRemvoe.TxId + utxoToRemvoe.VOut);
+				if (Count >= _limit)
+				{
+					var utxoToRemvoe = Dequeue(); // Kick out the oldest utxo
+					_index.Remove(utxoToRemvoe.TxId + utxoToRemvoe.VOut);
+				}
+				base.Enqueue(item);
+				_index.Add(item.TxId + item.VOut, item);
 			}
-			base.Enqueue(item);
-			_index.Add(item.TxId + item.VOut, item);
 		}
 
 		public UTXO GetUTXOOrDefault(string txId, int vout)
 		{
-			return _index.GetValueOrDefault(txId + vout);
+			lock (this)
+			{
+				return _index.GetValueOrDefault(txId + vout);
+			}
 		}
 	}
 
@@ -413,11 +458,16 @@ namespace SimpleDogeWallet
 
 		public new void Enqueue(T item)
 		{
-			if (Count >= _limit)
+			lock (this)
 			{
-				Dequeue(); // Kick out the oldest item
+				if (Count >= _limit)
+				{
+					Dequeue(); // Kick out the oldest item
+				}
+				base.Enqueue(item);
+
 			}
-			base.Enqueue(item);
 		}
+		
 	}
 }

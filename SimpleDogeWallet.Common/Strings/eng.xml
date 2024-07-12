@@ -164,6 +164,8 @@
   <String Id="terminal-spv-currentblock-height"><![CDATA[Height]]></String>
   <String Id="terminal-spv-currentblock-time"><![CDATA[Timestamp]]></String>
   <String Id="terminal-spv-currentblock-fee"><![CDATA[Estimated Fee]]></String>
+  <String Id="terminal-spv-average-block-size"><![CDATA[Avg. Block Size]]></String>
+  <String Id="terminal-spv-last-block-size"><![CDATA[Last Block Size]]></String>
 
   <String Id="terminal-spv-rescan"><![CDATA[Rescan]]></String>
   <String Id="terminal-spv-start"><![CDATA[Start]]></String>
