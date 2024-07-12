@@ -183,6 +183,8 @@ namespace SimpleDogeWallet
 			utxos.Clear();
 			blockFees.Clear();
 
+			currentBlock = startPoint.BlockHeight;
+			EstimatedRate = 1000;
 			//	wallet.UTXOs.Clear();
 
 			//wallet.Save();
@@ -391,6 +393,7 @@ namespace SimpleDogeWallet
 				_index.Remove(utxoToRemvoe.TxId + utxoToRemvoe.VOut);
 			}
 			base.Enqueue(item);
+			_index.Add(item.TxId + item.VOut, item);
 		}
 
 		public UTXO GetUTXOOrDefault(string txId, int vout)

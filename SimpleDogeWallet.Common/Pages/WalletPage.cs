@@ -165,14 +165,14 @@ namespace SimpleDogeWallet.Pages
 				}
 
 
-				var numPadResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-send-confirmpin"]));
+				//var numPadResponse = await navigation.PromptAsync<NumPadPage>(("title", strings["terminal-send-confirmpin"]));
 
-				if (numPadResponse.Response != PromptResponse.YesConfirm ||
-					!SimpleDogeWallet.TryOpen(numPadResponse.Value.ToString()))
-				{
-					navigation.Pop();
-					return;
-				}
+				//if (numPadResponse.Response != PromptResponse.YesConfirm ||
+				//	!SimpleDogeWallet.TryOpen(numPadResponse.Value.ToString()))
+				//{
+				//	navigation.Pop();
+				//	return;
+				//}
 
 				//
 
