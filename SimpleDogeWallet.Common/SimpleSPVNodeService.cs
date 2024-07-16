@@ -186,6 +186,7 @@ namespace SimpleDogeWallet
 					.StartAt(NEW_WALLET_START_BLOCK.Hash, NEW_WALLET_START_BLOCK.BlockHeight)
 					.UseCheckpointFile(SPV_CHECKPOINT_FILE, SPV_CHECKPOINT_BLOCKS_BEHIND)
 					.UseMainNet()
+					.FullSync()
 					.OnSyncCompleted(OnSyncComplete)
 					.OnNextBlock(HandleOnBlock)
 					.EnableDebug()
@@ -199,6 +200,7 @@ namespace SimpleDogeWallet
 					.UseMainNet()
 					.OnSyncCompleted(OnSyncComplete)
 					.OnNextBlock(HandleOnBlock)
+					.FullSync()
 					.EnableDebug()
 					.OnTransaction(HandleOnTransaction)
 					.Build();
@@ -229,6 +231,7 @@ namespace SimpleDogeWallet
 					.StartAt(startPoint)
 				.UseCheckpointFile(SPV_CHECKPOINT_FILE, SPV_CHECKPOINT_BLOCKS_BEHIND)
 				.UseMainNet()
+				.FullSync()
 				.OnSyncCompleted(OnSyncComplete)
 				.OnNextBlock(HandleOnBlock)
 				.OnTransaction(HandleOnTransaction)

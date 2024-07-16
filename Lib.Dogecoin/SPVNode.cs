@@ -68,6 +68,7 @@ namespace Lib.Dogecoin
 		public Action<SPVNodeTransaction> OnTransaction { get; set; }
 
 		public Action<SPVNodeBlockInfo, SPVNodeBlockInfo> OnNextBlock { get; set; }
+		public Action<SPVNodeBlockInfo> OnProcessedHeaders { get; set; }
 
 		private void BeforeOnNextBlock(SPVNodeBlockInfo previousBlock, SPVNodeBlockInfo nextBlock)
 		{
@@ -108,6 +109,51 @@ namespace Lib.Dogecoin
 			}
 
 			return connectedNodes;
+		}
+
+		public unsafe uint GetBestKnownHeight()
+		{
+
+			try
+			{
+				var client = Marshal.PtrToStructure<dogecoin_spv_client>(_spvNodeRef);
+
+				var nodeGroup = Marshal.PtrToStructure<dogecoin_node_group>(client.nodegroup);
+
+				var nodeList = *nodeGroup.nodes;
+
+				var heights = new Dictionary<uint, int>();
+
+				var connectedNodes = 0;
+				for (var i = 0; i < nodeList.len; i++)
+				{
+					dogecoin_node node = Marshal.PtrToStructure<dogecoin_node>(*(nodeList.data + i));
+
+					if ((NODE_STATE)node.state == NODE_STATE.NODE_CONNECTED)
+					{
+						connectedNodes++;
+
+						if(heights.ContainsKey(node.bestknownheight))
+						{
+							heights[node.bestknownheight] = heights[node.bestknownheight]++;
+						}
+						else
+						{
+							heights.Add(node.bestknownheight, 1);
+						}
+						Debug.WriteLine("Best Known Height: " + node.bestknownheight);
+					}
+				}
+
+				return heights.OrderByDescending(a => a.Value).First().Key;
+
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine(ex);
+			}
+
+			return 0;
 		}
 
 		public unsafe void PrintDebug()
@@ -268,7 +314,7 @@ namespace Lib.Dogecoin
 
 			var net = IsMainNet ? LibDogecoinContext._mainChain : LibDogecoinContext._testChain;
 
-			_spvNodeRef = LibDogecoinInterop.dogecoin_spv_client_new(net, _isDebug, true, false, true, _peerCount);
+			_spvNodeRef = LibDogecoinInterop.dogecoin_spv_client_new(net, _isDebug, true, false, false, _peerCount);
 			_syncComplete = false;
 			IsRunning = false;
 			
@@ -293,8 +339,18 @@ namespace Lib.Dogecoin
 		
 		private unsafe bool HeaderMessageProcessed(dogecoin_spv_client client, IntPtr node, dogecoin_block_header newtip)
 		{
-			Trace.WriteLine("Prv: " + ByteArrayToHexString(newtip.prev_block.Reverse().ToArray()));
+			if (OnProcessedHeaders != null)
+			{
+				OnProcessedHeaders(new SPVNodeBlockInfo()
+				{
+					BlockHeight = (uint)newtip.version
+					,
+					Hash = ByteArrayToHexString(newtip.prev_block.Reverse().ToArray())
 
+					// not sure whats going on but it's not correct
+					//,Timestamp = DateTimeOffset.FromUnixTimeSeconds(newtip.timestamp)
+				});
+			}
 			return true;
 		}
 

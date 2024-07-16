@@ -10,9 +10,11 @@ namespace Lib.Dogecoin
 	{
 		private SPVNodeBlockInfo _start;
 		private bool _useMainNet = false;
+		private bool _fullSync = false;
 		private bool _useDebug = false;
 		private int _peerCount = 24;
 		private Action _onSyncCompleted;
+		private Action<SPVNodeBlockInfo> _onHeaderMessage;
 		private Action<SPVNodeTransaction> _onTransaction;
 		private Action<SPVNodeBlockInfo, SPVNodeBlockInfo> _onNextBlock;
 
@@ -40,6 +42,12 @@ namespace Lib.Dogecoin
 			return this;
 		}
 
+		public SPVNodeBuilder FullSync()
+		{
+			_fullSync = true;
+			return this;
+		}
+
 		public SPVNodeBuilder UseMainNet()
 		{
 			_useMainNet = true;
@@ -57,6 +65,13 @@ namespace Lib.Dogecoin
 			_onSyncCompleted = action;
 			return this;
 		}
+
+		public SPVNodeBuilder OnHeaderMessageProcessed(Action<SPVNodeBlockInfo> action)
+		{
+			_onHeaderMessage = action;
+			return this;
+		}
+
 
 		public SPVNodeBuilder OnTransaction(Action<SPVNodeTransaction> action)
 		{
@@ -78,6 +93,7 @@ namespace Lib.Dogecoin
 			node.OnTransaction = _onTransaction;
 			node.OnNextBlock = _onNextBlock;
 			node.OnSyncComplete = _onSyncCompleted;
+			node.OnProcessedHeaders = _onHeaderMessage;
 
 			return node;
 		}
