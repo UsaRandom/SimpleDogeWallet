@@ -177,6 +177,9 @@
     <None Update="Pages\Xml\SPVRescanPage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Pages\Xml\SyncNetworkPage.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Pages\Xml\TransactionConfirmPage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

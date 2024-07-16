@@ -26,6 +26,7 @@ namespace Lib.Dogecoin
 		private int _peerCount;
 		private static dogecoin_spv_client.sync_transaction_delegate syncTransactionCallback;
 		private static dogecoin_spv_client.sync_completed_delegate syncCompletedCallback;
+		private static dogecoin_spv_client.header_message_processed_delegate headerMessageProcessedCallback;
 
 		private ISPVCheckpointTracker _checkpointTracker;
 		private SPVNodeBlockInfo _startPoint;
@@ -211,7 +212,7 @@ namespace Lib.Dogecoin
 				}
 
 				
-				LibDogecoinInterop.dogecoin_node_group_connect_next_nodes(client.nodegroup);
+	//			LibDogecoinInterop.dogecoin_node_group_connect_next_nodes(client.nodegroup);
 
 		
 				LibDogecoinInterop.dogecoin_spv_client_runloop(_spvNodeRef);
@@ -274,6 +275,7 @@ namespace Lib.Dogecoin
 
 			syncTransactionCallback = new dogecoin_spv_client.sync_transaction_delegate(SyncTransaction);
 			syncCompletedCallback = new dogecoin_spv_client.sync_completed_delegate(SyncCompleted);
+			headerMessageProcessedCallback = new dogecoin_spv_client.header_message_processed_delegate(HeaderMessageProcessed);
 
 			Marshal.WriteIntPtr(_spvNodeRef,
 				Marshal.OffsetOf(typeof(dogecoin_spv_client),
@@ -282,6 +284,18 @@ namespace Lib.Dogecoin
 			Marshal.WriteIntPtr(_spvNodeRef,
 				Marshal.OffsetOf(typeof(dogecoin_spv_client),
 				nameof(dogecoin_spv_client.sync_completed)).ToInt32(), Marshal.GetFunctionPointerForDelegate(syncCompletedCallback));
+
+
+			Marshal.WriteIntPtr(_spvNodeRef,
+				Marshal.OffsetOf(typeof(dogecoin_spv_client),
+				nameof(dogecoin_spv_client.header_message_processed)).ToInt32(), Marshal.GetFunctionPointerForDelegate(headerMessageProcessedCallback));
+		}
+		
+		private unsafe bool HeaderMessageProcessed(dogecoin_spv_client client, IntPtr node, dogecoin_block_header newtip)
+		{
+			Trace.WriteLine("Prv: " + ByteArrayToHexString(newtip.prev_block.Reverse().ToArray()));
+
+			return true;
 		}
 
 		private unsafe void SyncCompleted(IntPtr spv)

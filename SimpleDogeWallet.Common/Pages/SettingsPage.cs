@@ -156,14 +156,14 @@ namespace SimpleDogeWallet.Pages
 			{
 				await navigation.PushAsync<LoadingPage>();
 
-				var oldPinResponse = await navigation.PromptAsync<NumPadPage>(
-					("title", strings.GetString("terminal-enteroppin-title")),
-					("regex", ".{" + SimpleDogeWallet.MIN_PIN_LENGTH + ",16}"));
+				//var oldPinResponse = await navigation.PromptAsync<NumPadPage>(
+				//	("title", strings.GetString("terminal-enteroppin-title")),
+				//	("regex", ".{" + SimpleDogeWallet.MIN_PIN_LENGTH + ",16}"));
 
 
-				if (oldPinResponse.Response == PromptResponse.YesConfirm &&
-				   SimpleDogeWallet.TryOpen((string)oldPinResponse.Value))
-				{
+				//if (oldPinResponse.Response == PromptResponse.YesConfirm &&
+				//   SimpleDogeWallet.TryOpen((string)oldPinResponse.Value))
+				//{
 					var mnemonic = SimpleDogeWallet.Instance.GetMnemonic().Trim();
 
 					if(!string.IsNullOrEmpty(mnemonic))
@@ -173,7 +173,7 @@ namespace SimpleDogeWallet.Pages
 																	 ("mnemonic", mnemonic));
 					}
 
-				}
+				//}
 
 				navigation.Pop();
 			});

@@ -128,6 +128,7 @@ namespace SimpleDogeWallet.Pages
 				maxSpend -= ratePerByte * (225 +  (SimpleDogeWallet.Instance.UTXOs.Count - 1) * 148);
 
 
+				maxSpend = Math.Round(maxSpend, (int)Math.Ceiling(Math.Log10(1 / (double)settings.GetDecimal("dust-limit"))), MidpointRounding.ToZero);
 
 				var amountResult = await navigation.PromptAsync<NumPadPage>(("value-mode", true),
 																			("title", strings.GetString("terminal-sendamount-title")),

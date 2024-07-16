@@ -11,6 +11,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <AssemblyName>SimpleDogeWallet</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="app.manifest" />

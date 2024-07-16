@@ -1,0 +1,16 @@
+﻿<Page xmlns:common="SimpleDogeWallet.Common">
+	<common:ImageControl Name="BackButton" StartPosition="5,5" EndPosition="15,15" ImageSource="Content\left-arrow.png" />
+	<common:TextControl Name="TitleText" Color="White" Position="50,13" TextSize="6" StringDef="terminal-spv-sync-title" />
+	<common:ImageControl Name="Doge" StartPosition="82,5" EndPosition="95,18" ImageSource="Content/dogedrawn.png" />
+
+
+  <common:SpriteControl
+            SpriteSheetSource="Content/dancing-doge.png"
+            Rows="2"
+            Columns="5"
+            FrameCount="10"
+            FrameTimeMs="40"
+            StartPosition="30,20"
+            EndPosition="70,60"
+            Name="DancingDoge"/>
+</Page>

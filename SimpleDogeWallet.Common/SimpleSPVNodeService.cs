@@ -44,7 +44,7 @@ namespace SimpleDogeWallet
 
 		private LimitedQueue<decimal> blockSizes = new LimitedQueue<decimal>(30);
 		private LimitedQueue<long> blockFees = new LimitedQueue<long>(30);
-		private UTXOSampleIndex utxos = new UTXOSampleIndex(25000);
+		private UTXOSampleIndex utxos = new UTXOSampleIndex(75000);
 
 
 		
@@ -433,8 +433,10 @@ namespace SimpleDogeWallet
 					var utxoToRemvoe = Dequeue(); // Kick out the oldest utxo
 					_index.Remove(utxoToRemvoe.TxId + utxoToRemvoe.VOut);
 				}
-				base.Enqueue(item);
-				_index.Add(item.TxId + item.VOut, item);
+				if(_index.TryAdd(item.TxId + item.VOut, item))
+				{
+					base.Enqueue(item);
+				}
 			}
 		}
 

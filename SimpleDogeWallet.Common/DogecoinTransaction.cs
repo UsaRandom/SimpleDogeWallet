@@ -90,8 +90,10 @@ namespace SimpleDogeWallet
 			var maxSpend = SimpleDogeWallet.Instance.GetBalance();
             bool spendingAll = false;
 			maxSpend -= ratePerByte * (225 + (SimpleDogeWallet.Instance.UTXOs.Count - 1) * 148);
+			maxSpend = Math.Round(maxSpend, (int)Math.Ceiling(Math.Log10(1 / (double)dustLimit)), MidpointRounding.ToZero);
 
-            if(Math.Abs(maxSpend - amount) < dustLimit)
+
+			if (Math.Abs(maxSpend - amount) < dustLimit)
             {
                 spendingAll = true;
 			}
@@ -157,6 +159,12 @@ namespace SimpleDogeWallet
                 {
                     return false;
                 }
+            }
+
+            if (spendingAll)
+            {
+                Fee += Remainder;
+                Remainder = 0;
             }
 
             if (!_ctx.AddOutput(_workingTransactionId, To, amountStr))

@@ -66,7 +66,6 @@ namespace SimpleDogeWallet.WinForms
 
 			base.Initialize();
 
-			Messenger.Default.Register(this);
 
 			_notifyIcon = new System.Windows.Forms.NotifyIcon();
 			_notifyIcon.Icon = new System.Drawing.Icon("Icon.ico");
@@ -77,18 +76,20 @@ namespace SimpleDogeWallet.WinForms
 			// Create a context menu
 			ContextMenuStrip contextMenu = new ContextMenuStrip();
 
+			contextMenu.ShowImageMargin = false;
+
 			// Create an "Exit" button
 			ToolStripMenuItem exitButton = new ToolStripMenuItem("Exit");
 			exitButton.Click += (sender, e) => Application.Exit();
 
 			// Create a "Copy Address" button
-			ToolStripMenuItem copyAddressButton = new ToolStripMenuItem("Copy Address");
+			ToolStripMenuItem copyAddressButton = new ToolStripMenuItem("Copy Your Address");
 			copyAddressButton.Click += (sender, e) => {
 				Clipboard.SetText(_settings.GetString("address"));
 			};
 
 			// Create a label to display some text
-			var openButton = new ToolStripButton("Simple Doge Wallet");
+			var openButton = new ToolStripButton(Strings.Current.GetString("terminal-title"));
 
 			openButton.Click += (sender, e) =>
 			{
@@ -100,11 +101,45 @@ namespace SimpleDogeWallet.WinForms
 			_currentFees = new ToolStripLabel("Fees:");
 
 
+			//ToolStripMenuItem quickTipMenu = new ToolStripMenuItem("Quick Tip ->");
+			//((ToolStripDropDownMenu)quickTipMenu.DropDown).ShowImageMargin = false;
+
+			//ToolStripMenuItem subMenu = new ToolStripMenuItem($"Đ 6.9");
+			//quickTipMenu.DropDownItems.Add(subMenu);
+			//((ToolStripDropDownMenu)subMenu.DropDown).ShowImageMargin = false;
+			//subMenu.DropDownItems.Add(new ToolStripTextBox());
+
+			//subMenu = new ToolStripMenuItem($"Đ 4.2");
+			//quickTipMenu.DropDownItems.Add(subMenu);
+			//((ToolStripDropDownMenu)subMenu.DropDown).ShowCheckMargin = false;
+			//((ToolStripDropDownMenu)subMenu.DropDown).ShowImageMargin = false;
+
+			//var tb = new ToolStripTextBox();
+
+			//tb.MaxLength = 35;
+			//tb.Dock = DockStyle.Fill;
+			//tb.Margin = Padding.Empty;
+			//tb.Padding = Padding.Empty;
+		
+			
+			//subMenu.DropDownItems.Add(tb);
+
+			//subMenu = new ToolStripMenuItem($"Đ 0.42");
+			//((ToolStripDropDownMenu)subMenu.DropDown).ShowImageMargin = false;
+			//quickTipMenu.DropDownItems.Add(subMenu);
+
+
+
+			//subMenu.DropDownItems.Add(new ToolStripTextBox());
+
+
+
 			contextMenu.Items.Add(openButton);
 			contextMenu.Items.Add(new ToolStripSeparator());
 			contextMenu.Items.Add(_blockLabel);
 			contextMenu.Items.Add(_currentFees);
 			contextMenu.Items.Add(new ToolStripSeparator());
+		//	contextMenu.Items.Add(quickTipMenu);
 			contextMenu.Items.Add(copyAddressButton);
 			contextMenu.Items.Add(new ToolStripSeparator());
 			contextMenu.Items.Add(exitButton);
@@ -114,6 +149,7 @@ namespace SimpleDogeWallet.WinForms
 
 			Exiting += SimpleDogeWalletGame_Exiting;
 
+			Messenger.Default.Register(this);
 
 		}
 
