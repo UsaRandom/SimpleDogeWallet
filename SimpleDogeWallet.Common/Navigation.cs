@@ -40,6 +40,7 @@ namespace SimpleDogeWallet.Common
 			if (_pageHistory.TryPop(out var previousPage))
 			{
 				Messenger.Default.Deregister(previousPage);
+				previousPage.Cleanup();
 				Messenger.Default.Register(CurrentPage);
 			}
 		}
@@ -91,6 +92,10 @@ namespace SimpleDogeWallet.Common
 							{
 								//we should have already checked for this. should never happen?
 								throw new Exception($"Page {targetType.Name} does not exist in history stack.");
+							}
+							else
+							{
+								nextPageToPop.Cleanup();
 							}
 						}
 						else
@@ -201,7 +206,7 @@ namespace SimpleDogeWallet.Common
 				var promptCtx = new PromptContext();
 
 				_prompts.Push(promptCtx);
-
+				
 				var exit = false;
 
 				while (!exit)

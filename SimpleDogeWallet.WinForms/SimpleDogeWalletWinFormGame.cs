@@ -168,6 +168,13 @@ namespace SimpleDogeWallet.WinForms
 				System.Windows.Forms.Form form = control as System.Windows.Forms.Form;
 				if (form != null)
 				{
+
+					if(SimpleDogeWallet.Instance == null || string.IsNullOrWhiteSpace(SimpleDogeWallet.Instance.Address))
+					{
+						//wallet is in setup mode, don't prevent close
+						return;
+					}
+
 					e.Cancel = true;
 					form.WindowState = System.Windows.Forms.FormWindowState.Minimized;
 					form.Hide();

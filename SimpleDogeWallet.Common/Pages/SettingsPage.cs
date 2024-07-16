@@ -164,13 +164,14 @@ namespace SimpleDogeWallet.Pages
 				//if (oldPinResponse.Response == PromptResponse.YesConfirm &&
 				//   SimpleDogeWallet.TryOpen((string)oldPinResponse.Value))
 				//{
-					var mnemonic = SimpleDogeWallet.Instance.GetMnemonic().Trim();
 
-					if(!string.IsNullOrEmpty(mnemonic))
+					var mnemonic = SimpleDogeWallet.Instance.GetMnemonic();
+
+					if(!string.IsNullOrWhiteSpace(mnemonic))
 					{
 						await navigation.PromptAsync<BackupCodePage>(("title", strings.GetString("terminal-backupcodes-title")),
 																	 ("editmode", false),
-																	 ("mnemonic", mnemonic));
+																	 ("mnemonic", mnemonic.Trim()));
 					}
 
 				//}

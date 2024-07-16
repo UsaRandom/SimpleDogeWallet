@@ -225,6 +225,7 @@ namespace SimpleDogeWallet
 
 		public static void ClearWallet()
 		{
+			Instance.Address = null;
 			_instance.Services.GetService<ITerminalSettings>().Set("address", string.Empty);
 			_instance = null;
 			

@@ -17,7 +17,7 @@ namespace SimpleDogeWallet
 	//TODO: Remove duplicate code
 	public class SimpleSPVNodeService
 	{
-		private string SPV_CHECKPOINT_FILE = "spvcheckpoint";
+		public const string SPV_CHECKPOINT_FILE = "spvcheckpoint";
 
 		public SPVNodeBlockInfo NEW_WALLET_START_BLOCK = new SPVNodeBlockInfo()
 		{

@@ -11,6 +11,7 @@ using System.IO;
 using System.Transactions;
 using System.Xml.Linq;
 using System.Runtime;
+using Lib.Dogecoin.Interop;
 
 namespace SimpleDogeWallet.Pages
 {
@@ -54,6 +55,24 @@ namespace SimpleDogeWallet.Pages
 		{
 
 			await _navigation.PushAsync<LoadingPage>();
+
+
+
+			if (isNew)
+			{
+				var syncResult = await _navigation.PromptAsync<SyncNetworkPage>();
+
+				if(syncResult.Response != PromptResponse.YesConfirm)
+				{ 
+					_navigation.Pop();
+					return;
+				}
+			}
+
+
+
+
+
 
 			var newPin = string.Empty;
 			var confirmPin = string.Empty;

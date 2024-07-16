@@ -177,6 +177,7 @@ namespace SimpleDogeWallet
 		private void SimpleDogeWalletGame_Exiting(object sender, EventArgs e)
 		{
 			_spvNodeService.Stop();
+			_nav.CurrentPage.Cleanup();
 		}
 
 		protected override void LoadContent()
