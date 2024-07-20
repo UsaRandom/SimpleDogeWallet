@@ -94,6 +94,7 @@ namespace Lib.Dogecoin
 			node.OnNextBlock = _onNextBlock;
 			node.OnSyncComplete = _onSyncCompleted;
 			node.OnProcessedHeaders = _onHeaderMessage;
+			node.UseFullSync = _fullSync;
 
 			return node;
 		}

@@ -65,6 +65,8 @@ namespace Lib.Dogecoin
 
 		public Action OnSyncComplete { get; set; }
 
+		public bool UseFullSync { get; set; }
+
 		public Action<SPVNodeTransaction> OnTransaction { get; set; }
 
 		public Action<SPVNodeBlockInfo, SPVNodeBlockInfo> OnNextBlock { get; set; }
@@ -314,7 +316,7 @@ namespace Lib.Dogecoin
 
 			var net = IsMainNet ? LibDogecoinContext._mainChain : LibDogecoinContext._testChain;
 
-			_spvNodeRef = LibDogecoinInterop.dogecoin_spv_client_new(net, _isDebug, true, false, false, _peerCount);
+			_spvNodeRef = LibDogecoinInterop.dogecoin_spv_client_new(net, _isDebug, true, false, UseFullSync, _peerCount);
 			_syncComplete = false;
 			IsRunning = false;
 			
