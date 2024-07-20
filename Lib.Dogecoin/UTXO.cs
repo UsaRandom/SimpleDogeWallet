@@ -62,6 +62,8 @@ namespace Lib.Dogecoin
 			return left.VOut != right.VOut || left.TxId != right.TxId;
 		}
 
+		public long BlockHeight { get; set; } = -1;
+
 		public string TxId { get; set; }
 		
 		public int VOut { get; set; }

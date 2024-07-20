@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Transactions;
 using ZXing;
+using System.IO;
 
 namespace SimpleDogeWallet
 {
@@ -179,9 +180,13 @@ namespace SimpleDogeWallet
 				return;
 			}
 
+			uint startingBlock = 0;
+
 
 			if (isNew)
 			{
+				startingBlock = NEW_WALLET_START_BLOCK.BlockHeight;
+
 				_spvNode = new SPVNodeBuilder()
 					.StartAt(NEW_WALLET_START_BLOCK.Hash, NEW_WALLET_START_BLOCK.BlockHeight)
 					.UseCheckpointFile(SPV_CHECKPOINT_FILE, SPV_CHECKPOINT_BLOCKS_BEHIND)
@@ -195,6 +200,12 @@ namespace SimpleDogeWallet
 			}
 			else
 			{
+				if(File.Exists(SPV_CHECKPOINT_FILE))
+				{
+					startingBlock = uint.Parse(File.ReadAllText(SPV_CHECKPOINT_FILE).Split(":")[1]);
+				}
+
+
 				_spvNode = new SPVNodeBuilder()
 					.UseCheckpointFile(SPV_CHECKPOINT_FILE, SPV_CHECKPOINT_BLOCKS_BEHIND)
 					.UseMainNet()
@@ -205,11 +216,15 @@ namespace SimpleDogeWallet
 					.OnTransaction(HandleOnTransaction)
 					.Build();
 			}
-			
 
+
+
+			ClearUTXOsAfterCheckpoint(startingBlock);
 			_spvNode.Start();
 
 		}
+
+
 
 		public void Rescan(SPVNodeBlockInfo startPoint)
 		{
@@ -238,8 +253,16 @@ namespace SimpleDogeWallet
 					.EnableDebug()
 				.Build();
 
+			ClearUTXOsAfterCheckpoint((uint)currentBlock);
+
 			_spvNode.Start();
 
+		}
+
+
+		private void ClearUTXOsAfterCheckpoint(uint blockHeight)
+		{
+			SimpleDogeWallet.Instance.UTXOs.RemoveAll(u => u.BlockHeight > blockHeight);
 		}
 
 		private void OnSyncComplete()

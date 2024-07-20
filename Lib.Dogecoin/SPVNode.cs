@@ -416,7 +416,8 @@ namespace Lib.Dogecoin
 				inList.Add(new UTXO
 				{
 					TxId = ByteArrayToHexString(vin.prevout.hash.Reverse().ToArray()),
-					VOut = (int)vin.prevout.n
+					VOut = (int)vin.prevout.n,
+					BlockHeight = blockIdx.height
 				});
 			}
 
@@ -433,7 +434,8 @@ namespace Lib.Dogecoin
 					TxId = txId,
 					VOut = i,
 					AmountKoinu = vout.value,
-					ScriptPubKey = vout.script_pubkey
+					ScriptPubKey = vout.script_pubkey,
+					BlockHeight = blockIdx.height
 				});
 			}
 

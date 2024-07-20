@@ -197,7 +197,8 @@ namespace SimpleDogeWallet
 						{
 							TxId = lineParts[0],
 							VOut = int.Parse(lineParts[1]),
-							AmountKoinu = long.Parse(lineParts[2])
+							AmountKoinu = long.Parse(lineParts[2]),
+							BlockHeight = uint.Parse(lineParts[3])
 						});
 					}
 				}
@@ -215,7 +216,8 @@ namespace SimpleDogeWallet
 			{
 				utxoContent.Append(utxo.TxId + "|");
 				utxoContent.Append(utxo.VOut + "|");
-				utxoContent.AppendLine(utxo.AmountKoinu?.ToString());
+				utxoContent.Append(utxo.AmountKoinu?.ToString() + "|");
+				utxoContent.AppendLine(utxo.BlockHeight.ToString());
 			}
 
 			File.WriteAllText(UTXO_FILE, utxoContent.ToString());
