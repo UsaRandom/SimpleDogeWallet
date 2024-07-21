@@ -28,17 +28,18 @@ namespace Lib.Dogecoin
 		private static dogecoin_spv_client.sync_completed_delegate syncCompletedCallback;
 		private static dogecoin_spv_client.header_message_processed_delegate headerMessageProcessedCallback;
 
-		private ISPVCheckpointTracker _checkpointTracker;
 		private SPVNodeBlockInfo _startPoint;
 
 		public SPVNode(ISPVCheckpointTracker tracker, bool isMainNet, bool isDebug, SPVNodeBlockInfo startPoint, int peerCount = 24)
 		{
-			_checkpointTracker = tracker;
+			CheckpointTracker = tracker;
 			_isDebug = isDebug;
 			IsMainNet = isMainNet;
 			_startPoint = startPoint;
 			_peerCount = peerCount;
 		}
+
+		public ISPVCheckpointTracker CheckpointTracker { get; set; }
 
 		public bool IsRunning { get; private set; }
 
@@ -74,9 +75,9 @@ namespace Lib.Dogecoin
 
 		private void BeforeOnNextBlock(SPVNodeBlockInfo previousBlock, SPVNodeBlockInfo nextBlock)
 		{
-			if (_checkpointTracker != null)
+			if (CheckpointTracker != null)
 			{
-				_checkpointTracker.SaveCheckpoint(nextBlock);
+				CheckpointTracker.SaveCheckpoint(nextBlock);
 			}
 
 			if (OnNextBlock != null)
@@ -244,9 +245,9 @@ namespace Lib.Dogecoin
 						{
 							checkpoint = _startPoint;
 						}
-						else if (_checkpointTracker != null)
+						else if (CheckpointTracker != null)
 						{
-							checkpoint = _checkpointTracker.GetCheckpoint();
+							checkpoint = CheckpointTracker.GetCheckpoint();
 						}
 
 						if (checkpoint != null)

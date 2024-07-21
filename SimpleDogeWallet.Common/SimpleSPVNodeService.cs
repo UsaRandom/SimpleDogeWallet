@@ -224,6 +224,60 @@ namespace SimpleDogeWallet
 
 		}
 
+		public void Stop()
+		{
+			_spvNode?.Stop();
+			TxCount = 0;
+			SpentUTXOCount = 0;
+			NewUTXOCount = 0;
+		}
+
+
+		private SPVNodeBlockInfo _pauseBlock = null;
+		private bool _isPaused = false;
+
+		public void Pause()
+		{
+			if (_spvNode == null || !_spvNode.IsRunning)
+			{
+				return;
+			}
+			_pauseBlock = _spvNode.CurrentBlockInfo;
+			_spvNode?.Stop();
+			_isPaused = true;
+
+		}
+
+
+		public void Resume()
+		{
+
+			if (_spvNode == null || _spvNode.IsRunning)
+			{
+				return;
+			}
+			
+			
+			_isPaused = false;
+
+
+			_spvNode = new SPVNodeBuilder()
+					.StartAt(_pauseBlock)
+				.UseCheckpointTracker(_spvNode.CheckpointTracker)
+				.UseMainNet()
+				.FullSync()
+				.OnSyncCompleted(OnSyncComplete)
+				.OnNextBlock(HandleOnBlock)
+				.OnTransaction(HandleOnTransaction)
+					.EnableDebug()
+				.Build();
+
+			ClearUTXOsAfterCheckpoint((uint)_pauseBlock.BlockHeight);
+
+			_spvNode.Start();
+		}
+
+
 
 
 		public void Rescan(SPVNodeBlockInfo startPoint)
@@ -412,14 +466,6 @@ namespace SimpleDogeWallet
 
 		}
 
-
-		public void Stop()
-		{
-			_spvNode?.Stop();
-			TxCount = 0;
-			SpentUTXOCount = 0;
-			NewUTXOCount = 0;
-		}
 	}
 
 

@@ -46,6 +46,12 @@ namespace Lib.Dogecoin
 			return builder;
 		}
 
+		public static SPVNodeBuilder UseCheckpointTracker(this SPVNodeBuilder builder, ISPVCheckpointTracker tracker)
+		{
+			builder.CheckpointTracker = tracker;
+
+			return builder;
+		}
 
 		internal static char[] NullTerminate(this string str)
 		{

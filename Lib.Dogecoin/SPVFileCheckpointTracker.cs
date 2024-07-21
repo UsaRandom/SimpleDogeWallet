@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Lib.Dogecoin
 {
-	internal class SPVFileCheckpointTracker : ISPVCheckpointTracker
+	public class SPVFileCheckpointTracker : ISPVCheckpointTracker
 	{
 		private string _file;
 

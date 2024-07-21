@@ -188,7 +188,7 @@ namespace SimpleDogeWallet.Pages
 
 
 
-				_spvNode.Stop();
+				_spvNode.Pause();
 				Debug.WriteLine("Stopped SPV Node");
 
 				var rawTx = transaction.GetRawTransaction();
@@ -198,19 +198,18 @@ namespace SimpleDogeWallet.Pages
 				Debug.WriteLine($"Transaction Id (hash): {txId}");
 				Debug.WriteLine("Attempting to Broadcast Transaction!");
 
-				//NOTE: this isn't really reliable... it could be a bad broadcast and then say it's successful.
+
 
 				SimpleDogeWallet.Instance.PendingTxHash = txId;
 				SimpleDogeWallet.Instance.PendingAmount = transaction.Total;
 
 				await transaction.BroadcastAsync();
 
-		//		await navigation.PromptAsync<ShortMessagePage>(("message", "Broadcast Attempted! (check console for verification)"));
 
 
 				UpdateSendButton();
 
-				_spvNode.Start();
+				_spvNode.Resume();
 				Debug.WriteLine("Starting SPV Node");
 
 				navigation.Pop();
