@@ -179,7 +179,14 @@ namespace SimpleDogeWallet
         {
             try
 			{
-				var masterKeys = _ctx.GenerateHDMasterPubKeypairFromMnemonic(Wallet.GetMnemonic().Replace("-", " "));
+                var mnemonic = Wallet.GetMnemonic();
+
+                if(mnemonic == null)
+                {
+                    return false;
+                }
+
+				var masterKeys = _ctx.GenerateHDMasterPubKeypairFromMnemonic(mnemonic.Replace("-", " "));
 
 				var pk = _ctx.GetHDNodePrivateKeyWIFByPath(masterKeys.privateKey, Crypto.HDPATH, true);
 		
@@ -208,10 +215,27 @@ namespace SimpleDogeWallet
 
 		public async Task BroadcastAsync()
         { 
-            var cancelTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+
+            
+            var cancelTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(17));
             var cancelToken = cancelTokenSource.Token;
 
-			var processStartInfo = new ProcessStartInfo("sendtx.exe", "-m 64 -s 30 "+GetRawTransaction())
+   //         try
+   //         {
+                
+			//	await Task.Run(() =>
+			//	{
+			//		var result = LibDogecoinContext.Instance.BroadcastRawTransaction(GetRawTransaction());
+			//		Console.WriteLine(result);
+			//	}, cancelToken);
+			//}
+   //         catch
+   //         {
+
+   //         }
+
+            
+			var processStartInfo = new ProcessStartInfo("sendtx.exe", "-m 24 -s 15 "+GetRawTransaction())
 			{
 				UseShellExecute = false,
 				CreateNoWindow = true,
@@ -247,6 +271,8 @@ namespace SimpleDogeWallet
                 }
 				Console.WriteLine("Process timed out after 30 seconds");
 			}
+
+            
 
 		}
 	}

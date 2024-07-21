@@ -200,12 +200,12 @@ namespace SimpleDogeWallet.Pages
 
 				//NOTE: this isn't really reliable... it could be a bad broadcast and then say it's successful.
 
-				await transaction.BroadcastAsync();
-
-				await navigation.PromptAsync<ShortMessagePage>(("message", "Broadcast Attempted! (check console for verification)"));
-
 				SimpleDogeWallet.Instance.PendingTxHash = txId;
 				SimpleDogeWallet.Instance.PendingAmount = transaction.Total;
+
+				await transaction.BroadcastAsync();
+
+		//		await navigation.PromptAsync<ShortMessagePage>(("message", "Broadcast Attempted! (check console for verification)"));
 
 
 				UpdateSendButton();
