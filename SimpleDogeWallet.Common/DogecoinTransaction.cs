@@ -78,7 +78,7 @@ namespace SimpleDogeWallet
 
 
 
-			decimal fee = ratePerByte * 225;
+            decimal fee = _services.GetService<FeeEstimator>().EstimatedFee;
             decimal feePerUtxo = ratePerByte * 148;
 			decimal sum = 0M;
 			int utxoCount = 0; //min 2 utxo (receipient + change)

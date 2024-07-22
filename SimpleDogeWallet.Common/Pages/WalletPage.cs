@@ -23,12 +23,14 @@ namespace SimpleDogeWallet.Pages
 		private Texture2D _qrCodeImage;
 
 		private SimpleSPVNodeService _spvNode;
+		private FeeEstimator _feeEstimator;
 
 		private ButtonControl _sendButton;
 		private IServiceProvider _services;
 
-		public WalletPage(IPageOptions options, IServiceProvider services,  IClipboardService clipboard, ITerminalSettings settings, Navigation navigation, Strings strings, GraphicsDevice graphicsDevice, SimpleSPVNodeService spvNode) : base(options)
+		public WalletPage(IPageOptions options, IServiceProvider services,  IClipboardService clipboard, ITerminalSettings settings, Navigation navigation, Strings strings, GraphicsDevice graphicsDevice, SimpleSPVNodeService spvNode, FeeEstimator feeEstimator) : base(options)
         {
+			_feeEstimator = feeEstimator;
 			_services = services;
 
 			var isNew = options.GetOption<bool>("is-new", false);
@@ -235,11 +237,7 @@ namespace SimpleDogeWallet.Pages
 
 		private void UpdateSPVText()
 		{
-			var estimatedFee = Math.Max(_services.GetService<ITerminalSettings>().GetDecimal("dust-limit") * _services.GetService<ITerminalSettings>().GetDecimal("fee-coeff"),
-										_spvNode.EstimatedRate * 226 * _services.GetService<ITerminalSettings>().GetDecimal("fee-coeff"));
-
-
-			GetControl<TextControl>("SPVNodeInfo").Text = $"{_spvNode.CurrentBlock.BlockHeight}/~{_spvNode.EstimatedHeight} @ {_spvNode.CurrentBlock.Timestamp.ToLocalTime()} - {estimatedFee}";
+			GetControl<TextControl>("SPVNodeInfo").Text = $"{_spvNode.CurrentBlock.BlockHeight}/~{_spvNode.EstimatedHeight} @ {_spvNode.CurrentBlock.Timestamp.ToLocalTime()} - {_feeEstimator.EstimatedFee}";
 
 		}
 

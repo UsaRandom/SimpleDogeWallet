@@ -63,6 +63,7 @@ namespace SimpleDogeWallet
 			get; set;
 		}
 
+
 		public uint EstimatedHeight
 		{
 			get

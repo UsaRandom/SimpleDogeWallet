@@ -97,8 +97,7 @@ namespace SimpleDogeWallet.Pages
 			sb.AppendLine($"->{_strings.GetString("terminal-spv-currentblock-time")}: {_spvNodeService.CurrentBlock.Timestamp.ToLocalTime()}");
 
 			sb.AppendLine();
-			var estimatedFee = Math.Max(services.GetService<ITerminalSettings>().GetDecimal("dust-limit") * services.GetService<ITerminalSettings>().GetDecimal("fee-coeff"),
-										_spvNodeService.EstimatedRate * 226 * services.GetService<ITerminalSettings>().GetDecimal("fee-coeff"));
+			var estimatedFee = services.GetService<FeeEstimator>().EstimatedFee;
 
 
 			sb.AppendLine($"->{_strings.GetString("terminal-spv-last-block-size")}: {_spvNodeService.LastBlockSize:P2}");

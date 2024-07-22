@@ -48,8 +48,7 @@ namespace SimpleDogeWallet.WinForms
 		{
 			_blockLabel.Text = "Block: " + message.BlockHeight.ToString("N0");
 
-			var estimatedFee = Math.Max(_settings.GetDecimal("dust-limit") * _settings.GetDecimal("fee-coeff"),
-										_spvNodeService.EstimatedRate * 226 * _settings.GetDecimal("fee-coeff"));
+			var estimatedFee = Services.GetService<FeeEstimator>().EstimatedFee;
 
 
 			_currentFees.Text = "Fees: " + estimatedFee.ToString("N5");

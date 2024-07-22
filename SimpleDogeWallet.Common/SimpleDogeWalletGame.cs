@@ -142,6 +142,8 @@ namespace SimpleDogeWallet
 
 			Services.AddService(_spvNodeService);
 
+			Services.AddService(new FeeEstimator(Services));
+
 			Services.AddService<IClipboardService>(_clipboardService);
 
 
