@@ -206,6 +206,6 @@
 
 
 
-  <String Id="terminal-loading-text-broadcasting"><![CDATA[ Broadcasting Transaction!
+  <String Id="terminal-loading-text-broadcasting"><![CDATA[Broadcasting Transaction!
 This will take ~10 seconds.]]></String>
 </Strings>

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.VisualBasic;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,16 +19,18 @@ namespace SimpleDogeWallet.Common.Pages
 
 		private SPVFastSyncService _spvSyncService;
 		private SimpleSPVNodeService _spvNodeService;
+		private Strings _strings;
 
 		public SyncNetworkPage(IPageOptions options, Strings strings, SimpleSPVNodeService spvNodeService) : base(options)
 		{
+			_strings = strings;
 			_spvSyncService = new SPVFastSyncService();
 			_spvNodeService = spvNodeService;
 
 			Messenger.Default.Register<SPVSyncProgressMessage>(this);
 			_spvSyncService.Run();
 
-			_message = strings.GetString("terminal-spv-fast-sync-connecting");
+			_message = _strings.GetString("terminal-spv-fast-sync-connecting");
 
 
 			OnClick("BackButton", _ =>
@@ -45,6 +48,15 @@ namespace SimpleDogeWallet.Common.Pages
 
 		public void Receive(SPVSyncProgressMessage message)
 		{
+			if(message.BestKnownHeight < message.Block.BlockHeight)
+			{
+				_message = _strings.GetString("terminal-spv-fast-sync-connecting");
+
+				_spvNodeService.Stop();
+				_spvNodeService.Start();
+				return;
+			}
+
 			XPos = (int)(10 + (80 * message.PercentDone));
 			_message = message.Block.BlockHeight.ToString("N0") + " / " + message.BestKnownHeight.ToString("N0");
 
