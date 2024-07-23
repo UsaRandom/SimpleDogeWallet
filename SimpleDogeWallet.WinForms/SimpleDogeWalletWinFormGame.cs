@@ -130,10 +130,7 @@ namespace SimpleDogeWallet.WinForms
 			Exiting += SimpleDogeWalletGame_Exiting;
 
 
-
-
-
-
+			Messenger.Default.Register(this);
 		}
 
 		private void SimpleDogeWalletGame_Exiting(object sender, EventArgs e)
