@@ -215,10 +215,10 @@ namespace SimpleDogeWallet.Pages
 				_spvNode.Resume();
 				Debug.WriteLine("Starting SPV Node");
 
-				navigation.Pop();
-				
-
-
+				if(navigation.CurrentPage is LoadingPage)
+				{
+					navigation.Pop();
+				}
 			});
 
 
