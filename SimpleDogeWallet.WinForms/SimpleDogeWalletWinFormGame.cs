@@ -72,6 +72,7 @@ namespace SimpleDogeWallet.WinForms
 			IntPtr handle = Window.Handle; // Your window handle
 			System.Windows.Forms.Control control = System.Windows.Forms.Control.FromHandle(handle);
 			_form = control as System.Windows.Forms.Form;
+			_form.FormClosing += Form1_FormClosing;
 
 			Services.AddService(_form);
 
@@ -172,26 +173,6 @@ namespace SimpleDogeWallet.WinForms
 
 		protected override void Update(GameTime gameTime)
 		{
-			if (_form == null)
-			{
-				IntPtr handle = Window.Handle; // Your window handle
-				System.Windows.Forms.Control fControl = System.Windows.Forms.Control.FromHandle(handle);
-				System.Windows.Forms.Form form = fControl as System.Windows.Forms.Form;
-				if (form != null)
-				{
-					_form = form;
-				//	Services.AddService(_form);
-					_form.FormClosing += Form1_FormClosing;
-					var tb = new TextBox();
-					tb.Text = "Hello World";
-					tb.Hide();
-
-					this._form.Controls.Add(tb); ;
-
-				}
-
-			}
-
 
 			base.Update(gameTime);
 		}
