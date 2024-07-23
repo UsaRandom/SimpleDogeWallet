@@ -204,4 +204,8 @@
 
   <String Id="terminal-enteroppin-title"><![CDATA[Enter PIN to Unlock:]]></String>
 
+
+
+  <String Id="terminal-loading-text-broadcasting"><![CDATA[ Broadcasting Transaction!
+This will take ~10 seconds.]]></String>
 </Strings>

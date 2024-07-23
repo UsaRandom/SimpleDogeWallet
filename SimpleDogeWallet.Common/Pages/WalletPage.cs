@@ -189,7 +189,10 @@ namespace SimpleDogeWallet.Pages
 					return;
 				}
 
-
+				if(navigation.CurrentPage is LoadingPage)
+				{
+					((LoadingPage)navigation.CurrentPage).StringDef = "terminal-loading-text-broadcasting";
+				}
 
 				_spvNode.Pause();
 				Debug.WriteLine("Stopped SPV Node");

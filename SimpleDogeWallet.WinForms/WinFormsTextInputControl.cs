@@ -109,16 +109,42 @@ namespace SimpleDogeWallet.WinForms
 		public override void OnControlShown(IServiceProvider services)
 		{
 			var form = services.GetService<Form>();
+
+			var add = (MethodInvoker)delegate
+			{
+
+				var virtualScreen = services.GetService<VirtualScreen>();
+				var screenCordStart = virtualScreen.VirtualCoordToWindowCoord(StartPosition);
+				var screenCordEnd = virtualScreen.VirtualCoordToWindowCoord(EndPosition);
+
+
+				if (TextBoxControl.PlaceholderText == string.Empty && !string.IsNullOrWhiteSpace(PlaceholderTextStringDef))
+				{
+					TextBoxControl.PlaceholderText = services.GetService<Strings>().GetString(PlaceholderTextStringDef);
+				}
+
+				TextBoxControl.Width = Math.Abs(screenCordEnd.X - screenCordStart.X);
+				TextBoxControl.Height = Math.Abs(screenCordEnd.Y - screenCordStart.Y);
+
+				TextBoxControl.Location = new System.Drawing.Point(Math.Min(screenCordStart.X, screenCordEnd.X), Math.Min(screenCordStart.Y, screenCordEnd.Y));
+
+				if (lastHeight != TextBoxControl.Height)
+				{
+					TextBoxControl.Font = new Font("Comic Sans MS", TextBoxControl.Height / 2 - 2, FontStyle.Bold, GraphicsUnit.Pixel);
+				}
+
+				lastHeight = TextBoxControl.Height;
+
+				form.Controls.Add(TextBoxControl);
+			};
+
 			if (form.InvokeRequired)
 			{
-				form.Invoke((MethodInvoker)delegate {
-
-						form.Controls.Add(TextBoxControl);
-				});
+				form.Invoke(add);
 			}
 			else
 			{
-				form.Controls.Add(TextBoxControl);
+				add();
 			}
 		}
 	}

@@ -11,7 +11,7 @@
             Name="DancingDoge"/>
 
   <common:TextControl
-        Name="Title"
+        Name="LoadingPageText"
         Color="White"
         StringDef="common-loading-title"
         TextSize="5"
