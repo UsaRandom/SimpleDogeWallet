@@ -224,18 +224,18 @@ namespace SimpleDogeWallet.Common
 		public async Task<PromptResult> PromptAsync<T>(params (string key, object value)[] options) where T : IPage
 		{
 			await PushAsync<T>(options);
+			var promptCtx = new PromptContext();
 
-			return await Task.Run(() =>
+			Task.Run(() =>
 			{
-				var promptCtx = new PromptContext();
 
 				_prompts.Push(promptCtx);
-				
+
 				var exit = false;
 
 				while (!exit)
 				{
-					lock(_lock)
+					lock (_lock)
 					{
 						exit = promptCtx.Result != null;
 					}
@@ -243,8 +243,9 @@ namespace SimpleDogeWallet.Common
 
 				_prompts.TryPop(out _);
 				Pop();
-				return promptCtx.Result;
-			});
+			}).Wait();
+
+			return await Task.FromResult(promptCtx.Result);
 		}
 
 

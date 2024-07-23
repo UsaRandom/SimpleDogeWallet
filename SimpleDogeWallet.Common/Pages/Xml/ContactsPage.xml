@@ -12,7 +12,8 @@
 
 
   <common:TextInputControl StartPosition="12,22" EndPosition="68, 28"
-                           TextSize="3" Name="SearchBar" 
+                           TextSize="3" Name="SearchBar"
+                           PlaceholderTextStringDef="terminal-contacts-searchbar-placeholder"
                            BackgroundColor="White" ForegroundColor="DarkGrey" />
   
   

@@ -102,9 +102,10 @@ namespace SimpleDogeWallet.Pages
 					return;
 				}
 
+				PromptResult destinationResult = default;
 				await navigation.PushAsync<LoadingPage>();
 
-				var destinationResult = await navigation.PromptAsync<ContactsPage>(("edit-mode", false));
+				destinationResult = await navigation.PromptAsync<ContactsPage>(("edit-mode", false));
 
 				if(destinationResult.Response != PromptResponse.YesConfirm)
 				{

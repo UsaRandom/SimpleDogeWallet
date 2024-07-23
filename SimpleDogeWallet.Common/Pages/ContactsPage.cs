@@ -37,6 +37,7 @@ namespace SimpleDogeWallet.Common.Pages
 
 			if (EditMode)
 			{
+				GetControl<TextControl>("TitleText").StringDef = "terminal-contacts-title";
 				GetControl<ImageControl>("SubmitButton").Enabled = false;
 				GetControl<ImageControl>("EditButton").Enabled = true;
 				GetControl<ImageControl>("CopyButton").Enabled = true;
@@ -44,6 +45,7 @@ namespace SimpleDogeWallet.Common.Pages
 			}
 			else
 			{
+				GetControl<TextControl>("TitleText").StringDef = "terminal-contacts-title-sending";
 				GetControl<ImageControl>("SubmitButton").Enabled = true;
 				GetControl<ImageControl>("EditButton").Enabled = false;
 				GetControl<ImageControl>("CopyButton").Enabled = false;

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using SharpDX.Direct2D1;
 using SimpleDogeWallet.Common;
 using System;
 using System.Collections.Generic;
@@ -16,14 +17,16 @@ namespace SimpleDogeWallet.WinForms
 		private bool _selected = false;
 
 		private TextBox _textBox;
+
 		
 
 		public WinFormsTextInputControl(XElement element)
 			: base(element)
 		{
-
+			PlaceholderTextStringDef = element.Attribute(nameof(PlaceholderTextStringDef))?.Value;
 		}
-	
+
+		private string PlaceholderTextStringDef { get; set; }
 
 		public TextBox TextBoxControl
 		{
@@ -66,6 +69,12 @@ namespace SimpleDogeWallet.WinForms
 			var screenCordStart = virtualScreen.VirtualCoordToWindowCoord(StartPosition);
 			var screenCordEnd = virtualScreen.VirtualCoordToWindowCoord(EndPosition);
 
+
+			if(TextBoxControl.PlaceholderText == string.Empty && !string.IsNullOrWhiteSpace(PlaceholderTextStringDef))
+			{
+				TextBoxControl.PlaceholderText = services.GetService<Strings>().GetString(PlaceholderTextStringDef);
+			}
+
 			TextBoxControl.Width = Math.Abs(screenCordEnd.X - screenCordStart.X);
 			TextBoxControl.Height = Math.Abs(screenCordEnd.Y - screenCordStart.Y);
 			
@@ -79,13 +88,15 @@ namespace SimpleDogeWallet.WinForms
 			lastHeight = TextBoxControl.Height;
 		}
 
+
+
 		public override void OnControlHidden(IServiceProvider services)
 		{
 			var form = services.GetService<Form>();
 			if (form.InvokeRequired)
 			{
-				form.Invoke((MethodInvoker)delegate {
-
+				form.Invoke((MethodInvoker)delegate
+				{
 					form.Controls.Remove(TextBoxControl);
 				});
 			}
