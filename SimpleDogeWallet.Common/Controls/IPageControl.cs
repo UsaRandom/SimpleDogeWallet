@@ -9,7 +9,11 @@ namespace SimpleDogeWallet.Common
         void Update(GameTime time, IServiceProvider services);
         void Draw(GameTime time, IServiceProvider services);
 
-        string Name { get; }
+        void OnControlShown(IServiceProvider services);
+
+        void OnControlHidden(IServiceProvider services);
+
+		string Name { get; }
 
         bool Enabled { get; set; }
 

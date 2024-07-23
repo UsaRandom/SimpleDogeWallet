@@ -49,7 +49,7 @@ namespace SimpleDogeWallet.Common
 			}
 		}
 
-		public string Text { get; set; }
+		public virtual string Text { get; set; }
 		public Point StartPosition { get; set; }
 		public Point EndPosition { get; set; }
 		public TerminalColor BackgroundColor { get; set; }

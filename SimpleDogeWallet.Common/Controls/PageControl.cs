@@ -64,5 +64,15 @@ namespace SimpleDogeWallet.Common
 
 
 		public abstract void AcceptVisitor(IControlVisitor visitor);
+
+		public virtual void OnControlShown(IServiceProvider services)
+		{
+
+		}
+
+		public virtual void OnControlHidden(IServiceProvider services)
+		{
+
+		}
 	}
 }

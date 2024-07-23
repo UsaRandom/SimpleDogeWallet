@@ -182,7 +182,8 @@ namespace SimpleDogeWallet.Common.Pages
 
 		public override void Update(GameTime gameTime, IServiceProvider services)
 		{
-			var enteredText = GetControl<TextInputControl>("SearchBar").Text?.Trim() ?? string.Empty;
+			var searchBar = GetControl<TextInputControl>("SearchBar");
+			var enteredText = searchBar.Text?.Trim() ?? string.Empty;
 
 			if (_previousText != enteredText)
 			{

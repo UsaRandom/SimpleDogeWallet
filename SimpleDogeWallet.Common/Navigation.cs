@@ -40,17 +40,27 @@ namespace SimpleDogeWallet.Common
 			if (_pageHistory.TryPop(out var previousPage))
 			{
 				Messenger.Default.Deregister(previousPage);
+				previousPage.OnPageHidden(_serviceProvider);
 				previousPage.Cleanup();
+
+				CurrentPage?.OnPageShown(_serviceProvider);
 				Messenger.Default.Register(CurrentPage);
 			}
 		}
 
 		public Task PushAsync<T>(params (string key, object value)[] options) where T : IPage
 		{
-			var newPage = Page.Create<T>(new PageOptions(options), _serviceProvider);
+
+			var newPageOptions = new PageOptions(options);
+			newPageOptions.AddOption("platform-type-selector", _serviceProvider.GetService<IPlatformControlTypeSelector>());
+
+			var newPage = Page.Create<T>(newPageOptions, _serviceProvider);
 
 			Messenger.Default.Deregister(CurrentPage);
+			CurrentPage?.OnPageHidden(_serviceProvider);
+
 			_pageHistory.Push(newPage);
+			newPage.OnPageShown(_serviceProvider);
 			Messenger.Default.Register(newPage);
 
 			return Task.FromResult<object>(null);
@@ -84,6 +94,8 @@ namespace SimpleDogeWallet.Common
 
 					Messenger.Default.Deregister(CurrentPage);
 
+					var startPage = CurrentPage;
+
 					while (_pageHistory.TryPeek(out var nextPageToPop))
 					{
 						if (!targetType.IsInstanceOfType(nextPageToPop))
@@ -95,6 +107,10 @@ namespace SimpleDogeWallet.Common
 							}
 							else
 							{
+								if(nextPageToPop == startPage)
+								{
+									nextPageToPop.OnPageHidden(_serviceProvider);
+								}
 								nextPageToPop.Cleanup();
 							}
 						}
@@ -102,6 +118,11 @@ namespace SimpleDogeWallet.Common
 						{
 							break;
 						}
+					}
+					
+					if(CurrentPage != startPage)
+					{
+						CurrentPage.OnPageShown(_serviceProvider);
 					}
 
 					Messenger.Default.Register(CurrentPage);
@@ -111,7 +132,10 @@ namespace SimpleDogeWallet.Common
 
 		public async Task<bool> TryInsertBeforeAsync<TPageToInsert, TPageToLookFor>(params (string key, object value)[] options) where TPageToInsert : IPage where TPageToLookFor : IPage
 		{
-			var newPage = Page.Create<TPageToInsert>(new PageOptions(options), _serviceProvider);
+			var newPageOptions = new PageOptions(options);
+			newPageOptions.AddOption("platform-type-selector", _serviceProvider.GetService<IPlatformControlTypeSelector>());
+
+			var newPage = Page.Create<TPageToInsert>(newPageOptions, _serviceProvider);
 
 			var beforePageType = typeof(TPageToLookFor);
 

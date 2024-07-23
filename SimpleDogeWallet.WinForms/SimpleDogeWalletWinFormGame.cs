@@ -66,13 +66,22 @@ namespace SimpleDogeWallet.WinForms
 		protected override void Initialize()
 		{
 
+			Services.AddService<IPlatformControlTypeSelector>(new WinFormsPlatformControlTypeSelector());
+
+
+			IntPtr handle = Window.Handle; // Your window handle
+			System.Windows.Forms.Control control = System.Windows.Forms.Control.FromHandle(handle);
+			_form = control as System.Windows.Forms.Form;
+
+			Services.AddService(_form);
+
 			base.Initialize();
 
 			_notifyIcon = new System.Windows.Forms.NotifyIcon();
 			_notifyIcon.Icon = new System.Drawing.Icon("Icon.ico");
 			_notifyIcon.Text = "Simple Doge Wallet";
 			_notifyIcon.Visible = true;
-			
+
 			_notifyIcon.MouseClick += notifyIcon_MouseClick;
 
 			// Create a context menu
@@ -119,7 +128,10 @@ namespace SimpleDogeWallet.WinForms
 
 			Exiting += SimpleDogeWalletGame_Exiting;
 
-			Messenger.Default.Register(this);
+
+
+
+
 
 		}
 
@@ -132,36 +144,29 @@ namespace SimpleDogeWallet.WinForms
 		{
 			if (e.CloseReason == System.Windows.Forms.CloseReason.UserClosing)
 			{
-				IntPtr handle = Window.Handle; // Your window handle
-				System.Windows.Forms.Control control = System.Windows.Forms.Control.FromHandle(handle);
-				System.Windows.Forms.Form form = control as System.Windows.Forms.Form;
-				if (form != null)
+
+				if(SimpleDogeWallet.Instance == null || string.IsNullOrWhiteSpace(SimpleDogeWallet.Instance.Address))
 				{
-
-					if(SimpleDogeWallet.Instance == null || string.IsNullOrWhiteSpace(SimpleDogeWallet.Instance.Address))
-					{
-						//wallet is in setup mode, don't prevent close
-						return;
-					}
-
-					e.Cancel = true;
-					form.WindowState = System.Windows.Forms.FormWindowState.Minimized;
-					form.Hide();
-					_notifyIcon.Visible = true;
-
-					Task.Run(async () =>
-					{
-						while(_nav.CurrentPage != null)
-						{
-							_nav.Pop();
-						}
-
-						await _nav.PushAsync<UnlockTerminalPage>();
-
-					});
+					//wallet is in setup mode, don't prevent close
+					return;
 				}
 
+				e.Cancel = true;
+				_form.WindowState = System.Windows.Forms.FormWindowState.Minimized;
+				_form.Hide();
+				_notifyIcon.Visible = true;
 
+				Task.Run(async () =>
+				{
+					while(_nav.CurrentPage != null)
+					{
+						_nav.Pop();
+					}
+
+					await _nav.PushAsync<UnlockTerminalPage>();
+
+				});
+				
 			}
 		}
 
@@ -175,8 +180,14 @@ namespace SimpleDogeWallet.WinForms
 				if (form != null)
 				{
 					_form = form;
-
+				//	Services.AddService(_form);
 					_form.FormClosing += Form1_FormClosing;
+					var tb = new TextBox();
+					tb.Text = "Hello World";
+					tb.Hide();
+
+					this._form.Controls.Add(tb); ;
+
 				}
 
 			}

@@ -10,6 +10,10 @@ namespace SimpleDogeWallet.Common.Pages
         void Update(GameTime time, IServiceProvider services);
         void Draw(GameTime time, IServiceProvider services);
 
+        void OnPageShown(IServiceProvider services);
+
+        void OnPageHidden(IServiceProvider services);
+
         void Cleanup();
 
         ICollection<IPageControl> Controls { get; }

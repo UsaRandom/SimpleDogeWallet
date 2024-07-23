@@ -19,6 +19,7 @@ using Lib.Dogecoin;
 using System.Diagnostics.Metrics;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SimpleDogeWallet
 {
@@ -138,6 +139,11 @@ namespace SimpleDogeWallet
 			Services.AddService<Game>(this);
 			Services.AddService<IServiceProvider>(Services);
 			Services.AddService(_userInputService);
+
+			if(Services.GetService<IPlatformControlTypeSelector>() == null)
+			{
+				Services.AddService<IPlatformControlTypeSelector>(new DefaultPlatformControlTypeSelector());
+			}
 
 
 			Services.AddService(_spvNodeService);

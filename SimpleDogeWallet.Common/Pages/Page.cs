@@ -20,11 +20,14 @@ namespace SimpleDogeWallet.Common.Pages
 
         public IPageOptions Options { get; private set; }
 
-        public Page(IPageOptions options)
+
+		public Page(IPageOptions options)
         {
             Options = options;
 
-            _controlEvents = new Dictionary<string, OnEvent>();
+
+
+			_controlEvents = new Dictionary<string, OnEvent>();
 
 
             var pageDef = GetType().GetCustomAttribute<PageDefAttribute>();
@@ -37,7 +40,7 @@ namespace SimpleDogeWallet.Common.Pages
                 {
                     var fullControlName = element.Name.NamespaceName + "." + element.Name.LocalName;
 
-                    var target = Type.GetType(fullControlName);
+                    var target = Options.GetOption<IPlatformControlTypeSelector>("platform-type-selector").GetType(fullControlName);
 
                     if (target == null)
                     {
@@ -88,6 +91,23 @@ namespace SimpleDogeWallet.Common.Pages
                 }
             }
         }
+
+        public virtual void OnPageShown(IServiceProvider services)
+        {
+            foreach(var control in Controls)
+            {
+                control.OnControlShown(services);
+            }
+        }
+
+        public virtual void OnPageHidden(IServiceProvider services)
+		{
+			foreach (var control in Controls)
+			{
+				control.OnControlHidden(services);
+			}
+
+		}
 
 
         public virtual void Cleanup()
