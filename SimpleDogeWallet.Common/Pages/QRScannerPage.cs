@@ -57,14 +57,19 @@ namespace SimpleDogeWallet.Common.Pages
 
 			OnClick("BackButton", _ =>
 			{
-				_capture.Dispose();
 				Cancel();
 			});
 
 		}
 
+		public override void Cleanup()
+		{
+			_capture.Dispose();
+			base.Cleanup();
+		}
 
-		
+
+
 
 
 
@@ -75,7 +80,7 @@ namespace SimpleDogeWallet.Common.Pages
 
 			using (Mat frame = new Mat(VIDEO_CAPTURE_WIDTH, VIDEO_CAPTURE_HEIGHT, MatType.CV_32SC1))
 			{
-				if (_capture.Read(frame))
+				if (!_capture.IsDisposed && _capture.Read(frame))
 				{
 					try
 					{
