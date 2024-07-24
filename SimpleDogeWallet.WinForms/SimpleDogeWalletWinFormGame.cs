@@ -154,17 +154,8 @@ namespace SimpleDogeWallet.WinForms
 				_form.Hide();
 				_notifyIcon.Visible = true;
 
-				Task.Run(async () =>
-				{
-					while(_nav.CurrentPage != null)
-					{
-						_nav.Pop();
-					}
 
-					await _nav.PushAsync<UnlockTerminalPage>();
-
-				});
-				
+				LockRequested = true;
 			}
 		}
 

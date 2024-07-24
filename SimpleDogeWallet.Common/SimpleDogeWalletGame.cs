@@ -46,6 +46,12 @@ namespace SimpleDogeWallet
 		public FontSystem _fontSystem;
 		public VirtualScreen _screen;
 
+		public bool LockRequested
+		{
+			get;
+			set;
+		}
+
 
 
 		public SimpleDogeWalletGame()
@@ -257,6 +263,19 @@ namespace SimpleDogeWallet
 		{
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
+
+			if(LockRequested)
+			{
+
+				while (_nav.CurrentPage != null)
+				{
+					_nav.Pop();
+				}
+
+				_nav.PushAsync<UnlockTerminalPage>();
+
+				LockRequested = false;
+			}
 
 			_textInputSelector.UpdateMouse();
 			foreach (var control in _nav.CurrentPage.Controls)
