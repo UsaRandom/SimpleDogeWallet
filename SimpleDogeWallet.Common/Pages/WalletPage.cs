@@ -189,39 +189,43 @@ namespace SimpleDogeWallet.Pages
 					return;
 				}
 
-				if(navigation.CurrentPage is LoadingPage)
+				//if(navigation.CurrentPage is LoadingPage)
+				//{
+				//	((LoadingPage)navigation.CurrentPage).StringDef = "terminal-loading-text-broadcasting";
+				//}
+				await Task.Run(async () =>
 				{
-					((LoadingPage)navigation.CurrentPage).StringDef = "terminal-loading-text-broadcasting";
-				}
+					_spvNode.Pause();
+					Debug.WriteLine("Stopped SPV Node");
 
-				_spvNode.Pause();
-				Debug.WriteLine("Stopped SPV Node");
+					var rawTx = transaction.GetRawTransaction();
+					var txId = Crypto.GetTransactionIdFromRaw(rawTx);
 
-				var rawTx = transaction.GetRawTransaction();
-				var txId = Crypto.GetTransactionIdFromRaw(rawTx);
-
-				Debug.WriteLine($"Raw Transaction: {rawTx}");
-				Debug.WriteLine($"Transaction Id (hash): {txId}");
-				Debug.WriteLine("Attempting to Broadcast Transaction!");
+					Debug.WriteLine($"Raw Transaction: {rawTx}");
+					Debug.WriteLine($"Transaction Id (hash): {txId}");
+					Debug.WriteLine("Attempting to Broadcast Transaction!");
 
 
 
-				SimpleDogeWallet.Instance.PendingTxHash = txId;
-				SimpleDogeWallet.Instance.PendingAmount = transaction.Total;
+					SimpleDogeWallet.Instance.PendingTxHash = txId;
+					SimpleDogeWallet.Instance.PendingAmount = transaction.Total;
 
-				await transaction.BroadcastAsync();
+					if (navigation.CurrentPage is LoadingPage)
+					{
+						navigation.Pop();
+					}
+
+					UpdateSendButton();
+					await transaction.BroadcastAsync();
 
 
 
-				UpdateSendButton();
 
-				_spvNode.Resume();
-				Debug.WriteLine("Starting SPV Node");
+					_spvNode.Resume();
+					Debug.WriteLine("Starting SPV Node");
 
-				if(navigation.CurrentPage is LoadingPage)
-				{
-					navigation.Pop();
-				}
+				});
+
 			});
 
 

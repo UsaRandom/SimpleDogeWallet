@@ -123,6 +123,16 @@ namespace SimpleDogeWallet.WinForms
 					TextBoxControl.PlaceholderText = services.GetService<Strings>().GetString(PlaceholderTextStringDef);
 				}
 
+				TextBoxControl.ForeColor = System.Drawing.Color.FromArgb(ForegroundColor.Color.A,
+																		ForegroundColor.Color.R,
+																		ForegroundColor.Color.G,
+																		ForegroundColor.Color.B);
+				TextBoxControl.BackColor = System.Drawing.Color.FromArgb(BackgroundColor.Color.A,
+																		BackgroundColor.Color.R,
+																		BackgroundColor.Color.G,
+																		BackgroundColor.Color.B);
+
+				TextBoxControl.ReadOnly = !Editable;
 				TextBoxControl.Width = Math.Abs(screenCordEnd.X - screenCordStart.X);
 				TextBoxControl.Height = Math.Abs(screenCordEnd.Y - screenCordStart.Y);
 

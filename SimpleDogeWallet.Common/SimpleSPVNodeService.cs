@@ -176,7 +176,7 @@ namespace SimpleDogeWallet
 
 		public void Start(bool isNew = false)
 		{
-			if (_spvNode != null && _spvNode.IsRunning)
+			if (_spvNode != null && (_spvNode.IsRunning || _isPaused))
 			{
 				return;
 			}
