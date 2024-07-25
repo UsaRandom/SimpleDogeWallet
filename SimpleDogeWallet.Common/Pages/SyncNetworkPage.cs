@@ -63,7 +63,14 @@ namespace SimpleDogeWallet.Common.Pages
 			if (message.PercentDone == 1.0M)
 			{
 				_spvNodeService.NEW_WALLET_START_BLOCK = message.Block;
-				File.WriteAllText(SimpleSPVNodeService.SPV_CHECKPOINT_FILE, $"{message.Block.Hash}:{message.Block.BlockHeight}");
+
+				string checkpointData = $"{message.Block.Hash}:{message.Block.BlockHeight}";
+				string tempFilePath = Path.GetTempFileName();
+				
+				File.WriteAllText(tempFilePath, checkpointData);
+
+				File.Move(tempFilePath, SimpleSPVNodeService.SPV_CHECKPOINT_FILE, true);
+
 				this.Submit(message.Block);
 			}
 		}

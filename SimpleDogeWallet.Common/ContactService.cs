@@ -52,10 +52,14 @@ namespace SimpleDogeWallet
 			Save();
 		}
 
-
 		public void Save()
 		{
-			File.WriteAllText(CONTACT_LIST_FILE, JsonSerializer.Serialize(_contacts));
+			string serializedContacts = JsonSerializer.Serialize(_contacts);
+			string tempFilePath = Path.GetTempFileName();
+
+			File.WriteAllText(tempFilePath, serializedContacts);
+
+			File.Move(tempFilePath, CONTACT_LIST_FILE, true);
 		}
 
 		private void Load()

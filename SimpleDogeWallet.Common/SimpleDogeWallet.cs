@@ -132,7 +132,12 @@ namespace SimpleDogeWallet
 		{
 			var address = Crypto.Decrypt(File.ReadAllText(ADDRESS_FILE), oldPin);
 
-			File.WriteAllText(ADDRESS_FILE, Crypto.Encrypt(address, newPin));
+			string encryptedAddress = Crypto.Encrypt(address, newPin);
+			string tempFilePath = Path.GetTempFileName();
+
+			File.WriteAllText(tempFilePath, encryptedAddress);
+
+			File.Move(tempFilePath, ADDRESS_FILE, true);
 		}
 
 		public static void Init(IServiceProvider services)
@@ -220,8 +225,12 @@ namespace SimpleDogeWallet
 				utxoContent.AppendLine(utxo.BlockHeight.ToString());
 			}
 
-			File.WriteAllText(UTXO_FILE, utxoContent.ToString());
+			string utxoContentString = utxoContent.ToString();
+			string tempFilePath = Path.GetTempFileName();
 
+			File.WriteAllText(tempFilePath, utxoContentString);
+
+			File.Move(tempFilePath, UTXO_FILE, true);
 		}
 
 

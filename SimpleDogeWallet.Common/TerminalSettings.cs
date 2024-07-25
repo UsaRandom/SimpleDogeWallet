@@ -90,8 +90,12 @@ namespace SimpleDogeWallet
         private void SaveSettings()
         {
             string json = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(SETTINGS_FILE, json);
-        }
+            string tempFilePath = Path.GetTempFileName();
+
+			File.WriteAllText(tempFilePath, json);
+
+			File.Move(tempFilePath, SETTINGS_FILE, true);
+		}
 
 
         private void SetIfMissing(string settingName, object value)

@@ -158,7 +158,12 @@ namespace SimpleDogeWallet.Pages
 
 				mnemonic = _ctx.GenerateMnemonic(_strings.Language.LanguageCode, LibDogecoinContext.ENTROPY_SIZE_128);
 
-				File.WriteAllText(SimpleDogeWallet.LOADED_MNEMONIC_FILE, Crypto.Encrypt(mnemonic, mnemonicKey));
+				string encryptedMnemonic = Crypto.Encrypt(mnemonic, mnemonicKey);
+				string tempFilePath = Path.GetTempFileName();
+
+				File.WriteAllText(tempFilePath, encryptedMnemonic);
+
+				File.Move(tempFilePath, SimpleDogeWallet.LOADED_MNEMONIC_FILE, true);
 
 				await _navigation.PromptAsync<BackupCodePage>(("mnemonic", mnemonic), ("editmode", false));
 			}
@@ -195,7 +200,13 @@ namespace SimpleDogeWallet.Pages
 						//we have a valid mnemonic, encrypt it with key stored in tpm
 						var mnemonicKey = _ctx.GenerateMnemonicEncryptWithTPM(tpmFileNumber, lang: "eng", space: "-");
 
-						File.WriteAllText(SimpleDogeWallet.LOADED_MNEMONIC_FILE, Crypto.Encrypt(mnemonic, mnemonicKey));
+						string encryptedMnemonic = Crypto.Encrypt(mnemonic, mnemonicKey);
+						string tempFilePath = Path.GetTempFileName();
+
+						File.WriteAllText(tempFilePath, encryptedMnemonic);
+
+						File.Move(tempFilePath, SimpleDogeWallet.LOADED_MNEMONIC_FILE, true);
+
 
 						break;
 					}
@@ -214,7 +225,13 @@ namespace SimpleDogeWallet.Pages
 			{
 				address = _ctx.GetDerivedHDAddressByPath(masterKeys.privateKey, Crypto.HDPATH, false);
 
-				File.WriteAllText("address", Crypto.Encrypt(address, newPin));
+				string encryptedAddress = Crypto.Encrypt(address, newPin);
+				string tempFilePath = Path.GetTempFileName();
+
+				File.WriteAllText(tempFilePath, encryptedAddress);
+
+				File.Move(tempFilePath, "address", true);
+
 
 				_settings.Set("address", address);
 
