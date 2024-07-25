@@ -46,12 +46,17 @@ namespace SimpleDogeWallet.WinForms
 
 		public void Receive(SPVNodeBlockInfo message)
 		{
-			_blockLabel.Text = "Block: " + message.BlockHeight.ToString("N0");
+			if(_blockLabel != null)
+			{
+				_blockLabel.Text = "Block: " + message.BlockHeight.ToString("N0");
+			}
 
-			var estimatedFee = Services.GetService<FeeEstimator>().EstimatedFee;
+			if(_currentFees != null)
+			{
+				var estimatedFee = Services.GetService<FeeEstimator>().EstimatedFee;
 
-
-			_currentFees.Text = "Fees: " + estimatedFee.ToString("N5");
+				_currentFees.Text = "Fees: " + estimatedFee.ToString("N5");
+			}
 		}
 
 		private void notifyIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
