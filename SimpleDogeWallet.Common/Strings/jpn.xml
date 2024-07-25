@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Strings>
+<!-- ML Translations from Grok 1.5 -->
+  <String Id="terminal-contacts-title"><![CDATA[連絡先]]></String>
+  <String Id="terminal-contacts-title-sending"><![CDATA[送信先:]]></String>
+
+  <String Id="terminal-contacts-searchbar-placeholder"><![CDATA[Dogecoinアドレス/連絡先名]]></String>
+
+
+  <String Id="terminal-contacts-updatecontact-update"><![CDATA[更新]]></String>
+  <String Id="terminal-contacts-addcontact-add"><![CDATA[追加]]></String>
+  <String Id="terminal-contacts-addcontact-title"><![CDATA[連絡先を追加]]></String>
+  <String Id="terminal-contacts-addcontact-hint"><![CDATA[連絡先の名前を入力:]]></String>
+
+  <String Id="terminal-qrscanner-hint"><![CDATA[Dogecoinアドレスではありません:]]></String>
+  <String Id="terminal-qrscanner-title"><![CDATA[QRコードをスキャン]]></String>
+
+  <String Id="common-contacts-unknown"><![CDATA[不明]]></String>
+
+
+  <String Id="common-numpad-title"><![CDATA[PINを入力:]]></String>
+  <String Id="common-loading-title"><![CDATA[頑張ってますよ!]]></String>
+  <String Id="common-shortmsg-okbutton"><![CDATA[OK]]></String>
+  <String Id="common-yesno-yes"><![CDATA[はい]]></String>
+  <String Id="common-yesno-no"><![CDATA[いいえ]]></String>
+
+
+
+  <String Id="terminal-title"><![CDATA[Dogecoinウォレット]]></String>
+
+
+  <String Id="terminal-disclaimer-title"><![CDATA[注意: 開発中です!]]></String>
+  <String Id="terminal-disclaimer-text1">
+    <![CDATA[このプログラムは開発中です。]]>
+  </String>
+  <String Id="terminal-disclaimer-text2"><![CDATA[注意してご使用ください!]]></String>
+
+
+  <String Id="terminal-disclaimer-wow"><![CDATA[ワオ!]]></String>
+
+  <String Id="terminal-setup-newwalletinfo">
+    <![CDATA[必要なもの:
+
+ ● 10分
+ ● プライバシー
+ ● 紙とペン
+]]>
+  </String>
+
+  <String Id="terminal-setup-loadwalletinfo">
+    <![CDATA[必要なもの:
+
+ ● 12語のバックアップフレーズ
+ ● 10分
+ ● プライバシー
+]]>
+  </String>
+
+  <String Id="terminal-setup-setupwallet"><![CDATA[ウォレットを設定]]></String>
+  <String Id="terminal-setup-newwallet"><![CDATA[新しいウォレット]]></String>
+  <String Id="terminal-setup-loadwallet"><![CDATA[バックアップを読み込む]]></String>
+
+
+  <String Id="terminal-setup-setpin"><![CDATA[PINを設定]]></String>
+  <String Id="terminal-setup-confirmpin"><![CDATA[PINを確認]]></String>
+  <String Id="terminal-setup-setpin-hint"><![CDATA[(4文字以上)]]></String>
+  <String Id="terminal-setup-confirmpin-hint"><![CDATA[(忘れないでください!)]]></String>
+
+
+  <String Id="terminal-setup-tpm-is-full"><![CDATA[TPMがいっぱいです。ウォレットを作成できません。]]></String>
+
+
+  <Strings Id="terminal-backupcodes-title">
+    <![CDATA[手書きでバックアップフレーズを紙に書き写し、
+    安全な場所に保管してください。]]>
+  </Strings>
+
+  <Strings Id="terminal-backupcodes-load-title">
+    <![CDATA[12語のバックアップフレーズを入力:
+]]>
+  </Strings>
+
+  <Strings Id="terminal-backupcodes-load-badmnemonic">
+    <![CDATA[提供されたバックアップフレーズにエラーがあります。
+    12語を確認してください。
+              再試行しますか?
+]]>
+  </Strings>
+  <String Id="terminal-settings-title"><![CDATA[設定]]></String>
+  <String Id="terminal-settings-background"><![CDATA[背景]]></String>
+  <String Id="terminal-settings-fullscreen">
+    <![CDATA[    全画面表示
+(再起動が必要)]]>
+  </String>
+
+  <String Id="terminal-settings-devmode"><![CDATA[開発者モード]]></String>
+  <String Id="terminal-settings-dustlimit"><![CDATA[ダストリミット:]]></String>
+  <String Id="terminal-settings-feecoeff"><![CDATA[手数料係数:]]></String>
+
+
+  <String Id="terminal-settings-oldpin"><![CDATA[旧PINを入力]]></String>
+
+  <String Id="terminal-settings-updatepin"><![CDATA[PINを更新]]></String>
+  <String Id="terminal-settings-pin-updated"><![CDATA[PINが更新されました!]]></String>
+
+
+  <String Id="terminal-settings-backupcodes"><![CDATA[シードフレーズ]]></String>
+  <String Id="terminal-settings-language"><![CDATA[言語]]></String>
+  <String Id="terminal-settings-spv"><![CDATA[SPVノード]]></String>
+  <String Id="terminal-settings-clearpending"><![CDATA[保留中の送信を削除]]></String>
+  <String Id="terminal-settings-delete"><![CDATA[ウォレットを削除]]></String>
+
+
+
+  <String Id="terminal-settings-clearpending-confirm">
+    <![CDATA[トランザクションが失敗した場合または24時間以上経過した場合のみ行ってください。
+  続行しますか?
+]]>
+  </String>
+
+  <String Id="terminal-settings-delete-confirm">
+    <![CDATA[               このウォレットを削除しますか?
+(シードフレーズのバックアップを確認してください!)]]>
+  </String>
+
+  <String Id="terminal-settings-delete-confirm-pin">
+    <![CDATA[PINを確認してウォレットを削除します!
+]]>
+  </String>
+
+  <String Id="terminal-settings-delete-wallet-deleted">
+    <![CDATA[ウォレットが削除されました!
+]]>
+  </String>
+
+
+  <String Id="terminal-setuppage-setupbutton"><![CDATA[設定]]></String>
+  <String Id="terminal-unlockpage-unlockbutton"><![CDATA[ロック解除]]></String>
+  <String Id="terminal-unlockpage-exitbutton"><![CDATA[終了]]></String>
+
+  <String Id="terminal-send-confirmpin"><![CDATA[PINを確認して送信]]></String>
+  <String Id="terminal-sendamount-title"><![CDATA[送信額]]></String>
+
+  <String Id="terminal-send-confirm-title"><![CDATA[トランザクションを確認]]></String>
+
+  <String Id="terminal-send-confirm-amount"><![CDATA[額:]]></String>
+  <String Id="terminal-send-confirm-to"><![CDATA[送信先:]]></String>
+  <String Id="terminal-send-confirm-fee"><![CDATA[手数料:]]></String>
+  <String Id="terminal-send-confirm-total"><![CDATA[合計:]]></String>
+  <String Id="terminal-send-confirm-confirm"><![CDATA[確認]]></String>
+
+  <Strings Id="terminal-wallet-send"><![CDATA[送信]]></Strings>
+  <Strings Id="terminal-wallet-pending"><![CDATA[保留中...]]></Strings>
+  <Strings Id="terminal-wallet-syncing"><![CDATA[同期中...]]></Strings>
+
+
+  <String Id="terminal-spv-title"><![CDATA[SPVノード]]></String>
+  <String Id="terminal-spv-offline"><![CDATA[(オフライン)]]></String>
+  <String Id="terminal-spv-online"><![CDATA[(オンライン)]]></String>
+
+  <String Id="terminal-spv-peers"><![CDATA[ピア]]></String>
+
+  <String Id="terminal-spv-txcount"><![CDATA[TX数]]></String>
+  <String Id="terminal-spv-spentutxo"><![CDATA[UTXOを消費]]></String>
+  <String Id="terminal-spv-newutxo"><![CDATA[UTXOを作成]]></String>
+  <String Id="terminal-spv-netutxo"><![CDATA[Net UTXO]]></String>
+
+  <String Id="terminal-spv-currentblock"><![CDATA[現在のブロック]]></String>
+  <String Id="terminal-spv-currentblock-hash"><![CDATA[ハッシュ]]></String>
+  <String Id="terminal-spv-currentblock-height"><![CDATA[高さ]]></String>
+  <String Id="terminal-spv-currentblock-time"><![CDATA[タイムスタンプ]]></String>
+  <String Id="terminal-spv-currentblock-fee"><![CDATA[推定手数料]]></String>
+  <String Id="terminal-spv-average-block-size"><![CDATA[平均ブロックサイズ]]></String>
+  <String Id="terminal-spv-last-block-size"><![CDATA[前ブロックサイズ]]></String>
+
+  <String Id="terminal-spv-rescan"><![CDATA[再スキャン]]></String>
+  <String Id="terminal-spv-start"><![CDATA[開始]]></String>
+  <String Id="terminal-spv-stop"><![CDATA[停止]]></String>
+
+  <String Id="terminal-spv-estimatemaxblock"><![CDATA[推定ブロック高さ]]></String>
+  <String Id="terminal-spv-estimatemaxblock-hint"><![CDATA[(あまり正確ではありませんね)]]></String>
+
+  <String Id="terminal-spv-fast-sync-title"><![CDATA[Dogecoinネットワークと同期中]]></String>
+  <String Id="terminal-spv-fast-sync-connecting"><![CDATA[接続中...]]></String>
+
+
+  <String Id="terminal-spv-sync-title"><![CDATA[再スキャン]]></String>
+  <String Id="terminal-spv-sync-height"><![CDATA[ブロック高さ:]]></String>
+  <String Id="terminal-spv-sync-hash"><![CDATA[ブロックハッシュ:]]></String>
+  <String Id="terminal-spv-sync-rescan"><![CDATA[再スキャン]]></String>
+
+  <Strings Id="terminal-walletlist-emptyslot"><![CDATA[空きスロット]]></Strings>
+  <Strings Id="terminal-walletlist-title"><![CDATA[ウォレット/スロットを選択]]></Strings>
+
+  <Strings Id="terminal-walletlist-newwallet-enterpin"><![CDATA[PINを設定:]]></Strings>
+  <Strings Id="terminal-walletlist-newwallet-confirmpin"><![CDATA[PINを確認:]]></Strings>
+
+  <Strings Id="terminal-wallet-updatepin-newpin"><![CDATA[新しいPINを入力:]]></Strings>
+  <Strings Id="terminal-wallet-updatepin-confirmpin"><![CDATA[新しいPINを確認:]]></Strings>
+
+  <Strings Id="terminal-wallet-remove"><![CDATA[ウォレットを削除]]></Strings>
+
+  <String Id="terminal-enteroppin-title"><![CDATA[PINを入力してロック解除:]]></String>
+
+  <String Id="terminal-loading-text-broadcasting">
+    <![CDATA[トランザクションをブロードキャスト中!
+10秒ほどかかります。]]>
+  </String>
+</Strings>
