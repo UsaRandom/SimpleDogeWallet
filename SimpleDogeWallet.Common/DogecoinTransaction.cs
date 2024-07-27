@@ -220,57 +220,112 @@ namespace SimpleDogeWallet
             var cancelTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(17));
             var cancelToken = cancelTokenSource.Token;
 
-   //         try
-   //         {
-                
-			//	await Task.Run(() =>
-			//	{
-			//		var result = LibDogecoinContext.Instance.BroadcastRawTransaction(GetRawTransaction());
-			//		Console.WriteLine(result);
-			//	}, cancelToken);
-			//}
-   //         catch
-   //         {
-
-   //         }
-
-            
-			var processStartInfo = new ProcessStartInfo("sendtx.exe", "-m 24 -s 15 "+GetRawTransaction())
+			//i was unable to redirect output from sendtx
+			var processStartInfo = new ProcessStartInfo("cmd.exe")
 			{
 				UseShellExecute = false,
 				CreateNoWindow = true,
+				RedirectStandardError = true,
 				RedirectStandardOutput = true,
-				RedirectStandardError = true
+				RedirectStandardInput = true,
 			};
+
+			//var processStartInfo = new ProcessStartInfo("sendtx.exe", "-m 24 -s 15")
+			//{
+			//	UseShellExecute = true,
+			//	CreateNoWindow = false
+			//};
 
 			using var process = new Process();
 			process.StartInfo = processStartInfo;
 			process.EnableRaisingEvents = true;
 
-			process.OutputDataReceived += (sender, e) => Console.WriteLine(e.Data);
-			process.ErrorDataReceived += (sender, e) => Console.WriteLine(e.Data);
+			process.OutputDataReceived += (sender, e) =>
+			{
+				if (e.Data.Contains("Error"))
+				{
+					Trace.WriteLine("ERRR");
+				}
+				Trace.WriteLine(e.Data);
+			};
+			process.ErrorDataReceived += (sender, e) => Trace.WriteLine(e.Data);
 
 			process.Start();
-			process.BeginOutputReadLine();
 			process.BeginErrorReadLine();
+			process.BeginOutputReadLine();
+
+			process.StandardInput.WriteLine("sendtx.exe -m 24 -s 15 " + GetRawTransaction());
 
 			try
 			{
-				await process.WaitForExitAsync(cancelToken);
+				process.WaitForExit((int)TimeSpan.FromSeconds(30).TotalMilliseconds + 50);
 			}
 			catch (OperationCanceledException)
 			{
-                try
-                {
-                    
-                    process.Kill();
-                }
-                catch
-                {
-                
-                }
-				Console.WriteLine("Process timed out after 30 seconds");
+				try
+				{
+
+					process.Kill();
+				}
+				catch
+				{
+
+				}
+				Trace.WriteLine("Process timed out after 30 seconds");
 			}
+
+
+			////         try
+			////         {
+
+			////	await Task.Run(() =>
+			////	{
+			////		var result = LibDogecoinContext.Instance.BroadcastRawTransaction(GetRawTransaction());
+			////		Console.WriteLine(result);
+			////	}, cancelToken);
+			////}
+			////         catch
+			////         {
+
+			////         }
+
+
+			//var processStartInfo = new ProcessStartInfo("sendtx.exe", "-m 24 -s 15 "+GetRawTransaction())
+			//{
+			//	UseShellExecute = true,
+			//	CreateNoWindow = true,
+			//	RedirectStandardOutput = true,
+			//	RedirectStandardError = true
+			//};
+
+			//using var process = new Process();
+			//process.StartInfo = processStartInfo;
+			//process.EnableRaisingEvents = true;
+            
+			//process.OutputDataReceived += (sender, e) => Console.WriteLine(e.Data);
+			//process.ErrorDataReceived += (sender, e) => Console.WriteLine(e.Data);
+
+			//process.Start();
+			//process.BeginOutputReadLine();
+			//process.BeginErrorReadLine();
+
+			//try
+			//{
+			//	await process.WaitForExitAsync(cancelToken);
+			//}
+			//catch (OperationCanceledException)
+			//{
+   //             try
+   //             {
+                    
+   //                 process.Kill();
+   //             }
+   //             catch
+   //             {
+                
+   //             }
+			//	Console.WriteLine("Process timed out after 30 seconds");
+			//}
 
             
 

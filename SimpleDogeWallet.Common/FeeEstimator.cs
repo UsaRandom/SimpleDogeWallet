@@ -19,7 +19,11 @@ namespace SimpleDogeWallet.Common
 		{
 			get
 			{
-				return _services.GetService<SimpleSPVNodeService>().EstimatedRate * 226 * _services.GetService<ITerminalSettings>().GetDecimal("fee-coeff");
+				var feeEstimate = _services.GetService<SimpleSPVNodeService>().EstimatedRate * 226 * _services.GetService<ITerminalSettings>().GetDecimal("fee-coeff");
+
+				return Math.Max(feeEstimate, _services.GetService<ITerminalSettings>().GetDecimal("dust-limit"));
+
+//				return _services.GetService<SimpleSPVNodeService>().EstimatedRate * 226 * _services.GetService<ITerminalSettings>().GetDecimal("fee-coeff");
 			}
 		}
 
