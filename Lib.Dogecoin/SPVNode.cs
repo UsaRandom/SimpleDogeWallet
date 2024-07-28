@@ -279,6 +279,11 @@ namespace Lib.Dogecoin
 
 			LibDogecoinInterop.dogecoin_node_group_shutdown(spv.nodegroup);
 
+			_thread.Abort();
+
+	//		LibDogecoinInterop.dogecoin_spv_client_free(_spvNodeRef);
+
+
 			//var nodeList = *nodeGroup.nodes;
 
 			//Debug.WriteLine("Nodes: " + nodeList.len);

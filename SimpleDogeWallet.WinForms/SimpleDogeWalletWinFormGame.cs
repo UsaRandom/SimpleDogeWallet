@@ -63,8 +63,11 @@ namespace SimpleDogeWallet.WinForms
 		{
 			if (e.Button == System.Windows.Forms.MouseButtons.Left)
 			{
-				_form.Show();
-				_form.WindowState = System.Windows.Forms.FormWindowState.Normal;
+				if(!_form.IsDisposed)
+				{
+					_form.Show();
+					_form.WindowState = System.Windows.Forms.FormWindowState.Normal;
+				}
 			}
 		}
 
@@ -99,7 +102,12 @@ namespace SimpleDogeWallet.WinForms
 
 			// Create an "Exit" button
 			ToolStripMenuItem exitButton = new ToolStripMenuItem("Exit");
-			exitButton.Click += (sender, e) => Application.Exit();
+			exitButton.Click += (sender, e) =>
+			{
+				_spvNodeService.Stop();
+				Application.Exit();
+			};
+
 
 			// Create a "Copy Address" button
 			ToolStripMenuItem copyAddressButton = new ToolStripMenuItem("Copy Your Address");
