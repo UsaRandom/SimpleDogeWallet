@@ -347,17 +347,19 @@ namespace Lib.Dogecoin.Interop
 
 
 
-		#region SPV
+        #region SPV
 
 
-		[DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr dogecoin_spv_client_new(
             IntPtr chainparams,
             [MarshalAs(UnmanagedType.U1)] bool debug,
             [MarshalAs(UnmanagedType.U1)] bool headers_memonly,
             [MarshalAs(UnmanagedType.U1)] bool use_checkpoints,
             [MarshalAs(UnmanagedType.U1)] bool full_sync,
-			int maxNodes);
+            int maxNodes,
+            [MarshalAs(UnmanagedType.LPArray)] char[] httpServer);
+            
 
 
 
