@@ -132,7 +132,7 @@ namespace SimpleDogeWallet
 
 			_spvNodeService = new SimpleSPVNodeService();
 
-
+			Window.Title = Strings.Current.GetString("terminal-title");
 
 
 			Services.AddService(Strings.Current);
@@ -251,9 +251,9 @@ namespace SimpleDogeWallet
 				_spvNodeService.Start();
 
                 _nav.PushAsync<LoadingPage>();
-				_nav.TryInsertBeforeAsync<UnlockTerminalPage, LoadingPage>();
+                _nav.TryInsertBeforeAsync<WalletPage, LoadingPage>(("wallet", SimpleDogeWallet.Instance));
 
-				Task.Run(async () =>
+                Task.Run(async () =>
 				{
 			//		await _nav.PromptAsync<DisclaimerPage>();
 					_nav.Pop();
@@ -267,18 +267,18 @@ namespace SimpleDogeWallet
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
-			if(LockRequested)
-			{
+			//if(LockRequested)
+			//{
 
-				while (_nav.CurrentPage != null)
-				{
-					_nav.Pop();
-				}
+			//	while (_nav.CurrentPage != null)
+			//	{
+			//		_nav.Pop();
+			//	}
 
-				_nav.PushAsync<UnlockTerminalPage>();
+			//	_nav.PushAsync<UnlockTerminalPage>();
 
-				LockRequested = false;
-			}
+			//	LockRequested = false;
+			//}
 
 			_textInputSelector.UpdateMouse();
 			foreach (var control in _nav.CurrentPage.Controls)

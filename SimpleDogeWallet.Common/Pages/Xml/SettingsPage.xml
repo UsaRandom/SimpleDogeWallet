@@ -1,28 +1,34 @@
 ﻿<Page xmlns:common="SimpleDogeWallet.Common">
   <common:ImageControl Name="BackButton" StartPosition="5,5" EndPosition="15,15" ImageSource="Content\left-arrow.png" />
+	
   <common:TextControl Name="TitleText" Color="White" Position="50,13" TextSize="6" StringDef="terminal-settings-title" />
-  <common:TextControl Name="BackgroundText" Color="White" Position="20,24" TextSize="4" StringDef="terminal-settings-background" />
-  <common:CheckboxControl StartPosition="40,20" EndPosition="48,28" TextSize="4" Name="ToggleBackground" BackgroundColor="DarkGrey" ForegroundColor="White" Text="" />
-  <common:TextControl Name="FullscreenText" Color="White" Position="20,34" TextSize="4" StringDef="terminal-settings-fullscreen" />
-  <common:CheckboxControl StartPosition="40,30" EndPosition="48,38" TextSize="4" Name="ToggleFullscreen" BackgroundColor="DarkGrey" ForegroundColor="White" Text="" />
-  <common:TextControl Name="DevModeText" Color="White" Position="20,44" TextSize="4" StringDef="terminal-settings-devmode" />
-  <common:CheckboxControl StartPosition="40,40" EndPosition="48,48" TextSize="4" Name="ToggleDevMode" BackgroundColor="DarkGrey" ForegroundColor="White" Text="X" />
+	<common:TextControl Name="DevModeText" Color="White" Position="20,24" TextSize="4" StringDef="terminal-settings-devmode" />
+	<common:CheckboxControl StartPosition="40,20" EndPosition="48,28" TextSize="4" Name="ToggleDevMode" BackgroundColor="DarkGrey" ForegroundColor="White" Text="X" />
+
+	<common:TextControl Name="BackgroundText" Color="White" Position="20,34" TextSize="4" StringDef="terminal-settings-background" />
+	<common:CheckboxControl StartPosition="40,30" EndPosition="48,38" TextSize="4" Name="ToggleBackground" BackgroundColor="DarkGrey" ForegroundColor="White" Text="" />
+
+	<common:TextControl Name="FullscreenText" Color="White" Position="20,44" TextSize="4" StringDef="terminal-settings-fullscreen" />
+	<common:CheckboxControl StartPosition="40,40" EndPosition="48,48" TextSize="4" Name="ToggleFullscreen" BackgroundColor="DarkGrey" ForegroundColor="White" Text="" />
+	
   <common:TextControl Name="DustLimitText" Color="White" Position="13,54" TextSize="4" StringDef="terminal-settings-dustlimit" />
   <common:ButtonControl StartPosition="26,50" EndPosition="48,58" TextSize="4" Name="SetDustLimitButton" BackgroundColor="DarkGrey" ForegroundColor="White" Text="0.001" />
   <common:TextControl Name="FeePerByteText" Color="White" Position="13,64" TextSize="4" StringDef="terminal-settings-feecoeff" />
   <common:ButtonControl StartPosition="26,60" EndPosition="48,68" TextSize="4" Name="SetFeeCoeffButton"
                         BackgroundColor="DarkGrey" ForegroundColor="White" Text="0.001" />
-  
-  <common:ButtonControl StartPosition="52,20" EndPosition="90,28" TextSize="4" Name="UpdatePinButton"
-                        BackgroundColor="DarkGrey" ForegroundColor="White" StringDef="terminal-settings-updatepin" />
-  <common:ButtonControl StartPosition="52,30" EndPosition="90,38" TextSize="4" Name="BackupCodesButton"
+	
+	<common:ButtonControl StartPosition="52,20" EndPosition="90,28" TextSize="4" Name="BackupCodesButton"
                         BackgroundColor="DarkGrey" ForegroundColor="White" StringDef="terminal-settings-backupcodes" />
-  <common:ButtonControl StartPosition="52,40" EndPosition="90,48" TextSize="4" Name="LanguageButton"
-                        BackgroundColor="DarkGrey" ForegroundColor="White" StringDef="terminal-settings-language" />
-  <common:ButtonControl StartPosition="52,50" EndPosition="90,58" TextSize="4" Name="SPVButton"
-                        BackgroundColor="DarkGrey" ForegroundColor="White" StringDef="terminal-settings-spv" />
-  <common:ButtonControl StartPosition="52,60" EndPosition="90,68" TextSize="4" Name="ClearPendingButton"
-                        BackgroundColor="DarkGrey" ForegroundColor="White" StringDef="terminal-settings-clearpending" />
-  <common:ButtonControl StartPosition="52,70" EndPosition="90,78" TextSize="4" Name="DeleteButton"
-                        BackgroundColor="Red" ForegroundColor="White" StringDef="terminal-settings-delete" />
+
+	<common:ButtonControl StartPosition="52,30" EndPosition="90,38" TextSize="4" Name="LanguageButton"
+							BackgroundColor="DarkGrey" ForegroundColor="White" StringDef="terminal-settings-language" />
+
+
+	<common:ButtonControl StartPosition="52,50" EndPosition="90,58" TextSize="4" Name="SPVButton"
+                          BackgroundColor="DarkGrey" ForegroundColor="White" StringDef="terminal-settings-spv" />
+	<common:ButtonControl StartPosition="52,60" EndPosition="90,68" TextSize="4" Name="ClearPendingButton"
+                          BackgroundColor="DarkGrey" ForegroundColor="White" StringDef="terminal-settings-clearpending" />
+
+	<common:ButtonControl StartPosition="52,70" EndPosition="90,78" TextSize="4" Name="DeleteButton"
+							  BackgroundColor="Red" ForegroundColor="White" StringDef="terminal-settings-delete" />
 </Page>

@@ -74,37 +74,6 @@ namespace SimpleDogeWallet.Pages
 
 
 
-			var newPin = string.Empty;
-			var confirmPin = string.Empty;
-
-			while (newPin != confirmPin || newPin.Length < SimpleDogeWallet.MIN_PIN_LENGTH)
-			{
-				var enterPin = await _navigation.PromptAsync<NumPadPage>(
-					("title", _strings.GetString("terminal-setup-setpin")),
-					("hint", _strings.GetString("terminal-setup-setpin-hint")),
-					("regex", ".{" + SimpleDogeWallet.MIN_PIN_LENGTH + ",16}"));
-
-				if (enterPin.Response == PromptResponse.YesConfirm)
-				{
-					newPin = (string)enterPin.Value;
-				}
-				else
-				{
-					_navigation.Pop();
-					return;
-				}
-
-				var confirm = await _navigation.PromptAsync<NumPadPage>(
-					("title", _strings.GetString("terminal-setup-confirmpin")),
-					("hint", _strings.GetString("terminal-setup-confirmpin-hint")),
-					("regex", ".{"+ SimpleDogeWallet.MIN_PIN_LENGTH + ",16}"));
-
-				if (confirm.Response == PromptResponse.YesConfirm)
-				{
-					confirmPin = (string)confirm.Value;
-				}
-			}
-
 			string address = string.Empty;
 			bool createdWallet = false;
 
@@ -225,10 +194,9 @@ namespace SimpleDogeWallet.Pages
 			{
 				address = _ctx.GetDerivedHDAddressByPath(masterKeys.privateKey, Crypto.HDPATH, false);
 
-				string encryptedAddress = Crypto.Encrypt(address, newPin);
 				string tempFilePath = Path.GetTempFileName();
 
-				File.WriteAllText(tempFilePath, encryptedAddress);
+				File.WriteAllText(tempFilePath, address);
 
 				File.Move(tempFilePath, "address", true);
 

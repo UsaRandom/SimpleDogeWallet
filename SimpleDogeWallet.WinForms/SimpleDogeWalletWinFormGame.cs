@@ -161,7 +161,6 @@ namespace SimpleDogeWallet.WinForms
 				_notifyIcon.Visible = true;
 
 
-				LockRequested = true;
 			}
 		}
 

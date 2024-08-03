@@ -15,14 +15,27 @@ namespace SimpleDogeWallet.Pages
     [PageDef("Pages/Xml/SettingsPage.xml")]
 	internal class SettingsPage : Page
 	{
+		private bool _devMode = false;
+		private const string DEFAULT_CONTROLS = 
+			"BackButton,TitleText,DevModeText,ToggleDevMode,BackupCodesButton,LanguageButton,DeleteButton";
+
 		public SettingsPage(IPageOptions options, SimpleSPVNodeService spvService , IServiceProvider services, ITerminalSettings settings, Navigation navigation, Strings strings, LibDogecoinContext ctx) : base(options)
 		{
 			GetControl<CheckboxControl>("ToggleBackground").IsChecked = settings.GetBool("terminal-background", true);
 			GetControl<CheckboxControl>("ToggleFullscreen").IsChecked = settings.GetBool("terminal-fullscreen", false);
-			GetControl<CheckboxControl>("ToggleDevMode").IsChecked = settings.GetBool("terminal-devmode", false);
+			
+			GetControl<CheckboxControl>("ToggleDevMode").IsChecked = (_devMode = settings.GetBool("terminal-devmode", false));
+
+			foreach(var control in Controls)
+			{
+				if (!DEFAULT_CONTROLS.Contains(control.Name))
+				{
+					control.Enabled = _devMode;
+				}
+			}
 
 
-			GetControl<ButtonControl>("SetDustLimitButton").Text = settings.GetDecimal("dust-limit").ToString();
+            GetControl<ButtonControl>("SetDustLimitButton").Text = settings.GetDecimal("dust-limit").ToString();
 			GetControl<ButtonControl>("SetFeeCoeffButton").Text = settings.GetDecimal("fee-coeff").ToString();
 
 			OnClick("BackButton", async _ =>
@@ -49,7 +62,18 @@ namespace SimpleDogeWallet.Pages
 			{
 				var checkbox = GetControl<CheckboxControl>("ToggleDevMode");
 				checkbox.IsChecked = !checkbox.IsChecked;
-				settings.Set("terminal-devmode", checkbox.IsChecked);
+
+				_devMode = checkbox.IsChecked;
+
+                foreach (var control in Controls)
+                {
+                    if (!DEFAULT_CONTROLS.Contains(control.Name))
+                    {
+                        control.Enabled = _devMode;
+                    }
+                }
+
+                settings.Set("terminal-devmode", checkbox.IsChecked);
 			});
 
 
@@ -90,61 +114,6 @@ namespace SimpleDogeWallet.Pages
 				}
 			});
 
-
-			OnClick("UpdatePinButton", async _ =>
-			{
-				await navigation.PushAsync<LoadingPage>();
-
-				var newPin = string.Empty;
-				var confirmPin = string.Empty;
-				
-				var oldPinResponse = await navigation.PromptAsync<NumPadPage>(
-					("title", strings.GetString("terminal-settings-oldpin")),
-					("regex", ".{" + SimpleDogeWallet.MIN_PIN_LENGTH + ",16}"));
-
-
-				if(oldPinResponse.Response == PromptResponse.NoCancelBack ||
-				   !SimpleDogeWallet.TryOpen((string)oldPinResponse.Value))
-				{
-					navigation.Pop();
-					return;
-				}
-
-				var oldPin = (string)oldPinResponse.Value;
-
-				while (newPin != confirmPin || newPin.Length < SimpleDogeWallet.MIN_PIN_LENGTH)
-				{
-					var enterPin = await navigation.PromptAsync<NumPadPage>(
-						("title", strings.GetString("terminal-setup-setpin")),
-						("hint", strings.GetString("terminal-setup-setpin-hint")),
-						("regex", ".{"+ SimpleDogeWallet.MIN_PIN_LENGTH + ",16}"));
-
-					if (enterPin.Response == PromptResponse.YesConfirm)
-					{
-						newPin = (string)enterPin.Value;
-					}
-					else
-					{
-						navigation.Pop();
-						return;
-					}
-
-					var confirm = await navigation.PromptAsync<NumPadPage>(
-						("title", strings.GetString("terminal-setup-confirmpin")),
-						("hint", strings.GetString("terminal-setup-confirmpin-hint")),
-						("regex", ".{"+ SimpleDogeWallet.MIN_PIN_LENGTH + ",16}"));
-
-					if (confirm.Response == PromptResponse.YesConfirm)
-					{
-						confirmPin = (string)confirm.Value;
-					}
-				}
-				await navigation.PromptAsync<ShortMessagePage>(("message", strings.GetString("terminal-settings-pin-updated")));
-
-				SimpleDogeWallet.UpdatePin(oldPin, confirmPin);
-
-				navigation.Pop();
-			});
 
 
 			OnClick("LanguageButton", async _ =>
@@ -199,9 +168,10 @@ namespace SimpleDogeWallet.Pages
 
 				SimpleDogeWallet.Instance.PendingAmount = 0;
 				SimpleDogeWallet.Instance.PendingTxHash = string.Empty;
+                SimpleDogeWallet.Instance.PendingTxTime = DateTime.MaxValue;
 
 
-				Messenger.Default.Send(new UpdateSendButtonMessage());
+//                Messenger.Default.Send(new UpdateSendButtonMessage());
 
 				navigation.Pop();
 			});
@@ -219,27 +189,15 @@ namespace SimpleDogeWallet.Pages
 				if (sendYesNo.Response != PromptResponse.YesConfirm)
 				{
 					navigation.Pop();
-					return;
+                    spvService.Resume();
+                    return;
 				}
 
-				var oldPinResponse = await navigation.PromptAsync<NumPadPage>(
-					("title", strings.GetString("terminal-settings-delete-confirm-pin")),
-					("regex", ".{" + SimpleDogeWallet.MIN_PIN_LENGTH + ",16}"));
-
-
-				if (oldPinResponse.Response == PromptResponse.YesConfirm &&
-				   SimpleDogeWallet.TryOpen((string)oldPinResponse.Value))
-				{
-					SimpleDogeWallet.ClearWallet();
-					await navigation.PromptAsync<ShortMessagePage>(("message", strings.GetString("terminal-settings-delete-wallet-deleted")));
-					await navigation.TryInsertBeforeAsync<SetupWalletPage, WalletPage>();
-					await navigation.PromptAsync<LanguageSelectionPage>();
-					await navigation.PopToPage<SetupWalletPage>();
-					return;
-				}
-
-				spvService.Resume();
-				navigation.Pop();
+				SimpleDogeWallet.ClearWallet();
+				await navigation.PromptAsync<ShortMessagePage>(("message", strings.GetString("terminal-settings-delete-wallet-deleted")));
+				await navigation.TryInsertBeforeAsync<SetupWalletPage, WalletPage>();
+				await navigation.PromptAsync<LanguageSelectionPage>();
+				await navigation.PopToPage<SetupWalletPage>();
 			});
 
 		}

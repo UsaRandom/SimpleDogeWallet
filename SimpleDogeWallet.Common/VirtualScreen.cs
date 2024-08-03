@@ -67,10 +67,13 @@ namespace SimpleDogeWallet.Common
 			}
 			else
 			{
-				SetWindowDim(graphicsDeviceManager,
+				var dim = Math.Min(graphicsDeviceManager.GraphicsDevice.Adapter.CurrentDisplayMode.Height,
+                                   graphicsDeviceManager.GraphicsDevice.Adapter.CurrentDisplayMode.Width)-200;
+
+                SetWindowDim(graphicsDeviceManager,
 								useFullScreen,
-								_settings.GetInt("window-width", graphicsDeviceManager.GraphicsDevice.Adapter.CurrentDisplayMode.Width - 200),
-								_settings.GetInt("window-height", graphicsDeviceManager.GraphicsDevice.Adapter.CurrentDisplayMode.Height - 200));
+								_settings.GetInt("window-width", dim),
+								_settings.GetInt("window-height", dim));
 			}
 		}
 

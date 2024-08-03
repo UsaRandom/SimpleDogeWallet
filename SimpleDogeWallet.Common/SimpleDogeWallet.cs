@@ -154,17 +154,17 @@ namespace SimpleDogeWallet
 			return Crypto.Decrypt(File.ReadAllText(LOADED_MNEMONIC_FILE), key);
 		}
 
-		public static void UpdatePin(string oldPin, string newPin)
-		{
-			var address = Crypto.Decrypt(File.ReadAllText(ADDRESS_FILE), oldPin);
+		//public static void UpdatePin(string oldPin, string newPin)
+		//{
+		//	var address = Crypto.Decrypt(File.ReadAllText(ADDRESS_FILE), oldPin);
 
-			string encryptedAddress = Crypto.Encrypt(address, newPin);
-			string tempFilePath = Path.GetTempFileName();
+		//	string encryptedAddress = Crypto.Encrypt(address, newPin);
+		//	string tempFilePath = Path.GetTempFileName();
 
-			File.WriteAllText(tempFilePath, encryptedAddress);
+		//	File.WriteAllText(tempFilePath, encryptedAddress);
 
-			File.Move(tempFilePath, ADDRESS_FILE, true);
-		}
+		//	File.Move(tempFilePath, ADDRESS_FILE, true);
+		//}
 
 		public static void Init(IServiceProvider services)
 		{

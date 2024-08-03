@@ -57,6 +57,10 @@ namespace SimpleDogeWallet.WinForms
 						TextBoxControl.Text = value;
 					}));
 				}
+				else
+                {
+                    TextBoxControl.Text = value;
+                }
 			}
 		}
 

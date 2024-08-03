@@ -85,8 +85,8 @@ namespace SimpleDogeWallet.Pages
 
 			OnClick("LockButton", async _ =>
 			{
-				await navigation.TryInsertBeforeAsync<UnlockTerminalPage, WalletPage>();
-				await navigation.PopToPage<UnlockTerminalPage>();
+			//	await navigation.TryInsertBeforeAsync<UnlockTerminalPage, WalletPage>();
+				//await navigation.PopToPage<UnlockTerminalPage>();
 			});
 
 			OnClick("ContactsButton", async _ =>
