@@ -26,9 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="dist\sdw-release.zip">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="dist\sdw-release.zip" />
     <EmbeddedResource Include="dist\vc_redist.x64.exe">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>

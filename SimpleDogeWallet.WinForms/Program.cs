@@ -7,6 +7,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace SimpleDogeWallet.WinForms
 {
@@ -15,6 +16,7 @@ namespace SimpleDogeWallet.WinForms
 		private const string PipeName = "SimpleDogeWalletReOpenRequest"; // replace with a unique name
 
 		private static SimpleDogeWalletWinFormGame _game;
+		private static System.Threading.Timer _timer;
 
 		[STAThread]
 		private static void Main(string[] args)
@@ -40,8 +42,28 @@ namespace SimpleDogeWallet.WinForms
 			Application.SetCompatibleTextRenderingDefault(false);
 
 			_game = new SimpleDogeWalletWinFormGame();
-			_game.Run();
+
+			if (args.Length > 0 && args[0] == "-h")
+			{
+                _timer = new System.Threading.Timer(HideForm, null, 500, Timeout.Infinite);
+            }
+
+            _game.Run();
 		}
+
+
+		private static void HideForm(object e)
+		{
+            var form = _game.Services.GetService<Form>();
+
+            if (form != null && form.InvokeRequired)
+            {
+                form.Invoke((MethodInvoker)delegate
+                {
+					form.Hide();
+                });
+            }
+        }
 
 
 		private static void SendReOpenRequest()

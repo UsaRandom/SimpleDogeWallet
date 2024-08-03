@@ -61,6 +61,10 @@ namespace SimpleDogeInstaller
             shortcut.Save();
 
             System.IO.File.Copy(shortcutAddress, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), "Simple Ðoge Wallet.lnk"), true);
+
+            shortcut.Arguments = "-h";
+            shortcut.Save();
+
             System.IO.File.Copy(shortcutAddress, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), "Simple Ðoge Wallet.lnk"), true);
 
         }
