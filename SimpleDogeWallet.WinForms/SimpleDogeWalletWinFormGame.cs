@@ -29,18 +29,10 @@ namespace SimpleDogeWallet.WinForms
 		protected override void OnResize(Object o, EventArgs evt)
 		{
 
-			//if ((_graphics.PreferredBackBufferWidth != _graphics.GraphicsDevice.Viewport.Width) ||
-			//		(_graphics.PreferredBackBufferHeight != _graphics.GraphicsDevice.Viewport.Height))
-			//{
-			//	_graphics.PreferredBackBufferWidth = _graphics.GraphicsDevice.Viewport.Width;
-			//	_graphics.PreferredBackBufferHeight = _graphics.GraphicsDevice.Viewport.Height;
 
 			_background = new MoonBackgroundScene(Services, _graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height);
 
 			_screen.SetWindowDim(_graphics, false, _graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height);
-			//	_graphics.ApplyChanges();
-
-			//}
 		}
 
 

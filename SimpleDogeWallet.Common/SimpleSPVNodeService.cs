@@ -258,6 +258,12 @@ namespace SimpleDogeWallet
 			{
 				return;
 			}
+
+			if(_pauseBlock == null || !IsPaused)
+			{
+				Start();
+				return;
+			}
 			
 			
 			IsPaused = false;

@@ -213,7 +213,7 @@ namespace SimpleDogeWallet
             return _ctx.GetRawTransaction(_workingTransactionId);
         }
 
-		public async Task BroadcastAsync()
+		public async Task<bool> BroadcastAsync()
         { 
 
             
@@ -230,24 +230,54 @@ namespace SimpleDogeWallet
 				RedirectStandardInput = true,
 			};
 
-			//var processStartInfo = new ProcessStartInfo("sendtx.exe", "-m 24 -s 15")
-			//{
-			//	UseShellExecute = true,
-			//	CreateNoWindow = false
-			//};
+            //var processStartInfo = new ProcessStartInfo("sendtx.exe", "-m 24 -s 15")
+            //{
+            //	UseShellExecute = true,
+            //	CreateNoWindow = false
+            //};
+            int maxNodes = 0;
+            int connectedNodes = 0;
+            int informedNodes = 0;
+            int requestedNodes = 0;
+            int seenNodes = 0;
 
-			using var process = new Process();
+            bool error = false;
+
+            using var process = new Process();
 			process.StartInfo = processStartInfo;
 			process.EnableRaisingEvents = true;
 
 			process.OutputDataReceived += (sender, e) =>
 			{
-				if (e.Data.Contains("Error"))
-				{
-					Trace.WriteLine("ERRR");
-				}
-				Trace.WriteLine(e.Data);
-			};
+
+                if (e.Data.Contains("Max nodes to connect to:"))
+                {
+                    maxNodes = int.Parse(e.Data.Split(':')[1].Trim());
+                }
+                else if (e.Data.Contains("Successfully connected to nodes:"))
+                {
+                    connectedNodes = int.Parse(e.Data.Split(':')[1].Trim());
+                }
+                else if (e.Data.Contains("Informed nodes:"))
+                {
+                    informedNodes = int.Parse(e.Data.Split(':')[1].Trim());
+                }
+                else if (e.Data.Contains("Requested from nodes:"))
+                {
+                    requestedNodes = int.Parse(e.Data.Split(':')[1].Trim());
+                }
+                else if (e.Data.Contains("Seen on other nodes:"))
+                {
+                    seenNodes = int.Parse(e.Data.Split(':')[1].Trim());
+                }
+                else if (e.Data.Contains("Error"))
+                {
+                    error = true;
+                }
+                
+                Trace.WriteLine(e.Data);
+                
+            };
 			process.ErrorDataReceived += (sender, e) => Trace.WriteLine(e.Data);
 
 			process.Start();
@@ -274,61 +304,7 @@ namespace SimpleDogeWallet
 				Trace.WriteLine("Process timed out after 30 seconds");
 			}
 
-
-			////         try
-			////         {
-
-			////	await Task.Run(() =>
-			////	{
-			////		var result = LibDogecoinContext.Instance.BroadcastRawTransaction(GetRawTransaction());
-			////		Console.WriteLine(result);
-			////	}, cancelToken);
-			////}
-			////         catch
-			////         {
-
-			////         }
-
-
-			//var processStartInfo = new ProcessStartInfo("sendtx.exe", "-m 24 -s 15 "+GetRawTransaction())
-			//{
-			//	UseShellExecute = true,
-			//	CreateNoWindow = true,
-			//	RedirectStandardOutput = true,
-			//	RedirectStandardError = true
-			//};
-
-			//using var process = new Process();
-			//process.StartInfo = processStartInfo;
-			//process.EnableRaisingEvents = true;
-            
-			//process.OutputDataReceived += (sender, e) => Console.WriteLine(e.Data);
-			//process.ErrorDataReceived += (sender, e) => Console.WriteLine(e.Data);
-
-			//process.Start();
-			//process.BeginOutputReadLine();
-			//process.BeginErrorReadLine();
-
-			//try
-			//{
-			//	await process.WaitForExitAsync(cancelToken);
-			//}
-			//catch (OperationCanceledException)
-			//{
-   //             try
-   //             {
-                    
-   //                 process.Kill();
-   //             }
-   //             catch
-   //             {
-                
-   //             }
-			//	Console.WriteLine("Process timed out after 30 seconds");
-			//}
-
-            
-
+            return !error && connectedNodes > 0 && seenNodes > 0;
 		}
 	}
 	

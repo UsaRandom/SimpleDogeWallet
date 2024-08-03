@@ -280,6 +280,8 @@ namespace Lib.Dogecoin
 
         public unsafe void Stop()
         {
+            Trace.WriteLine("SPV Stop Requested");
+
             var spv = Marshal.PtrToStructure<dogecoin_spv_client>(_spvNodeRef);
 
             LibDogecoinInterop.dogecoin_node_group_shutdown(spv.nodegroup);

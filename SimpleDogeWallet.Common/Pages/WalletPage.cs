@@ -209,19 +209,26 @@ namespace SimpleDogeWallet.Pages
 
 					SimpleDogeWallet.Instance.PendingTxHash = txId;
 					SimpleDogeWallet.Instance.PendingAmount = transaction.Total;
+                    SimpleDogeWallet.Instance.PendingTxTime = DateTime.Now;
 
-					if (navigation.CurrentPage is LoadingPage)
+                    if (navigation.CurrentPage is LoadingPage)
 					{
 						navigation.Pop();
 					}
 
-					UpdateSendButton();
-					await transaction.BroadcastAsync();
+					if(!await transaction.BroadcastAsync())
+					{
+						SimpleDogeWallet.Instance.PendingTxHash = string.Empty;
+                        SimpleDogeWallet.Instance.PendingAmount = 0;
+                        SimpleDogeWallet.Instance.PendingTxTime = DateTime.MaxValue;
+
+                    }
 
 
 
 
-					_spvNode.Resume();
+
+                    _spvNode.Resume();
 					Debug.WriteLine("Starting SPV Node");
 
 				});

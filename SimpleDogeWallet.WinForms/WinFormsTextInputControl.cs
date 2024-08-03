@@ -50,7 +50,13 @@ namespace SimpleDogeWallet.WinForms
 			}
 			set
 			{
-				TextBoxControl.Text = value;
+				if(TextBoxControl.InvokeRequired)
+				{
+					TextBoxControl.Invoke(new MethodInvoker(delegate
+					{
+						TextBoxControl.Text = value;
+					}));
+				}
 			}
 		}
 
