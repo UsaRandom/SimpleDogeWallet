@@ -146,6 +146,7 @@ namespace SimpleDogeWallet
 			Services.AddService<IServiceProvider>(Services);
 			Services.AddService(_userInputService);
 
+
 			if(Services.GetService<IPlatformControlTypeSelector>() == null)
 			{
 				Services.AddService<IPlatformControlTypeSelector>(new DefaultPlatformControlTypeSelector());
@@ -154,7 +155,9 @@ namespace SimpleDogeWallet
 
 			Services.AddService(_spvNodeService);
 
-			Services.AddService(new FeeEstimator(Services));
+            Services.AddService(new NetworkMonitorService(_spvNodeService));
+
+            Services.AddService(new FeeEstimator(Services));
 
 			Services.AddService<IClipboardService>(_clipboardService);
 
@@ -247,7 +250,7 @@ namespace SimpleDogeWallet
 				SimpleDogeWallet.Init(Services);
 				_spvNodeService.Start();
 
-				_nav.PushAsync<LoadingPage>();
+                _nav.PushAsync<LoadingPage>();
 				_nav.TryInsertBeforeAsync<UnlockTerminalPage, LoadingPage>();
 
 				Task.Run(async () =>

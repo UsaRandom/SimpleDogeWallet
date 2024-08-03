@@ -51,8 +51,17 @@ namespace SimpleDogeWallet
             return valueIfEmpty;
         }
 
+        public DateTime GetDateTime(string settingName, DateTime valueIfEmpty = default)
+        {
+            if (settings.ContainsKey(settingName))
+            {
+                return DateTime.Parse(settings[settingName]);
+            }
 
-		public int GetInt(string settingName, int valueIfEmpty = default)
+            return valueIfEmpty;
+        }
+
+        public int GetInt(string settingName, int valueIfEmpty = default)
 		{
 			if (settings.ContainsKey(settingName))
 			{

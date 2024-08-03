@@ -284,6 +284,8 @@ namespace Lib.Dogecoin
 
             LibDogecoinInterop.dogecoin_node_group_shutdown(spv.nodegroup);
 
+
+            LibDogecoinInterop.dogecoin_node_group_event_loopbreak(spv.nodegroup);
          //   _thread.Abort();
 
             //		LibDogecoinInterop.dogecoin_spv_client_free(_spvNodeRef);
@@ -330,7 +332,8 @@ namespace Lib.Dogecoin
 
             var net = IsMainNet ? LibDogecoinContext._mainChain : LibDogecoinContext._testChain;
 
-            _spvNodeRef = LibDogecoinInterop.dogecoin_spv_client_new(net, _isDebug, true, true, UseFullSync, _peerCount, null);
+
+            _spvNodeRef = LibDogecoinInterop.dogecoin_spv_client_new(net, _isDebug, true, true, UseFullSync, _peerCount, IntPtr.Zero);
             _syncComplete = false;
             IsRunning = false;
 

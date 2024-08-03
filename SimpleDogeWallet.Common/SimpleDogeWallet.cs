@@ -28,7 +28,7 @@ namespace SimpleDogeWallet
 
 		private decimal _pendingAmount;
 		private string _pendingHash;
-
+		private DateTime _pendingTxSubmitTime;
 
 		public SimpleDogeWallet(string address, IServiceProvider services)
 		{
@@ -39,8 +39,9 @@ namespace SimpleDogeWallet
 
 			_pendingHash = services.GetService<ITerminalSettings>().GetString("pending-hash", string.Empty);
 			_pendingAmount = services.GetService<ITerminalSettings>().GetDecimal("pending-amount", 0);
+			_pendingTxSubmitTime = services.GetService<ITerminalSettings>().GetDateTime("pending-time", DateTime.MaxValue);
 
-			_ctx = LibDogecoinContext.Instance;
+            _ctx = LibDogecoinContext.Instance;
 
 			LoadUTXOs();
 
@@ -118,6 +119,31 @@ namespace SimpleDogeWallet
 			}
 		}
 
+		public DateTime PendingTxTime
+		{
+			get
+			{
+				return _pendingTxSubmitTime;
+            }
+			set
+			{
+                _pendingTxSubmitTime = value;
+				Services.GetService<ITerminalSettings>().Set("pending-time", _pendingTxSubmitTime);
+
+            }
+		}
+
+		public bool UpdatePending()
+		{
+            if (!string.IsNullOrWhiteSpace(PendingTxHash) && PendingTxTime < DateTime.Now - TimeSpan.FromHours(24))
+            {
+                PendingTxTime = DateTime.MaxValue;
+                PendingTxHash = string.Empty;
+                PendingAmount = 0;
+				return true;
+            }
+			return false;
+        }
 
 
 

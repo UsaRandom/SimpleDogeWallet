@@ -1,4 +1,6 @@
-﻿namespace SimpleDogeWallet.Common
+﻿using System;
+
+namespace SimpleDogeWallet.Common
 {
 	public interface ITerminalSettings
 	{
@@ -8,6 +10,8 @@
 		bool GetBool(string settingName, bool valueIfEmpty = default);
 
 		decimal GetDecimal(string settingName, decimal valueIfEmpty = default);
+
+		DateTime GetDateTime(string settingName, DateTime valueIfEmpty = default);
 		
 		int GetInt(string settingName, int valueIfEmpty = default);
 

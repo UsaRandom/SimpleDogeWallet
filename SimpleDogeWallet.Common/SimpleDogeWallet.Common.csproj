@@ -2,7 +2,6 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <Platforms>x64</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Content\ComicNeue-Bold.ttf" />

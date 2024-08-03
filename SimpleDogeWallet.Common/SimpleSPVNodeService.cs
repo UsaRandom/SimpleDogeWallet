@@ -111,10 +111,11 @@ namespace SimpleDogeWallet
 		{
 			get
 			{
-				if (!IsRunning)
+                if (!IsRunning)
 				{
 					return 0;
 				}
+
 				var currentTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
 				if(currentTime - _lastRefreshTime > _timeBetweenRefresh)
@@ -176,7 +177,7 @@ namespace SimpleDogeWallet
 
 		public void Start(bool isNew = false)
 		{
-			if (_spvNode != null && (_spvNode.IsRunning || _isPaused))
+			if (_spvNode != null && (_spvNode.IsRunning || IsPaused))
 			{
 				return;
 			}
@@ -235,7 +236,7 @@ namespace SimpleDogeWallet
 
 
 		private SPVNodeBlockInfo _pauseBlock = null;
-		private bool _isPaused = false;
+		public bool IsPaused { get; set; } = false;
 
 		public void Pause()
 		{
@@ -245,7 +246,7 @@ namespace SimpleDogeWallet
 			}
 			_pauseBlock = _spvNode.CurrentBlockInfo;
 			_spvNode?.Stop();
-			_isPaused = true;
+			IsPaused = true;
 
 		}
 
@@ -259,7 +260,7 @@ namespace SimpleDogeWallet
 			}
 			
 			
-			_isPaused = false;
+			IsPaused = false;
 
 
 			_spvNode = new SPVNodeBuilder()

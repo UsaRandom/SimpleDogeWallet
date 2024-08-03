@@ -211,7 +211,7 @@ namespace SimpleDogeWallet.Pages
 
 			OnClick("DeleteButton", async _ =>
 			{
-				spvService.Stop();
+				spvService.Pause();
 				await navigation.PushAsync<LoadingPage>();
 
 				var sendYesNo = await navigation.PromptAsync<YesNoPage>(("message", strings.GetString("terminal-settings-delete-confirm")));
@@ -238,7 +238,7 @@ namespace SimpleDogeWallet.Pages
 					return;
 				}
 
-				spvService.Start();
+				spvService.Resume();
 				navigation.Pop();
 			});
 

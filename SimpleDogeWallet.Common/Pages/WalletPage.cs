@@ -249,8 +249,17 @@ namespace SimpleDogeWallet.Pages
 
 		}
 
+        public override void Update(GameTime gameTime, IServiceProvider services)
+        {
+			SimpleDogeWallet.Instance.UpdatePending();
+            UpdateSendButton();
+            UpdateSPVText();
 
-		public override void Draw(GameTime gameTime, IServiceProvider services)
+            base.Update(gameTime, services);
+        }
+
+
+        public override void Draw(GameTime gameTime, IServiceProvider services)
 		{
 			var screen = services.GetService<VirtualScreen>();
 			screen.DrawImage(_qrCodeImage, new Microsoft.Xna.Framework.Point(50, 60), new Microsoft.Xna.Framework.Point(40, 40));
@@ -290,7 +299,7 @@ namespace SimpleDogeWallet.Pages
 				GetControl<TextControl>("PendingText").Text = $"(Đ -{SimpleDogeWallet.Instance.PendingAmount:#,0.000})";
 			}
 
-			if (!_spvNode.SyncCompleted)
+			if (!_spvNode.SyncCompleted || !_spvNode.IsRunning)
 			{
 				_sendButton.BackgroundColor = TerminalColor.Grey;
 				_sendButton.StringDef = "terminal-wallet-syncing";
