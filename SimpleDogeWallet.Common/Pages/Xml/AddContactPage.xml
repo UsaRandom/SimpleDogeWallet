@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Page xmlns:common="SimpleDogeWallet.Common">
+
+
+  <common:ImageControl Name="BackButton" StartPosition="5,5" EndPosition="15,15" ImageSource="Content\left-arrow.png" />
+
+  <common:TextControl Name="TitleText" Color="White" Position="50,13" TextSize="6" StringDef="terminal-contacts-addcontact-title" />
+
+  <common:ImageControl StartPosition="82,5"
+         EndPosition="95,18"
+         Name="Doge"
+         ImageSource="Content/dogedrawn.png"/>
+
+  <common:TextControl Name="TitleText" Color="White" Position="40,37" TextSize="3" StringDef="terminal-contacts-addcontact-hint" />
+
+  <common:TextInputControl StartPosition="12,41" EndPosition="68, 47"
+                           TextSize="3" Name="LabelText"
+                           BackgroundColor="White" ForegroundColor="DarkGrey" />
+
+
+  <common:ImageControl StartPosition="70,40"
+         EndPosition="78,48"
+         Name="LabelPasteButton"
+         BackgroundColor="DarkGrey"
+         ImageSource="Content/paste-button.png"/>
+
+
+  <common:ButtonControl StartPosition="12,52" EndPosition="68, 58"
+                           TextSize="3" Name="AddressText"
+                           BackgroundColor="DarkGrey" ForegroundColor="White" />
+  
+  
+  <common:ButtonControl StartPosition="75,85" EndPosition="95,95" TextSize="4" Name="AddButton"
+                        BackgroundColor="Green" ForegroundColor="White" StringDef="terminal-contacts-addcontact-add" />
+</Page>

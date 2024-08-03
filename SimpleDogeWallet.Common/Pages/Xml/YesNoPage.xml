@@ -1,0 +1,7 @@
+﻿<Page xmlns:common="SimpleDogeWallet.Common">
+  <common:ImageControl Name="Doge" StartPosition="40,20" EndPosition="60,40" ImageSource="Content/dogedrawn.png" />
+  <common:ImageControl Name="BackButton" StartPosition="5,5" EndPosition="15,15" ImageSource="Content\left-arrow.png" />
+  <common:TextControl Name="MessageText" Color="White" Position="50,50" TextSize="4" />
+  <common:ButtonControl StartPosition="53,60" EndPosition="75,70" TextSize="6" Name="YesButton" BackgroundColor="Green" ForegroundColor="White" StringDef="common-yesno-yes" />
+  <common:ButtonControl StartPosition="25,60" EndPosition="47,70" TextSize="6" Name="NoButton" BackgroundColor="Red" ForegroundColor="White" StringDef="common-yesno-no" />
+</Page>

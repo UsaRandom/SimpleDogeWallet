@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/SimpleDogeInstaller/dist/vc_redist.x64.exe
+/SimpleDogeInstaller/dist/sdw-release.zip

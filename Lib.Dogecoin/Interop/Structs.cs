@@ -193,6 +193,8 @@ namespace Lib.Dogecoin.Interop
         public uint nonce;
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 1)]
 		public auxpow[] auxpow;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
+		public byte[] chainwork;
 	}
 
     [StructLayout(LayoutKind.Sequential)]

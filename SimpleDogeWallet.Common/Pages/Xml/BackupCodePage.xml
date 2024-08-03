@@ -1,0 +1,28 @@
+﻿<Page xmlns:common="SimpleDogeWallet.Common">
+  <common:TextControl Name="Title" Color="White" Position="50,10" TextSize="4" StringDef="terminal-backupcodes-title" />
+  <common:ImageControl Name="NextButton" StartPosition="85,85" EndPosition="95,95" ImageSource="Content\right-arrow.png" BackgroundColor="Green" />
+  <common:TextControl Name="Num1Text" Color="White" Position="20,24" TextSize="3" Text="1." />
+  <common:TextControl Name="Num2Text" Color="White" Position="20,34" TextSize="3" Text="2." />
+  <common:TextControl Name="Num3Text" Color="White" Position="20,44" TextSize="3" Text="3." />
+  <common:TextControl Name="Num4Text" Color="White" Position="20,54" TextSize="3" Text="4." />
+  <common:TextControl Name="Num5Text" Color="White" Position="20,64" TextSize="3" Text="5." />
+  <common:TextControl Name="Num6Text" Color="White" Position="20,74" TextSize="3" Text="6." />
+  <common:TextControl Name="Num7Text" Color="White" Position="55,24" TextSize="3" Text="7." />
+  <common:TextControl Name="Num8Text" Color="White" Position="55,34" TextSize="3" Text="8." />
+  <common:TextControl Name="Num9Text" Color="White" Position="55,44" TextSize="3" Text="9." />
+  <common:TextControl Name="Num10Text" Color="White" Position="54,54" TextSize="3" Text="10." />
+  <common:TextControl Name="Num11Text" Color="White" Position="54,65" TextSize="3" Text="11." />
+  <common:TextControl Name="Num12Text" Color="White" Position="54,74" TextSize="3" Text="12." />
+  <common:TextInputControl StartPosition="22,20" EndPosition="48,28" TextSize="3" Name="BackupWordButton_0" BackgroundColor="DarkGrey" ForegroundColor="White"/>
+  <common:TextInputControl StartPosition="22,30" EndPosition="48,38" TextSize="3" Name="BackupWordButton_1" BackgroundColor="DarkGrey" ForegroundColor="White"/>
+  <common:TextInputControl StartPosition="22,40" EndPosition="48,48" TextSize="3" Name="BackupWordButton_2" BackgroundColor="DarkGrey" ForegroundColor="White"/>
+  <common:TextInputControl StartPosition="22,50" EndPosition="48,58" TextSize="3" Name="BackupWordButton_3" BackgroundColor="DarkGrey" ForegroundColor="White"/>
+  <common:TextInputControl StartPosition="22,60" EndPosition="48,68" TextSize="3" Name="BackupWordButton_4" BackgroundColor="DarkGrey" ForegroundColor="White"/>
+  <common:TextInputControl StartPosition="22,70" EndPosition="48,78" TextSize="3" Name="BackupWordButton_5" BackgroundColor="DarkGrey" ForegroundColor="White"/>
+  <common:TextInputControl StartPosition="57,20" EndPosition="83,28" TextSize="3" Name="BackupWordButton_6" BackgroundColor="DarkGrey" ForegroundColor="White"/>
+  <common:TextInputControl StartPosition="57,30" EndPosition="83,38" TextSize="3" Name="BackupWordButton_7" BackgroundColor="DarkGrey" ForegroundColor="White"/>
+  <common:TextInputControl StartPosition="57,40" EndPosition="83,48" TextSize="3" Name="BackupWordButton_8" BackgroundColor="DarkGrey" ForegroundColor="White"/>
+  <common:TextInputControl StartPosition="57,50" EndPosition="83,58" TextSize="3" Name="BackupWordButton_9" BackgroundColor="DarkGrey" ForegroundColor="White"/>
+  <common:TextInputControl StartPosition="57,60" EndPosition="83,68" TextSize="3" Name="BackupWordButton_10" BackgroundColor="DarkGrey" ForegroundColor="White"/>
+  <common:TextInputControl StartPosition="57,70" EndPosition="83,78" TextSize="3" Name="BackupWordButton_11" BackgroundColor="DarkGrey" ForegroundColor="White"/>
+</Page>

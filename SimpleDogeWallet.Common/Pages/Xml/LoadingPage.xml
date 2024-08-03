@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Page xmlns:common="SimpleDogeWallet.Common">
+  <common:SpriteControl
+            SpriteSheetSource="Content/dancing-doge.png"
+            Rows="2"
+            Columns="5"
+            FrameCount="10"
+            FrameTimeMs="40"
+            StartPosition="30,20"
+            EndPosition="70,60"
+            Name="DancingDoge"/>
+
+  <common:TextControl
+        Name="LoadingPageText"
+        Color="White"
+        StringDef="common-loading-title"
+        TextSize="5"
+        Position="50,70"/>
+
+</Page>

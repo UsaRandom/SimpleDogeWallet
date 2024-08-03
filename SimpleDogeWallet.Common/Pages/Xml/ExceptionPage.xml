@@ -1,0 +1,15 @@
+﻿<Page xmlns:common="SimpleDogeWallet.Common">
+  <common:ImageControl Name="Doge" StartPosition="82,5" EndPosition="95,18" ImageSource="Content/dogedrawn.png" />
+
+
+  <common:TextControl Name="TitleText" Color="White" Position="50,13" TextSize="5" />
+  <common:TextControl Name="ErrorText" Color="White" Position="50,50" TextSize="2.3" />
+  
+  <common:ButtonControl Name="ExitButton" StartPosition="75,85" EndPosition="95,95" TextSize="4"
+                       ForegroundColor="White" BackgroundColor="Red" StringDef="terminal-unlockpage-exitbutton"/>
+  
+  <common:ImageControl Name="CopyButton" StartPosition="5,85" EndPosition="15,95"
+                       ImageSource="Content\copy-button.png" BackgroundColor="DarkGrey" />
+
+
+</Page>

@@ -1,0 +1,15 @@
+﻿<Page xmlns:common="SimpleDogeWallet.Common">
+	<common:ImageControl Name="Doge" StartPosition="42,5" EndPosition="58,21" ImageSource="Content/dogedrawn.png" />
+	<common:ImageControl Name="CopyButton" StartPosition="86,31" EndPosition="94,39" ImageSource="Content\copy-button.png" BackgroundColor="DarkGrey" />
+	
+	<common:ImageControl Name="SettingsButton" StartPosition="5,85" EndPosition="15,95"  ImageSource="Content\gear-fill.png" BackgroundColor="DarkGrey" />
+	<common:ImageControl Name="ContactsButton" StartPosition="17,85" EndPosition="27,95" ImageSource="Content\contacts-icon.png" BackgroundColor="DarkGrey" />
+	
+	<common:TextControl Name="AddressText" Color="White" Position="50,35" TextSize="4" Text="" />
+	<common:TextControl Name="BalanceText" Color="White" Position="50,24" TextSize="8.5" Text="" />
+	<common:TextControl Name="PendingText" Color="Red" Position="50,30" TextSize="3" Text="" />
+
+
+	<common:ButtonControl StartPosition="75,85" EndPosition="95,95" TextSize="4" Name="SendButton" BackgroundColor="Green" ForegroundColor="White" StringDef="terminal-wallet-send" />
+	<common:TextControl Name="SPVNodeInfo" Color="White" Position="50,2" TextSize="2" Text="" />
+</Page>

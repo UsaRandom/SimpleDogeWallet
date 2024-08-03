@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Lib.Dogecoin
 {
-	internal class SPVFileCheckpointTracker : ISPVCheckpointTracker
+	public class SPVFileCheckpointTracker : ISPVCheckpointTracker
 	{
 		private string _file;
 
@@ -58,21 +58,15 @@ namespace Lib.Dogecoin
 
 			try
 			{
-				if(_previousBlocks.Count >= _blocksBehind)
+				if (_previousBlocks.Count >= _blocksBehind)
 				{
-					if(_previousBlocks.TryDequeue(out SPVNodeBlockInfo checkpointToSave))
-					{
-						File.WriteAllText(_file, $"{checkpointToSave.Hash}:{checkpointToSave.BlockHeight}");
-					}
-					else
-					{
-						Debug.WriteLine($"Failed to save checkpoint: {checkpoint.Hash}:{checkpoint.BlockHeight}");
-					}
+					string checkpointData = $"{checkpoint.Hash}:{checkpoint.BlockHeight}";
+					string tempFilePath = Path.GetTempFileName();
 
+					File.WriteAllText(tempFilePath, checkpointData);
+
+					File.Move(tempFilePath, _file, true);
 				}
-				
-
-				
 			}
 			catch (Exception ex)
 			{

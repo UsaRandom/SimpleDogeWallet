@@ -334,6 +334,19 @@ namespace Lib.Dogecoin.Interop
 
 
 
+		[DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int dogecoin_generate_mnemonic(
+			[MarshalAs(UnmanagedType.LPArray)] char[] entropy_size,
+			[MarshalAs(UnmanagedType.LPArray)] char[] language,
+			[MarshalAs(UnmanagedType.LPArray)] char[] space,
+			[MarshalAs(UnmanagedType.LPArray)] char[] entropy,
+			[MarshalAs(UnmanagedType.LPArray)] char[] filepath,
+			[Out, MarshalAs(UnmanagedType.LPArray)] char[] entropy_out,
+            [Out] out int size,
+            [Out, MarshalAs(UnmanagedType.LPArray)] char[] words);
+
+
+
         #region SPV
 
 
@@ -344,7 +357,9 @@ namespace Lib.Dogecoin.Interop
             [MarshalAs(UnmanagedType.U1)] bool headers_memonly,
             [MarshalAs(UnmanagedType.U1)] bool use_checkpoints,
             [MarshalAs(UnmanagedType.U1)] bool full_sync,
-			int maxNodes);
+            int maxNodes,
+             IntPtr httpServer);
+            
 
 
 
@@ -432,12 +447,26 @@ namespace Lib.Dogecoin.Interop
 		[DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void dogecoin_node_group_event_loop(IntPtr group);
 
-		
+
+        [DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void dogecoin_node_group_event_loopbreak(IntPtr group);
+
+
+
+        [DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void dogecoin_node_group_connect_next_nodes(IntPtr group);
 
 
 		[DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void dogecoin_node_group_connect_next_nodes(IntPtr group);
-		
+		public static unsafe extern void dogecoin_tx_serialize(cstring* s, dogecoin_tx* tx);
+
+		[DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		public static unsafe extern cstring* cstr_new_sz(int sz);
+
+
+        [DllImport(DLL_NAME, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr utils_hex_to_uint8(char[] chars);
+
 		#endregion SPV
 
 	}
